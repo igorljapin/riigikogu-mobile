@@ -1,5 +1,5 @@
 // Service Worker for Riigikogu XV Dashboard
-const CACHE_NAME = 'riigikogu-dashboard-v2';
+const CACHE_NAME = 'riigikogu-dashboard-v3';
 const OFFLINE_URL = '/riigikogu-dashboard/offline.html';
 
 // Files to cache on install
