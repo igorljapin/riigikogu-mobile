@@ -1,14 +1,14 @@
 // Service Worker for Riigikogu XV Dashboard
 const CACHE_NAME = 'riigikogu-dashboard-v1';
-const OFFLINE_URL = '/offline.html';
+const OFFLINE_URL = '/riigikogu-dashboard/offline.html';
 
 // Files to cache on install
 const PRECACHE_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  '/riigikogu-dashboard/',
+  '/riigikogu-dashboard/index.html',
+  '/riigikogu-dashboard/manifest.json',
+  '/riigikogu-dashboard/icons/icon-192x192.png',
+  '/riigikogu-dashboard/icons/icon-512x512.png'
 ];
 
 // Install event - cache essential files

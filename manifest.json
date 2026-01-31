@@ -2,7 +2,7 @@
   "name": "Riigikogu XV Dashboard",
   "short_name": "Riigikogu",
   "description": "Dashboard for tracking Riigikogu XV parliamentary activities",
-  "start_url": "/",
+  "start_url": "/riigikogu-dashboard/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "theme_color": "#0072CE",
