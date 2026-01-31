@@ -1,12 +1,12 @@
 {
-  "name": "XV Riigikogu Dashboard",
+  "name": "Riigikogu XV Dashboard",
   "short_name": "Riigikogu",
-  "description": "Interactive dashboard for tracking Estonian Parliament (XV Riigikogu) activities, voting records, and member statistics",
+  "description": "Dashboard for tracking Riigikogu XV parliamentary activities",
   "start_url": "/riigikogu-dashboard/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "theme_color": "#0072CE",
-  "background_color": "#F8FAFC",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "icons/icon-192x192.png",
