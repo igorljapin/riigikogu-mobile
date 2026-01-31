@@ -5,7 +5,7 @@ const OFFLINE_URL = '/riigikogu-dashboard/offline.html';
 // Files to cache on install
 const PRECACHE_ASSETS = [
   '/riigikogu-dashboard/',
-  '/riigikogu-dashboard/index.html',
+  '/riigikogu-dashboard/riigikogu-mobile.html',
   '/riigikogu-dashboard/manifest.json',
   '/riigikogu-dashboard/icons/icon-192x192.png',
   '/riigikogu-dashboard/icons/icon-512x512.png'
