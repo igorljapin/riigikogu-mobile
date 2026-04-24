@@ -1,0 +1,55 @@
+name: Monthly Riigikogu MP Data Check
+
+on:
+  schedule:
+    - cron: '0 8 1 * *'
+  workflow_dispatch:
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Fetch current MP data
+        run: python scripts/fetch_mp_data.py
+
+      - name: Compare against baseline
+        id: compare
+        run: python scripts/compare_mp_data.py
+
+      - name: Log and exit if no changes
+        if: steps.compare.outputs.changes_detected == 'false'
+        run: echo "No changes detected. Nothing to do."
+
+      - name: Commit change report and open PR
+        if: steps.compare.outputs.changes_detected == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          MONTH_YEAR=$(date +"%B %Y")
+          BRANCH="mp-data-check/$(date +%Y-%m)"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add data/change_report.json data/mp_data_fetched.json
+          git commit -m "MP data check - ${MONTH_YEAR}: changes detected"
+          git push origin "$BRANCH"
+          MONTH_YEAR="$MONTH_YEAR" python scripts/generate_pr_body.py > /tmp/pr_body.txt
+          gh pr create \
+            --title "MP Data Update Required - ${MONTH_YEAR}" \
+            --body-file /tmp/pr_body.txt \
+            --base main
