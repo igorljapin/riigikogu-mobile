@@ -181,6 +181,9 @@ function ChromeApp() {
       overflow: 'hidden',
     }}>
       <TopBar tokens={tokens} subtitle={subtitle}/>
+      {tab === 'parliament' && typeof ParliamentScreen !== 'undefined'
+        ? <ParliamentScreen tokens={tokens}/>
+        : null}
       <TabBar tokens={tokens} active={tab} onChange={setTab}/>
     </div>
   );
