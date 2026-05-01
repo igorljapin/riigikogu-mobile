@@ -183,6 +183,10 @@ function ChromeApp() {
       <TopBar tokens={tokens} subtitle={subtitle}/>
       {tab === 'parliament' && typeof ParliamentScreen !== 'undefined'
         ? <ParliamentScreen tokens={tokens}/>
+        : tab === 'members' && typeof MembersScreen !== 'undefined'
+        ? <MembersScreen tokens={tokens}/>
+        : tab === 'calculator' && typeof CalculatorScreen !== 'undefined'
+        ? <CalculatorScreen tokens={tokens}/>
         : null}
       <TabBar tokens={tokens} active={tab} onChange={setTab}/>
     </div>
