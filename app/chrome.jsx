@@ -187,6 +187,9 @@ function ChromeApp() {
       {tab === 'members' && typeof MembersScreen !== 'undefined'
         ? <MembersScreen tokens={tokens}/>
         : null}
+      {tab === 'calculator' && typeof CalculatorScreen !== 'undefined'
+        ? <CalculatorScreen tokens={tokens}/>
+        : null}
       <TabBar tokens={tokens} active={tab} onChange={setTab}/>
     </div>
   );
