@@ -18,8 +18,10 @@ WEB_BASE = "https://www.riigikogu.ee/en/parliament-of-estonia/composition/member
 FACTION_MAP = {
     "Estonian Reform Party Parliamentary Group": "reform",
     "Eesti 200 Parliamentary Group": "eesti200",
+    "Estonia 200 Parliamentary Group": "eesti200",
     "Social Democratic Party Parliamentary Group": "sde",
     "Estonian Conservative People's Party Parliamentary Group": "ekre",
+    "Estonian Conservative People’s Party Parliamentary Group": "ekre",
     "Isamaa Parliamentary Group": "isamaa",
     "Estonian Centre Party Parliamentary Group": "center",
 }

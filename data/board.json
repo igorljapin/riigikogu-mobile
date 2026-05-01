@@ -1,5 +1,5 @@
 [
-  { "role": "President", "name": "Lauri Hussar", "party": "reform" },
-  { "role": "1st Vice President", "name": "Jüri Ratas", "party": "center" },
-  { "role": "2nd Vice President", "name": "Toomas Kivimägi", "party": "reform" }
+  { "role": "Speaker", "name": "Lauri Hussar", "party": "eesti200" },
+  { "role": "1st Deputy Speaker", "name": "Toomas Kivimägi", "party": "reform" },
+  { "role": "2nd Deputy Speaker", "name": "Arvo Aller", "party": "ekre" }
 ]
