@@ -118,10 +118,10 @@ function SeatBalance({ tokens, parties, counts }) {
 }
 
 // ─── Party card ───
-function PartyCard({ tokens, party, seats }) {
+function PartyCard({ tokens, party, seats, onTap }) {
   const isLight = party.textColor === '#1a1a1a';
   return (
-    <div style={{
+    <div onClick={onTap} style={{
       position: 'relative',
       borderRadius: 14,
       background: tokens.surface,
@@ -129,6 +129,7 @@ function PartyCard({ tokens, party, seats }) {
       padding: '12px 13px 13px',
       display: 'flex', flexDirection: 'column', gap: 8,
       minHeight: 96,
+      cursor: onTap ? 'pointer' : 'default',
     }}>
       <div style={{
         position: 'absolute', left: 0, top: 12, bottom: 12,
@@ -171,7 +172,7 @@ function PartyCard({ tokens, party, seats }) {
 }
 
 // ─── Party grid ───
-function PartyGrid({ tokens, parties, counts }) {
+function PartyGrid({ tokens, parties, counts, onPartyTap }) {
   const sorted = [...parties].sort((a, b) => (counts[b.id] || 0) - (counts[a.id] || 0));
   return (
     <div style={{
@@ -181,7 +182,13 @@ function PartyGrid({ tokens, parties, counts }) {
       gap: 10,
     }}>
       {sorted.map(p => (
-        <PartyCard key={p.id} tokens={tokens} party={p} seats={counts[p.id] || 0}/>
+        <PartyCard
+          key={p.id}
+          tokens={tokens}
+          party={p}
+          seats={counts[p.id] || 0}
+          onTap={onPartyTap ? () => onPartyTap(p) : undefined}
+        />
       ))}
     </div>
   );
@@ -235,6 +242,7 @@ function BoardList({ tokens, parties, board }) {
 function ParliamentScreen({ tokens }) {
   const counts = React.useMemo(partySeatCounts, []);
   const total = Object.values(counts).reduce((s, n) => s + n, 0);
+  const [openParty, setOpenParty] = React.useState(null);
 
   return (
     <div style={{
@@ -246,12 +254,21 @@ function ParliamentScreen({ tokens }) {
       <SeatBalance tokens={tokens} parties={PARTIES} counts={counts}/>
 
       <SectionLabel tokens={tokens}>Parties</SectionLabel>
-      <PartyGrid tokens={tokens} parties={PARTIES} counts={counts}/>
+      <PartyGrid tokens={tokens} parties={PARTIES} counts={counts} onPartyTap={setOpenParty}/>
 
       <div style={{ height: 22 }}/>
 
       <SectionLabel tokens={tokens}>Board of the Riigikogu</SectionLabel>
       <BoardList tokens={tokens} parties={PARTIES} board={BOARD}/>
+
+      {typeof PartyMPsSheet !== 'undefined' ? (
+        <PartyMPsSheet
+          tokens={tokens}
+          open={!!openParty}
+          party={openParty}
+          onClose={() => setOpenParty(null)}
+        />
+      ) : null}
     </div>
   );
 }
