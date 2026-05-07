@@ -12,11 +12,25 @@
   <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
   <title>XV Riigikogu</title>
   <style>
+    :root {
+      --bg:           #FAFAF7;
+      --surface:      #FFFFFF;
+      --surfaceAlt:   #F4F4F1;
+      --border:       rgba(17,17,17,0.07);
+      --borderStrong: rgba(17,17,17,0.12);
+      --text:         #111114;
+      --textMuted:    rgba(17,17,20,0.58);
+      --textSubtle:   rgba(17,17,20,0.36);
+      --accent:       #1a1a1a;
+      --accentSoft:   #f0f0ee;
+      --good:         oklch(0.55 0.16 145);
+      --bad:          oklch(0.58 0.20 25);
+    }
     *, *::before, *::after { box-sizing: border-box; }
     html, body {
       margin: 0; padding: 0;
-      background: #E8E8E5;
-      color: #111;
+      background: var(--bg);
+      color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
       -webkit-tap-highlight-color: transparent;
@@ -25,7 +39,7 @@
     button { font-family: inherit; cursor: pointer; }
     input { font-family: inherit; font-size: 16px; }
     ::-webkit-scrollbar { width: 0; height: 0; }
-    .app { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #F5F5F2; padding-bottom: 80px; }
+    .app { max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--bg); padding-bottom: 90px; }
     .safe-top { padding-top: env(safe-area-inset-top); }
     .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
     main > section { animation: fadeIn 180ms ease-out; }
@@ -92,52 +106,133 @@
 
     // ── Design tokens ──
     const T = {
-      bg: '#F5F5F2', surface: '#FFFFFF', surfaceAlt: '#EDEDE8',
-      text: '#111', textMuted: '#5C5C5A', textSubtle: '#8A8A87',
-      border: '#E2E2DC', accent: '#111', accentSoft: '#F0EFEA',
-      good: '#0E7A3C', danger: '#C0392B',
+      bg: '#FAFAF7',
+      surface: '#FFFFFF',
+      surfaceAlt: '#F4F4F1',
+      border: 'rgba(17,17,17,0.07)',
+      borderStrong: 'rgba(17,17,17,0.12)',
+      text: '#111114',
+      textMuted: 'rgba(17,17,20,0.58)',
+      textSubtle: 'rgba(17,17,20,0.36)',
+      accent: '#1a1a1a',
+      accentSoft: '#f0f0ee',
+      good: 'oklch(0.55 0.16 145)',
+      danger: 'oklch(0.58 0.20 25)',
     };
 
     // ─────────── Chrome ───────────
     function TopBar({ subtitle }) {
       return (
-        <div style={{ padding: '14px 18px 6px', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: -0.6 }}>Riigikogu</h1>
-              <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, background: T.text, color: '#fff', letterSpacing: 0.5 }}>XV</span>
+        <div style={{
+          display: 'flex', flexDirection: 'row',
+          justifyContent: 'space-between', alignItems: 'center',
+          padding: '8px 20px 14px',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{
+              width: 32, height: 32, borderRadius: 9,
+              background: '#1a1a1a', color: '#fff',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 13, fontWeight: 700,
+              fontFamily: 'ui-serif, "New York", Georgia, serif',
+            }}>XV</div>
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15, gap: 0 }}>
+              <span style={{ fontSize: 16, fontWeight: 600, color: '#111114', letterSpacing: '-0.2px' }}>Riigikogu</span>
+              <span style={{ fontSize: 11.5, color: T.textMuted }}>{subtitle}</span>
             </div>
-            <div style={{ marginTop: 2, fontSize: 12, color: T.textMuted }}>{subtitle}</div>
           </div>
+          <button aria-label="Clock" style={{
+            all: 'unset', cursor: 'pointer',
+            width: 34, height: 34, borderRadius: 17,
+            border: '1px solid rgba(17,17,17,0.07)',
+            background: '#FFFFFF',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="6.5" stroke="rgba(17,17,20,0.58)" strokeWidth="1.4"/>
+              <path d="M8 5v3l2 2" stroke="rgba(17,17,20,0.58)" strokeWidth="1.4" strokeLinecap="round"/>
+            </svg>
+          </button>
         </div>
+      );
+    }
+
+    function ParliamentIcon({ color }) {
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="6.5" width="5" height="14.5" fill={color}/>
+          <rect x="3" y="5.2" width="1.1" height="1.3" fill={color}/>
+          <rect x="5.2" y="5.2" width="1" height="1.3" fill={color}/>
+          <rect x="7.1" y="5.2" width="0.9" height="1.3" fill={color}/>
+          <rect x="5.2" y="2" width="0.5" height="3.2" fill={color}/>
+          <path d="M5.7 2h2.5v1.4h-2.5z" fill={color}/>
+          <path d="M10 13l4-3 4 3v0H10z" fill={color}/>
+          <rect x="9.5" y="12.7" width="11" height="0.9" fill={color}/>
+          <rect x="10" y="13.6" width="11" height="7.4" fill={color}/>
+          <path d="M14.5 21v-3.2a1 1 0 0 1 2 0V21z" fill="#FAFAF7"/>
+          <rect x="1.5" y="21" width="21" height="1.1" rx="0.4" fill={color}/>
+        </svg>
+      );
+    }
+    function MembersIcon({ color }) {
+      return (
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <circle cx="8" cy="8" r="3.2" stroke={color} strokeWidth="1.6"/>
+          <circle cx="15" cy="9" r="2.4" stroke={color} strokeWidth="1.6"/>
+          <path d="M2.5 17c.6-2.5 2.9-4 5.5-4s4.9 1.5 5.5 4 M14 13c2 0 4 1.2 4.5 3.5"
+                stroke={color} strokeWidth="1.6" strokeLinecap="round"/>
+        </svg>
+      );
+    }
+    function CalculatorIcon({ color }) {
+      return (
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <rect x="4.5" y="2.5" width="13" height="17" rx="2.5" stroke={color} strokeWidth="1.6"/>
+          <rect x="7" y="5" width="8" height="3" rx="0.8" stroke={color} strokeWidth="1.4"/>
+          <circle cx="8" cy="11.5" r="0.9" fill={color}/>
+          <circle cx="11" cy="11.5" r="0.9" fill={color}/>
+          <circle cx="14" cy="11.5" r="0.9" fill={color}/>
+          <circle cx="8" cy="15" r="0.9" fill={color}/>
+          <circle cx="11" cy="15" r="0.9" fill={color}/>
+          <circle cx="14" cy="15" r="0.9" fill={color}/>
+        </svg>
       );
     }
 
     function TabBar({ active, onChange }) {
       const tabs = [
-        { id: 'parliament', label: 'Parliament' },
-        { id: 'members',    label: 'Members' },
-        { id: 'calculator', label: 'Calculator' },
+        { id: 'parliament', label: 'Parliament', Icon: ParliamentIcon },
+        { id: 'members',    label: 'Members',    Icon: MembersIcon },
+        { id: 'calculator', label: 'Calculator', Icon: CalculatorIcon },
       ];
       return (
-        <nav className="safe-bottom" style={{
+        <nav style={{
           position: 'fixed', left: 0, right: 0, bottom: 0,
-          maxWidth: 480, margin: '0 auto',
-          background: '#FFFFFFEE', backdropFilter: 'blur(12px)',
-          borderTop: `1px solid ${T.border}`,
-          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
-          zIndex: 50,
+          padding: '8px 0 26px',
+          background: 'rgba(250,250,247,0.78)',
+          backdropFilter: 'blur(20px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          borderTop: '0.5px solid rgba(17,17,17,0.08)',
+          display: 'flex', justifyContent: 'space-around',
+          zIndex: 30,
         }}>
           {tabs.map(t => {
             const on = active === t.id;
+            const color = on ? '#1a1a1a' : 'rgba(17,17,20,0.58)';
+            const Icon = t.Icon;
             return (
               <button key={t.id} onClick={() => onChange(t.id)} style={{
-                all: 'unset', textAlign: 'center', padding: '12px 0 14px',
-                fontSize: 12, fontWeight: 600,
-                color: on ? T.text : T.textSubtle,
-                borderTop: on ? `2px solid ${T.text}` : '2px solid transparent',
-                marginTop: -1,
-              }}>{t.label}</button>
+                all: 'unset', cursor: 'pointer',
+                display: 'flex', flexDirection: 'column', alignItems: 'center',
+                gap: 3, padding: '4px 16px', minWidth: 64,
+                background: 'none', border: 'none',
+              }}>
+                <Icon color={color} />
+                <span style={{
+                  fontSize: 10.5, fontWeight: 500, letterSpacing: '0.1px',
+                  color,
+                }}>{t.label}</span>
+              </button>
             );
           })}
         </nav>
