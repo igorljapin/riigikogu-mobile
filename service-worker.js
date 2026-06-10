@@ -1,22 +1,14 @@
 // Service Worker for Riigikogu XV Dashboard
-const CACHE_NAME = 'riigikogu-mobile-v3';
-const OFFLINE_URL = '/riigikogu-mobile/offline.html';
+const CACHE_NAME = 'riigikogu-dashboard-v2';
+const OFFLINE_URL = '/riigikogu-dashboard/offline.html';
 
 // Files to cache on install
 const PRECACHE_ASSETS = [
-  '/riigikogu-mobile/',
-  '/riigikogu-mobile/index.html',
-  '/riigikogu-mobile/manifest.json',
-  '/riigikogu-mobile/icons/icon-192x192.png',
-  '/riigikogu-mobile/icons/icon-512x512.png',
-  '/riigikogu-mobile/app/data.js',
-  '/riigikogu-mobile/app/chrome.jsx',
-  '/riigikogu-mobile/app/parliament.jsx',
-  '/riigikogu-mobile/app/sheets.jsx',
-  '/riigikogu-mobile/app/members.jsx',
-  '/riigikogu-mobile/app/calculator.jsx',
-  '/riigikogu-mobile/data/mp_data_current.json',
-  '/riigikogu-mobile/data/board.json',
+  '/riigikogu-dashboard/',
+  '/riigikogu-dashboard/index.html',
+  '/riigikogu-dashboard/manifest.json',
+  '/riigikogu-dashboard/icons/icon-192x192.png',
+  '/riigikogu-dashboard/icons/icon-512x512.png'
 ];
 
 // Install event - cache essential files
