@@ -242,76 +242,80 @@
     // ─────────── Parliament ───────────
     function ParliamentScreen({ onPartyTap }) {
       return (
-        <section style={{ padding: '4px 0 16px' }}>
+        <section style={{ paddingBottom: 16 }}>
           <SeatBalance />
-          <SectionLabel>Parties</SectionLabel>
-          <div style={{ margin: '0 16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+          <div style={{
+            fontSize: 11, fontWeight: 600, color: T.textSubtle,
+            letterSpacing: 0.6, textTransform: 'uppercase',
+            margin: '20px 16px 8px',
+          }}>Parties</div>
+          <div style={{ margin: '0 16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             {PARTIES.map(p => <PartyCard key={p.id} p={p} onTap={onPartyTap} />)}
           </div>
         </section>
       );
     }
 
-    function SeatBalance() {
-      const coalPct = (COALITION_SEATS / TOTAL_SEATS) * 100;
-      const oppPct  = (OPPOSITION_SEATS / TOTAL_SEATS) * 100;
-      const thresh  = (51 / TOTAL_SEATS) * 100;
+    function MajorityBadge() {
+      const reached = COALITION_SEATS >= 51;
       return (
-        <div style={{
-          margin: '6px 16px 0', padding: 14,
-          background: T.surface, borderRadius: 16,
-          border: `1px solid ${T.border}`,
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
-            <div>
-              <div style={{ fontSize: 10, fontWeight: 600, color: T.textSubtle, letterSpacing: 0.6, textTransform: 'uppercase' }}>Coalition</div>
-              <div style={{ fontSize: 26, fontWeight: 700, letterSpacing: -1, lineHeight: 1 }}>
-                {COALITION_SEATS}
-                <span style={{ fontSize: 13, color: T.textMuted, fontWeight: 500, marginLeft: 3 }}>/101</span>
-              </div>
-            </div>
-            <div style={{
-              padding: '3px 9px', borderRadius: 99,
-              background: COALITION_SEATS >= 51 ? '#E2F4E5' : '#F3E2E2',
-              color: COALITION_SEATS >= 51 ? '#0E7A3C' : '#9B2222',
-              fontSize: 11, fontWeight: 600,
-            }}>{COALITION_SEATS >= 51 ? '✓ Majority' : 'No majority'}</div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: 10, fontWeight: 600, color: T.textSubtle, letterSpacing: 0.6, textTransform: 'uppercase' }}>Opposition</div>
-              <div style={{ fontSize: 26, fontWeight: 700, letterSpacing: -1, lineHeight: 1 }}>{OPPOSITION_SEATS}</div>
-            </div>
-          </div>
-          <div style={{ position: 'relative', height: 10, borderRadius: 99, background: T.surfaceAlt, overflow: 'hidden' }}>
-            <div style={{ display: 'flex', height: '100%' }}>
-              {PARTIES.map((p, i) => (
-                <div key={p.id} style={{
-                  width: `${(p.seats / TOTAL_SEATS) * 100}%`,
-                  background: p.color,
-                  borderRight: i < PARTIES.length - 1 ? '1px solid rgba(255,255,255,0.5)' : 'none',
-                }} />
-              ))}
-            </div>
-            <div style={{
-              position: 'absolute', top: -3, bottom: -3, left: `${thresh}%`,
-              width: 2, background: T.text, borderRadius: 2, transform: 'translateX(-1px)',
-            }} />
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: T.textMuted, marginTop: 6, fontWeight: 600, letterSpacing: 0.4 }}>
-            <span style={{ textTransform: 'uppercase' }}>{Math.round(coalPct)}% coalition</span>
-            <span style={{ textTransform: 'uppercase' }}>51 for majority ↑</span>
-            <span style={{ textTransform: 'uppercase' }}>{Math.round(oppPct)}% opposition</span>
-          </div>
-        </div>
+        <span style={{
+          padding: '6px 10px', borderRadius: 99,
+          background: reached ? 'oklch(0.95 0.05 145)' : 'oklch(0.95 0.05 25)',
+          color: reached ? 'oklch(0.42 0.13 145)' : 'oklch(0.42 0.13 25)',
+          fontSize: 11.5, fontWeight: 600, whiteSpace: 'nowrap',
+        }}>{reached ? '✓ Majority' : '✕ No majority'}</span>
       );
     }
 
-    function SectionLabel({ children }) {
+    function SeatBalance() {
+      const coalPct = Math.round((COALITION_SEATS / TOTAL_SEATS) * 100);
+      const oppPct  = Math.round((OPPOSITION_SEATS / TOTAL_SEATS) * 100);
       return (
         <div style={{
-          fontSize: 11, fontWeight: 600, color: T.textSubtle,
-          letterSpacing: 0.6, textTransform: 'uppercase',
-          padding: '16px 22px 8px',
-        }}>{children}</div>
+          margin: '0 16px', padding: 16,
+          background: '#FFFFFF', borderRadius: 18,
+          border: '1px solid rgba(17,17,17,0.07)',
+        }}>
+          <div style={{
+            display: 'grid', gridTemplateColumns: '1fr auto 1fr',
+            alignItems: 'center', gap: 8, marginBottom: 6,
+          }}>
+            <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: 0.6, color: T.textSubtle, fontWeight: 600 }}>COALITION</span>
+            <MajorityBadge />
+            <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: 0.6, color: T.textSubtle, fontWeight: 600, textAlign: 'right' }}>OPPOSITION</span>
+          </div>
+
+          <div style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+            marginBottom: 12,
+          }}>
+            <span style={{ fontSize: 44, fontWeight: 700, color: '#1a1a1a', letterSpacing: -2, lineHeight: 1 }}>
+              {COALITION_SEATS}
+              <span style={{ fontSize: 16, color: T.textMuted, fontWeight: 500, marginLeft: 4, letterSpacing: 0 }}>/101</span>
+            </span>
+            <span style={{ fontSize: 44, fontWeight: 700, color: '#111114', letterSpacing: -2, lineHeight: 1 }}>{OPPOSITION_SEATS}</span>
+          </div>
+
+          <div style={{ height: 8, borderRadius: 99, overflow: 'hidden', display: 'flex' }}>
+            {PARTIES.map(p => (
+              <div key={p.id} style={{
+                width: `${(p.seats / TOTAL_SEATS) * 100}%`,
+                background: p.color,
+              }} />
+            ))}
+          </div>
+
+          <div style={{
+            display: 'flex', justifyContent: 'space-between',
+            fontSize: 10, color: T.textSubtle, marginTop: 8,
+            textTransform: 'uppercase', letterSpacing: 0.5, fontWeight: 600,
+          }}>
+            <span>{coalPct}% Coalition</span>
+            <span>51 for majority ↑</span>
+            <span>{oppPct}% Opposition</span>
+          </div>
+        </div>
       );
     }
 
@@ -319,102 +323,123 @@
       const isCoalition = p.side === 'coalition';
       return (
         <button onClick={() => onTap?.(p.id)} style={{
-          all: 'unset', cursor: 'pointer',
-          padding: '12px 12px 12px 14px',
-          background: T.surface,
-          border: `1px solid ${T.border}`,
-          borderLeft: `4px solid ${p.color}`,
-          borderRadius: 12,
-          display: 'flex', flexDirection: 'column', gap: 4,
+          all: 'unset', cursor: 'pointer', boxSizing: 'border-box',
+          background: '#FFFFFF',
+          borderRadius: 14,
+          border: '1px solid rgba(17,17,17,0.07)',
+          borderLeft: `3px solid ${p.color}`,
+          padding: 14,
+          minHeight: 90,
+          display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
         }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: -0.2 }}>{p.short}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 15, fontWeight: 600, color: '#111114' }}>{p.short}</span>
             <span style={{
-              fontSize: 9, fontWeight: 700, letterSpacing: 0.6,
+              fontSize: 10, fontWeight: 700,
               padding: '2px 6px', borderRadius: 4,
-              background: isCoalition ? '#E2F4E5' : '#F3E2E2',
-              color: isCoalition ? '#0E7A3C' : '#9B2222',
+              background: isCoalition ? '#e8f5e9' : '#fce4ec',
+              color: isCoalition ? '#2e7d32' : '#c62828',
             }}>{isCoalition ? 'GOV' : 'OPP'}</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-            <span style={{ fontSize: 22, fontWeight: 700, letterSpacing: -0.8, lineHeight: 1 }}>{p.seats}</span>
-            <span style={{ fontSize: 11, color: T.textMuted }}>seats</span>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginTop: 8 }}>
+            <span style={{ fontSize: 28, fontWeight: 700, color: '#111114', letterSpacing: -1, lineHeight: 1 }}>{p.seats}</span>
+            <span style={{ fontSize: 12, color: T.textMuted }}>seats</span>
           </div>
         </button>
       );
     }
 
     // ─────────── Members ───────────
-    function MembersScreen({ onMemberTap }) {
+    const PARTY_SHORT_FROM_FULL = {
+      'Estonian Reform Party Parliamentary Group': 'Reform',
+      'Eesti 200 Parliamentary Group': 'Eesti 200',
+      'Social Democratic Party Parliamentary Group': 'SDE',
+      "Estonian Conservative People's Party Parliamentary Group": 'EKRE',
+      'Isamaa Parliamentary Group': 'Isamaa',
+      'Estonian Centre Party Parliamentary Group': 'Centre',
+      'Non-affiliated members': 'Independent',
+    };
+
+    const ALL_MPS_SORTED = [...MPS].sort((a, b) =>
+      a.name.localeCompare(b.name, 'et')
+    );
+
+    const CHAIRS_SORTED = [
+      { name: 'Helir-Valdor Seeder', party: 'isamaa' },
+      { name: 'Lauri Laats',         party: 'centre' },
+      { name: 'Lauri Läänemets',     party: 'sde' },
+      { name: 'Martin Helme',        party: 'ekre' },
+      { name: 'Toomas Uibo',         party: 'eesti200' },
+      { name: 'Õnne Pillak',         party: 'reform' },
+    ].map((c, i) => ({ ...c, id: `chair-${i}-${c.name}` }));
+
+    function MembersScreen() {
       const [q, setQ] = React.useState('');
       const [filter, setFilter] = React.useState(null); // null | 'chairs' | 'usa'
 
-      const list = React.useMemo(() => {
-        if (filter === 'chairs') {
-          return FACTION_CHAIRS.map(c => ({ name: c.name, party: c.party, isChair: true, id: 'chair-' + c.name }));
-        }
-        if (filter === 'usa') return [];
-        return MPS;
-      }, [filter]);
+      const baseList = filter === 'chairs' ? CHAIRS_SORTED
+                     : filter === 'usa'    ? []
+                     : ALL_MPS_SORTED;
 
       const filtered = React.useMemo(() => {
-        if (!q.trim()) return list;
+        if (!q.trim()) return baseList;
         const needle = q.trim().toLowerCase();
-        return list.filter(m => m.name.toLowerCase().includes(needle));
-      }, [list, q]);
+        return baseList.filter(m => m.name.toLowerCase().includes(needle));
+      }, [baseList, q]);
 
       return (
-        <section style={{ padding: '4px 0 16px' }}>
-          <div style={{ margin: '6px 16px 0' }}>
-            <input
-              value={q} onChange={e => setQ(e.target.value)}
-              placeholder="Search members…"
-              style={{
-                width: '100%', padding: '12px 14px',
-                background: T.surface, border: `1px solid ${T.border}`,
-                borderRadius: 12, outline: 'none', fontSize: 15,
-              }}
-            />
-          </div>
+        <section style={{ paddingBottom: 16 }}>
+          <input
+            value={q} onChange={e => setQ(e.target.value)}
+            placeholder="Search members..."
+            style={{
+              width: 'calc(100% - 32px)', margin: '0 16px',
+              boxSizing: 'border-box',
+              padding: '12px 16px', borderRadius: 12,
+              background: '#F4F4F1', border: 'none',
+              fontSize: 15, color: '#111114', outline: 'none',
+            }}
+          />
 
-          <div style={{ display: 'flex', gap: 8, margin: '10px 16px 0' }}>
+          <div style={{ display: 'flex', gap: 8, margin: '10px 16px' }}>
             <FilterChip active={filter === 'chairs'} onClick={() => setFilter(filter === 'chairs' ? null : 'chairs')}>Faction chairs</FilterChip>
             <FilterChip active={filter === 'usa'} onClick={() => setFilter(filter === 'usa' ? null : 'usa')}>U.S. friendship group</FilterChip>
           </div>
 
-          <div style={{ margin: '12px 16px 0', background: T.surface, border: `1px solid ${T.border}`, borderRadius: 14, overflow: 'hidden' }}>
-            {filter === 'usa' ? (
-              <div style={{ padding: 28, textAlign: 'center', color: T.textMuted, fontSize: 14 }}>
-                Data not yet available
-              </div>
-            ) : filtered.length === 0 ? (
-              <div style={{ padding: 28, textAlign: 'center', color: T.textMuted, fontSize: 14 }}>
-                No matches
-              </div>
-            ) : (
-              filtered.map((m, i) => {
+          {filter === 'usa' ? (
+            <div style={{ marginTop: 32, textAlign: 'center', fontSize: 14, color: T.textMuted }}>
+              Data not yet available
+            </div>
+          ) : (
+            <div style={{
+              margin: '0 16px',
+              background: '#FFFFFF',
+              borderRadius: 14,
+              border: '1px solid rgba(17,17,17,0.07)',
+              overflow: 'hidden',
+            }}>
+              {filtered.length === 0 ? (
+                <div style={{ padding: 28, textAlign: 'center', color: T.textMuted, fontSize: 14 }}>
+                  No matches
+                </div>
+              ) : filtered.map((m, i) => {
                 const p = PARTY(m.party);
                 return (
-                  <button key={m.id} onClick={() => onMemberTap?.(m)} style={{
-                    all: 'unset', display: 'flex', alignItems: 'center', gap: 12,
-                    width: '100%', padding: '12px 14px',
-                    borderTop: i > 0 ? `1px solid ${T.border}` : 'none',
-                    cursor: 'pointer',
+                  <div key={m.id} style={{
+                    display: 'flex', alignItems: 'center', gap: 12,
+                    padding: '12px 16px',
+                    borderTop: i > 0 ? '0.5px solid rgba(17,17,17,0.07)' : 'none',
                   }}>
                     <span style={{ width: 8, height: 8, borderRadius: 99, background: p.color, flexShrink: 0 }} />
-                    <span style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 15, fontWeight: 600, letterSpacing: -0.2 }}>{m.name}</div>
-                      <div style={{ fontSize: 12, color: T.textMuted, marginTop: 1 }}>{p.short}</div>
-                    </span>
-                  </button>
+                    <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                      <span style={{ fontSize: 14.5, fontWeight: 500, color: '#111114' }}>{m.name}</span>
+                      <span style={{ fontSize: 11.5, color: T.textMuted, marginTop: 1 }}>{p.short}</span>
+                    </div>
+                  </div>
                 );
-              })
-            )}
-          </div>
-
-          <div style={{ textAlign: 'center', fontSize: 11, color: T.textSubtle, marginTop: 10 }}>
-            {filter === 'usa' ? '' : `${filtered.length} member${filtered.length === 1 ? '' : 's'}`}
-          </div>
+              })}
+            </div>
+          )}
         </section>
       );
     }
@@ -423,198 +448,319 @@
       return (
         <button onClick={onClick} style={{
           all: 'unset', cursor: 'pointer',
-          padding: '8px 12px', borderRadius: 99,
-          fontSize: 12, fontWeight: 600,
-          background: active ? T.text : T.surface,
-          color: active ? '#fff' : T.text,
-          border: `1px solid ${active ? T.text : T.border}`,
+          padding: '7px 14px', borderRadius: 99,
+          fontSize: 13, fontWeight: 500,
+          background: active ? '#1a1a1a' : '#FFFFFF',
+          color: active ? '#FFFFFF' : '#111114',
+          border: `1px solid ${active ? '#1a1a1a' : 'rgba(17,17,17,0.12)'}`,
         }}>{children}</button>
       );
     }
 
     // ─────────── Calculator ───────────
     function CalculatorScreen() {
-      const [parties, setParties] = React.useState([]); // party ids selected
-      const [extras, setExtras]   = React.useState([]); // mp ids selected
+      const [parties, setParties] = React.useState([]);   // selected party ids
+      const [added, setAdded]     = React.useState([]);   // mp ids added from non-selected parties
+      const [excluded, setExcluded] = React.useState([]); // mp ids removed from selected parties
+      const [panel, setPanel] = React.useState(null);     // null | 'add' | 'exclude'
       const [q, setQ] = React.useState('');
 
       const partySeats = parties.reduce((s, id) => s + PARTY(id).seats, 0);
-      const extraSeats = extras.length;
-      // Don't double-count: MPs whose party is already selected aren't counted twice
-      const dedupedExtras = extras.filter(mpId => {
+      const addedActive = added.filter(mpId => {
         const mp = MPS.find(m => m.id === mpId);
         return mp && !parties.includes(mp.party);
       });
-      const total = partySeats + dedupedExtras.length;
+      const excludedActive = excluded.filter(mpId => {
+        const mp = MPS.find(m => m.id === mpId);
+        return mp && parties.includes(mp.party);
+      });
+      const total = partySeats + addedActive.length - excludedActive.length;
 
       const togglePartySelection = (id) => {
         setParties(parties.includes(id) ? parties.filter(x => x !== id) : [...parties, id]);
       };
-      const toggleExtra = (mpId) => {
-        setExtras(extras.includes(mpId) ? extras.filter(x => x !== mpId) : [...extras, mpId]);
-      };
-      const presetCoalition = () => { setParties(['reform', 'eesti200']); setExtras([]); };
-      const reset = () => { setParties([]); setExtras([]); };
+      const selectCoalition = () => { setParties(['reform', 'eesti200']); setAdded([]); setExcluded([]); };
+      const selectOpposition = () => { setParties(['sde', 'isamaa', 'ekre', 'centre', 'indep']); setAdded([]); setExcluded([]); };
+      const reset = () => { setParties([]); setAdded([]); setExcluded([]); setPanel(null); };
 
       const need = Math.max(0, 51 - total);
-      const pct = Math.min(100, (total / TOTAL_SEATS) * 100);
       const reached = total >= 51;
+      const fillPct = Math.min(100, (total / TOTAL_SEATS) * 100);
 
-      const filteredMPs = React.useMemo(() => {
-        if (!q.trim()) return [];
+      const MILESTONES = [
+        { value: 51, label: 'Simple' },
+        { value: 61, label: '3/5' },
+        { value: 68, label: '2/3' },
+        { value: 81, label: '4/5' },
+      ];
+
+      const openPanel = (which) => {
+        if (which === 'exclude' && parties.length === 0) return;
+        setQ('');
+        setPanel(panel === which ? null : which);
+      };
+
+      // Add panel: MPs from non-selected parties; Exclude panel: MPs from selected parties
+      const panelPool = React.useMemo(() => {
+        if (panel === 'add') return MPS.filter(m => !parties.includes(m.party));
+        if (panel === 'exclude') return MPS.filter(m => parties.includes(m.party));
+        return [];
+      }, [panel, parties]);
+
+      const panelResults = React.useMemo(() => {
+        if (!q.trim()) return panelPool.slice(0, 30);
         const needle = q.trim().toLowerCase();
-        return MPS.filter(m => m.name.toLowerCase().includes(needle)).slice(0, 30);
-      }, [q]);
+        return panelPool.filter(m => m.name.toLowerCase().includes(needle)).slice(0, 30);
+      }, [panelPool, q]);
 
-      const addedMPObjs = extras.map(id => MPS.find(m => m.id === id)).filter(Boolean);
+      const toggleAdded = (mpId) => setAdded(added.includes(mpId) ? added.filter(x => x !== mpId) : [...added, mpId]);
+      const toggleExcluded = (mpId) => setExcluded(excluded.includes(mpId) ? excluded.filter(x => x !== mpId) : [...excluded, mpId]);
+
+      const chevron = (
+        <svg width="6" height="10" viewBox="0 0 6 10" fill="none">
+          <path d="M1 1l3.5 4L1 9" stroke="rgba(17,17,20,0.36)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      );
 
       return (
-        <section style={{ padding: '4px 0 16px' }}>
+        <section style={{ paddingBottom: 16 }}>
           {/* Counter card */}
           <div style={{
-            margin: '6px 16px 0', padding: 16,
-            background: T.surface, borderRadius: 16,
-            border: `1px solid ${T.border}`,
+            margin: '4px 16px 0', padding: 18,
+            background: '#FFFFFF', borderRadius: 18,
+            border: '1px solid rgba(17,17,17,0.07)',
           }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: T.textSubtle, letterSpacing: 0.6, textTransform: 'uppercase' }}>Seats selected</div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 2 }}>
-              <span style={{ fontSize: 38, fontWeight: 700, letterSpacing: -1.4, lineHeight: 1 }}>{total}</span>
-              <span style={{ fontSize: 16, color: T.textMuted, fontWeight: 500 }}>/ 101</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                  <span style={{ fontSize: 44, fontWeight: 700, letterSpacing: -2, color: '#1a1a1a', lineHeight: 1 }}>{total}</span>
+                  <span style={{ fontSize: 16, color: T.textMuted, fontWeight: 500 }}>/101</span>
+                </div>
+                <div style={{ fontSize: 11.5, color: T.textMuted, marginTop: 4 }}>
+                  {parties.length} part{parties.length === 1 ? 'y' : 'ies'} selected
+                </div>
+              </div>
+              <span style={{
+                padding: '6px 10px', borderRadius: 99,
+                fontSize: 11.5, fontWeight: 600, whiteSpace: 'nowrap',
+                background: reached ? 'oklch(0.95 0.05 145)' : 'oklch(0.96 0.03 25)',
+                color: reached ? 'oklch(0.42 0.13 145)' : 'oklch(0.50 0.18 25)',
+              }}>{reached ? '✓ Majority' : `Need ${need}`}</span>
             </div>
-            <div style={{ position: 'relative', height: 8, borderRadius: 99, background: T.surfaceAlt, marginTop: 12, overflow: 'hidden' }}>
+
+            {/* Progress bar */}
+            <div style={{
+              position: 'relative', marginTop: 16,
+              height: 8, background: '#F4F4F1', borderRadius: 99,
+              overflow: 'visible',
+            }}>
               <div style={{
-                width: `${pct}%`, height: '100%',
-                background: reached ? T.good : T.text,
-                transition: 'width 200ms',
+                width: `${fillPct}%`, height: '100%',
+                background: '#1a1a1a', borderRadius: 99,
+                transition: 'width 240ms ease',
               }} />
-              <div style={{
-                position: 'absolute', top: -3, bottom: -3, left: `${(51 / TOTAL_SEATS) * 100}%`,
-                width: 2, background: T.text, borderRadius: 2,
-              }} />
+              {MILESTONES.map(m => {
+                const at = (m.value / TOTAL_SEATS) * 100;
+                const hit = total >= m.value;
+                return (
+                  <div key={m.value} style={{
+                    position: 'absolute', top: -3, bottom: -3, left: `${at}%`,
+                    width: 1.5, transform: 'translateX(-0.75px)',
+                    background: hit ? '#1a1a1a' : 'rgba(17,17,17,0.12)',
+                  }} />
+                );
+              })}
             </div>
-            <div style={{ marginTop: 8, fontSize: 13, fontWeight: 600, color: reached ? T.good : T.textMuted }}>
-              {reached ? 'Majority reached!' : `${need} more seat${need === 1 ? '' : 's'} needed for majority`}
+
+            {/* Milestone chips */}
+            <div style={{ marginTop: 10, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6 }}>
+              {MILESTONES.map(m => {
+                const hit = total >= m.value;
+                return (
+                  <div key={m.value} style={{
+                    padding: '7px 6px', borderRadius: 9, textAlign: 'center',
+                    background: hit ? '#f0f0ee' : '#F4F4F1',
+                    border: `1px solid ${hit ? '#1a1a1a' : 'transparent'}`,
+                  }}>
+                    <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: -0.4, color: hit ? '#1a1a1a' : '#111114' }}>{m.value}</div>
+                    <div style={{ fontSize: 9.5, textTransform: 'uppercase', fontWeight: 500, letterSpacing: 0.2, color: hit ? '#1a1a1a' : T.textMuted }}>{m.label}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
-          {/* Presets */}
-          <div style={{ display: 'flex', gap: 8, margin: '10px 16px 0' }}>
-            <button onClick={presetCoalition} style={{
-              all: 'unset', cursor: 'pointer', flex: 1, textAlign: 'center',
-              padding: '10px 12px', borderRadius: 10,
-              background: T.text, color: '#fff', fontSize: 13, fontWeight: 600,
-            }}>Current coalition</button>
+          {/* Action buttons */}
+          <div style={{ display: 'flex', gap: 6, padding: '14px 16px 0' }}>
+            <button onClick={selectCoalition} style={{
+              all: 'unset', cursor: 'pointer', flex: 1, textAlign: 'center', boxSizing: 'border-box',
+              padding: '10px 6px', borderRadius: 11, fontSize: 13.5, fontWeight: 600,
+              background: '#1a1a1a', color: '#FFFFFF', border: '1px solid #1a1a1a',
+            }}>Coalition</button>
+            <button onClick={selectOpposition} style={{
+              all: 'unset', cursor: 'pointer', flex: 1, textAlign: 'center', boxSizing: 'border-box',
+              padding: '10px 6px', borderRadius: 11, fontSize: 13.5, fontWeight: 600,
+              background: '#FFFFFF', color: '#111114', border: '1px solid rgba(17,17,17,0.12)',
+            }}>Opposition</button>
             <button onClick={reset} style={{
-              all: 'unset', cursor: 'pointer', flex: 1, textAlign: 'center',
-              padding: '10px 12px', borderRadius: 10,
-              background: T.surface, border: `1px solid ${T.border}`, fontSize: 13, fontWeight: 600,
+              all: 'unset', cursor: 'pointer', flex: 1, textAlign: 'center', boxSizing: 'border-box',
+              padding: '10px 6px', borderRadius: 11, fontSize: 13.5, fontWeight: 600,
+              background: 'transparent', color: 'oklch(0.58 0.20 25)', border: '1px solid oklch(0.58 0.20 25)',
             }}>Reset</button>
           </div>
 
           {/* Party list */}
-          <SectionLabel>Parties</SectionLabel>
-          <div style={{ margin: '0 16px', background: T.surface, border: `1px solid ${T.border}`, borderRadius: 14, overflow: 'hidden' }}>
+          <div style={{ fontSize: 11, fontWeight: 600, color: T.textSubtle, letterSpacing: 0.6, textTransform: 'uppercase', padding: '14px 16px 0' }}>Select parties</div>
+          <div style={{ margin: '8px 16px 0', background: '#FFFFFF', border: '1px solid rgba(17,17,17,0.07)', borderRadius: 14, overflow: 'hidden' }}>
             {PARTIES.map((p, i) => {
               const on = parties.includes(p.id);
               return (
-                <button key={p.id} onClick={() => togglePartySelection(p.id)} style={{
-                  all: 'unset', cursor: 'pointer',
+                <div key={p.id} onClick={() => togglePartySelection(p.id)} style={{
                   display: 'flex', alignItems: 'center', gap: 12,
-                  width: '100%', padding: '12px 14px',
-                  borderTop: i > 0 ? `1px solid ${T.border}` : 'none',
-                  background: on ? '#F4F4EE' : 'transparent',
+                  padding: '11px 14px', cursor: 'pointer',
+                  borderTop: i > 0 ? '0.5px solid rgba(17,17,17,0.07)' : 'none',
+                  background: on ? '#f0f0ee' : 'transparent',
                 }}>
-                  <span style={{ width: 12, height: 12, borderRadius: 99, background: p.color, flexShrink: 0 }} />
-                  <span style={{ flex: 1, fontSize: 14, fontWeight: 600 }}>{p.short}</span>
-                  <span style={{ fontSize: 12, color: T.textMuted }}>{p.seats}</span>
-                  <Switch on={on} />
-                </button>
+                  <span style={{
+                    width: 24, height: 24, borderRadius: 6, background: p.color, flexShrink: 0,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#fff', fontSize: 14, fontWeight: 700,
+                  }}>{on ? '✓' : ''}</span>
+                  <span style={{ flex: 1, minWidth: 0 }}>
+                    <span style={{ fontSize: 14.5, fontWeight: 500, color: T.text }}>{p.short}</span>
+                    <span style={{ fontSize: 11, color: T.textMuted, marginLeft: 6 }}>· {p.side}</span>
+                  </span>
+                  <span style={{ fontSize: 14.5, fontVariantNumeric: 'tabular-nums' }}>
+                    {on ? (
+                      <span style={{ color: T.accent, fontWeight: 700 }}>{p.seats}</span>
+                    ) : (
+                      <span><span style={{ color: T.textMuted }}>0</span><span style={{ color: T.textSubtle }}>/{p.seats}</span></span>
+                    )}
+                  </span>
+                </div>
               );
             })}
           </div>
 
-          {/* Individual MPs */}
-          <SectionLabel>Add individual MP</SectionLabel>
-          <div style={{ margin: '0 16px' }}>
-            <input
-              value={q} onChange={e => setQ(e.target.value)}
-              placeholder="Search MPs by name…"
-              style={{
-                width: '100%', padding: '11px 14px',
-                background: T.surface, border: `1px solid ${T.border}`,
-                borderRadius: 12, outline: 'none', fontSize: 14,
-              }}
-            />
-            {q.trim() && (
-              <div style={{ marginTop: 8, background: T.surface, border: `1px solid ${T.border}`, borderRadius: 12, overflow: 'hidden', maxHeight: 240, overflowY: 'auto' }}>
-                {filteredMPs.length === 0 ? (
-                  <div style={{ padding: 14, color: T.textMuted, fontSize: 13, textAlign: 'center' }}>No matches</div>
-                ) : filteredMPs.map((m, i) => {
-                  const p = PARTY(m.party);
-                  const added = extras.includes(m.id);
-                  const inParty = parties.includes(m.party);
-                  return (
-                    <button key={m.id} onClick={() => toggleExtra(m.id)} disabled={inParty} style={{
-                      all: 'unset', cursor: inParty ? 'not-allowed' : 'pointer',
-                      display: 'flex', alignItems: 'center', gap: 10,
-                      width: '100%', padding: '10px 12px',
-                      borderTop: i > 0 ? `1px solid ${T.border}` : 'none',
-                      opacity: inParty ? 0.5 : 1,
-                    }}>
-                      <span style={{ width: 8, height: 8, borderRadius: 99, background: p.color, flexShrink: 0 }} />
-                      <span style={{ flex: 1, fontSize: 14 }}>{m.name} <span style={{ color: T.textMuted, fontSize: 12 }}>· {p.short}</span></span>
-                      <span style={{ fontSize: 18, fontWeight: 700, color: added ? T.danger : T.text }}>{added ? '−' : '+'}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-            {addedMPObjs.length > 0 && (
-              <div style={{ marginTop: 12 }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: T.textSubtle, letterSpacing: 0.6, textTransform: 'uppercase', padding: '4px 0 6px' }}>
-                  Added MPs ({addedMPObjs.length})
+          {/* Individual adjustments */}
+          <div style={{ fontSize: 11, fontWeight: 600, color: T.textSubtle, letterSpacing: 0.6, textTransform: 'uppercase', padding: '20px 16px 0' }}>Individual adjustments</div>
+          <div style={{ margin: '8px 16px 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {/* Card 1 — Add */}
+            <div>
+              <div onClick={() => openPanel('add')} style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '12px 14px', borderRadius: 13, cursor: 'pointer',
+                background: '#FFFFFF', border: '1px solid rgba(17,17,17,0.07)',
+              }}>
+                <span style={{
+                  width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: 'oklch(0.95 0.05 145)',
+                }}>
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <circle cx="7" cy="6.5" r="3" stroke="oklch(0.45 0.13 145)" strokeWidth="1.5"/>
+                    <path d="M2 15c.7-2.5 2.7-4 5-4s4.3 1.5 5 4" stroke="oklch(0.45 0.13 145)" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M13 13.5h4M15 11.5v4" stroke="oklch(0.45 0.13 145)" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: T.text }}>Add individual MPs</div>
+                  <div style={{ fontSize: 11.5, color: T.textMuted }}>From non-selected parties</div>
                 </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                  {addedMPObjs.map(m => {
-                    const p = PARTY(m.party);
-                    const greyed = parties.includes(m.party);
-                    return (
-                      <button key={m.id} onClick={() => toggleExtra(m.id)} style={{
-                        all: 'unset', cursor: 'pointer',
-                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                        padding: '5px 10px', borderRadius: 99,
-                        background: T.surface, border: `1px solid ${T.border}`,
-                        fontSize: 12, opacity: greyed ? 0.5 : 1,
-                      }}>
-                        <span style={{ width: 7, height: 7, borderRadius: 99, background: p.color }} />
-                        <span>{m.name}</span>
-                        <span style={{ color: T.textMuted, fontWeight: 700 }}>×</span>
-                      </button>
-                    );
-                  })}
-                </div>
+                {chevron}
               </div>
-            )}
+              {panel === 'add' && (
+                <IndividualPanel
+                  q={q} setQ={setQ}
+                  placeholder="Search MPs to add…"
+                  results={panelResults}
+                  selectedIds={added}
+                  onToggle={toggleAdded}
+                />
+              )}
+            </div>
+
+            {/* Card 2 — Exclude */}
+            <div>
+              <div onClick={() => openPanel('exclude')} style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '12px 14px', borderRadius: 13,
+                cursor: parties.length === 0 ? 'default' : 'pointer',
+                opacity: parties.length === 0 ? 0.6 : 1,
+                background: '#FFFFFF', border: '1px solid rgba(17,17,17,0.07)',
+              }}>
+                <span style={{
+                  width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: 'oklch(0.95 0.03 25)',
+                }}>
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <circle cx="7" cy="6.5" r="3" stroke="oklch(0.55 0.16 25)" strokeWidth="1.5"/>
+                    <path d="M2 15c.7-2.5 2.7-4 5-4s4.3 1.5 5 4" stroke="oklch(0.55 0.16 25)" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M13 13.5h4" stroke="oklch(0.55 0.16 25)" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: T.text }}>Exclude MPs</div>
+                  <div style={{ fontSize: 11.5, color: T.textMuted }}>
+                    {parties.length === 0 ? 'Select parties first' : 'Remove MPs from selected parties'}
+                  </div>
+                </div>
+                {chevron}
+              </div>
+              {panel === 'exclude' && parties.length > 0 && (
+                <IndividualPanel
+                  q={q} setQ={setQ}
+                  placeholder="Search MPs to exclude…"
+                  results={panelResults}
+                  selectedIds={excluded}
+                  onToggle={toggleExcluded}
+                  danger
+                />
+              )}
+            </div>
           </div>
         </section>
       );
     }
 
-    function Switch({ on }) {
+    function IndividualPanel({ q, setQ, placeholder, results, selectedIds, onToggle, danger }) {
       return (
-        <span style={{
-          width: 36, height: 22, borderRadius: 99,
-          background: on ? T.text : T.surfaceAlt,
-          position: 'relative', transition: 'background 150ms',
-          flexShrink: 0,
-        }}>
-          <span style={{
-            position: 'absolute', top: 2, left: on ? 16 : 2,
-            width: 18, height: 18, borderRadius: 99,
-            background: '#fff', transition: 'left 150ms',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-          }} />
-        </span>
+        <div style={{ marginTop: 8 }}>
+          <input
+            value={q} onChange={e => setQ(e.target.value)}
+            placeholder={placeholder}
+            style={{
+              width: '100%', boxSizing: 'border-box',
+              padding: '11px 14px', borderRadius: 12,
+              background: '#F4F4F1', border: 'none',
+              fontSize: 14, color: '#111114', outline: 'none',
+            }}
+          />
+          <div style={{ marginTop: 8, background: '#FFFFFF', border: '1px solid rgba(17,17,17,0.07)', borderRadius: 12, overflow: 'hidden', maxHeight: 240, overflowY: 'auto' }}>
+            {results.length === 0 ? (
+              <div style={{ padding: 14, color: T.textMuted, fontSize: 13, textAlign: 'center' }}>No matches</div>
+            ) : results.map((m, i) => {
+              const p = PARTY(m.party);
+              const on = selectedIds.includes(m.id);
+              return (
+                <button key={m.id} onClick={() => onToggle(m.id)} style={{
+                  all: 'unset', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  width: '100%', boxSizing: 'border-box', padding: '10px 12px',
+                  borderTop: i > 0 ? '0.5px solid rgba(17,17,17,0.07)' : 'none',
+                  background: on ? '#f0f0ee' : 'transparent',
+                }}>
+                  <span style={{ width: 8, height: 8, borderRadius: 99, background: p.color, flexShrink: 0 }} />
+                  <span style={{ flex: 1, fontSize: 14 }}>{m.name} <span style={{ color: T.textMuted, fontSize: 12 }}>· {p.short}</span></span>
+                  <span style={{ fontSize: 18, fontWeight: 700, color: on ? (danger ? 'oklch(0.58 0.20 25)' : T.accent) : T.textMuted }}>
+                    {danger ? (on ? '✓' : '−') : (on ? '✓' : '+')}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       );
     }
 
