@@ -1,231 +1,232 @@
-# Riigikogu Mobile — Architecture Rebuild & API-Check Plan
+# Riigikogu Mobile — Architecture Rebuild & API-Check Plan (v2)
 
-> **Status:** Approved plan, not yet executed.
+> **Status:** Approved plan, not yet executed. v2 supersedes the v1 plan after a critical review.
 > **Stack decision (locked):** Plain HTML + CSS + native ES modules. **No bundler, no framework, no build step.** The source *is* what ships.
-> **Audience:** A future Claude Code session executing this plan end to end.
-> **Golden rule:** Usability must be preserved at every step. Parties, MP names, party colors, clickable buttons/menus/links, tabs, board, and the **vote-calculator logic** must behave identically before and after. The Phase 2 regression tests are the enforcement mechanism — never merge a phase that makes them red.
+> **Audience:** A Claude Code session executing one phase at a time via `EXECUTION_GUIDE.md`.
+> **Golden rule:** Usability is preserved at every step — parties, MP names, party colors, clickable buttons/menus/links, tabs, board, and the vote-calculator logic. The Usability Contract (Phase 2) enforces this; never merge a phase with a red suite.
 
 ---
 
-## 0. Why this plan exists (context)
+## 1. Verified findings (evidence, not assumptions)
 
-The current `index.html` (253 KB) is a **compiled, minified, symbol-mangled build artifact** (Tailwind CSS + a bundled React-like app, `<div id=root>`). Findings established during analysis:
+All of the following were verified against the actual repo and live API:
 
-1. **No source code is in the repo** — only the build output. The minified blob cannot be safely hand-edited.
-2. **All data and all logic are baked into the blob.** Grep of the bundle found **no `fetch()`, no `.json`, no XHR** — every MP, faction, committee, board member, party color, seat count (52/49/51), and the entire vote calculator is hardcoded inside the minified JS.
-3. **`data/*.json` is not read by the app.** It only feeds the monthly GitHub Action, whose output a human must then hand-apply to the un-editable blob. The loop is broken at the last step.
-4. **`CLAUDE.md` is drifted:** it references `mp-data-scraped.json` (does not exist) and tells editors to modify "hardcoded JS objects" (minified, unsafe).
-5. **A redesign already failed once** — git commit `4dae72b "Restore original app from before the redesign"` reverted the entire `redesign/chunk1..7` effort. This is the exact failure mode this plan prevents.
-6. **The faction resolver is buggy.** `scripts/fetch_mp_data.py` takes `factions[0]` (the first, possibly expired, membership). Correct logic = the `FRAKTSIOON` faction whose `membership.endDate is null`. Verified against the live API:
-   - Buggy `[0]`: 50 Non-affiliated, 25 Reform (wrong).
-   - Corrected: Reform 37, Non-affiliated 18, Eesti 200 13, SDE 9, EKRE 9, Isamaa 8, Centre 7 = **101** (plausible).
-7. **Service worker path bug:** `service-worker.js` caches `/riigikogu-dashboard/...` but the app is hosted at `/riigikogu-mobile/`.
+1. **`index.html` is a compiled, minified artifact with no source in the repo.** 253 KB; Tailwind-compiled CSS + a minified bundled app mounting into `<div id=root>`. Cannot be safely hand-edited.
+2. **Zero runtime data loading.** The bundle contains no `fetch()`, no `.json` reference, no XHR. All MPs, factions, committees, board, colors, and calculator logic are baked in.
+3. **The deployed data is ~2 years stale.** The bundle hardcodes `seats:39/14/13/11/10/8/6` (the 2023 composition: Reform 39, SDE 14 …). The live API today returns: **Reform 37, Non-affiliated 18, Eesti 200 13, SDE 9, EKRE 9, Isamaa 8, Centre 7 = 101.** The rebuild must ship *fresh* data, not reproduce stale numbers.
+4. **The monthly workflow is broken three times over:**
+   - a) Its `git add data/mp_data_fetched.json` fails with exit 1 — that path is in `.gitignore` (verified by simulation).
+   - b) Its `gh pr create --base main` fails — **the repo has no `main` branch** (default branch is `claude/setup-pwa-structure-R7z8d`).
+   - c) Even if (a) and (b) worked, the app never reads the data it updates (finding 2).
+5. **Faction-resolver bug.** `scripts/fetch_mp_data.py` takes `factions[0]` — the first (possibly expired) membership. Naive parse yields 50 "Non-affiliated" / 25 Reform (wrong). Correct rule — the `FRAKTSIOON` entry whose `membership.endDate is null` — yields the plausible 101-seat split in finding 3.
+6. **Service-worker path bug.** `service-worker.js` precaches `/riigikogu-dashboard/...` but the app is hosted at `/riigikogu-mobile/`. Offline mode cannot currently work. Consequence for testing: a PWA test **cannot** be green before this is fixed (Phase 6) — it is marked expected-fail until then.
+7. **`CLAUDE.md` is drifted:** references `mp-data-scraped.json` and `data/change_report.json` (neither exists), instructs editing "hardcoded JS objects" in a minified file, and targets the nonexistent `main`.
+8. **A redesign already failed once** (commit `4dae72b "Restore original app from before the redesign"`), because design, data, and logic are fused — the exact failure this plan prevents.
+9. **Live API verified:** `GET https://api.riigikogu.ee/api/plenary-members?lang=EN` → HTTP 200, ~427 KB, 101 members, `access-control-allow-origin: *`.
 
-### Target architecture
+### API field map
+
+| App field    | API source                                                              |
+|--------------|-------------------------------------------------------------------------|
+| `name`       | `fullName`                                                              |
+| `uuid`       | `uuid`                                                                  |
+| `photoUrl`   | `photo._links.download.href`                                            |
+| `profileUrl` | `WEB_BASE/{uuid}/{name-with-dashes}`                                    |
+| `faction`    | `factions[]` entry with `type.code=="FRAKTSIOON"` and `membership.endDate==null` |
+| `committees` | `committees[]` entries with `membership.endDate==null` (name + `membership.role.value`) |
+
+---
+
+## 2. Target architecture
 
 ```
-DATA LAYER      data/*.json  ── single source of truth, fetched at runtime
-   │            (maintained by the monthly API-check workflow)
+DATA LAYER      data/*.json  ── single source of truth, fetched by the app at runtime,
+   │                            maintained by the monthly API-check workflow via reviewed PRs
 LOGIC LAYER     src/lib/*.js ── pure, framework-free, unit-tested (calculator, thresholds, faction map)
    │
-VIEW LAYER      src/views/*.js + styles.css ── THE ONLY PART A REDESIGN TOUCHES
+VIEW LAYER      src/views/*.js + styles.css ── THE ONLY LAYER A REDESIGN EVER TOUCHES
    │
-USABILITY       tests/ (Playwright) ── locks every feature; blocks regressions in CI
+USABILITY       tests/ (Playwright + unit) ── locks every feature; CI blocks regressions
 CONTRACT
 ```
 
-### Live API — verified working
+**Two parity concepts — kept separate on purpose:**
+- **Behavior parity** (required): same tabs, same clickable elements, same flows, same calculator rules. Locked by tests.
+- **Data parity** (explicitly NOT required): the rebuild ships *current* API data, not the stale 2023 numbers. Composition changes are flagged in the PR for human review (party changes are politically significant).
 
-```
-GET https://api.riigikogu.ee/api/plenary-members?lang=EN
-→ HTTP 200, ~427 KB, 101 members, access-control-allow-origin: *
-```
-
-Field map per member:
-
-| App field      | API source                              |
-|----------------|-----------------------------------------|
-| `name`         | `fullName`                              |
-| `uuid`         | `uuid`                                  |
-| `photoUrl`     | `photo._links.download.href`            |
-| `profileUrl`   | `WEB_BASE/{uuid}/{name-with-dashes}`    |
-| `faction`      | `factions[]` where membership is current (see resolver) |
-| `committees`   | `committees[]` where `membership.endDate is null` (name + role.value) |
+**Stable-ID contract:** every interactive/meaningful element in the new app carries a `data-testid` (e.g. `tab-calculator`, `mp-row`, `party-chip-ref`, `calc-total`, `badge-majority`). These IDs are the permanent anchor points of the Usability Contract. **A future redesign may change any markup, style, or layout — but must keep the `data-testid`s.** That is the mechanism that makes redesigns safe forever.
 
 ---
 
-## Execution rules for Claude Code
+## 3. Execution rules
 
-- Work on branch `claude/jolly-edison-ar6tjy` (or a child branch per phase). **Never commit to `main`.**
-- Each phase is a **separate commit** (ideally a separate PR) and must leave the app working.
-- **Do not start Phase 3+ until Phase 2 tests are green against the CURRENT app.** The tests must pass on the old blob first, proving they describe real behavior, then keep passing through the rewrite.
-- After each phase: run the full test suite, update `CLAUDE.md`, and stop for human review before the next phase if it changes user-visible behavior.
-- Honor existing `CLAUDE.md` critical rules where still valid: never alter the PWA contract casually, always use a feature branch, total MP count must equal 101.
+- Phase 0 establishes a real `main` branch. **Every later phase = its own branch off `main` + its own PR into `main`.** Never commit directly to `main`.
+- Each phase must leave the repo in a working, shippable state.
+- Tests: Tier-1 must stay green from Phase 2 onward; Tier-2 activates in Phase 4. A red suite blocks merge — no exceptions.
+- Every phase ends with: run full test suite, commit, push, open PR, report results with evidence (test output / screenshots).
+- Claude drives verification itself with the pre-installed Chromium + Playwright — the human's job is reviewing PRs, not manual browser testing.
 
----
+### Test strategy (resolves v1's circular dependencies)
 
-## Phase 0 — Freeze the baseline (safety net) — NO app changes
-
-**Goal:** Make rollback trivial and capture today's behavior before anything moves.
-
-Steps:
-1. `git tag v-stable-pre-rebuild` on the current `HEAD` of `main`; push the tag. This is the guaranteed rollback point.
-2. Create `BEHAVIOR_SNAPSHOT.md` recording observed current behavior (manually verify in a browser):
-   - Tabs that exist and their order.
-   - Party list with the **exact hex colors** used (extract from the compiled CSS / computed styles).
-   - Coalition vs opposition totals and the majority threshold shown.
-   - Calculator outputs for 3 fixed scenarios (e.g. "Reform+Eesti200+SDE", "all parties", "single MP added") — record seat totals and which threshold badges light up.
-   - List of every clickable element per tab (buttons, MP rows → profile links, menu items, bottom sheets).
-3. Correct `CLAUDE.md` immediately to state reality: the app is currently an artifact-only blob; `data/*.json` is not yet wired to the app; `mp-data-scraped.json` does not exist. Mark the old "Monthly Update Procedure" as **deprecated, pending rebuild**.
-
-**Acceptance:** Tag exists and is pushed; `BEHAVIOR_SNAPSHOT.md` committed; `CLAUDE.md` no longer describes nonexistent files.
+- **Tier 1 — behavior core (runs on the OLD app now, and the new app forever):** text/role-based Playwright selectors only (tab names, MP names, visible totals) since the old DOM has no testids. Calculator tests are **self-consistency** checks — e.g. "tap party X → total increases by the seat count the app itself displays for X; majority badge activates iff total ≥ 51" — so they hold regardless of data vintage.
+- **Tier 2 — data-driven extended (new app only, from Phase 4):** uses `data-testid` + cross-checks the DOM against `data/*.json` (party colors, 101 rows, profile links, seat sums).
+- **Unit tests (from Phase 3):** pure calculator math — boundaries 50/51 and 67/68, party/MP add & remove.
+- **PWA test:** written in Phase 2 but marked expected-fail (`test.fixme`) until Phase 6 fixes the service worker.
+- Local serving for tests: any static server (e.g. `python3 -m http.server`) from repo root.
 
 ---
 
-## Phase 1 — Data layer (extract data to versioned JSON, runtime-read)
+## Phase 0 — Baseline, snapshot & repo repair
 
-**Goal:** Make `data/*.json` the single source of truth, with a schema driven by the real API.
+**Goal:** rollback point, automated behavior record, and a sane default branch. No app changes.
 
-Steps:
-1. Define and document the schema in `data/` (commit example files):
-   - **`data/parties.json`** — array of `{ id, nameEn, nameEt, short, color, seats, bloc }` where `bloc ∈ {"coalition","opposition","none"}` and `color` is a hex string. This is the **canonical home of party colors** (extracted from the current compiled CSS during Phase 0).
-   - **`data/mps.json`** — array of `{ name, uuid, photoUrl, profileUrl, partyId, faction, committees:[{name,role}], active }`. Extends the existing `mp_data_current.json`.
-   - **`data/board.json`** — `{ president, vicePresidents:[...] }` with each `{ name, partyId, uuid }`.
-   - **`data/meta.json`** — `{ totalSeats:101, coalitionSeats, oppositionSeats, simpleMajority:51, constitutionalMajority:68, updatedAt }`.
-2. Add a `partyId` mapping table (faction full name → party id + color) in `data/parties.json` so MP factions resolve to a stable id and color. Cover all 7 current factions plus "Non-affiliated members".
-3. Populate the JSON **once** from the live API (using the corrected resolver from Phase 5's script) **plus** party colors extracted from the existing bundle/CSS in Phase 0. Do not retype from memory.
-4. **Validate:** assert `len(mps) == 101`; assert `sum(party.seats) == 101`; assert every `mp.partyId` exists in `parties.json`; assert `coalitionSeats + oppositionSeats == 101`.
+1. Tag the current default-branch HEAD: `git tag v-stable-pre-rebuild` + push the tag.
+2. **Automated characterization** (Claude, with local Playwright/Chromium against the current `index.html`):
+   - Screenshot every tab and key interaction (MP popup, calculator with selections).
+   - Extract: tab names, all party names + their **rendered hex colors** (computed styles), displayed seat totals, the full list of clickable elements per tab, and the calculator's behavior for 3 scenarios.
+   - Write it all to `BEHAVIOR_SNAPSHOT.md` + `snapshot/` screenshots. Note explicitly which displayed numbers are stale (vs. live API).
+3. **Repo repair:**
+   - Create branch `main` from the current default branch HEAD (via API/MCP).
+   - Ask the owner to flip the default branch to `main` in GitHub Settings → Branches (one click; cannot be done via available tooling), and to confirm **GitHub Pages source** (Settings → Pages) so we know what deploys the live site.
+   - Retarget PR #18 to `main`.
+4. Correct `CLAUDE.md` minimally: mark the old procedure deprecated, remove references to nonexistent files, note the artifact-only state and this plan.
 
-**Acceptance:** All four JSON files exist, validate, and total to 101. No app behavior change yet (app still runs off the blob).
-
----
-
-## Phase 2 — Usability contract + regression tests (the safety net)
-
-**Goal:** Lock every feature with automated tests that pass against the CURRENT blob first, then guard the rewrite.
-
-Steps:
-1. Write `USABILITY.md`: an explicit, checkable list of features that must always work — tab set, MP directory + search/filter, party color coding, clickable profile links, board view, calculator (add/remove party, add/remove MP, simple + constitutional majority indicators), PWA install + offline.
-2. Add **Playwright** tests under `tests/` (Playwright is framework-agnostic — it drives the rendered site, so the same tests survive the rewrite). Add a minimal `package.json` dev-dependency on `@playwright/test` and an `npm test` script. Tests:
-   - `01-render.spec.js`: 101 MP entries render; each MP row links to its `profileUrl`.
-   - `02-colors.spec.js`: each party's rendered color matches `data/parties.json`.
-   - `03-tabs.spec.js`: all tabs from `USABILITY.md` are present and switch.
-   - `04-calculator.spec.js`: for the 3 fixed scenarios from `BEHAVIOR_SNAPSHOT.md`, assert seat totals and which majority badges are active. **This is the test that prevents the calculator from silently breaking in a redesign.**
-   - `05-pwa.spec.js`: manifest loads; service worker registers; offline navigation serves `offline.html`.
-3. Run the suite against the **current** `index.html` and make it green (adjust selectors to the real DOM). Commit only when green.
-4. Add a GitHub Actions workflow `.github/workflows/usability-tests.yml` running Playwright on every PR. **A red suite blocks merge.**
-
-**Acceptance:** `npm test` green against the existing app; CI workflow runs on PRs and blocks on failure.
+**Acceptance:** tag pushed; `BEHAVIOR_SNAPSHOT.md` + screenshots committed; `main` exists and is default; Pages source confirmed; `CLAUDE.md` no longer lies.
 
 ---
 
-## Phase 3 — Vanilla source rewrite (decouple design from data/logic)
+## Phase 1 — Data layer (fresh, validated, canonical)
 
-**Goal:** Replace the opaque blob with owned, plain-JS source that renders the SAME UI from the Phase 1 data and Phase 4 logic. No bundler.
+**Goal:** `data/*.json` becomes the single source of truth, populated from the live API with the corrected resolver.
 
-Target file structure:
+1. Schema (documented in `data/README.md`):
+   - `data/parties.json` — `{ id, nameEn, nameEt, short, color, bloc }` per party incl. a "Non-affiliated" group. `bloc ∈ {"coalition","opposition","none"}`. **Colors** come from Phase 0's extraction; **bloc assignments are editorial** — proposed by Claude from current government composition, confirmed by the owner in PR review. Includes the faction-name → partyId map for all current faction names.
+   - `data/mps.json` — `{ name, uuid, photoUrl, profileUrl, partyId, faction, committees:[{name,role}], active }`.
+   - `data/board.json` — president + vice-presidents `{ name, partyId, uuid }` (from the API usergroups / verified sources).
+   - `data/meta.json` — `{ totalSeats:101, simpleMajority:51, constitutionalMajority:68, coalitionSeats, oppositionSeats, updatedAt }` (seat totals **computed**, never hand-typed).
+2. Populate from the live API using the corrected faction resolver. Editorial extras baked in the old bundle (per-MP notes, flags) are carried into an optional curated `data/notes.json` only if the current UI displays them (per `BEHAVIOR_SNAPSHOT.md`).
+3. `scripts/validate_data.py`: exactly 101 MPs; every `partyId` resolves; per-party seat sums match; `coalition+opposition+none == 101`; all photo/profile URLs well-formed. Wire it so later phases and the monthly workflow reuse it.
+
+**Acceptance:** JSON files committed, validator passes, PR review confirms bloc assignments and flags the composition drift vs. the old app.
+
+---
+
+## Phase 2 — Usability Contract (tests before any rewrite)
+
+**Goal:** executable safety net, green on the CURRENT app.
+
+1. `USABILITY.md`: the feature list that must survive any change — tabs, MP directory + search/filter, party color coding, profile links, board view, calculator (add/remove party, add/remove MP, 51/68 badges), PWA install + offline (post-Phase-6).
+2. Playwright **Tier-1** suite per the test strategy above; green against the current blob served locally. PWA spec written but `fixme`-marked (documented reason: pre-existing SW path bug).
+3. **Tier-2** specs written but skipped until Phase 4 (they need testids + runtime JSON).
+4. CI workflow `.github/workflows/usability-tests.yml`: runs the suite on every PR to `main`; red blocks merge.
+5. `package.json`: `@playwright/test` devDependency + `npm test`. Use the pre-installed Chromium (`executablePath` respected via `PLAYWRIGHT_BROWSERS_PATH`) — no browser download in CI beyond the standard Playwright action.
+
+**Acceptance:** Tier-1 green on the current app locally AND in CI; the suite demonstrably fails if a tab or the calculator is broken (prove with a deliberate temporary sabotage run, then revert).
+
+---
+
+## Phase 3 — Pure logic layer (before any UI work)
+
+**Goal:** the math exists, tested, before views depend on it.
+
+1. `src/lib/calculator.js` — pure functions, no DOM/globals: `seatsForSelection(selection, parties, mps)`, `hasSimpleMajority(n)`, `hasConstitutionalMajority(n)`, add/remove party/MP semantics (an individually-removed MP subtracts from their selected party; matching current app behavior per snapshot).
+2. `src/lib/factions.js` — faction-name → partyId/color resolution (same mapping as `parties.json`).
+3. Unit tests (Node's built-in `node:test` runner — zero new dependencies): majority boundaries 50/51 and 67/68, add/remove semantics, the 3 snapshot scenarios recomputed from `data/*.json`.
+
+**Acceptance:** unit tests green in CI; no UI changed yet; module is import-ready for Phase 4.
+
+---
+
+## Phase 4 — Vanilla UI rebuild
+
+**Goal:** replace the blob with owned source rendering the same UX from data + lib.
+
 ```
 index.html            # small hand-written shell: <div id=app>, <script type="module" src="./src/app.js">
-styles.css            # plain CSS; party colors as custom properties (--party-<id>)
+styles.css            # plain CSS; party colors as custom properties (--party-<id>) set from parties.json at load
 src/
   app.js              # tab router + mount
-  data.js             # fetch ./data/*.json at runtime, expose typed accessors
-  lib/
-    calculator.js     # pure vote/threshold logic (Phase 4)
-    factions.js       # faction-name → partyId/color resolution
+  data.js             # fetch ./data/*.json, cache, typed accessors
+  lib/                # from Phase 3 (untouched)
   views/
-    parliament.js     # composition / coalition-opposition dashboard
-    mps.js            # MP directory + search/filter
-    calculator.js     # vote calculator UI (calls lib/calculator.js)
+    parliament.js     # composition dashboard (coalition/opposition from meta.json)
+    mps.js            # directory + search/filter + profile links + photos
+    calculator.js     # calculator UI — imports ONLY src/lib/calculator.js
     board.js          # board of the Riigikogu
-data/                 # parties.json, mps.json, board.json, meta.json (Phase 1)
 ```
 
-Steps:
-1. Build `index.html` as a minimal shell loading native ES modules (GitHub Pages serves them directly — no compile).
-2. `src/data.js` fetches the committed `data/*.json` at load and caches it. (This is the wiring that was missing — the app finally reads its data files.)
-3. **Drop compiled Tailwind.** Recreate only the styles actually used in `styles.css`, with party colors as CSS custom properties read conceptually from `parties.json`. This removes ~18 KB of utility-class soup and makes future restyling = editing variables.
-4. Rebuild each tab in `src/views/*` to render from data — **matching the current UI 1:1** (this is the one-time cost of the vanilla choice).
-5. Run Phase 2 tests continuously; the rewrite is "done" only when **all Phase 2 tests pass against the new source**, identical to how they passed against the blob.
-6. Keep the old `index.html` blob in git history (and behind the `v-stable-pre-rebuild` tag) for rollback.
+1. Build views matching `BEHAVIOR_SNAPSHOT.md` behavior 1:1 (flows, clickables, badges) — with **current** data. Every interactive element gets its `data-testid` (documented list in `USABILITY.md`).
+2. Drop compiled Tailwind; recreate only used styles in `styles.css`.
+3. Un-skip Tier-2 tests. **Done when Tier-1 + Tier-2 + unit tests are all green.**
+4. Attach before/after screenshots (Phase 0 snapshots vs. new app) to the PR for human visual review; PR description flags every data difference (stale → current) explicitly.
+5. Old blob remains recoverable via `v-stable-pre-rebuild`.
 
-**Acceptance:** New vanilla app renders from `data/*.json`; all Phase 2 tests green; visual parity with `BEHAVIOR_SNAPSHOT.md`.
+**Acceptance:** full suite green in CI; screenshot review approved by owner; rollback path documented in PR.
 
 ---
 
-## Phase 4 — Pure logic layer (lock the calculator)
+## Phase 5 — Monthly API check, repaired end-to-end
 
-**Goal:** The vote math lives in one tested module the views call but never re-implement.
+**Goal:** the monthly job updates the JSON the app actually reads, via a reviewed PR — and actually runs.
 
-Steps:
-1. Implement `src/lib/calculator.js` as pure functions: `seatsForSelection(parties, mps, selection)`, `hasSimpleMajority(seats)`, `hasConstitutionalMajority(seats)`, etc. No DOM, no globals.
-2. Add unit tests `tests/unit/calculator.spec.js` covering majority boundaries (50/51, 67/68), party add/remove, individual MP add/remove, and the 3 snapshot scenarios.
-3. The calculator view imports only from `lib/calculator.js`. A redesign can rewrite the view freely; the math is immune.
+1. Fix `scripts/fetch_mp_data.py`: corrected faction resolver; parse current committees; output the **full Phase-1 schema** (`mps.json` + recomputed `meta.json` seat totals); abort (non-zero) on any validation failure — never emit bad data. Reuse `validate_data.py`.
+2. Fix `scripts/compare_mp_data.py` for the new schema; classify changes: **party switches (flagged prominently — politically significant)**, joins, departures, photo/committee changes.
+3. Fix `.github/workflows/monthly-mp-check.yml`:
+   - Remove the gitignore conflict (fetched data goes to a non-ignored working path, or the ignore rule is dropped — the report/diff is what gets committed).
+   - `--base main` (which now exists).
+   - **Run `validate_data.py` + the unit tests inside the workflow before opening the PR** — required because PRs created with `GITHUB_TOKEN` do **not** trigger other workflows (GitHub Actions limitation), so the Phase-2 CI will not run on the bot's PR automatically. Validation must therefore happen in-job. (Alternative if desired later: a PAT/App token so CI triggers normally.)
+   - PR title `MP Data Update - <Month YYYY>`, body from `generate_pr_body.py` with party switches called out.
+4. Resolver regression test: asserts 101 MPs and a sane faction split from a fixture of the raw API payload (so the `factions[0]` class of bug can never return silently).
+5. Optional (nice-to-have): the app shows "Data updated <date>" from `meta.updatedAt`.
 
-**Acceptance:** Unit tests green; `04-calculator.spec.js` still green; no calculator logic duplicated in any view.
-
----
-
-## Phase 5 — Working monthly API check (close the loop)
-
-**Goal:** The monthly check updates the JSON the app actually reads, via a reviewed PR. Architecture = **Option A (build/commit-time)**: the workflow updates `data/*.json` → opens PR → human reviews (party switches flagged) → merge → GitHub Pages redeploys. This preserves offline support and the human review gate for politically sensitive switches.
-
-Steps:
-1. **Fix the faction resolver** in `scripts/fetch_mp_data.py`. Replace the `factions[0]` logic with: among `m["factions"]`, select entries where `type.code == "FRAKTSIOON"` **and** `membership.endDate in (None, "")`; take the current one. (Verified to yield the correct 101-seat distribution.) Also parse current committees (`committees[]` where `membership.endDate is null`, capture `name` + `membership.role.value`).
-2. Make `fetch_mp_data.py` write the **full app schema** (`data/mps.json` shape from Phase 1), not just the legacy fields. Have it also recompute party `seats` and coalition/opposition totals into `data/meta.json` and validate `== 101` (abort on mismatch — never emit bad data).
-3. Update `scripts/compare_mp_data.py` to diff the new schema and to **explicitly flag party switches** (partyId changes) separately from joins/leaves/photo changes, so the PR body highlights politically significant changes for human review (per CLAUDE.md intent).
-4. Update `.github/workflows/monthly-mp-check.yml`:
-   - Keep `cron: '0 8 1 * *'` + `workflow_dispatch`.
-   - On changes: write the new `data/*.json`, run validation, open a PR titled `MP Data Update - <Month YYYY>` targeting `main`, body generated by `generate_pr_body.py` with party switches called out.
-   - Replace the deprecated `gh`-only path if needed; ensure it commits the **app-read** JSON files, not a throwaway report.
-5. **Optional enhancement (not required):** add a client-side "refresh from API" that fetches the live endpoint (CORS is `*`) to show staleness, layered on top of committed JSON — but committed JSON remains the source of truth so offline + review gate are preserved.
-6. Add `tests/unit/faction-resolver.spec.js` (or a Python test) asserting the resolver yields exactly 101 and the known 7-faction split, so the resolver bug can never silently return.
-
-**Acceptance:** Running `python scripts/fetch_mp_data.py` locally produces valid 101-MP JSON in the app schema with correct factions; `compare` flags party switches; the workflow opens a reviewable PR; the app, after merge, shows the updated data.
+**Acceptance:** local dry-run produces valid JSON and a correct change report; `workflow_dispatch` run opens a well-formed PR against `main`; merging it visibly updates the deployed app.
 
 ---
 
-## Phase 6 — PWA housekeeping
+## Phase 6 — PWA repair
 
-**Goal:** Make the PWA survive rebuilds and fix the path bug.
+1. `service-worker.js`: paths `/riigikogu-dashboard/` → `/riigikogu-mobile/`; precache list = `index.html`, `styles.css`, `src/**/*.js`, `data/*.json`, `manifest.json`, icons, `offline.html`; bump cache version.
+2. Verify `manifest.json` `start_url`/`scope` match `/riigikogu-mobile/`.
+3. Un-`fixme` the PWA spec; it must now pass (install + offline serving cached app **and data**).
 
-Steps:
-1. Fix `service-worker.js`: change cached paths from `/riigikogu-dashboard/` to `/riigikogu-mobile/`.
-2. Update the SW precache list to the new asset set: `index.html`, `styles.css`, `src/**/*.js`, `data/*.json`, `manifest.json`, icons, `offline.html`.
-3. Bump the cache version constant so clients pick up the new app.
-4. Confirm `manifest.json` `start_url`/`scope` match `/riigikogu-mobile/`.
-5. `05-pwa.spec.js` must stay green (install + offline).
-
-**Acceptance:** PWA installs, works offline serving cached app + data, and `05-pwa.spec.js` green.
+**Acceptance:** PWA spec green; manual check on the live site after merge: install prompt + airplane-mode reload works.
 
 ---
 
-## Phase 7 — Documentation & cutover
+## Phase 7 — Docs & cutover
 
-Steps:
-1. Rewrite `CLAUDE.md` to describe the **new** architecture and a **safe** monthly procedure: "edit `data/*.json` only (or merge the automated PR); never touch `src/views` or `styles.css` for data changes; run `npm test` before merge."
-2. Document in `CLAUDE.md` the redesign-safety guarantee: design changes touch only `styles.css` + `src/views/*`; `npm test` (Usability Contract) must stay green; data/logic layers are off-limits to design work.
-3. Update `README.md` feature list with whatever the current data shows (composition has drifted from the README's older numbers — let the data drive it).
-4. Final full-suite run; merge to `main`; verify the live GitHub Pages site.
+1. Rewrite `CLAUDE.md`: new architecture; monthly procedure = "review/merge the automated data PR (or edit `data/*.json` by hand); **never** touch `src/views` or `styles.css` for data changes; `npm test` must be green"; the redesign-safety rule (testids + green suite); rule: never commit to `main` directly.
+2. Update `README.md` from current data (numbers driven by `data/*.json`, not prose).
+3. Retire the drifted artifacts of this plan itself: mark `ARCHITECTURE_PLAN.md` executed, keep as historical record.
+4. Full suite; final PR; verify the live GitHub Pages site against `USABILITY.md`.
 
-**Acceptance:** Docs match reality; full suite green; live site verified.
+**Acceptance:** docs match reality; live site verified; owner sign-off.
 
 ---
 
 ## Sequencing, risk & rollback
 
-- **Phases 0–2 are low-risk and deliver most of the safety** (rollback tag + data extracted + regression net). They do not modify the running app. Ship these first; they are valuable even if later phases are deferred.
-- **Phases 3–4** are the larger lift but are gated by Phase 2 tests — every step is verifiable against the locked contract.
-- **Phase 5** can run in parallel with 3–4 (it touches scripts/workflow, not the app), but its output only reaches users after Phase 3 wires the app to JSON.
-- **Rollback at any point:** `git checkout v-stable-pre-rebuild -- index.html` restores the known-good blob.
-- **Never** merge a phase with a red Usability Contract. That rule is what structurally prevents a repeat of commit `4dae72b`.
+| Phase | Risk | Touches running app? | Depends on |
+|-------|------|----------------------|------------|
+| 0 | none | no | — |
+| 1 | none | no | 0 (colors, snapshot) |
+| 2 | none | no | 0, 1 |
+| 3 | none | no | 1 |
+| 4 | **medium** | **yes** | 2, 3 |
+| 5 | low | no (automation) | 1 (+4 for user-visible effect) |
+| 6 | low | offline/install | 4 |
+| 7 | none | docs | all |
 
-## Definition of done (whole project)
+- Phases 0–3 are pure safety and can all merge without changing the deployed app. Phase 5 can proceed in parallel with 3–4.
+- **Rollback at any point:** `git checkout v-stable-pre-rebuild -- index.html service-worker.js manifest.json` restores the known-good app.
+- **Never merge a red suite.** That single rule is what structurally prevents a repeat of `4dae72b`.
 
-- App runs as plain HTML/CSS/ES modules, no bundler, source committed.
-- All MP/party/board/calculator data comes from `data/*.json` at runtime.
-- Vote calculator logic is a single pure, unit-tested module.
-- Monthly API-check workflow opens a reviewable PR updating the app's real data, with correct factions and party-switch flagging.
-- Playwright Usability Contract is green in CI and blocks regressions.
-- PWA installs and works offline with corrected paths.
-- A future design change requires touching only `styles.css` + `src/views/*`, with the test suite proving usability is preserved.
+## Definition of done
+
+- App = plain HTML/CSS/ES modules, source committed, no build step.
+- All data read at runtime from `data/*.json`; deployed composition matches the live Riigikogu API (currently: Reform 37, NA 18, E200 13, SDE 9, EKRE 9, Isamaa 8, Centre 7).
+- Calculator = one pure, unit-tested module.
+- Monthly workflow runs end-to-end: correct factions, validation in-job, reviewed PR against `main`, merge → live update.
+- Usability Contract green in CI; `data-testid` contract documented.
+- PWA installs and works offline on correct paths.
+- A future redesign touches only `styles.css` + `src/views/*`, keeps the testids, and ships only with a green suite.
