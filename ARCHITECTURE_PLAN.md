@@ -1,6 +1,14 @@
-# Riigikogu Mobile — Architecture Rebuild & API-Check Plan (v2)
+# Riigikogu Mobile — Architecture Rebuild & API-Check Plan (v3)
 
-> **Status:** Approved plan, not yet executed. v2 supersedes the v1 plan after a critical review.
+> **Status:** Approved plan, not yet executed. v3 supersedes v2 after analysing the official API repo (`riigikogu-kantselei/api`) and probing every relevant endpoint.
+>
+> ### ⚠️ Correction to v2 — read this first
+>
+> **v2 stated that the deployed app's baked data is "the 2023 composition, ~2 years stale." That was wrong, and the plan built on it was wrong in a way that would have broken the app.**
+>
+> The bundle's hardcoded values are `Reform 39 (coalition), Eesti 200 13 (coalition), SDE 14, EKRE 10, Isamaa 11, Center 8, Independent 6` — coalition 52 of 101. That is **not** the 2023 election result (which was Reform 37, EKRE 17, Centre 16, Eesti 200 14, SDE 9, Isamaa 8). It is a **voting-bloc** count that was accurate until **14 May 2026**, when Varro Vooglaid left the EKRE group (EKRE 10 → 9, unaffiliated 6 → 7). The deployed app is **one defection stale, not two years.**
+>
+> **Why this matters architecturally:** the API reports **registered faction membership**, which is a *different number* from the voting bloc the app displays and the calculator uses. Blindly replacing the app's numbers with API values — as v2's Phase 1 instructed — would show coalition 50 instead of 52 and SDE 9 instead of 14. v3 introduces the alignment overlay (§4) to model both counts correctly.
 > **Stack decision (locked):** Plain HTML + CSS + native ES modules. **No bundler, no framework, no build step.** The source *is* what ships.
 > **Audience:** A Claude Code session executing one phase at a time via `EXECUTION_GUIDE.md`.
 > **Golden rule:** Usability is preserved at every step — parties, MP names, party colors, clickable buttons/menus/links, tabs, board, and the vote-calculator logic. The Usability Contract (Phase 2) enforces this; never merge a phase with a red suite.
@@ -13,7 +21,10 @@ All of the following were verified against the actual repo and live API:
 
 1. **`index.html` is a compiled, minified artifact with no source in the repo.** 253 KB; Tailwind-compiled CSS + a minified bundled app mounting into `<div id=root>`. Cannot be safely hand-edited.
 2. **Zero runtime data loading.** The bundle contains no `fetch()`, no `.json` reference, no XHR. All MPs, factions, committees, board, colors, and calculator logic are baked in.
-3. **The deployed data is ~2 years stale.** The bundle hardcodes `seats:39/14/13/11/10/8/6` (the 2023 composition: Reform 39, SDE 14 …). The live API today returns: **Reform 37, Non-affiliated 18, Eesti 200 13, SDE 9, EKRE 9, Isamaa 8, Centre 7 = 101.** The rebuild must ship *fresh* data, not reproduce stale numbers.
+3. **The deployed data is voting-bloc data, one defection stale** (see the correction box above). Bundle: Reform 39, SDE 14, Eesti 200 13, Isamaa 11, EKRE 10, Center 8, Independent 6; coalition 52. Current truth: EKRE 9, unaffiliated 7 (Vooglaid, 14 May 2026). The API's *registered* counts are a different measure entirely: Reform 37, Non-affiliated 18, Eesti 200 13, SDE 9, EKRE 9, Isamaa 8, Centre 7.
+
+   **Party colors are already extractable from the bundle** (use these in Phase 1, do not re-invent):
+   `Reform #FFD700` (black text), `Eesti 200 #00AEEF`, `SDE #E4002B`, `EKRE #8B4513`, `Isamaa #0072BC`, `Center #007438`, `Independent #808080`.
 4. **The monthly workflow is broken three times over:**
    - a) Its `git add data/mp_data_fetched.json` fails with exit 1 — that path is in `.gitignore` (verified by simulation).
    - b) Its `gh pr create --base main` fails — **the repo has no `main` branch** (default branch is `claude/setup-pwa-structure-R7z8d`).
@@ -23,6 +34,24 @@ All of the following were verified against the actual repo and live API:
 7. **`CLAUDE.md` is drifted:** references `mp-data-scraped.json` and `data/change_report.json` (neither exists), instructs editing "hardcoded JS objects" in a minified file, and targets the nonexistent `main`.
 8. **A redesign already failed once** (commit `4dae72b "Restore original app from before the redesign"`), because design, data, and logic are fused — the exact failure this plan prevents.
 9. **Live API verified:** `GET https://api.riigikogu.ee/api/plenary-members?lang=EN` → HTTP 200, ~427 KB, 101 members, `access-control-allow-origin: *`.
+
+---
+
+## 1b. Official API survey (`github.com/riigikogu-kantselei/api`)
+
+The Chancellery's repo documents only `/api/votings` and `/api/votings/{uuid}`, licensed **CC BY-SA 3.0**, data reliable from 2012 onward, no file downloads. Everything else below was found by probing the live service; treat undocumented endpoints as **best-effort** and guard them accordingly.
+
+| Endpoint | Status | Returns | Use for |
+|---|---|---|---|
+| `/api/plenary-members?lang=EN` | ✅ 200, 101 records | full MP objects | roster, photos, factions, committees, contacts, district |
+| `/api/usergroups?lang=EN` | ✅ 200, 347 groups | all groups incl. historical | authoritative faction & committee lists |
+| `/api/usergroups/{uuid}?lang=EN` | ✅ 200 | group + `members[]` with `membership.role`/`jobTitle` | **Board of the Riigikogu**, committee rosters |
+| `/api/votings?startDate=&endDate=&lang=EN` | ✅ 200 | sittings + votes | future feature, out of scope for monthly |
+| `/api/factions`, `/api/committees` | ❌ 404 | — | do **not** use; filter `/usergroups` by `type.code` instead |
+
+Useful `usergroups` type codes: `FRAKTSIOON` (faction — 7 active), `ALALINE_KOMISJON` (standing committee — 11 active), plus select committees, committees of investigation, delegations, and `Board of the Riigikogu`.
+
+`?includeInactive=true` on `plenary-members` changes nothing (still 101) — do not rely on it to detect departures; diff the roster instead.
 
 ### API field map
 
@@ -34,6 +63,46 @@ All of the following were verified against the actual repo and live API:
 | `profileUrl` | `WEB_BASE/{uuid}/{name-with-dashes}`                                    |
 | `faction`    | `factions[]` entry with `type.code=="FRAKTSIOON"` and `membership.endDate==null` |
 | `committees` | `committees[]` entries with `membership.endDate==null` (name + `membership.role.value`) |
+| `boardRole`  | `plenaryMembership.jobTitle.value` — verified to yield exactly one President, one First and one Second Vice-President |
+| `district`   | `electoralDistrictHistory[]` entry whose `membership` == current convocation (15) |
+| `email`, `phone`, `gender`, `dateOfBirth`, `parliamentSeniority` | same-named fields — present for 101/101 |
+
+---
+
+## 1c. What can be updated automatically each month — and what cannot
+
+This is the core question this plan answers. The split is driven by one fact: **the API knows registered faction membership, and nothing about a defector's new political home.**
+
+### Tier A — fully automatic (API is authoritative, zero human judgement)
+
+Verified present and complete for all 101 members:
+
+1. **Roster** — arrivals, departures, and substitutions (diff by `uuid`).
+2. **Names** (`fullName`).
+3. **Photos** (`photo._links.download.href`) — the current bundle uses stale `wpcms` thumbnail URLs; the API download links are the durable form.
+4. **Profile links** (derived from uuid + name slug).
+5. **Registered faction** — the 7 active `FRAKTSIOON` groups + "Non-affiliated members".
+6. **Committee memberships and roles** — 92 members, 11 Chairmen, 11 Deputy Chairmen across the 11 standing committees; select/investigation committees also available.
+7. **Board of the Riigikogu** — currently Lauri Hussar (President), Toomas Kivimägi (First VP), **Arvo Aller (Second VP, since 2024-07-15)**. Note the API is *more current than most secondary sources here* — several references still list Seeder, who last held a Board office in 2023.
+8. **Contact details** — email, phone.
+9. **Electoral district**, **parliamentary seniority**, convocation membership number.
+10. **The faction and committee catalogues themselves** (names, uuids) — so a renamed or newly formed committee is picked up without a code change.
+
+### Tier B — detected automatically, decided by a human
+
+11. **Voting-bloc alignment of the 18 non-affiliated MPs.** Under the Rules of Procedure §40–42, an MP who leaves a parliamentary group **may never join another** for the rest of the term — so a defector who joins a new party is registered as non-affiliated forever while voting with their new group. The API therefore reports 18 non-affiliated; the political reality is 11 of them vote with a party and 7 with no one.
+
+    The job **can** detect, with no human input: *who* newly became non-affiliated, *when*, and *which faction they left* (verified — it correctly surfaces Vooglaid leaving EKRE on 2026-05-14, and all 17 earlier cases with dates). It **cannot** determine which party they joined. That single fact is what the human supplies.
+
+12. **Coalition / opposition bloc per party** — political, changes when a government changes.
+13. **Party colours** — a design decision; stable, and already captured (finding 3).
+
+### Tier C — out of scope for the monthly job
+
+14. **Voting records** (`/api/votings`) — a genuinely valuable future feature (per-MP roll-call), but a separate dataset and a separate UI. Deliberately not part of the monthly roster update.
+15. **Party membership outside parliament** — not in this API at all.
+
+**Net result:** roughly 95% of the app's data maintains itself. The recurring human task shrinks to *"a new MP became non-affiliated — which bloc do they vote with?"*, which arises only when someone actually defects (roughly a handful of times per term).
 
 ---
 
@@ -50,9 +119,34 @@ USABILITY       tests/ (Playwright + unit) ── locks every feature; CI blocks
 CONTRACT
 ```
 
+### The dual-count model (new in v3 — the key design decision)
+
+Every party carries **two seat numbers**, and conflating them is the single biggest correctness risk in this app:
+
+| Count | Source | Meaning | Used for |
+|---|---|---|---|
+| `registeredSeats` | 100% API, auto-updated | Formal parliamentary group size | Procedural facts: speaking time, committee entitlements, anything quoted as an official Riigikogu figure |
+| `votingBlocSeats` | API + `alignment.json` overlay | Group size **plus** defectors who vote with it | **Majority arithmetic — the vote calculator, coalition/opposition totals, "will this pass"** |
+
+Today: coalition = **52** voting-bloc (Reform 39 + Eesti 200 13) but **50** registered. The app has always displayed voting-bloc numbers, and must continue to — the calculator is meaningless otherwise.
+
+`data/alignment.json` is the **only hand-maintained data file**, keyed by MP uuid:
+
+```jsonc
+{
+  "blocs": { "reform": "coalition", "e200": "coalition", "sde": "opposition", "…": "…" },
+  "defectors": {
+    "<uuid>": { "votesWith": "sde", "since": "2024-01-05", "note": "left Centre Jan 2024" }
+  },
+  "unaligned": ["<uuid>", "…"]
+}
+```
+
+Rules enforced by the validator: every non-affiliated MP appears in exactly one of `defectors` / `unaligned`; `registeredSeats` sums to 101; `votingBlocSeats` sums to 101. The UI labels which count it is showing wherever both could be meant.
+
 **Two parity concepts — kept separate on purpose:**
 - **Behavior parity** (required): same tabs, same clickable elements, same flows, same calculator rules. Locked by tests.
-- **Data parity** (explicitly NOT required): the rebuild ships *current* API data, not the stale 2023 numbers. Composition changes are flagged in the PR for human review (party changes are politically significant).
+- **Data parity** (near-total, deliberately): because the deployed numbers are voting-bloc figures only one defection behind, the rebuild should reproduce them almost exactly. The **only** expected change is EKRE 10 → 9 and unaffiliated 6 → 7 (Vooglaid, 14 May 2026); coalition stays 52. **If Phase 4 produces any other change to a headline number, that is a bug, not fresh data** — most likely registered counts leaking into a voting-bloc display.
 
 **Stable-ID contract:** every interactive/meaningful element in the new app carries a `data-testid` (e.g. `tab-calculator`, `mp-row`, `party-chip-ref`, `calc-total`, `badge-majority`). These IDs are the permanent anchor points of the Usability Contract. **A future redesign may change any markup, style, or layout — but must keep the `data-testid`s.** That is the mechanism that makes redesigns safe forever.
 
@@ -100,14 +194,16 @@ CONTRACT
 **Goal:** `data/*.json` becomes the single source of truth, populated from the live API with the corrected resolver.
 
 1. Schema (documented in `data/README.md`):
-   - `data/parties.json` — `{ id, nameEn, nameEt, short, color, bloc }` per party incl. a "Non-affiliated" group. `bloc ∈ {"coalition","opposition","none"}`. **Colors** come from Phase 0's extraction; **bloc assignments are editorial** — proposed by Claude from current government composition, confirmed by the owner in PR review. Includes the faction-name → partyId map for all current faction names.
-   - `data/mps.json` — `{ name, uuid, photoUrl, profileUrl, partyId, faction, committees:[{name,role}], active }`.
-   - `data/board.json` — president + vice-presidents `{ name, partyId, uuid }` (from the API usergroups / verified sources).
-   - `data/meta.json` — `{ totalSeats:101, simpleMajority:51, constitutionalMajority:68, coalitionSeats, oppositionSeats, updatedAt }` (seat totals **computed**, never hand-typed).
-2. Populate from the live API using the corrected faction resolver. Editorial extras baked in the old bundle (per-MP notes, flags) are carried into an optional curated `data/notes.json` only if the current UI displays them (per `BEHAVIOR_SNAPSHOT.md`).
-3. `scripts/validate_data.py`: exactly 101 MPs; every `partyId` resolves; per-party seat sums match; `coalition+opposition+none == 101`; all photo/profile URLs well-formed. Wire it so later phases and the monthly workflow reuse it.
+   - `data/parties.json` — `{ id, nameEn, nameEt, short, color, textColor, factionName }` per party plus the "Independent/Non-affiliated" group. **Colours are the hex values in finding 3** (they match the deployed app — do not invent new ones). `factionName` is the exact API faction string, used for matching.
+   - `data/mps.json` — `{ name, uuid, photoUrl, profileUrl, faction, registeredPartyId, committees:[{name,role}], boardRole, district, active }` — **100% API-derived, regenerated wholesale each month.**
+   - `data/alignment.json` — the **curated overlay** (§4): `blocs`, `defectors`, `unaligned`. Hand-maintained; never overwritten by the job.
+   - `data/board.json` — derived from the API (`plenaryMembership.jobTitle`), so President/VPs auto-update.
+   - `data/meta.json` — `{ totalSeats:101, simpleMajority:51, constitutionalMajority:68, registered:{...}, votingBloc:{...}, coalitionSeats, oppositionSeats, updatedAt }` — **all seat totals computed**, never hand-typed.
+2. Populate from the live API using the corrected faction resolver. Seed `alignment.json` with the 11 current defectors and 7 unaligned MPs; the resolver's "who is non-affiliated and which faction did they leave" output (verified working) gives the candidate list, and the owner confirms each mapping in PR review.
+3. Sanity gate: the resulting **voting-bloc numbers must reproduce the deployed app's** (Reform 39, SDE 14, E200 13, Isamaa 11, Center 8, coalition 52) with the single expected delta EKRE 9 / unaffiliated 7. Any other mismatch means the overlay is wrong — investigate before proceeding.
+4. `scripts/validate_data.py` (reused by every later phase and the monthly job): exactly 101 MPs; every faction maps to a known party; **`registeredSeats` sums to 101**; **`votingBlocSeats` sums to 101**; every non-affiliated MP is in exactly one of `defectors`/`unaligned`; coalition+opposition+none == 101; photo/profile URLs well-formed.
 
-**Acceptance:** JSON files committed, validator passes, PR review confirms bloc assignments and flags the composition drift vs. the old app.
+**Acceptance:** JSON committed, validator green, voting-bloc sanity gate passes, owner confirms the bloc and defector mappings in review.
 
 ---
 
@@ -169,17 +265,23 @@ src/
 
 **Goal:** the monthly job updates the JSON the app actually reads, via a reviewed PR — and actually runs.
 
-1. Fix `scripts/fetch_mp_data.py`: corrected faction resolver; parse current committees; output the **full Phase-1 schema** (`mps.json` + recomputed `meta.json` seat totals); abort (non-zero) on any validation failure — never emit bad data. Reuse `validate_data.py`.
-2. Fix `scripts/compare_mp_data.py` for the new schema; classify changes: **party switches (flagged prominently — politically significant)**, joins, departures, photo/committee changes.
+1. Fix `scripts/fetch_mp_data.py`: corrected faction resolver; parse current committees **and roles**; derive `board.json` from `plenaryMembership.jobTitle`; refresh the faction/committee catalogues from `/usergroups`; output the **full Phase-1 schema** and recompute both seat counts in `meta.json`; abort non-zero on any validation failure — never emit bad data. **Never writes `alignment.json`.**
+2. Fix `scripts/compare_mp_data.py` for the new schema. Classify changes into:
+   - **🔴 ACTION REQUIRED — new non-affiliated MP.** An MP left a faction; the PR must name them, the faction and date, and state: *"Add this uuid to `alignment.json` as either a defector (`votesWith: <party>`) or unaligned before merging — until then the voting-bloc totals are provisional."* This is the one recurring human decision (§1c Tier B).
+   - **🟠 Roster change** — MP joined or left parliament (substitutions when a member becomes a minister).
+   - **🟡 Board change** — President/Vice-President changed.
+   - **🟢 Routine** — committee moves, photo, contact, district changes.
+   - **♻️ Stale alignment** — a uuid in `alignment.json` that is no longer non-affiliated (rejoined or left parliament) → prompt removal.
 3. Fix `.github/workflows/monthly-mp-check.yml`:
    - Remove the gitignore conflict (fetched data goes to a non-ignored working path, or the ignore rule is dropped — the report/diff is what gets committed).
    - `--base main` (which now exists).
    - **Run `validate_data.py` + the unit tests inside the workflow before opening the PR** — required because PRs created with `GITHUB_TOKEN` do **not** trigger other workflows (GitHub Actions limitation), so the Phase-2 CI will not run on the bot's PR automatically. Validation must therefore happen in-job. (Alternative if desired later: a PAT/App token so CI triggers normally.)
    - PR title `MP Data Update - <Month YYYY>`, body from `generate_pr_body.py` with party switches called out.
-4. Resolver regression test: asserts 101 MPs and a sane faction split from a fixture of the raw API payload (so the `factions[0]` class of bug can never return silently).
-5. Optional (nice-to-have): the app shows "Data updated <date>" from `meta.updatedAt`.
+4. Resolver regression tests against a committed fixture of the raw API payload: 101 MPs; registered split Reform 37 / Non-affiliated 18 / E200 13 / SDE 9 / EKRE 9 / Isamaa 8 / Centre 7; board = Hussar / Kivimägi / Aller; 11 committee Chairmen and 11 Deputy Chairmen. Locks out the `factions[0]` class of bug permanently.
+5. **Resilience** (the API is a third party and only `/votings` is contractually documented): on non-200, malformed payload, or a member count outside 95–105, the job **fails loudly and changes nothing** — never publishes a partial roster. Retry with backoff before giving up.
+6. The app shows "Data updated <date>" from `meta.updatedAt`, so staleness is visible to users.
 
-**Acceptance:** local dry-run produces valid JSON and a correct change report; `workflow_dispatch` run opens a well-formed PR against `main`; merging it visibly updates the deployed app.
+**Acceptance:** local dry-run produces valid JSON and a correct, correctly-classified change report; `workflow_dispatch` opens a well-formed PR against `main`; merging it visibly updates the deployed app; a simulated defection produces the 🔴 ACTION REQUIRED block.
 
 ---
 
@@ -224,9 +326,10 @@ src/
 ## Definition of done
 
 - App = plain HTML/CSS/ES modules, source committed, no build step.
-- All data read at runtime from `data/*.json`; deployed composition matches the live Riigikogu API (currently: Reform 37, NA 18, E200 13, SDE 9, EKRE 9, Isamaa 8, Centre 7).
+- All data read at runtime from `data/*.json`. Both counts modelled: registered (API) and voting bloc (API + `alignment.json`); the calculator uses voting bloc; coalition reads 52.
 - Calculator = one pure, unit-tested module.
-- Monthly workflow runs end-to-end: correct factions, validation in-job, reviewed PR against `main`, merge → live update.
+- Monthly workflow runs end-to-end: correct factions, committees, board, validation in-job, reviewed PR against `main`, merge → live update — with defections surfaced as an explicit 🔴 ACTION REQUIRED decision rather than silently mis-counted.
+- Tier A data (roster, names, photos, links, factions, committees + roles, board, contacts, district) maintains itself with no human input.
 - Usability Contract green in CI; `data-testid` contract documented.
 - PWA installs and works offline on correct paths.
 - A future redesign touches only `styles.css` + `src/views/*`, keeps the testids, and ships only with a green suite.
