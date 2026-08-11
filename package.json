@@ -1,5 +1,16 @@
 {
+  "name": "riigikogu-mobile",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Mobile PWA dashboard for the XV Riigikogu",
+  "scripts": {
+    "test": "playwright test",
+    "test:tier1": "playwright test tests/tier1",
+    "test:report": "playwright show-report",
+    "serve": "python3 -m http.server 8099"
+  },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "sharp": "^0.34.5"
   }
 }
