@@ -2,6 +2,20 @@
 
 For each phase: **copy the prompt block, paste it to Claude Code, wait for it to finish, then review using the checklist.** Do phases in order. Full technical detail lives in `ARCHITECTURE_PLAN.md` (v3).
 
+> ### ⚠️ Seat numbers in this guide were superseded on 2026-08-11
+>
+> v3 was written when the coalition held 52 of 101. Three defections — Vooglaid
+> (EKRE, 14 May), Stoicescu (Eesti 200, 9 Aug) and Kiili (Reform, 10 Aug) — have
+> since made it a **minority government at 50**. See the erratum at the top of
+> `ARCHITECTURE_PLAN.md` and `BEHAVIOR_SNAPSHOT.md` §8.
+>
+> The **Phase 4 prompt and checklist below have been corrected**. The Phase 1
+> block still quotes the old figures; it is left as written because Phase 1 has
+> already been executed and reviewed, and rewriting it would falsify the record
+> of what was actually run. Do not use its numbers as a reference.
+>
+> Live numbers always come from `data/meta.json`, never from this document.
+
 ## The one thing to understand before you start
 
 Estonian parliamentary rules create a permanent gap between two different seat counts, and the app depends on knowing the difference:
@@ -9,9 +23,17 @@ Estonian parliamentary rules create a permanent gap between two different seat c
 - **Registered count** — the official parliamentary group size. The API gives this, always correct, always free.
 - **Voting bloc count** — who actually votes together. **This is what your app shows and what the calculator needs.**
 
-They differ because an MP who leaves a parliamentary group can never join another one (Rules of Procedure §40–42). So when an MP defects to another party, they vote with their new party forever while the registry still calls them "non-affiliated." Right now 18 MPs are registered non-affiliated; 11 of them reliably vote with a party.
+They differ because an MP who leaves a parliamentary group can never join another one (Rules of Procedure §40–42). So when an MP defects to another party, they vote with their new party forever while the registry still calls them "non-affiliated." Right now **20** MPs are registered non-affiliated; 11 of them reliably vote with a party and 9 vote with nobody.
 
-Your coalition shows **52** because that is the voting bloc. The API would say 50.
+Both counts move independently. Today Reform + Eesti 200 hold **50** of 101 on the
+voting-bloc count and **48** registered — a minority government either way. The
+deployed app still displays 52, which was the voting-bloc figure before the three
+defections above; that gap is exactly what Phase 4 closes.
+
+A third state matters as much as the two counts: **9 MPs have left a group and
+joined no party.** They have no whip and no common position, so they belong to
+neither bloc and are never added to one to reach a majority. That is why the
+coalition and opposition totals now sum to 92, not 101.
 
 **What this means for you in practice:** the monthly job updates everything automatically — names, photos, committees, the Board, contact details, roster changes. The *only* thing it will ever ask you is: *"MP X just left their group. Which bloc do they vote with now?"* You answer that in one line of `data/alignment.json`, and it happens only when someone actually defects — a handful of times per term.
 
@@ -110,12 +132,35 @@ src/lib/. Match the behavior in BEHAVIOR_SNAPSHOT.md 1:1 and give every interact
 element its data-testid (document the list in USABILITY.md). The calculator and all
 headline totals must use VOTING BLOC counts, not registered counts. Un-skip the
 Tier-2 tests. Done only when Tier-1 + Tier-2 + unit tests are ALL green. Attach
-side-by-side before/after screenshots and list every visible number that changed —
-the only expected changes are EKRE 10->9 and independents 6->7. Commit, push, open
-a PR into main.
+side-by-side before/after screenshots and list every visible number that changed.
+Expected changes vs. the deployed bundle, and ONLY these: Reform 39->38, Eesti 200
+13->12, EKRE 10->9, Indep. 6->9, coalition 52->50, opposition 49->42, plus a new
+third bucket showing 9 unaligned MPs. SDE 14, Isamaa 11 and Center 8 must not move.
+Every number must match data/meta.json. Commit, push, open a PR into main.
 ```
 
-**Review checklist:** full suite green; compare the screenshots yourself — same tabs, same interactions, same look; **coalition still reads 52**; the only changed numbers are EKRE and independents. **Any other changed number is a bug — most likely registered counts leaking into the display. This is the one PR to review slowly.**
+**Review checklist:** full suite green; compare the screenshots yourself — same tabs, same interactions, same look.
+
+Expected numbers (these come from `data/meta.json`, verified against the live API on 2026-08-11):
+
+| Readout | Deployed bundle | Phase 4 must show |
+|---|---|---|
+| Reform | 39 | **38** |
+| Eesti 200 | 13 | **12** |
+| SDE | 14 | 14 — unchanged |
+| EKRE | 10 | **9** |
+| Isamaa | 11 | 11 — unchanged |
+| Center | 8 | 8 — unchanged |
+| Indep. chip | 6 | **9** |
+| Coalition heading | 52 | **50 — no majority** |
+| Opposition heading | 49 | **42** |
+| Unaligned heading | *(no such bucket)* | **9 — new** |
+
+The last four rows are the bloc headings, not extra seats: the 9 Indep. MPs used
+to be counted inside Opposition's 49 and now stand on their own, which is what
+takes Opposition from 49 to 42. 50 + 42 + 9 = 101.
+
+**Any number outside this table is a bug — most likely registered counts leaking into the display.** The tell: if Reform shows 36, SDE 9 or Isamaa 8, you are looking at registered counts, not the voting bloc. **This is the one PR to review slowly.**
 
 ---
 
