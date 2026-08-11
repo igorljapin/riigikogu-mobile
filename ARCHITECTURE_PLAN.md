@@ -238,12 +238,37 @@ Rules enforced by the validator: every non-affiliated MP appears in exactly one 
 1. Schema (documented in `data/README.md`):
    - `data/parties.json` — `{ id, nameEn, nameEt, short, color, textColor, factionName }` per party plus the "Independent/Non-affiliated" group. **Colours are the hex values in finding 3** (they match the deployed app — do not invent new ones). `factionName` is the exact API faction string, used for matching.
    - `data/mps.json` — `{ name, uuid, photoUrl, profileUrl, faction, registeredPartyId, committees:[{name,role}], boardRole, district, active }` — **100% API-derived, regenerated wholesale each month.**
-   - `data/alignment.json` — the **curated overlay** (§4): `blocs`, `defectors`, `unaligned`. Hand-maintained; never overwritten by the job.
+   - `data/alignment.json` — the **curated overlay** (§4): `blocs`, `defectors`, `unaligned`. `blocs` and `defectors` are hand-maintained and never overwritten by the job. The job may **append** a new uuid to `unaligned` (safe-default rule below) and flag stale entries, but never invents a `votesWith`.
    - `data/board.json` — derived from the API (`plenaryMembership.jobTitle`), so President/VPs auto-update.
    - `data/meta.json` — `{ totalSeats:101, simpleMajority:51, constitutionalMajority:68, registered:{...}, votingBloc:{...}, coalitionSeats, oppositionSeats, updatedAt }` — **all seat totals computed**, never hand-typed.
-2. Populate from the live API using the corrected faction resolver. Seed `alignment.json` with the 11 current defectors and 7 unaligned MPs; the resolver's "who is non-affiliated and which faction did they leave" output (verified working) gives the candidate list, and the owner confirms each mapping in PR review.
-3. Sanity gate: the resulting **voting-bloc numbers must reproduce the deployed app's** (Reform 39, SDE 14, E200 13, Isamaa 11, Center 8, coalition 52) with the single expected delta EKRE 9 / unaffiliated 7. Any other mismatch means the overlay is wrong — investigate before proceeding.
-4. `scripts/validate_data.py` (reused by every later phase and the monthly job): exactly 101 MPs; every faction maps to a known party; **`registeredSeats` sums to 101**; **`votingBlocSeats` sums to 101**; every non-affiliated MP is in exactly one of `defectors`/`unaligned`; coalition+opposition+none == 101; photo/profile URLs well-formed.
+2. Populate from the live API using the corrected faction resolver. Seed `alignment.json` with the **11 current defectors and 9 unaligned MPs**; the resolver's "who is non-affiliated and which faction did they leave" output (verified working) gives the candidate list, and the owner confirms each mapping in PR review.
+3. Sanity gate: the resulting **voting-bloc numbers must reproduce the deployed app's for the parties no defection has touched** — SDE 14, Isamaa 11, Center 8 — while showing the four verified deltas: Reform 39→**38**, Eesti 200 13→**12**, EKRE 10→**9**, Independent 6→**9**, coalition 52→**50**. Any *other* mismatch means the overlay is wrong — investigate before proceeding. (Supersedes the pre-erratum gate that expected coalition 52.)
+4. `scripts/validate_data.py` (reused by every later phase and the monthly job): exactly 101 MPs; every faction maps to a known party; **`registeredSeats` sums to 101**; **`votingBlocSeats` sums to 101**; every non-affiliated MP is in exactly one of `defectors`/`unaligned`; coalition+opposition+unaligned == 101; photo/profile URLs well-formed.
+
+### The safe-default rule (amended 2026-08-11)
+
+**A newly non-affiliated MP is classified `unaligned` automatically. This is not a
+placeholder awaiting a human ruling — it is the factually correct state.** An MP who
+has left a parliamentary group has no group, no whip and no common position, and
+under §40–42 cannot join another. `unaligned` describes that exactly.
+
+The state machine, and who drives each transition:
+
+| Event | Action | Human needed? |
+|---|---|---|
+| MP leaves a group | → `unaligned`; both seat counts recomputed; ships | **No** |
+| MP later joins a party | stays `unaligned` until the owner says otherwise | Optional enrichment |
+| uuid in `alignment.json` is no longer non-affiliated | flagged for removal | No |
+
+Why this ordering matters: it makes the pipeline **safe by construction**. The only
+possible error is *understating* a bloc by one seat; the job can never manufacture a
+majority that does not exist. Given the coalition must now assemble majorities vote
+by vote, that asymmetry is the whole point. The alternative — holding the data until
+a human rules — is what left the deployed app three defections stale, because a
+blocking decision that nobody makes blocks the 95% that needed no judgement too.
+
+The owner's input becomes an **optional upgrade** (`unaligned` → `defector`), never a
+gate. If it never happens, the published numbers stay conservative and defensible.
 
 **Acceptance:** JSON committed, validator green, voting-bloc sanity gate passes, owner confirms the bloc and defector mappings in review.
 
@@ -307,9 +332,9 @@ src/
 
 **Goal:** the monthly job updates the JSON the app actually reads, via a reviewed PR — and actually runs.
 
-1. Fix `scripts/fetch_mp_data.py`: corrected faction resolver; parse current committees **and roles**; derive `board.json` from `plenaryMembership.jobTitle`; refresh the faction/committee catalogues from `/usergroups`; output the **full Phase-1 schema** and recompute both seat counts in `meta.json`; abort non-zero on any validation failure — never emit bad data. **Never writes `alignment.json`.**
+1. Fix `scripts/fetch_mp_data.py`: corrected faction resolver; parse current committees **and roles**; derive `board.json` from `plenaryMembership.jobTitle`; refresh the faction/committee catalogues from `/usergroups`; output the **full Phase-1 schema** and recompute both seat counts in `meta.json`; abort non-zero on any validation failure — never emit bad data. **Writes only the `unaligned` list in `alignment.json`, append-only; never `blocs`, never `defectors`, never a `votesWith`.**
 2. Fix `scripts/compare_mp_data.py` for the new schema. Classify changes into:
-   - **🔴 ACTION REQUIRED — new non-affiliated MP.** An MP left a faction; the PR must name them, the faction and date, and state: *"Add this uuid to `alignment.json` as either a defector (`votesWith: <party>`) or unaligned before merging — until then the voting-bloc totals are provisional."* This is the one recurring human decision (§1c Tier B).
+   - **🔵 NEW NON-AFFILIATED MP — handled automatically, no merge gate.** An MP left a faction. The job adds their uuid to `alignment.json` as `unaligned` (see the safe-default rule in Phase 1) and recomputes both seat counts. The PR names them, the faction and the date, states the resulting bloc arithmetic, and adds: *"Classified `unaligned` — correct as of today. If they join a party later, change this entry to `votesWith: <party>`; until then the voting-bloc totals deliberately exclude them from every bloc."* **The PR is mergeable as-is.** This is the one place the job writes to `alignment.json`, and it only ever writes the conservative value.
    - **🟠 Roster change** — MP joined or left parliament (substitutions when a member becomes a minister).
    - **🟡 Board change** — President/Vice-President changed.
    - **🟢 Routine** — committee moves, photo, contact, district changes.
@@ -323,7 +348,7 @@ src/
 5. **Resilience** (the API is a third party and only `/votings` is contractually documented): on non-200, malformed payload, or a member count outside 95–105, the job **fails loudly and changes nothing** — never publishes a partial roster. Retry with backoff before giving up.
 6. The app shows "Data updated <date>" from `meta.updatedAt`, so staleness is visible to users.
 
-**Acceptance:** local dry-run produces valid JSON and a correct, correctly-classified change report; `workflow_dispatch` opens a well-formed PR against `main`; merging it visibly updates the deployed app; a simulated defection produces the 🔴 ACTION REQUIRED block.
+**Acceptance:** local dry-run produces valid JSON and a correct, correctly-classified change report; `workflow_dispatch` opens a well-formed PR against `main`; merging it visibly updates the deployed app; a simulated defection is auto-classified `unaligned`, produces the 🔵 block, recomputes both seat counts, and leaves the PR mergeable without human input.
 
 ---
 
@@ -370,7 +395,7 @@ src/
 - App = plain HTML/CSS/ES modules, source committed, no build step.
 - All data read at runtime from `data/*.json`. Both counts modelled: registered (API) and voting bloc (API + `alignment.json`); the calculator uses voting bloc; coalition reads 52.
 - Calculator = one pure, unit-tested module.
-- Monthly workflow runs end-to-end: correct factions, committees, board, validation in-job, reviewed PR against `main`, merge → live update — with defections surfaced as an explicit 🔴 ACTION REQUIRED decision rather than silently mis-counted.
+- Monthly workflow runs end-to-end: correct factions, committees, board, validation in-job, reviewed PR against `main`, merge → live update — with defections auto-classified `unaligned` — never silently mis-counted, never blocking the merge, and never added to a bloc without an explicit human upgrade.
 - Tier A data (roster, names, photos, links, factions, committees + roles, board, contacts, district) maintains itself with no human input.
 - Usability Contract green in CI; `data-testid` contract documented.
 - PWA installs and works offline on correct paths.
