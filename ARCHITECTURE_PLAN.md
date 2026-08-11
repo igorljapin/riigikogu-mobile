@@ -1,6 +1,36 @@
 # Riigikogu Mobile — Architecture Rebuild & API-Check Plan (v3)
 
-> **Status:** Approved plan, not yet executed. v3 supersedes v2 after analysing the official API repo (`riigikogu-kantselei/api`) and probing every relevant endpoint.
+> **Status:** Phase 0 executed 2026-08-11. Phases 1–7 outstanding. v3 supersedes v2 after analysing the official API repo (`riigikogu-kantselei/api`) and probing every relevant endpoint.
+>
+> ### ⚠️ Erratum (2026-08-11) — the "coalition stays 52" assumption is dead
+>
+> **Two defections after v3 was written have turned the government into a minority
+> government. Any Phase-1 or Phase-4 gate that asserts coalition = 52 will now
+> reject correct data.** Grigore-Kalev Stoicescu left Eesti 200 on 2026-08-09 and
+> Meelis Kiili left Reform on 2026-08-10. Together with Varro Vooglaid
+> (EKRE, 2026-05-14) the deployed app is **three** defections stale, not one.
+>
+> | | v3 assumed | Verified 2026-08-11 |
+> |---|---|---|
+> | Reform (voting bloc) | 39 | **38** |
+> | Eesti 200 (voting bloc) | 13 | **12** |
+> | EKRE (voting bloc) | 9 | 9 |
+> | Party-less unaffiliated | 7 | **9** |
+> | **Coalition** | **52** | **50 — no majority** |
+>
+> Consequences for the phases that follow:
+> - **§2 "Data parity"** and **Phase 1 step 3** must be read as: the rebuild
+>   reproduces SDE 14, Isamaa 11 and Center 8 exactly, and *legitimately* changes
+>   Reform 39→38, Eesti 200 13→12, EKRE 10→9, Independent 6→9, coalition 52→50.
+>   Only a deviation from *those* numbers is a bug.
+> - **`alignment.json` needs a real third state.** The current app has two buckets
+>   and files every independent under Opposition. With 9 party-less MPs who have
+>   no whip, that silently hands the opposition 9 votes it does not have. The
+>   `unaligned` list must be modelled and surfaced in the UI, not folded into a bloc.
+> - **The API lags reality.** On 2026-08-11 it had recorded Kiili's departure but
+>   not Stoicescu's. Phase 5's job must not assume the registry is instantaneous.
+>
+> Full evidence: `BEHAVIOR_SNAPSHOT.md` §8.
 >
 > ### ⚠️ Correction to v2 — read this first
 >
@@ -186,6 +216,18 @@ Rules enforced by the validator: every non-affiliated MP appears in exactly one 
 4. Correct `CLAUDE.md` minimally: mark the old procedure deprecated, remove references to nonexistent files, note the artifact-only state and this plan.
 
 **Acceptance:** tag pushed; `BEHAVIOR_SNAPSHOT.md` + screenshots committed; `main` exists and is default; Pages source confirmed; `CLAUDE.md` no longer lies.
+
+### Phase 0 outcome (2026-08-11)
+
+| Step | Result |
+|---|---|
+| Rollback ref at `291ba1e` | ⚠️ Created as **branch** `v-stable-pre-rebuild`, not a tag. The session's GitHub credentials return 403 on `git-receive-pack` for `refs/tags/*`, and the proxy blocks `POST /git/refs`; no create-tag tool is available. Functionally equivalent for `git checkout v-stable-pre-rebuild -- index.html …`. Owner can promote it to a real tag locally. |
+| `BEHAVIOR_SNAPSHOT.md` + `snapshot/` | ✅ 19 screenshots, all three tabs, MP popup, party sheet, calculator scenarios |
+| `main` branch created from default HEAD | ✅ at `291ba1e` |
+| Default branch flipped to `main` | ⛔ **owner action** — Settings → Branches |
+| Pages source confirmed | ⛔ **owner action** — Settings → Pages |
+| Retarget PR #18 | ➖ **not applicable.** PR #18 was merged 2026-07-22, before this phase ran; a merged PR cannot be retargeted. No open PRs existed at Phase 0 time. |
+| `CLAUDE.md` corrected | ✅ dead file references removed; old procedure moved to `docs/DEPRECATED_MONTHLY_PROCEDURE.md` |
 
 ---
 

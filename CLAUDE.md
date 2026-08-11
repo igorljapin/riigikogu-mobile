@@ -4,56 +4,80 @@
 Mobile PWA dashboard for the XV Riigikogu (101 MPs).
 Hosted at https://igorljapin.github.io/riigikogu-mobile/
 
-## File Map
-- `index.html` - All MP data is hardcoded as JavaScript objects.
-  This is the primary file requiring edits when composition changes.
-- `mp-data-scraped.json` - Photo and profile link lookup used by
-  the MP popup window. Keep in sync with mp_data_current.json.
-- `data/mp_data_current.json` - Committed baseline used for
-  monthly diff comparison.
-- `data/mp_data_fetched.json` - Temporary file created by workflow.
-  Never commit this directly to main.
-- `data/change_report.json` - Output of comparison script.
-  Always read this first before making any changes.
+## Current state: mid-rebuild (read this first)
 
-## Monthly Update Procedure
+The app is being rebuilt in phases per `ARCHITECTURE_PLAN.md` (v3).
+Until Phase 4 lands, the shipped app is a **compiled, minified bundle
+with no source in this repository**, and the monthly update procedure
+that used to live in this file **does not work**. It is reproduced in
+`docs/DEPRECATED_MONTHLY_PROCEDURE.md` as a historical record only.
 
-1. READ data/change_report.json fully before touching any file.
+- `BEHAVIOR_SNAPSHOT.md` + `snapshot/` — what the app does today,
+  captured automatically. Phase 4 must reproduce this behavior 1:1.
+- `v-stable-pre-rebuild` — rollback ref for the last known-good app.
 
-2. For PARTY SWITCHES (politically significant - flag in PR):
-   - Find MP by name in index.html
-   - Update their party/faction field
-   - Update coalition/opposition totals in the dashboard header
-   - Update mp-data-scraped.json and data/mp_data_current.json
+## File Map (verified 2026-08-11)
 
-3. For NEW MEMBERS:
-   - Add MP to index.html with correct party assignment
-   - Add entry to mp-data-scraped.json with photoUrl and profileUrl
-   - Update data/mp_data_current.json
-   - Note in PR that seating position needs verification
+| Path | What it actually is |
+|---|---|
+| `index.html` | 253 KB **compiled artifact**. Tailwind-compiled CSS plus a minified bundle mounting into `<div id=root>`. All MP data, party colours and calculator logic are baked in. **Not hand-editable.** |
+| `data/mp_data_current.json` | Committed baseline for the monthly diff. **Nothing in the app reads it** — the bundle performs no runtime data loading at all. |
+| `service-worker.js` | Precaches `/riigikogu-dashboard/...` while the site is served from `/riigikogu-mobile/`. Registration fails; offline mode does not work. Fixed in Phase 6. |
+| `manifest.json`, `offline.html`, `icons/` | PWA assets. |
+| `scripts/*.py` | Monthly fetch/compare/PR-body scripts. Currently broken — see below. |
+| `.github/workflows/monthly-mp-check.yml` | Monthly job. Currently broken — see below. |
+| `ARCHITECTURE_PLAN.md`, `EXECUTION_GUIDE.md` | The rebuild plan and its per-phase prompts. |
+| `BEHAVIOR_SNAPSHOT.md`, `snapshot/` | Phase 0 characterization of the current app. |
 
-4. For REMOVED MEMBERS:
-   - Remove from index.html active roster
-   - Remove from mp-data-scraped.json
-   - Update data/mp_data_current.json
+**Files that do not exist**, despite earlier versions of this document
+referring to them: `mp-data-scraped.json`, `data/change_report.json`,
+`data/mp_data_fetched.json` (the workflow's own output path, and it is
+gitignored). Do not look for them and do not write instructions around them.
 
-5. For PHOTO CHANGES only:
-   - Update photoUrl in mp-data-scraped.json only
-   - Update data/mp_data_current.json
-   - No changes to index.html needed
+## Known-broken, do not treat as working
 
-6. VALIDATION before committing:
-   - Total MP count must equal 101
-   - All bracket pairs must match
-   - Test that PWA service worker cache list still references correct files
+1. **The app never reads `data/`.** Updating any JSON in this repo has no
+   effect on what users see until Phase 4.
+2. **The monthly workflow cannot succeed.** Its `git add
+   data/mp_data_fetched.json` hits a gitignored path, and its
+   `gh pr create --base main` targeted a branch that did not exist until
+   Phase 0 created it.
+3. **`scripts/fetch_mp_data.py` resolves factions wrongly.** It takes
+   `factions[0]`, which may be an expired membership. The correct rule is
+   the `FRAKTSIOON` entry whose `membership.endDate` is `null`.
+4. **The service worker path is wrong** (see file map).
 
-7. CREATE pull request:
-   - Title: "MP Data Update - [Month YYYY]"
-   - Flag party switches for human review before merge
-   - Target branch: main
+## Data model: two seat counts, never conflate them
+
+| Count | Source | Use for |
+|---|---|---|
+| Registered | 100% API | Procedural facts: speaking time, committee entitlements, any official Riigikogu figure |
+| Voting bloc | API + curated overlay | **Majority arithmetic — the calculator, coalition/opposition totals, "will this pass"** |
+
+Under the Rules of Procedure §40–42 an MP who leaves a parliamentary group
+may never join another, so a defector stays registered as non-affiliated
+while voting with their new party. The app displays **voting-bloc** numbers
+and must continue to.
+
+A third state matters as of 2026-08-10: MPs who left a group and joined
+**no** party. They have no whip and no common position, and must never be
+added to either bloc to reach a majority.
+
+## Changing MP data before Phase 4
+
+Don't, unless explicitly asked. The data lives inside the minified bundle
+and cannot be edited safely by hand — that is the whole reason for the
+rebuild. If a data change is genuinely urgent, say so and ask; the answer
+is normally "wait for Phase 1/4", not "edit `index.html`".
 
 ## Critical Rules
-- Never change UI layout, CSS, or PWA configuration
-- Never modify the service worker or manifest.json
-- Never commit directly to main - always use a feature branch
-- Mobile layout is optimized for small screens - do not alter spacing
+
+- Never commit directly to the default branch — always a feature branch
+  plus a PR.
+- Never change UI layout, CSS, or PWA configuration outside the phase that
+  owns it. Phase 6 owns `service-worker.js` and `manifest.json`.
+- Mobile layout is optimised for small screens — do not alter spacing.
+- Every phase must leave the repo shippable, and from Phase 2 on must not
+  merge with a red test suite.
+- Never state Riigikogu seat arithmetic or coalition strength from memory.
+  Verify against the live API and cite the date.
