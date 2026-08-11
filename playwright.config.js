@@ -15,6 +15,10 @@ const PORT = Number(process.env.PORT || 8099);
 
 module.exports = defineConfig({
   testDir: './tests',
+  // Browser specs only. The node:test unit suite lives in tests/unit/*.test.mjs
+  // and is run by `npm run test:unit`; without this pattern Playwright's default
+  // testMatch would also pick those files up and fail to run them.
+  testMatch: '**/*.spec.js',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,

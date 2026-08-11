@@ -4,7 +4,9 @@
   "private": true,
   "description": "Mobile PWA dashboard for the XV Riigikogu",
   "scripts": {
-    "test": "playwright test",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "node --test tests/unit/*.test.mjs",
+    "test:e2e": "playwright test",
     "test:tier1": "playwright test tests/tier1",
     "test:report": "playwright show-report",
     "serve": "python3 -m http.server 8099"

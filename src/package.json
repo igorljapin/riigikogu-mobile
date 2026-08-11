@@ -1,0 +1,4 @@
+{
+  "//": "Scopes src/**/*.js to native ES modules for Node, matching how the browser loads them via <script type=module>. Without this, Node reads the repo-root package.json (which has no \"type\") and treats these files as CommonJS, so `export` is a syntax error. Keeping the flag here rather than at the root leaves the Phase-2 Playwright specs as CommonJS and untouched.",
+  "type": "module"
+}
