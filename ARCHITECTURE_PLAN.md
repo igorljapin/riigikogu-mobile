@@ -224,8 +224,8 @@ Rules enforced by the validator: every non-affiliated MP appears in exactly one 
 | Rollback ref at `291ba1e` | ⚠️ Created as **branch** `v-stable-pre-rebuild`, not a tag. The session's GitHub credentials return 403 on `git-receive-pack` for `refs/tags/*`, and the proxy blocks `POST /git/refs`; no create-tag tool is available. Functionally equivalent for `git checkout v-stable-pre-rebuild -- index.html …`. Owner can promote it to a real tag locally. |
 | `BEHAVIOR_SNAPSHOT.md` + `snapshot/` | ✅ 19 screenshots, all three tabs, MP popup, party sheet, calculator scenarios |
 | `main` branch created from default HEAD | ✅ at `291ba1e` |
-| Default branch flipped to `main` | ⛔ **owner action** — Settings → Branches |
-| Pages source confirmed | ⛔ **owner action** — Settings → Pages |
+| Default branch flipped to `main` | ⛔ **owner action** — Settings → Branches. Now urgent: Pages already deploys from `main`, so anything merged to the old default branch never ships. |
+| Pages source confirmed | ✅ **Deploy from a branch → `main` / `(root)`.** `main` is the production branch; every merge to it deploys. Verified live bytes == `index.html@291ba1e`. See `BEHAVIOR_SNAPSHOT.md` §0. |
 | Retarget PR #18 | ➖ **not applicable.** PR #18 was merged 2026-07-22, before this phase ran; a merged PR cannot be retargeted. No open PRs existed at Phase 0 time. |
 | `CLAUDE.md` corrected | ✅ dead file references removed; old procedure moved to `docs/DEPRECATED_MONTHLY_PROCEDURE.md` |
 

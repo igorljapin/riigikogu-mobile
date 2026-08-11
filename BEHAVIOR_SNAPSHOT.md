@@ -18,6 +18,40 @@
 | **Served by** | `python3 -m http.server 8099` from repo root |
 | **Viewport** | 390 × 844, DPR 2 (iPhone-class portrait) |
 | **Screenshots** | `snapshot/` — 19 PNGs, referenced inline below |
+| **Fidelity** | The captured bundle is **byte-identical to production** — `sha256(https://igorljapin.github.io/riigikogu-mobile/) == sha256(index.html@291ba1e) == ba061d24…cd1c`. This snapshot describes the live site, not just a local copy. |
+
+---
+
+## 0. Deployment topology (confirmed 2026-08-11)
+
+| Setting | Value |
+|---|---|
+| Pages source | **Deploy from a branch** |
+| Branch / path | **`main` / `(root)`** |
+| Live URL | https://igorljapin.github.io/riigikogu-mobile/ |
+| Last build | `pages build and deployment`, 2026-08-11 10:45 UTC, from `main` @ `291ba1e` — **success** |
+
+**`main` is the production branch.** Every merge into `main` deploys to the live
+site. Phase 0's PR is documentation and screenshots only — `index.html`,
+`service-worker.js` and `manifest.json` are untouched — so merging it is a no-op
+for users. From Phase 4 onward, a merge to `main` ships to users immediately.
+
+Two consequences worth carrying forward:
+
+- **The Pages source pointed at `main` before `main` existed.** Every prior
+  deployment (through 2026-07-28) built from `claude/setup-pwa-structure-R7z8d`.
+  Creating `main` in Phase 0 let Pages resolve its configured branch and rebuild.
+  Because `main` was cut from the same commit that was already live, the rebuild
+  changed nothing users see — verified by the hash match above.
+- **The default branch and the Pages source are now different branches.** Until
+  the default is flipped to `main`, anything merged into
+  `claude/setup-pwa-structure-R7z8d` will silently never reach the live site.
+  Pages source and default branch are independent settings; only the former is
+  correct today.
+
+The scheduled monthly job also runs from the default branch, and its 2026-08-01
+run failed — as `ARCHITECTURE_PLAN.md` finding 4 predicts. It has failed on every
+scheduled run since 2026-06-01.
 
 ---
 
