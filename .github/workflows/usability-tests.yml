@@ -1,0 +1,63 @@
+name: Usability Contract
+
+# The merge gate for every change to the app. A red run here means a feature
+# listed in USABILITY.md regressed — see ARCHITECTURE_PLAN.md §3, "never merge
+# a red suite", the single rule that prevents a repeat of commit 4dae72b.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# A new push to a PR supersedes the run in flight.
+concurrency:
+  group: usability-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  playwright:
+    name: Playwright (Tier 1)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The runner has no pre-installed Chromium, so Playwright fetches the
+      # build matching the pinned @playwright/test. Locally the config points at
+      # the sandbox's /opt/pw-browsers/chromium instead — see playwright.config.js.
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      # The app is static with no build step; the config starts
+      # `python3 -m http.server` itself and waits for it.
+      - name: Run the Usability Contract suite
+        run: npm test
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload failure traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 14
