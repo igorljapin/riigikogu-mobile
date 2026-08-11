@@ -20,6 +20,11 @@ permissions:
 
 jobs:
   playwright:
+    # NOTE: this job name is the branch-protection check name. Renaming it
+    # silently breaks the required-status-check rule on `main` — every PR would
+    # then sit waiting for a check that never reports. If it ever needs to
+    # change, update the ruleset in the same sitting. (It now covers the unit
+    # suite too, which is why the name reads narrower than the job is.)
     name: Playwright (Tier 1)
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -35,6 +40,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Runs first: pure calculator/faction maths, no browser needed. Cheap and
+      # fast, so a broken threshold fails the job in seconds rather than after a
+      # full browser run — and the failure is unambiguous about which layer broke.
+      - name: Unit tests (src/lib)
+        run: npm run test:unit
+
       # The runner has no pre-installed Chromium, so Playwright fetches the
       # build matching the pinned @playwright/test. Locally the config points at
       # the sandbox's /opt/pw-browsers/chromium instead — see playwright.config.js.
@@ -44,7 +55,7 @@ jobs:
       # The app is static with no build step; the config starts
       # `python3 -m http.server` itself and waits for it.
       - name: Run the Usability Contract suite
-        run: npm test
+        run: npm run test:e2e
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
