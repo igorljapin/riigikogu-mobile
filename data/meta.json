@@ -1,0 +1,31 @@
+{
+  "totalSeats": 101,
+  "simpleMajority": 51,
+  "threeFifths": 61,
+  "constitutionalMajority": 68,
+  "fourFifths": 81,
+  "registered": {
+    "reform": 36,
+    "e200": 12,
+    "sde": 9,
+    "ekre": 9,
+    "isamaa": 8,
+    "center": 7,
+    "independent": 20
+  },
+  "votingBloc": {
+    "reform": 38,
+    "e200": 12,
+    "sde": 14,
+    "ekre": 9,
+    "isamaa": 11,
+    "center": 8,
+    "unaligned": 9
+  },
+  "coalitionSeats": 50,
+  "oppositionSeats": 42,
+  "unalignedSeats": 9,
+  "coalitionHasMajority": false,
+  "updatedAt": "2026-08-11T12:56:10Z",
+  "sourceDate": "2026-08-11"
+}
