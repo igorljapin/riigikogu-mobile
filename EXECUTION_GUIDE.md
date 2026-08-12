@@ -210,6 +210,14 @@ must now pass for real. Show me the green run. Commit, push, open a PR into main
 
 **Review checklist:** PWA test green; after merging, on your phone: open the site, install it, turn on airplane mode, reopen — it must still work.
 
+> **Executed 2026-08-12.** All five PWA specs pass for real — 54 passed, 0
+> skipped, no `fixme` left anywhere in the suite. Details and the two extra
+> fixes are in `ARCHITECTURE_PLAN.md`, "Phase 6 outcome". **The phone check is
+> still yours**, and it is the only part of this phase a test cannot do: install
+> the site, go into airplane mode, reopen it. Expect the app and its numbers to
+> work; expect MP photos to be missing, because they come from
+> `api.riigikogu.ee` and are not cached.
+
 ---
 
 ## Phase 7 — Docs & go live

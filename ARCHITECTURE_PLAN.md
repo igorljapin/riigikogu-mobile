@@ -389,6 +389,34 @@ committee Chairmen — the National Defence Committee chair fell vacant on
 
 **Acceptance:** PWA spec green; manual check on the live site after merge: install prompt + airplane-mode reload works.
 
+### Phase 6 outcome (2026-08-12)
+
+| Step | Result |
+|---|---|
+| Paths fixed | ✅ but **not** by swapping one absolute prefix for another. Every precache entry is now **relative**, resolving against the worker's own URL — correct at `/riigikogu-mobile/` in production *and* at `/` where the suite serves the repo root. An absolute list would have kept the specs unrunnable |
+| Precache list | ✅ shell, `offline.html`, `manifest.json`, `styles.css`, all 9 ES modules, the 5 `data/*.json` files the app reads, 4 icons. `catalogues.json` excluded — the monthly job writes it, nothing reads it |
+| Cache version | ✅ `riigikogu-dashboard-v2` → `riigikogu-mobile-v3`, so activate evicts the bundle-era entries |
+| `manifest.json` | ✅ `start_url` `/riigikogu-dashboard/` → `/riigikogu-mobile/`, and `scope` **added** — it was absent entirely |
+| PWA specs | ✅ all five `fixme` markers removed; **54 passed, 0 skipped** (was 49 + 5 skipped) |
+| Teeth proven | ✅ reinstating the `/riigikogu-dashboard/` entries turns 4 of 5 red, including registration and both offline tests |
+| Live-site check | ➖ **owner action** — install prompt and airplane-mode reload on a real phone, after merge |
+
+Two fixes beyond the letter of the plan, both causes of the original bug rather
+than the bug itself:
+
+- **Install no longer swallows its own failure.** The old worker ended
+  `cache.addAll()` with `.catch(console.error)`, so a precache that 404'd every
+  entry still "installed". That is how a broken PWA survived unnoticed; a
+  rejected install now fails registration, where the spec sees it.
+- **The background revalidate is caught.** Cache-first with a stale-while-
+  revalidate refresh means the network fetch rejects on every offline hit; that
+  rejection is now handled instead of surfacing as an unhandled rejection.
+
+**Known limitation:** MP photos are served by `api.riigikogu.ee`. The worker
+ignores cross-origin requests, so offline the roster renders with placeholders.
+Caching them would mean ~100 opaque responses of unknown size in the same cache
+as the app — deliberately not done.
+
 ---
 
 ## Phase 7 — Docs & cutover
