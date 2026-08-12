@@ -1,6 +1,11 @@
 node_modules/
-data/mp_data_fetched.json
 prototype-ref/
+
+# The monthly job used to write data/mp_data_fetched.json here and then
+# `git add` it — an ignored path, so the step failed every time. Phase 5 removed
+# both halves of that: the fetch now writes data/*.json (what the app reads) and
+# the change report goes to the runner's temp dir, never into the tree.
+__pycache__/
 
 # Playwright
 test-results/

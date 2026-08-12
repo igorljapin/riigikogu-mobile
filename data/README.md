@@ -1,19 +1,20 @@
 # `data/` — the single source of truth
 
-Every file here except `alignment.json` is **generated**. Regenerate with:
+The app fetches these files at runtime. Every one of them except
+`alignment.json` is **generated**. Regenerate with:
 
 ```bash
 python3 scripts/build_data.py          # fetches the live API
 python3 scripts/validate_data.py       # exit 0 = safe to publish
 ```
 
-Do not hand-edit `mps.json`, `board.json`, `meta.json` or `parties.json` — the
-next build overwrites them. The one file you may edit by hand is
-`alignment.json`, and only its `blocs` and `defectors` sections.
+Do not hand-edit `mps.json`, `board.json`, `catalogues.json`, `meta.json` or
+`parties.json` — the next build overwrites them. The one file you may edit by
+hand is `alignment.json`, and only its `blocs` and `defectors` sections.
 
-> Nothing in the deployed app reads these files yet. Runtime loading arrives in
-> Phase 4 of `ARCHITECTURE_PLAN.md`; until then this directory is the staging
-> ground the rebuild will consume.
+Once a month `.github/workflows/monthly-mp-check.yml` does the same thing
+unattended via `scripts/fetch_mp_data.py` and opens a PR with the diff. **That
+job never writes `alignment.json`** — see "Who writes what" below.
 
 ---
 
@@ -112,20 +113,29 @@ bloc to reach a majority.** As of 2026-08-11 there are 9 of them, and with the
 coalition at 50 of 101 they decide outcomes vote by vote — which is exactly why
 they must not be silently attributed.
 
-#### The safe-default rule
+#### Who writes what
 
-`build_data.py` classifies every newly non-affiliated MP as `unaligned`
-automatically, and the monthly job merges without waiting for anyone.
+| Tool | May write `alignment.json`? |
+|---|---|
+| You, by hand | yes — it is your file |
+| `scripts/build_data.py` (hand-run) | appends a new uuid to `unaligned`, nothing else |
+| `scripts/fetch_mp_data.py` (the monthly job) | **never** |
 
-This is not a placeholder awaiting a ruling — it is the **factually correct
-state**. An MP who just left a group has no group. The rule makes the pipeline
-safe by construction: the only possible error is understating a bloc by a seat,
-never manufacturing a majority that does not exist.
+Phase 5 tightened `ARCHITECTURE_PLAN.md` §5.2 on the last row: the *unattended*
+job does not touch the curated overlay at all. A newly non-affiliated MP reaches
+you as a 🔴 **ACTION REQUIRED** block in the PR, naming them, the group they left
+and the date, and the PR opens as a **draft** until you classify them.
 
-Promoting someone from `unaligned` to `defectors` is an **optional enrichment**
-you make when they actually join a party. If it never happens, the published
-numbers stay conservative and defensible. The job never writes a `votesWith` and
-never touches `blocs` or `defectors`.
+The seat arithmetic in that PR is still correct and publishable while you decide,
+because an unclassified MP is counted toward **no bloc**. That is the same
+asymmetry the safe-default rule was built on: the worst case is understating a
+bloc by one seat, never manufacturing a majority that does not exist. What
+changed is only *who* records the decision — and since the job cannot know which
+party a defector joined, recording it was never something it could do.
+
+Promoting someone from `unaligned` to `defectors` is an enrichment you make when
+they actually join a party. If it never happens, the published numbers stay
+conservative and defensible. Nothing automated ever writes a `votesWith`.
 
 Change `blocs` when a government changes.
 
@@ -137,6 +147,24 @@ Vice-President. Auto-updates.
 > The API is **more current here than most secondary sources**. It gives Arvo
 > Aller as Second Vice-President (since 2024-07-15); several references still
 > list Helir-Valdor Seeder, who last held a Board office in 2023. Trust the API.
+
+### `catalogues.json` — the group registry, refreshed from `/usergroups`
+
+```jsonc
+{ "factions":   [{ "uuid": "…", "name": "Isamaa Parliamentary Group", "shortName": "I",
+                   "colorHex": "6FABD4", "type": "FRAKTSIOON", "typeName": "faction" }],
+  "committees": [{ "uuid": "…", "name": "Finance Committee", "type": "ALALINE_KOMISJON",
+                   "typeName": "standing committee" }],
+  "fetchedAt": "…" }
+```
+
+The `active` subset of `/usergroups`: 7 parliamentary groups, 11 standing
+committees and the select committees. Nothing in the app reads it — it exists so
+that a **renamed or newly formed group is caught**. `parties.json` matches MPs to
+parties by exact faction string, so a rename would otherwise unmap a third of the
+roster with no single error to point at; instead `check_catalogue()` fails the
+build with the old name and the instruction to update `PARTIES`. Same for a
+committee an MP sits on that the catalogue does not list.
 
 ### `meta.json` — every total computed, never hand-typed
 
@@ -191,13 +219,29 @@ Eesti 200 (Aug 9) and Meelis Kiili left Reform (Aug 10).
 It is deliberately paranoid about the seat arithmetic, because that is the number
 readers act on.
 
-### Guards in `build_data.py`
+One rule bends, and only for the monthly job: `--allow-pending-alignment`
+downgrades "non-affiliated MP in neither list" to a warning, because that job may
+not write the overlay and a fresh defection legitimately arrives unclassified.
+Every other rule stays fatal, and the arithmetic still counts that MP toward no
+bloc. Run it without the flag — as you would locally — and the gap is an error
+again, which is what stops the draft PR merging unresolved.
 
-The API is a third party and only `/votings` is contractually documented, so the
+### Guards in `build_data.py` and `fetch_mp_data.py`
+
+The API is a third party and only `/votings` is contractually documented, so a
 build **fails loudly and writes nothing** on a non-200 response, a malformed
 payload, a member count outside 95–105, an MP with no current faction, an unknown
-faction name, or a Board that does not resolve to exactly three people. Retries
-use exponential backoff. A partial roster is never published.
+or renamed faction name, a committee missing from the catalogue, or a Board that
+does not resolve to exactly three people. Retries use exponential backoff.
+
+`fetch_mp_data.py` goes one step further: it builds into a staging directory and
+runs `validate_data.py` there, copying into `data/` only after that exits 0. A
+partial or invalid roster is never published, and a failed run leaves the
+committed data exactly as it was.
+
+`tests/python/test_resolvers.py` holds all of this to a frozen API capture — the
+registered split, the Board, the committee chairs, every guard, and the ACTION
+REQUIRED path. Run it with `npm run test:resolvers`.
 
 **The registry lags reality.** Stoicescu announced his departure on Aug 9; the
 API recorded it on Aug 10 and only exposed it partway through Aug 11 — observed

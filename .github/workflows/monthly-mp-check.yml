@@ -1,9 +1,36 @@
 name: Monthly Riigikogu MP Data Check
 
+# Refreshes the JSON the app actually reads, and opens a reviewed PR against
+# main. Phase 5 of ARCHITECTURE_PLAN.md; the pre-Phase-5 version of this file
+# could not succeed — it staged a gitignored path and targeted a branch that did
+# not exist.
+#
+# Three things about this job are load-bearing:
+#
+# 1. It commits `data/*.json` — the files the app fetches at runtime — so
+#    merging the PR updates the deployed site. Nothing gitignored is touched;
+#    the change report lives in the runner's temp dir and is rendered into the
+#    PR body rather than committed.
+# 2. Validation and the test suites run HERE, before the PR is opened. A PR
+#    created with GITHUB_TOKEN does not trigger other workflows, so the
+#    Usability Contract will not run on it — the gate has to be in-job.
+# 3. It never writes `data/alignment.json`. A newly non-affiliated MP counts
+#    toward no bloc and is raised as ACTION REQUIRED in the PR body; the
+#    reviewer classifies them before merging.
+
 on:
   schedule:
     - cron: '0 8 1 * *'
   workflow_dispatch:
+    inputs:
+      force_pr:
+        description: 'Open a PR even if nothing substantive changed (pipeline test)'
+        type: boolean
+        default: false
+
+concurrency:
+  group: monthly-mp-check
+  cancel-in-progress: false
 
 jobs:
   check-and-update:
@@ -21,35 +48,136 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
       - name: Install dependencies
-        run: pip install requests beautifulsoup4
+        run: npm ci
 
-      - name: Fetch current MP data
-        run: python scripts/fetch_mp_data.py
+      # The diff is against the committed data, so keep a copy before the fetch
+      # overwrites it. Outside the working tree: nothing here is ever committed.
+      - name: Snapshot the committed data
+        run: cp -r data "$RUNNER_TEMP/baseline"
 
-      - name: Compare against baseline
+      # Fetches, resolves, validates in a staging dir, and only then writes
+      # data/. Aborts non-zero — with data/ untouched — on a non-200, a
+      # malformed payload, a member count outside 95-105, an unknown or renamed
+      # faction, or a board that does not resolve to three people.
+      - name: Fetch current data from the API
+        run: python3 scripts/fetch_mp_data.py
+
+      - name: Classify the changes
         id: compare
-        run: python scripts/compare_mp_data.py
+        run: |
+          python3 scripts/compare_mp_data.py \
+            --baseline "$RUNNER_TEMP/baseline" \
+            --current data \
+            --report "$RUNNER_TEMP/change_report.json"
 
-      - name: Log and exit if no changes
-        if: steps.compare.outputs.changes_detected == 'false'
-        run: echo "No changes detected. Nothing to do."
+      - name: No changes — restore and stop
+        if: steps.compare.outputs.changes_detected == 'false' && inputs.force_pr != true
+        run: |
+          echo "Only meta.updatedAt moved. Nothing to review."
+          git checkout -- data
 
-      - name: Commit change report and open PR
-        if: steps.compare.outputs.changes_detected == 'true'
+      # ---- the merge gate, run here because the bot's PR will not trigger CI --
+      - name: Validate the fetched data
+        if: steps.compare.outputs.changes_detected == 'true' || inputs.force_pr == true
+        run: |
+          if [ "${{ steps.compare.outputs.action_required }}" = "true" ]; then
+            # A defection the job may not classify itself. The arithmetic already
+            # counts them toward no bloc; the PR body says who needs classifying.
+            python3 scripts/validate_data.py --allow-pending-alignment
+          else
+            python3 scripts/validate_data.py
+          fi
+
+      - name: Resolver regression tests
+        if: steps.compare.outputs.changes_detected == 'true' || inputs.force_pr == true
+        run: npm run test:resolvers
+
+      - name: Unit tests
+        if: steps.compare.outputs.changes_detected == 'true' || inputs.force_pr == true
+        run: npm run test:unit
+
+      - name: Commit and open the PR
+        if: steps.compare.outputs.changes_detected == 'true' || inputs.force_pr == true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTION_REQUIRED: ${{ steps.compare.outputs.action_required }}
         run: |
+          set -euo pipefail
           MONTH_YEAR=$(date +"%B %Y")
           BRANCH="mp-data-check/$(date +%Y-%m)"
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$BRANCH"
-          git add data/change_report.json data/mp_data_fetched.json
-          git commit -m "MP data check - ${MONTH_YEAR}: changes detected"
-          git push origin "$BRANCH"
-          MONTH_YEAR="$MONTH_YEAR" python scripts/generate_pr_body.py > /tmp/pr_body.txt
-          gh pr create \
-            --title "MP Data Update Required - ${MONTH_YEAR}" \
-            --body-file /tmp/pr_body.txt \
-            --base main
+          # A second run in the same month reuses the branch. Fetch it first so
+          # --force-with-lease below has a lease to compare against; the default
+          # checkout only fetches the ref being built, which would make the push
+          # fail with "stale info" rather than update the open PR.
+          git fetch origin "$BRANCH" || true
+          git checkout -B "$BRANCH"
+
+          # Only the app's data. The change report stays in the runner's temp
+          # dir — committing it is what made the old job fail against .gitignore.
+          git add data
+          if git diff --cached --quiet; then
+            echo "Nothing staged; skipping."
+            exit 0
+          fi
+          git commit -m "MP data update - ${MONTH_YEAR}"
+          git push --force-with-lease -u origin "$BRANCH"
+
+          MONTH_YEAR="$MONTH_YEAR" python3 scripts/generate_pr_body.py \
+            --report "$RUNNER_TEMP/change_report.json" > "$RUNNER_TEMP/pr_body.md"
+
+          EXISTING=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
+          if [ -n "$EXISTING" ]; then
+            gh pr edit "$EXISTING" --body-file "$RUNNER_TEMP/pr_body.md"
+            echo "Updated PR #$EXISTING"
+            exit 0
+          fi
+
+          # ACTION REQUIRED means the overlay is incomplete until a human edits
+          # it, so the PR opens as a draft — mergeable only after they do.
+          DRAFT=""
+          if [ "$ACTION_REQUIRED" = "true" ]; then DRAFT="--draft"; fi
+          if gh pr create \
+              --title "MP Data Update - ${MONTH_YEAR}" \
+              --body-file "$RUNNER_TEMP/pr_body.md" \
+              --base main \
+              --head "$BRANCH" \
+              $DRAFT; then
+            exit 0
+          fi
+
+          # The data is fetched, validated and pushed either way — only the PR
+          # is missing. The usual cause is one repository setting, so say so
+          # rather than leaving a GraphQL error as the whole explanation.
+          COMPARE="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/main...${BRANCH}?expand=1"
+          {
+            echo "### Data pushed, PR not opened"
+            echo
+            echo "Branch \`${BRANCH}\` is pushed and validated. \`gh pr create\` failed —"
+            echo "if the error above reads *\"GitHub Actions is not permitted to create or"
+            echo "approve pull requests\"*, enable **Settings → Actions → General →"
+            echo "Workflow permissions → Allow GitHub Actions to create and approve pull"
+            echo "requests**, then re-run this workflow."
+            echo
+            echo "Open it by hand meanwhile: ${COMPARE}"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "::error title=PR not opened::Branch ${BRANCH} is pushed and valid. Enable 'Allow GitHub Actions to create and approve pull requests' in Settings → Actions → General, or open it manually: ${COMPARE}"
+          exit 1
+
+      - name: Upload the change report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: change-report
+          path: ${{ runner.temp }}/change_report.json
+          if-no-files-found: ignore
+          retention-days: 90
