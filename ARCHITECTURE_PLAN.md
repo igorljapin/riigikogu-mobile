@@ -1,6 +1,35 @@
 # Riigikogu Mobile — Architecture Rebuild & API-Check Plan (v3)
 
-> **Status:** Phase 0 executed 2026-08-11. Phases 1–7 outstanding. v3 supersedes v2 after analysing the official API repo (`riigikogu-kantselei/api`) and probing every relevant endpoint.
+> # ✅ EXECUTED — historical record, not a to-do list
+>
+> **All seven phases have landed** (Phase 0 on 2026-08-11; Phases 1–7 on
+> 2026-08-12). This document is kept because it records *why* the app is shaped
+> the way it is, what was measured rather than assumed, and which of its
+> predictions turned out wrong. **It is not a plan anyone should still be
+> executing**, and several of its numbers were already stale when the phase that
+> used them ran — each such case is flagged in the phase's outcome table below.
+>
+> | Phase | | Landed | Outcome |
+> |---|---|---|---|
+> | 0 | Baseline, snapshot & repo repair | 2026-08-11 | [table](#phase-0-outcome-2026-08-11) |
+> | 1 | Data layer | 2026-08-12 | `data/*.json` is the single source of truth; see `data/README.md` |
+> | 2 | Usability Contract | 2026-08-12 | `USABILITY.md` + `tests/`, CI on every PR |
+> | 3 | Pure logic layer | 2026-08-12 | `src/lib/calculator.js`, `src/lib/factions.js` |
+> | 4 | Vanilla UI rebuild | 2026-08-12 | The bundle is gone; source is what ships |
+> | 5 | Monthly API check | 2026-08-12 | [table](#phase-5-outcome-2026-08-12) — one owner checkbox outstanding |
+> | 6 | PWA repair | 2026-08-12 | [table](#phase-6-outcome-2026-08-12) |
+> | 7 | Docs & cutover | 2026-08-12 | [table](#phase-7-outcome-2026-08-12) |
+>
+> **Two items remain, and neither can be done from inside the repository:**
+> flipping the default branch to `main` (Settings → Branches) and allowing
+> GitHub Actions to open pull requests (Settings → Actions → General → Workflow
+> permissions). Both are owner actions.
+>
+> **For how to work on this repo now, read `CLAUDE.md`** — not this file.
+>
+> ---
+>
+> **Original status line:** Phase 0 executed 2026-08-11. Phases 1–7 outstanding. v3 supersedes v2 after analysing the official API repo (`riigikogu-kantselei/api`) and probing every relevant endpoint.
 >
 > ### ⚠️ Erratum (2026-08-11) — the "coalition stays 52" assumption is dead
 >
@@ -428,6 +457,25 @@ as the app — deliberately not done.
 
 **Acceptance:** docs match reality; live site verified; owner sign-off.
 
+### Phase 7 outcome (2026-08-12)
+
+| Step | Result |
+|---|---|
+| `CLAUDE.md` rewritten | ✅ Reorganised around the four layers rather than the rebuild's progress. Leads with the two rules that follow from the layering — a data change touches `data/*.json` only, a design change touches `styles.css` + `src/views/*` only and keeps every `data-testid` — then the six critical rules (never commit to `main`; never merge a red suite), the dual-count model, and both update paths: review/merge the automated PR, or `build_data.py` → `validate_data.py` → `npm test` → PR. The "mid-rebuild" framing is gone |
+| `README.md` updated from current data | ✅ Every number now traces to `data/*.json`: the dual-count table (registered vs voting bloc, both summing to 101), coalition 50 · opposition 42 · unaligned 9, the Board, all four thresholds from `meta.json`, and the roster aggregates. Was showing coalition 52, "Second Vice-President: Jüri Ratas", "Constitutional Majority 61", and "Framework: React with Tailwind CSS · Build: Vite" — all four wrong |
+| Plan marked executed | ✅ This box, this table, and the stale line in *Definition of done* corrected |
+| Full suite | ✅ **64 unit + 23 resolver + 54 Playwright = 141, all green**, 0 skipped |
+| Live-site verification | ➖ **owner action** — the PR carries the checklist. Pages serves `main`, and this branch is not merged yet, so the live site still predates the check |
+
+**One thing this phase deliberately did not do.** §7.2 says the README's numbers
+should be "driven by `data/*.json`, not prose", which could be read as generating
+the file. It is not generated: a README that only a script may edit is a README
+nobody edits. Instead every figure is transcribed from `data/*.json` with its
+source and date stated inline, and the reader is pointed at the app — which
+renders the live values and its own `updatedAt` — for anything current. The
+failure mode §7.2 was aimed at is a README that contradicts the app; a dated
+snapshot that names its source does not.
+
 ---
 
 ## Sequencing, risk & rollback
@@ -450,7 +498,7 @@ as the app — deliberately not done.
 ## Definition of done
 
 - App = plain HTML/CSS/ES modules, source committed, no build step.
-- All data read at runtime from `data/*.json`. Both counts modelled: registered (API) and voting bloc (API + `alignment.json`); the calculator uses voting bloc; coalition reads 52.
+- All data read at runtime from `data/*.json`. Both counts modelled: registered (API) and voting bloc (API + `alignment.json`); the calculator uses voting bloc. ~~coalition reads 52~~ — **superseded by the erratum at the top of this file**: the coalition is 50 of 101 and has been a minority government since 2026-08-10. The app reads whatever `meta.json` says; no total is written into this repo by hand.
 - Calculator = one pure, unit-tested module.
 - Monthly workflow runs end-to-end: correct factions, committees, board, validation in-job, reviewed PR against `main`, merge → live update — with defections auto-classified `unaligned` — never silently mis-counted, never blocking the merge, and never added to a bloc without an explicit human upgrade.
 - Tier A data (roster, names, photos, links, factions, committees + roles, board, contacts, district) maintains itself with no human input.
