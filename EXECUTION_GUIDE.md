@@ -1,5 +1,11 @@
 # How to Execute the Architecture Plan — Copy-Paste Guide (v3)
 
+> ### ✅ All seven phases were executed (2026-08-11 / 2026-08-12). Nothing here is left to run.
+>
+> Kept as the record of what was actually asked of each session. **To work on
+> this repo now, read `CLAUDE.md`**; for what each phase produced, see the
+> outcome tables in `ARCHITECTURE_PLAN.md`.
+
 For each phase: **copy the prompt block, paste it to Claude Code, wait for it to finish, then review using the checklist.** Do phases in order. Full technical detail lives in `ARCHITECTURE_PLAN.md` (v3).
 
 > ### ⚠️ Seat numbers in this guide were superseded on 2026-08-11

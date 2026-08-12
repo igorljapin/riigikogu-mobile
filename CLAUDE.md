@@ -1,27 +1,38 @@
-# Riigikogu Mobile Dashboard - Claude Code Instructions
+# Riigikogu Mobile Dashboard — Claude Code Instructions
 
-## Repository Purpose
-Mobile PWA dashboard for the XV Riigikogu (101 MPs).
-Hosted at https://igorljapin.github.io/riigikogu-mobile/
+Mobile PWA dashboard for the XV Riigikogu (101 MPs), live at
+https://igorljapin.github.io/riigikogu-mobile/ — GitHub Pages deploys `main`
+from the repository root, so **every merge to `main` ships**.
 
-## Current state: mid-rebuild (read this first)
+## Architecture in one screen
 
-The app is being rebuilt in phases per `ARCHITECTURE_PLAN.md` (v3).
-**Phases 0–6 have landed.** The minified bundle is gone: the shipped app is
-plain HTML + CSS + native ES modules, with all source in this repository and
-no build step; the monthly job refreshes the JSON the app actually reads; and
-the PWA installs and works offline on the correct paths. Phase 7 (docs) is
-outstanding. The hand-written monthly procedure that used to live in this
-file is obsolete — the job does it; the
-old text survives in `docs/DEPRECATED_MONTHLY_PROCEDURE.md` as a historical
-record only.
+The rebuild described in `ARCHITECTURE_PLAN.md` is **finished** (Phases 0–7,
+Aug 2026). There is no bundler, no framework and no build step: the source in
+this repository *is* what ships. Four layers, and knowing which one you are in
+tells you what you are allowed to touch.
 
-- `BEHAVIOR_SNAPSHOT.md` + `snapshot/` — what the app did before the rebuild.
-  Phase 4 reproduces it 1:1; `snapshot/phase4/` and `snapshot/compare/` are
-  the after and side-by-side captures.
-- `v-stable-pre-rebuild` — rollback ref for the pre-rebuild app.
+```
+DATA      data/*.json      single source of truth, fetched by the app at runtime
+LOGIC     src/lib/*.js     pure functions, no DOM, no I/O, unit-tested
+VIEW      src/views/*.js   the only layer a redesign ever touches
+          styles.css
+CONTRACT  USABILITY.md     the promises, and tests/ the executable proof
+          tests/
+```
 
-## File Map (verified 2026-08-12)
+Two rules follow directly from that diagram, and they are the two ways this
+repo has broken before:
+
+- **A data change is a change to `data/*.json` and nothing else.** The app reads
+  those files at runtime. Never edit `src/views/*` or `styles.css` to change a
+  number.
+- **A design change is a change to `styles.css` and `src/views/*` and nothing
+  else.** It may rewrite either freely, but it must keep every `data-testid` in
+  `USABILITY.md` §3 and ship with a green suite. A redesign already failed once
+  here (`4dae72b`) because design, data and logic were fused; the testids are
+  the mechanism that keeps them separable.
+
+## File map (verified 2026-08-12)
 
 | Path | What it actually is |
 |---|---|
@@ -29,71 +40,101 @@ record only.
 | `styles.css` | The whole stylesheet, plain CSS. Party colours are **not** here — `src/app.js` publishes them as `--party-<id>` from `parties.json`. |
 | `src/app.js`, `src/data.js`, `src/dom.js` | Entry point + tab router; runtime loader for `data/*.json`; three DOM helpers. |
 | `src/lib/*.js` | Pure, unit-tested logic: `calculator.js`, `factions.js`. No DOM, no I/O. |
-| `src/views/*.js` | `parliament.js`, `mps.js`, `calculator.js`, `board.js`. **The only layer a redesign touches**, together with `styles.css`. |
+| `src/views/*.js` | `parliament.js` (composition + Board), `mps.js`, `calculator.js`, `board.js`. **The redesign layer**, together with `styles.css`. |
 | `data/*.json` | The single source of truth, **read by the app at runtime**. See `data/README.md`. |
-| `service-worker.js` | Precaches the whole Phase-4 layout — shell, ES modules, `data/*.json` — with **relative** entries, so one list is correct both at `/riigikogu-mobile/` and at `/` under the test server. Bump `CACHE_NAME` whenever the list changes. |
-| `manifest.json`, `offline.html`, `icons/` | PWA assets. |
-| `scripts/build_data.py`, `validate_data.py` | Rebuild `data/` from the live API, and gate it. Both current. |
+| `service-worker.js` | Precaches the whole layout — shell, ES modules, `data/*.json` — with **relative** entries, so one list is correct both at `/riigikogu-mobile/` and at `/` under the test server. Bump `CACHE_NAME` whenever the list changes. |
+| `manifest.json`, `offline.html`, `icons/` | PWA assets. `start_url` and `scope` are `/riigikogu-mobile/`. |
+| `scripts/build_data.py`, `validate_data.py` | Rebuild `data/` from the live API, and gate it. |
 | `scripts/fetch_mp_data.py` | The monthly job's fetcher. Same resolvers as `build_data.py` (it imports them), stages + validates before publishing, and **never writes `data/alignment.json`**. |
-| `scripts/compare_mp_data.py`, `generate_pr_body.py` | Classify a fetch into the five Phase-5 categories, and render the PR body — ACTION REQUIRED first. |
-| `tests/fixtures/`, `tests/python/` | Frozen API capture (2026-08-12) and the resolver regression suite it pins. `npm run test:resolvers`. |
+| `scripts/compare_mp_data.py`, `generate_pr_body.py` | Classify a fetch into the five change categories, and render the PR body — ACTION REQUIRED first. |
 | `scripts/capture_screens.mjs` | Re-captures the Phase-0 states against the current app and builds the before/after strips. |
-| `.github/workflows/monthly-mp-check.yml` | Monthly job, working. Commits `data/*.json`, validates and runs the suites in-job, opens a PR into `main`. `workflow_dispatch` takes a `force_pr` input for testing the pipeline. |
-| `USABILITY.md`, `tests/` | The Usability Contract and its suite. Tier 1 + Tier 2 + unit tests all live. |
-| `ARCHITECTURE_PLAN.md`, `EXECUTION_GUIDE.md` | The rebuild plan and its per-phase prompts. |
-| `BEHAVIOR_SNAPSHOT.md`, `snapshot/` | Phase 0 characterization, plus the Phase 4 after/compare captures. |
+| `tests/` | The Usability Contract's suite: `tier1/` behaviour core, `tier2/` data-driven, `pwa/`, `unit/`, `python/`. |
+| `tests/fixtures/` | Frozen API capture (2026-08-12) pinning the resolver regression suite. |
+| `.github/workflows/usability-tests.yml` | Runs the suite on every PR to `main`. Red blocks merge. |
+| `.github/workflows/monthly-mp-check.yml` | Monthly job. Fetches, validates, runs the suites in-job, commits `data/*.json`, opens a draft PR into `main`. `workflow_dispatch` takes a `force_pr` input for testing the pipeline. |
+| `USABILITY.md` | The contract: every promise, its test, and the `data-testid` table (§3). |
+| `data/README.md` | The data schemas, the two seat counts, and who is allowed to write which file. |
+| `ARCHITECTURE_PLAN.md`, `EXECUTION_GUIDE.md` | The rebuild plan and its per-phase prompts. **Executed — historical record**, not a to-do list. |
+| `BEHAVIOR_SNAPSHOT.md`, `snapshot/` | What the app did before the rebuild, plus the after/compare captures. |
+| `docs/DEPRECATED_MONTHLY_PROCEDURE.md` | The hand-written monthly procedure the job replaced. History only — do not follow it. |
+| `v-stable-pre-rebuild` | Rollback ref for the pre-rebuild app. |
 
-**Files that do not exist**, despite earlier versions of this document
-referring to them: `mp-data-scraped.json`, `data/change_report.json`,
-`data/mp_data_fetched.json`, `data/mp_data_current.json`. Nothing writes them
-any more — the monthly job's change report is a workflow artifact, not a
-committed file. Do not look for them and do not write instructions around them.
+**Files that do not exist**, despite older documents referring to them:
+`mp-data-scraped.json`, `data/change_report.json`, `data/mp_data_fetched.json`,
+`data/mp_data_current.json`. Nothing writes them; the monthly job's change
+report is a workflow artifact, not a committed file.
 
-## Known-broken, do not treat as working
+## Critical rules
 
-1. **The monthly job cannot open its own PR yet — one owner checkbox.**
-   Everything else in it works (verified by dispatch on 2026-08-12: fetch,
-   classify, validate, both suites, commit, push all green). `gh pr create`
-   then failed with *"GitHub Actions is not permitted to create or approve
-   pull requests"*. Fix: **Settings → Actions → General → Workflow permissions
-   → Allow GitHub Actions to create and approve pull requests.** Until then the
-   job pushes a validated branch and the run's error message links the compare
-   page. Same class of item as the Phase 0 default-branch flip: nothing in the
-   repo can do it.
+1. **Never commit directly to `main`.** Always a feature branch plus a PR.
+   `main` is the production branch — a merge deploys.
+2. **`npm test` must be green before any merge.** Not "usually", not "unless
+   it's unrelated". That single rule is what prevents a repeat of `4dae72b`.
+   If the suite is red, fix the app; changing a test is legitimate only when
+   the *contract* changed, and then `USABILITY.md` §1 changes in the same PR.
+3. **A data change touches `data/*.json` only** (see below).
+4. **A design change touches `styles.css` + `src/views/*` only**, keeps every
+   `data-testid` in `USABILITY.md` §3, and ships green. Mobile layout is
+   optimised for small screens — do not alter spacing casually.
+5. **`service-worker.js` and `manifest.json` are PWA configuration.** Touching
+   them means bumping `CACHE_NAME` and keeping `tests/pwa/offline.spec.js`
+   green.
+6. **Never state Riigikogu seat arithmetic or coalition strength from memory.**
+   Read it out of `data/meta.json`, or verify against the live API and cite the
+   date.
 
-Fixed in Phase 6: the service worker's precache paths. Offline mode works, and
-the five PWA specs run for real — `tests/pwa/offline.spec.js` has no `fixme`
-left. MP photos remain the one thing unavailable offline; they are served by
-`api.riigikogu.ee` and the worker leaves cross-origin requests alone.
-
-Fixed in Phase 5, kept here because older sessions were told otherwise: the
-monthly workflow's gitignored `git add` and missing `--base main` are gone, and
-`fetch_mp_data.py` no longer takes `factions[0]` — every MP carries a stale
-`Non-affiliated members` membership from April 2023, which is why that bug
-reported 50 non-affiliated members. `tests/python/test_resolvers.py` asserts the
-difference so it cannot come back.
-
-## Data model: two seat counts, never conflate them
+## The data model: two seat counts, never conflate them
 
 | Count | Source | Use for |
 |---|---|---|
-| Registered | 100% API | Procedural facts: speaking time, committee entitlements, any official Riigikogu figure |
-| Voting bloc | API + curated overlay | **Majority arithmetic — the calculator, coalition/opposition totals, "will this pass"** |
+| **Registered** | 100% API | Procedural facts: speaking time, committee entitlements, any official Riigikogu figure |
+| **Voting bloc** | API + `alignment.json` overlay | **Majority arithmetic — the calculator, coalition/opposition totals, "will this pass"** |
 
-Under the Rules of Procedure §40–42 an MP who leaves a parliamentary group
-may never join another, so a defector stays registered as non-affiliated
-while voting with their new party. The app displays **voting-bloc** numbers
-and must continue to.
+Under the Rules of Procedure §40–42 an MP who leaves a parliamentary group may
+never join another for the rest of the term, so a defector stays *registered* as
+non-affiliated while *voting* with their new party. Both numbers are correct;
+they answer different questions. **The app displays voting-bloc numbers and must
+continue to** — the calculator is meaningless otherwise.
 
-A third state matters as of 2026-08-10: MPs who left a group and joined
-**no** party. They have no whip and no common position, and must never be
-added to either bloc to reach a majority.
+A third state matters: MPs who left a group and joined **no** party. They have
+no whip and no common position, and must **never** be added to either bloc to
+reach a majority. They are a visible third bucket in the UI, not a rounding
+error.
 
-## Changing MP data
+`USABILITY.md` §6 documents the sabotage that proves Tier 2 catches registered
+counts leaking into a voting-bloc display. That is the failure mode this model
+exists to prevent.
 
-A data change is a change to `data/*.json` and **nothing else**. The app
-reads those files at runtime; never edit `src/views/*` or `styles.css` to
-change a number.
+## Updating MP data
+
+There are exactly two ways, and both end in a PR.
+
+### 1. Review and merge the automated PR (the normal path)
+
+`.github/workflows/monthly-mp-check.yml` runs on the 1st of each month, and on
+`workflow_dispatch` (with `force_pr` to exercise the pipeline when nothing
+changed). It fetches the live API, validates, runs the unit + resolver suites
+**in-job** — necessary because a PR created with `GITHUB_TOKEN` does not trigger
+the Usability Contract workflow — commits `data/*.json`, and opens a **draft**
+PR into `main` with the changes classified:
+
+| | Meaning | What you do |
+|---|---|---|
+| 🔴 **ACTION REQUIRED** | An MP became non-affiliated. The job cannot know which party they joined. | Add them to `alignment.json` — `unaligned` if they joined no party, `defectors` with a `votesWith` if they did. |
+| 🟠 Roster change | An MP joined or left parliament (substitutions when a member becomes a minister). | Read it. |
+| 🟡 Board change | President or a Vice-President changed. | Read it. |
+| 🟢 Routine | Committee moves, photos, contacts, districts. | Read it. |
+| ♻️ Stale alignment | A uuid in `alignment.json` is no longer non-affiliated. | Remove the entry. |
+
+Your job is: resolve every 🔴, remove every ♻️, confirm the suite is green,
+then merge. Pages deploys `main`.
+
+While a 🔴 is unresolved the arithmetic in the PR is still correct and
+publishable — an unclassified MP counts toward **no bloc**. The worst case is
+understating a bloc by one seat; the pipeline can never manufacture a majority
+that does not exist.
+
+### 2. Do it by hand
 
 ```bash
 python3 scripts/build_data.py       # regenerate everything API-derived
@@ -101,35 +142,45 @@ python3 scripts/validate_data.py    # exit 0 = safe to publish
 npm test                            # must be green before the PR
 ```
 
-`data/alignment.json` is the only hand-maintained file, and only its `blocs`
-and `defectors` sections. `build_data.py` may append a newly non-affiliated MP
-to `unaligned`; **the monthly job may not write the file at all** — it raises
-them as an ACTION REQUIRED item in a draft PR instead, and counts them toward
-no bloc until you decide. See `data/README.md`, "Who writes what".
+Then commit `data/*.json` on a branch and open a PR.
 
-### The monthly job
+`data/alignment.json` is the **only** hand-maintained file, and only its
+`blocs` (change when a government changes) and `defectors` sections.
+`build_data.py`, run by hand, may append a newly non-affiliated MP to
+`unaligned`; **the monthly job may not write that file at all**. See
+`data/README.md`, "Who writes what".
 
-`.github/workflows/monthly-mp-check.yml` runs on the 1st, and on
-`workflow_dispatch` (with a `force_pr` input to exercise the pipeline when
-nothing changed). It fetches, validates and runs the suites **before** opening
-the PR, because a PR created with `GITHUB_TOKEN` does not trigger the Usability
-Contract workflow. Your job is to review that PR: resolve any 🔴 ACTION REQUIRED
-item in `alignment.json`, remove any ♻️ stale entry, then merge — Pages deploys
-`main`.
+## Running the tests
 
-## Critical Rules
+```bash
+npm ci
+npm test              # unit + resolver + Playwright; starts its own static server
+npm run test:tier1    # behaviour core only
+npm run test:report   # HTML report after a run
+```
 
-- Never commit directly to the default branch — always a feature branch
-  plus a PR.
-- Never change UI layout, CSS, or PWA configuration outside the phase that
-  owns it. `service-worker.js` and `manifest.json` were Phase 6's; touching
-  them now means bumping `CACHE_NAME` and keeping `tests/pwa/offline.spec.js`
-  green.
-- Mobile layout is optimised for small screens — do not alter spacing.
-- A redesign may rewrite `styles.css` and `src/views/*` freely, but it must
-  keep every `data-testid` in `USABILITY.md` §3 and ship with a green suite.
-  That is the whole mechanism that makes a redesign safe here.
-- Every phase must leave the repo shippable, and from Phase 2 on must not
-  merge with a red test suite.
-- Never state Riigikogu seat arithmetic or coalition strength from memory.
-  Verify against the live API and cite the date.
+Chromium is pre-installed in this sandbox at `/opt/pw-browsers/chromium` — do
+not run `playwright install` here. CI installs its own.
+
+## Known-broken, do not treat as working
+
+1. **The monthly job cannot open its own PR yet — one owner checkbox.**
+   Everything else works (verified by dispatch on 2026-08-12: fetch, classify,
+   validate, both suites, commit, push all green). `gh pr create` then failed
+   with *"GitHub Actions is not permitted to create or approve pull requests"*.
+   Fix: **Settings → Actions → General → Workflow permissions → Allow GitHub
+   Actions to create and approve pull requests.** Until then the job pushes a
+   validated branch and the run's error message links the compare page. Nothing
+   in the repository can fix this.
+
+2. **MP photos do not work offline.** They are served by `api.riigikogu.ee` and
+   the service worker leaves cross-origin requests alone; the roster falls back
+   to placeholders. Caching ~100 opaque responses of unknown size alongside the
+   app was a deliberate no.
+
+Everything else that older sessions were warned about is fixed: the service
+worker's precache paths (Phase 6 — offline works, all five PWA specs run for
+real), the workflow's gitignored `git add` and missing `--base main`, and the
+`factions[0]` faction resolver that reported 50 non-affiliated members because
+every MP carries a stale `Non-affiliated members` membership from April 2023.
+`tests/python/test_resolvers.py` asserts the difference so it cannot come back.
