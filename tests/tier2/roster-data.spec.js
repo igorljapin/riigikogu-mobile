@@ -15,7 +15,7 @@ const alignment = require('../../data/alignment.json');
 
 const activeMps = mps.filter((mp) => mp.active);
 
-test.describe.skip('Tier 2 — Members directory against data/*.json (Phase 4)', () => {
+test.describe('Tier 2 — Members directory against data/*.json (Phase 4)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/index.html');
     await page.getByTestId('tab-members').click();
@@ -60,9 +60,10 @@ test.describe.skip('Tier 2 — Members directory against data/*.json (Phase 4)',
     const mp = activeMps.find((m) => m.committees.length > 0);
     await page.locator(`[data-testid="mp-row"][data-mp-uuid="${mp.uuid}"]`).click();
     const popup = page.getByTestId('mp-popup');
-    for (const committee of mp.committees) {
-      await expect(popup.getByTestId('mp-committee')).toContainText(committee.name);
-    }
+    // One pill per committee, in the order data/mps.json lists them, and no
+    // extras — the array form of toHaveText, because `mp-committee` resolves to
+    // one element per committee rather than to a single container.
+    await expect(popup.getByTestId('mp-committee')).toHaveText(mp.committees.map((c) => c.name));
   });
 
   test('unaligned MPs are labelled unaligned, not opposition', async ({ page }) => {
@@ -85,7 +86,7 @@ test.describe.skip('Tier 2 — Members directory against data/*.json (Phase 4)',
   });
 });
 
-test.describe.skip('Tier 2 — Calculator against data/*.json (Phase 4)', () => {
+test.describe('Tier 2 — Calculator against data/*.json (Phase 4)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/index.html');
     await page.getByTestId('tab-calculator').click();

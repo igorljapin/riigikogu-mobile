@@ -17,7 +17,7 @@ async function partyChips(page) {
 }
 
 /**
- * "Coalition (52 seats)" → 52. The heading renders upper-case via CSS
+ * "Coalition (50 seats)" → 50. The heading renders upper-case via CSS
  * `text-transform`, so the selector matches the DOM text case-insensitively.
  */
 function sectionHeading(page, heading) {
@@ -27,6 +27,26 @@ function sectionHeading(page, heading) {
 async function sectionSeats(page, heading) {
   const text = await sectionHeading(page, heading).innerText();
   return Number(/\((\d+)/.exec(text)[1]);
+}
+
+/**
+ * Every bloc section's stated size, read off the headings themselves.
+ *
+ * Written as "however many sections there are" rather than "coalition plus
+ * opposition" on purpose. The promise in USABILITY.md §1 (2.2) is that the bloc
+ * totals account for all 101 seats with none invented or lost — not that there
+ * are exactly two of them. The shipped bundle had two buckets and swept nine
+ * whip-less MPs into the opposition; Phase 4 gives them their own, so the
+ * arithmetic is 50 + 42 + 9. This helper checks the promise, not the shape.
+ */
+async function allSectionSeats(page) {
+  return page.evaluate(() =>
+    [...document.querySelectorAll('h1, h2, h3, h4, p, div, span')]
+      .filter((el) => el.children.length === 0)
+      .map((el) => /^(.+?)\s*\((\d+) seats?\)$/i.exec((el.textContent || '').trim()))
+      .filter(Boolean)
+      .map((m) => ({ bloc: m[1], seats: Number(m[2]) })),
+  );
 }
 
 test.describe('Tier 1 — Parliament tab', () => {
@@ -41,10 +61,15 @@ test.describe('Tier 1 — Parliament tab', () => {
     await expect(page.getByText(/Majority threshold: 51 seats/)).toBeVisible();
   });
 
-  test('coalition and opposition seats account for all 101 seats', async ({ page }) => {
-    const coalition = await sectionSeats(page, 'COALITION');
-    const opposition = await sectionSeats(page, 'OPPOSITION');
-    expect(coalition + opposition).toBe(TOTAL_SEATS);
+  test('the bloc sections account for all 101 seats', async ({ page }) => {
+    const sections = await allSectionSeats(page);
+    expect(sections.length).toBeGreaterThanOrEqual(2);
+
+    const named = sections.map((s) => s.bloc.toLowerCase());
+    expect(named).toContain('coalition');
+    expect(named).toContain('opposition');
+
+    expect(sections.reduce((sum, s) => sum + s.seats, 0)).toBe(TOTAL_SEATS);
   });
 
   test('the party chips sum to the section headings that contain them', async ({ page }) => {
@@ -54,9 +79,8 @@ test.describe('Tier 1 — Parliament tab', () => {
     expect(chips.length).toBeGreaterThanOrEqual(7);
 
     const chipTotal = chips.reduce((sum, c) => sum + c.seats, 0);
-    const coalition = await sectionSeats(page, 'COALITION');
-    const opposition = await sectionSeats(page, 'OPPOSITION');
-    expect(chipTotal).toBe(coalition + opposition);
+    const sectionTotal = (await allSectionSeats(page)).reduce((sum, s) => sum + s.seats, 0);
+    expect(chipTotal).toBe(sectionTotal);
     expect(chipTotal).toBe(TOTAL_SEATS);
   });
 

@@ -8,6 +8,13 @@
 > **Everything below was measured, not read off the source.** The app is a minified
 > bundle; every number, colour, and label here came out of a real Chromium session
 > driving the real page.
+>
+> **Status after Phase 4 (2026-08-12):** this document still describes the
+> *pre-rebuild* app, deliberately and permanently — it is the baseline, not a
+> live description. The rebuild reproduces the behaviour recorded here, with the
+> data corrections §8 called for. The same nineteen states captured against the
+> new app are in `snapshot/phase4/`, and side by side with these in
+> `snapshot/compare/`; see `snapshot/README.md`.
 
 | | |
 |---|---|

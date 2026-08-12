@@ -56,8 +56,10 @@ API string and is how `mps.json` joins to a party.
 ```jsonc
 { "name": "Aivar Kokk", "uuid": "…", "photoUrl": "…", "profileUrl": "…",
   "faction": "Isamaa Parliamentary Group", "registeredPartyId": "isamaa",
+  "factionRole": null,
   "committees": [{ "name": "Finance Committee", "role": "member", "type": "ALALINE_KOMISJON" }],
   "boardRole": null, "district": "Jõgevamaa and Tartumaa", "email": "…",
+  "usaFriendship": true,
   "leftFaction": null, "leftFactionDate": null, "active": true }
 ```
 
@@ -70,6 +72,21 @@ API string and is how `mps.json` joins to a party.
   this is what makes defections detectable with no human input.
 - `committees` covers standing (`ALALINE_KOMISJON`) and select (`ERIKOMISJON`)
   committees, with roles (`member`, `Chairman`, `Deputy Chairman`).
+- `factionRole` is the office held inside the MP's *current* parliamentary
+  group — `Faction Chairman` (6, one per group), `Faction Deputy Chairman` (8),
+  or `null`. It drives the Members tab's `Chairs` filter and the role captions
+  in the party sheet.
+- `usaFriendship` is current membership of the **Estonia-USA Parliamentary
+  Friendship Group** (`/usergroups`, type `PARLAMENDIRYHM`), the 🇺🇸 marker on
+  the Members tab. Added in Phase 4: the deployed bundle had it baked in, and
+  reproducing the Members tab 1:1 needs it as data. It is Tier A — nobody
+  maintains it by hand.
+
+  > **This number moved.** The bundle marked 33 MPs; the live group has 38
+  > current members who sit in this Riigikogu, having added Ando Kiviberg,
+  > Helle-Moonika Helme, Mart Helme, Martin Helme and Raimond Kaljulaid since
+  > the bundle's "Jan 2026" vintage. The bundle's 33 are a strict subset of the
+  > API's 38, so this is a refresh, not a resolver disagreement.
 
 ### `alignment.json` — the only curated file
 

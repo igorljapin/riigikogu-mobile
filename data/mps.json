@@ -6,6 +6,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/2dcb35ed-acbc-4bcf-9e9d-9da681842d6d/Aivar-Kokk",
     "faction": "Isamaa Parliamentary Group",
     "registeredPartyId": "isamaa",
+    "factionRole": null,
     "committees": [
       {
         "name": "Finance Committee",
@@ -21,6 +22,7 @@
     "boardRole": null,
     "district": "Jõgevamaa and Tartumaa",
     "email": "aivar.kokk@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -32,6 +34,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/5650dddf-f2ca-4b94-8888-e7482808f81b/Aivar-Sõerd",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "European Union Affairs Committee",
@@ -47,6 +50,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "aivar.soerd@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -58,6 +62,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/563f86fd-db45-4046-b8ed-b66e5a2aec45/Alar-Laneman",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "National Defence Committee",
@@ -68,6 +73,7 @@
     "boardRole": null,
     "district": "Pärnumaa",
     "email": "alar.laneman@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Conservative People’s Party Parliamentary Group",
     "leftFactionDate": "2024-06-14",
     "active": true
@@ -79,6 +85,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/fe6fcd51-6911-4dc6-9232-ddeac5ec1155/Aleksandr-Tšaplõgin",
     "faction": "Estonian Centre Party Parliamentary Group",
     "registeredPartyId": "center",
+    "factionRole": null,
     "committees": [
       {
         "name": "Social Affairs Committee",
@@ -89,6 +96,7 @@
     "boardRole": null,
     "district": "Kesklinn, Lasnamäe and Pirita districts of Tallinn",
     "email": "aleksandr.tsaplogin@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -100,6 +108,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/0ef9e676-8ee6-481a-ae29-e1ce75af5aaa/Aleksei-Jevgrafov",
     "faction": "Estonian Centre Party Parliamentary Group",
     "registeredPartyId": "center",
+    "factionRole": null,
     "committees": [
       {
         "name": "Economic Affairs Committee",
@@ -110,6 +119,7 @@
     "boardRole": null,
     "district": "Ida-Virumaa",
     "email": "aleksei.jevgrafov@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -121,6 +131,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/04510d7c-b12a-48aa-8402-80b0efb114a6/Anastassia-Kovalenko-Kõlvart",
     "faction": "Estonian Centre Party Parliamentary Group",
     "registeredPartyId": "center",
+    "factionRole": null,
     "committees": [
       {
         "name": "Anti-Corruption Select Committee",
@@ -136,6 +147,7 @@
     "boardRole": null,
     "district": "Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn",
     "email": "anastassia.kovalenko-kolvart@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -147,6 +159,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/4e2e1744-16b5-4d88-a08a-cf250c776956/Ando-Kiviberg",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
+    "factionRole": null,
     "committees": [
       {
         "name": "Constitutional Committee",
@@ -162,6 +175,7 @@
     "boardRole": null,
     "district": "Järvamaa and Viljandimaa",
     "email": "ando.kiviberg@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -173,6 +187,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/80f542c1-393a-46e2-9fca-99948e59850d/Andre-Hanimägi",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Legal Affairs Committee",
@@ -183,6 +198,7 @@
     "boardRole": null,
     "district": "Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn",
     "email": "andre.hanimagi@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": "Estonian Centre Party Parliamentary Group",
     "leftFactionDate": "2024-01-05",
     "active": true
@@ -194,6 +210,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/a62b7530-a1fb-4c0b-b041-f10c2cfaa31a/Andrei-Korobeinik",
     "faction": "Estonian Centre Party Parliamentary Group",
     "registeredPartyId": "center",
+    "factionRole": null,
     "committees": [
       {
         "name": "Finance Committee",
@@ -204,6 +221,7 @@
     "boardRole": null,
     "district": "Pärnumaa",
     "email": "andrei.korobeinik@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": "Estonian Centre Party Parliamentary Group",
     "leftFactionDate": "2024-03-06",
     "active": true
@@ -215,6 +233,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d5f3dddb-d809-448a-a94f-adbf208e408a/Andres-Metsoja",
     "faction": "Isamaa Parliamentary Group",
     "registeredPartyId": "isamaa",
+    "factionRole": null,
     "committees": [
       {
         "name": "Environment Committee",
@@ -225,6 +244,7 @@
     "boardRole": null,
     "district": "Pärnumaa",
     "email": "andres.metsoja@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -236,6 +256,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/fd57045c-5dde-4c26-bf60-e5c294da0e4c/Andrus-Seeme",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Rural Affairs Committee",
@@ -246,6 +267,7 @@
     "boardRole": null,
     "district": "Võrumaa, Valgamaa and Põlvamaa",
     "email": "andrus.seeme@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -257,6 +279,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/7655e8d3-b658-49f0-8e09-f6cbc4a2c714/Annely-Akkermann",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Finance Committee",
@@ -267,6 +290,7 @@
     "boardRole": null,
     "district": "Pärnumaa",
     "email": "annely.akkermann@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -278,6 +302,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/f6353ede-a0a5-4918-ab8b-790a1957c5cd/Anti-Allas",
     "faction": "Social Democratic Party Parliamentary Group",
     "registeredPartyId": "sde",
+    "factionRole": null,
     "committees": [
       {
         "name": "Rural Affairs Committee",
@@ -293,6 +318,7 @@
     "boardRole": null,
     "district": "Võrumaa, Valgamaa and Põlvamaa",
     "email": "anti.allas@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -304,6 +330,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/07003549-aa42-4764-8bdd-cab06cb94a92/Anti-Haugas",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Legal Affairs Committee",
@@ -314,6 +341,7 @@
     "boardRole": null,
     "district": "Võrumaa, Valgamaa and Põlvamaa",
     "email": "anti.haugas@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -325,6 +353,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/bc9c1725-2fd8-4f54-a0e3-58b87e9dfe1f/Anti-Poolamets",
     "faction": "Estonian Conservative People’s Party Parliamentary Group",
     "registeredPartyId": "ekre",
+    "factionRole": null,
     "committees": [
       {
         "name": "Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks",
@@ -345,6 +374,7 @@
     "boardRole": null,
     "district": "Lääne-Virumaa",
     "email": "anti.poolamets@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -356,6 +386,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/c4e3fc0f-80fb-4a3e-b49e-80045c5253d9/Ants-Frosch",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Constitutional Committee",
@@ -366,6 +397,7 @@
     "boardRole": null,
     "district": "Võrumaa, Valgamaa and Põlvamaa",
     "email": "ants.frosch@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Conservative People’s Party Parliamentary Group",
     "leftFactionDate": "2024-06-13",
     "active": true
@@ -377,6 +409,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/a39c4392-bbc8-4036-b923-0f5f2b3d9766/Arvo-Aller",
     "faction": "Estonian Conservative People’s Party Parliamentary Group",
     "registeredPartyId": "ekre",
+    "factionRole": null,
     "committees": [
       {
         "name": "European Union Affairs Committee",
@@ -387,6 +420,7 @@
     "boardRole": "Second Vice-President of the Riigikogu",
     "district": "Ida-Virumaa",
     "email": "arvo.aller@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -398,6 +432,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/8946b072-80c5-436e-95b2-41f928a7c636/Diana-Ingerainen",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
+    "factionRole": null,
     "committees": [
       {
         "name": "Finance Committee",
@@ -413,6 +448,7 @@
     "boardRole": null,
     "district": "Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn",
     "email": "diana.ingerainen@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -424,6 +460,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/b2226516-4cd4-4471-b93b-696c40b7a9e2/Eerik-Niiles-Kross",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Anti-Corruption Select Committee",
@@ -444,6 +481,7 @@
     "boardRole": null,
     "district": "Võrumaa, Valgamaa and Põlvamaa",
     "email": "eerik-niiles.kross@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -455,6 +493,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/7d6b0605-e425-41c8-9a53-3b92b81f21b1/Eero-Merilind",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Social Affairs Committee",
@@ -465,6 +504,7 @@
     "boardRole": null,
     "district": "Mustamäe and Nõmme districts of Tallinn",
     "email": "eero.merilind@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -476,6 +516,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/07132cc4-5afc-4edb-9537-7c721ec39b2d/Enn-Eesmaa",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "European Union Affairs Committee",
@@ -491,6 +532,7 @@
     "boardRole": null,
     "district": "Pärnumaa",
     "email": "enn.eesmaa@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Centre Party Parliamentary Group",
     "leftFactionDate": "2024-01-05",
     "active": true
@@ -502,6 +544,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d5c54f88-dff3-486b-aac6-2cd124577d38/Ester-Karuse",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Foreign Affairs Committee",
@@ -512,6 +555,7 @@
     "boardRole": null,
     "district": "Võrumaa, Valgamaa and Põlvamaa",
     "email": "ester.karuse@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": "Estonian Centre Party Parliamentary Group",
     "leftFactionDate": "2024-01-05",
     "active": true
@@ -523,6 +567,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/afc264da-dc7d-4885-a971-0e645995e6de/Evelin-Poolamets",
     "faction": "Estonian Conservative People’s Party Parliamentary Group",
     "registeredPartyId": "ekre",
+    "factionRole": null,
     "committees": [
       {
         "name": "Constitutional Committee",
@@ -538,6 +583,7 @@
     "boardRole": null,
     "district": "Lääne-Virumaa",
     "email": "evelin.poolamets@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -549,6 +595,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/987e47c7-929b-4437-9385-fab4f4fd7824/Grigore-Kalev-Stoicescu",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Rural Affairs Committee",
@@ -559,6 +606,7 @@
     "boardRole": null,
     "district": "Hiiumaa, Läänemaa and Saaremaa",
     "email": "kalev.stoicescu@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonia 200 Parliamentary Group",
     "leftFactionDate": "2026-08-10",
     "active": true
@@ -570,6 +618,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d18cee4c-7b30-405f-96f2-4ab6f81efaf2/Hanah-Lahe",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Environment Committee",
@@ -580,6 +629,7 @@
     "boardRole": null,
     "district": "Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn",
     "email": "hanah.lahe@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -591,6 +641,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/23161df7-bc1b-442e-b4cd-2d1f37627658/Helir-Valdor-Seeder",
     "faction": "Isamaa Parliamentary Group",
     "registeredPartyId": "isamaa",
+    "factionRole": "Faction Chairman",
     "committees": [
       {
         "name": "Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks",
@@ -606,6 +657,7 @@
     "boardRole": null,
     "district": "Järvamaa and Viljandimaa",
     "email": "helir-valdor.seeder@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -617,6 +669,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/b5922bb2-56bb-4de6-a7e1-754553191c27/Heljo-Pikhof",
     "faction": "Social Democratic Party Parliamentary Group",
     "registeredPartyId": "sde",
+    "factionRole": null,
     "committees": [
       {
         "name": "Legal Affairs Committee",
@@ -627,6 +680,7 @@
     "boardRole": null,
     "district": "City of Tartu",
     "email": "heljo.pikhof@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -638,6 +692,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/f4e5d00e-19d1-428a-ba5e-5ce9ae4ef2c2/Helle-Moonika-Helme",
     "faction": "Estonian Conservative People’s Party Parliamentary Group",
     "registeredPartyId": "ekre",
+    "factionRole": "Faction Deputy Chairman",
     "committees": [
       {
         "name": "Cultural Affairs Committee",
@@ -648,6 +703,7 @@
     "boardRole": null,
     "district": "Hiiumaa, Läänemaa and Saaremaa",
     "email": "helle-moonika.helme@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -659,6 +715,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/1d0b281d-b769-4e94-8c67-faa1cb1b1395/Helmen-Kütt",
     "faction": "Social Democratic Party Parliamentary Group",
     "registeredPartyId": "sde",
+    "factionRole": "Faction Deputy Chairman",
     "committees": [
       {
         "name": "Social Affairs Committee",
@@ -669,6 +726,7 @@
     "boardRole": null,
     "district": "Järvamaa and Viljandimaa",
     "email": "helmen.kytt@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -680,6 +738,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/65b1d8bb-7f45-48f5-b4aa-7ba4ca459824/Henn-Põlluaas",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Foreign Affairs Committee",
@@ -690,6 +749,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "henn.polluaas@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": "Estonian Conservative People’s Party Parliamentary Group",
     "leftFactionDate": "2024-06-13",
     "active": true
@@ -701,6 +761,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/3febb869-f443-4aba-908e-7c0c30f8c4dd/Irja-Lutsar",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
+    "factionRole": "Faction Deputy Chairman",
     "committees": [
       {
         "name": "Anti-Corruption Select Committee",
@@ -716,6 +777,7 @@
     "boardRole": null,
     "district": "Jõgevamaa and Tartumaa",
     "email": "irja.lutsar@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonia 200 Parliamentary Group",
     "leftFactionDate": "2025-04-21",
     "active": true
@@ -727,6 +789,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/6b45cfb5-8a17-481c-b674-80fc00c6cf5d/Jaak-Aab",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Economic Affairs Committee",
@@ -737,6 +800,7 @@
     "boardRole": null,
     "district": "Järvamaa and Viljandimaa",
     "email": "jaak.aab@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Centre Party Parliamentary Group",
     "leftFactionDate": "2024-01-05",
     "active": true
@@ -748,6 +812,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/54bc0d5b-7c98-4245-8682-4a3a0b6e0275/Jaak-Valge",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Constitutional Committee",
@@ -758,6 +823,7 @@
     "boardRole": null,
     "district": "City of Tartu",
     "email": "jaak.valge@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Conservative People’s Party Parliamentary Group",
     "leftFactionDate": "2024-06-13",
     "active": true
@@ -769,6 +835,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/94351dfe-449e-48db-9396-06cf204ce22e/Jaanus-Karilaid",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Social Affairs Committee",
@@ -779,6 +846,7 @@
     "boardRole": null,
     "district": "Hiiumaa, Läänemaa and Saaremaa",
     "email": "jaanus.karilaid@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Centre Party Parliamentary Group",
     "leftFactionDate": "2023-09-18",
     "active": true
@@ -790,6 +858,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/a5d17c31-61e5-4e45-87b0-5834b6728fe6/Juku-Kalle-Raid",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
+    "factionRole": null,
     "committees": [
       {
         "name": "Foreign Affairs Committee",
@@ -805,6 +874,7 @@
     "boardRole": null,
     "district": "Mustamäe and Nõmme districts of Tallinn",
     "email": "juku-kalle.raid@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -816,6 +886,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/09500870-255e-416d-8eda-f80e9929adda/Jüri-Jaanson",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Environment Committee",
@@ -826,6 +897,7 @@
     "boardRole": null,
     "district": "Pärnumaa",
     "email": "jyri.jaanson@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -837,6 +909,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/2bc608c1-1c67-4db8-968b-94bc3947dfac/Kadri-Tali",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
+    "factionRole": "Faction Deputy Chairman",
     "committees": [
       {
         "name": "Cultural Affairs Committee",
@@ -852,6 +925,7 @@
     "boardRole": null,
     "district": "Pärnumaa",
     "email": "kadri.tali@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -863,6 +937,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/db532de2-5abd-4b6d-a82c-2d9a75fd9d18/Kalle-Grünthal",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Social Affairs Committee",
@@ -873,6 +948,7 @@
     "boardRole": null,
     "district": "Järvamaa and Viljandimaa",
     "email": "kalle.grynthal@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Conservative People’s Party Parliamentary Group",
     "leftFactionDate": "2023-10-18",
     "active": true
@@ -884,6 +960,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/31eee189-0019-469f-8469-7da564bf1af9/Kalle-Laanet",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Constitutional Committee",
@@ -894,6 +971,7 @@
     "boardRole": null,
     "district": "Hiiumaa, Läänemaa and Saaremaa",
     "email": "kalle.laanet@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Reform Party Parliamentary Group",
     "leftFactionDate": "2023-04-18",
     "active": true
@@ -905,6 +983,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/001dd80c-38c3-4557-b3ee-408d3ffd5cd7/Katrin-Kuusemäe",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Constitutional Committee",
@@ -920,6 +999,7 @@
     "boardRole": null,
     "district": "Lääne-Virumaa",
     "email": "katrin.kuusemae@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -931,6 +1011,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/caea357b-12c0-4069-b53e-89f69f517212/Kersti-Sarapuu",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Finance Committee",
@@ -941,6 +1022,7 @@
     "boardRole": null,
     "district": "Järvamaa and Viljandimaa",
     "email": "kersti.sarapuu@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": "Estonian Centre Party Parliamentary Group",
     "leftFactionDate": "2024-01-05",
     "active": true
@@ -952,6 +1034,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/28e48bd7-9f1f-4d6a-b40c-9c6ff6d445e5/Kristina-Šmigun-Vähi",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Economic Affairs Committee",
@@ -962,6 +1045,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "kristina.smigun-vahi@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -973,6 +1057,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/1600fe77-4b45-44ab-972a-181a5ef71767/Kristo-Enn-Vaga",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "European Union Affairs Committee",
@@ -993,6 +1078,7 @@
     "boardRole": null,
     "district": "Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn",
     "email": "kristoenn.vaga@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1004,10 +1090,12 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/64c0141f-371b-4520-8a50-09e65231f775/Lauri-Hussar",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
+    "factionRole": null,
     "committees": [],
     "boardRole": "President of the Riigikogu",
     "district": "Harjumaa and Raplamaa",
     "email": "lauri.hussar@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1019,6 +1107,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/1839253a-aec0-4019-995a-1c031db8fd10/Lauri-Laats",
     "faction": "Estonian Centre Party Parliamentary Group",
     "registeredPartyId": "center",
+    "factionRole": "Faction Chairman",
     "committees": [
       {
         "name": "Environment Committee",
@@ -1034,6 +1123,7 @@
     "boardRole": null,
     "district": "Mustamäe and Nõmme districts of Tallinn",
     "email": "lauri.laats@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": "Estonian Centre Party Parliamentary Group",
     "leftFactionDate": "2024-03-06",
     "active": true
@@ -1045,6 +1135,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d557812c-971d-415b-827d-aa6a382ec6ef/Lauri-Läänemets",
     "faction": "Social Democratic Party Parliamentary Group",
     "registeredPartyId": "sde",
+    "factionRole": "Faction Chairman",
     "committees": [
       {
         "name": "Constitutional Committee",
@@ -1055,6 +1146,7 @@
     "boardRole": null,
     "district": "Järvamaa and Viljandimaa",
     "email": "lauri.laanemets@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Social Democratic Party Parliamentary Group",
     "leftFactionDate": "2025-03-17",
     "active": true
@@ -1066,6 +1158,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/7f83e40c-4854-4632-9372-448b3a5dc93a/Lea-Danilson-Järg",
     "faction": "Isamaa Parliamentary Group",
     "registeredPartyId": "isamaa",
+    "factionRole": null,
     "committees": [
       {
         "name": "European Union Affairs Committee",
@@ -1081,6 +1174,7 @@
     "boardRole": null,
     "district": "Mustamäe and Nõmme districts of Tallinn",
     "email": "lea.danilson-jarg@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1092,6 +1186,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/fd2d1dd5-ff19-445e-b190-28aabb07763a/Leo-Kunnas",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "National Defence Committee",
@@ -1102,6 +1197,7 @@
     "boardRole": null,
     "district": "Kesklinn, Lasnamäe and Pirita districts of Tallinn",
     "email": "leo.kunnas@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Conservative People’s Party Parliamentary Group",
     "leftFactionDate": "2024-06-14",
     "active": true
@@ -1113,6 +1209,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/a12ffc5c-0809-46cb-abc4-cc99a7fa3f60/Liina-Kersna",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Cultural Affairs Committee",
@@ -1123,6 +1220,7 @@
     "boardRole": null,
     "district": "Võrumaa, Valgamaa and Põlvamaa",
     "email": "liina.kersna@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Reform Party Parliamentary Group",
     "leftFactionDate": "2025-04-16",
     "active": true
@@ -1134,6 +1232,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/17d27ea5-b5e6-43e0-86db-ebc15bdd5788/Luisa-Rõivas",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "European Union Affairs Committee",
@@ -1149,6 +1248,7 @@
     "boardRole": null,
     "district": "Jõgevamaa and Tartumaa",
     "email": "luisa.vark@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1160,6 +1260,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/c7f4f213-58a3-4b6f-a236-153644653d17/Madis-Kallas",
     "faction": "Social Democratic Party Parliamentary Group",
     "registeredPartyId": "sde",
+    "factionRole": null,
     "committees": [
       {
         "name": "Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks",
@@ -1175,6 +1276,7 @@
     "boardRole": null,
     "district": "Hiiumaa, Läänemaa and Saaremaa",
     "email": "madis.kallas@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Social Democratic Party Parliamentary Group",
     "leftFactionDate": "2025-03-17",
     "active": true
@@ -1186,6 +1288,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/429e71ce-d5ba-4617-8db4-d546482d43bc/Madis-Timpson",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Legal Affairs Committee",
@@ -1196,6 +1299,7 @@
     "boardRole": null,
     "district": "Järvamaa and Viljandimaa",
     "email": "madis.timpson@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1207,6 +1311,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d4effc9d-0aee-4450-9926-5246efcda08c/Maido-Ruusmann",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "European Union Affairs Committee",
@@ -1222,6 +1327,7 @@
     "boardRole": null,
     "district": "Võrumaa, Valgamaa and Põlvamaa",
     "email": "maido.ruusmann@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1233,6 +1339,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/122e850b-5e6b-41f6-8b91-830ca8de8450/Mait-Klaassen",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Environment Committee",
@@ -1243,6 +1350,7 @@
     "boardRole": null,
     "district": "Võrumaa, Valgamaa and Põlvamaa",
     "email": "mait.klaassen@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1254,6 +1362,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/798de8ee-0587-4543-aa2e-89c3f6c8f914/Marek-Reinaas",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
+    "factionRole": null,
     "committees": [
       {
         "name": "Economic Affairs Committee",
@@ -1264,6 +1373,7 @@
     "boardRole": null,
     "district": "Kesklinn, Lasnamäe and Pirita districts of Tallinn",
     "email": "marek.reinaas@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonia 200 Parliamentary Group",
     "leftFactionDate": "2025-04-21",
     "active": true
@@ -1275,6 +1385,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/ee639cdf-b86c-48b7-9b34-fbba9b83826d/Margit-Sutrop",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Cultural Affairs Committee",
@@ -1285,6 +1396,7 @@
     "boardRole": null,
     "district": "City of Tartu",
     "email": "margit.sutrop@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1296,6 +1408,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/a5af5ad0-6e31-443a-9b12-15769d43e784/Maria-Jufereva-Skuratovski",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Legal Affairs Committee",
@@ -1306,6 +1419,7 @@
     "boardRole": null,
     "district": "Kesklinn, Lasnamäe and Pirita districts of Tallinn",
     "email": "maria.jufereva-skuratovski@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": "Estonian Centre Party Parliamentary Group",
     "leftFactionDate": "2023-11-16",
     "active": true
@@ -1317,6 +1431,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/53141769-f7bb-4995-8d12-5ff0d9c1eca1/Mario-Kadastik",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Anti-Corruption Select Committee",
@@ -1332,6 +1447,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "mario.kadastik@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1343,6 +1459,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/315ea785-8f59-40e5-a158-3de8b908572f/Maris-Lauri",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Finance Committee",
@@ -1358,6 +1475,7 @@
     "boardRole": null,
     "district": "Mustamäe and Nõmme districts of Tallinn",
     "email": "maris.lauri@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1369,6 +1487,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/58be6531-1f4b-4b0b-9c21-92566a40ae8b/Marko-Mihkelson",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Foreign Affairs Committee",
@@ -1379,6 +1498,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "marko.mihkelson@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1390,6 +1510,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/4b96f3e5-af5e-41ce-86c9-3fdee3ce51da/Mart-Helme",
     "faction": "Estonian Conservative People’s Party Parliamentary Group",
     "registeredPartyId": "ekre",
+    "factionRole": null,
     "committees": [
       {
         "name": "Foreign Affairs Committee",
@@ -1400,6 +1521,7 @@
     "boardRole": null,
     "district": "Pärnumaa",
     "email": "mart.helme@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1411,6 +1533,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/29068268-672d-451a-a08a-5727ec4300f4/Mart-Maastik",
     "faction": "Isamaa Parliamentary Group",
     "registeredPartyId": "isamaa",
+    "factionRole": null,
     "committees": [
       {
         "name": "Economic Affairs Committee",
@@ -1421,6 +1544,7 @@
     "boardRole": null,
     "district": "Hiiumaa, Läänemaa and Saaremaa",
     "email": "mart.maastik@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1432,6 +1556,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/8600af41-4dcc-424d-9d05-7c851e5270b5/Mart-Võrklaev",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Finance Committee",
@@ -1447,6 +1572,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "mart.vorklaev@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Reform Party Parliamentary Group",
     "leftFactionDate": "2023-04-18",
     "active": true
@@ -1458,6 +1584,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/98008392-64a2-4429-8a41-fb051823e402/Martin-Helme",
     "faction": "Estonian Conservative People’s Party Parliamentary Group",
     "registeredPartyId": "ekre",
+    "factionRole": "Faction Chairman",
     "committees": [
       {
         "name": "Finance Committee",
@@ -1468,6 +1595,7 @@
     "boardRole": null,
     "district": "Mustamäe and Nõmme districts of Tallinn",
     "email": "martin.helme@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1479,6 +1607,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/410c0030-7bcd-4977-85c2-27af3439770f/Mati-Raidma",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "National Defence Committee",
@@ -1489,6 +1618,7 @@
     "boardRole": null,
     "district": "Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn",
     "email": "mati.raidma@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": "Estonian Reform Party Parliamentary Group",
     "leftFactionDate": "2025-03-25",
     "active": true
@@ -1500,6 +1630,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/7251e077-1964-4f2b-9dba-349dc127b56e/Meelis-Kiili",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "National Defence Committee",
@@ -1510,6 +1641,7 @@
     "boardRole": null,
     "district": "Ida-Virumaa",
     "email": "meelis.kiili@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Reform Party Parliamentary Group",
     "leftFactionDate": "2026-08-10",
     "active": true
@@ -1521,6 +1653,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/1c173f0d-6c5e-445a-934f-32e7edf903db/Mihkel-Lees",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": "Faction Deputy Chairman",
     "committees": [
       {
         "name": "Social Affairs Committee",
@@ -1531,6 +1664,7 @@
     "boardRole": null,
     "district": "City of Tartu",
     "email": "mihkel.lees@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Reform Party Parliamentary Group",
     "leftFactionDate": "2024-07-23",
     "active": true
@@ -1542,6 +1676,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/f8a770b2-916c-4172-84b3-005ba9906a18/Peeter-Ernits",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Legal Affairs Committee",
@@ -1552,6 +1687,7 @@
     "boardRole": null,
     "district": "Jõgevamaa and Tartumaa",
     "email": "peeter.ernits@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1563,6 +1699,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/b6f8dff5-7c69-4d4c-b978-be0a2ad6e161/Peeter-Tali",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
+    "factionRole": null,
     "committees": [
       {
         "name": "Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks",
@@ -1583,6 +1720,7 @@
     "boardRole": null,
     "district": "Pärnumaa",
     "email": "peeter.tali@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1594,6 +1732,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/9035e217-d990-40ca-87ed-54c77653c6d7/Pipi-Liis-Siemann",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Constitutional Committee",
@@ -1604,6 +1743,7 @@
     "boardRole": null,
     "district": "Järvamaa and Viljandimaa",
     "email": "pipi-liis.siemann@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1615,6 +1755,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/8940964b-6bfd-482d-a4f5-53f2cccb149d/Priit-Sibul",
     "faction": "Isamaa Parliamentary Group",
     "registeredPartyId": "isamaa",
+    "factionRole": "Faction Deputy Chairman",
     "committees": [
       {
         "name": "Anti-Corruption Select Committee",
@@ -1630,6 +1771,7 @@
     "boardRole": null,
     "district": "Võrumaa, Valgamaa and Põlvamaa",
     "email": "priit.sibul@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1641,6 +1783,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/989194b6-b6cc-4c8f-9e6a-8eb8913d103e/Raimond-Kaljulaid",
     "faction": "Social Democratic Party Parliamentary Group",
     "registeredPartyId": "sde",
+    "factionRole": null,
     "committees": [
       {
         "name": "National Defence Committee",
@@ -1656,6 +1799,7 @@
     "boardRole": null,
     "district": "Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn",
     "email": "raimond.kaljulaid@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1667,6 +1811,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/94ffc777-09a5-4472-bf5d-ce16e78a2341/Rain-Epler",
     "faction": "Estonian Conservative People’s Party Parliamentary Group",
     "registeredPartyId": "ekre",
+    "factionRole": null,
     "committees": [
       {
         "name": "Anti-Corruption Select Committee",
@@ -1687,6 +1832,7 @@
     "boardRole": null,
     "district": "Võrumaa, Valgamaa and Põlvamaa",
     "email": "rain.epler@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1698,6 +1844,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/988995d4-3cbe-4ea7-acdd-6222d0b658b1/Reili-Rand",
     "faction": "Social Democratic Party Parliamentary Group",
     "registeredPartyId": "sde",
+    "factionRole": null,
     "committees": [
       {
         "name": "Economic Affairs Committee",
@@ -1708,6 +1855,7 @@
     "boardRole": null,
     "district": "Hiiumaa, Läänemaa and Saaremaa",
     "email": "reili.rand@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1719,6 +1867,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/694b084f-e151-4f7e-8a5c-2664a40cee7a/Rene-Kokk",
     "faction": "Estonian Conservative People’s Party Parliamentary Group",
     "registeredPartyId": "ekre",
+    "factionRole": null,
     "committees": [
       {
         "name": "Economic Affairs Committee",
@@ -1734,6 +1883,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "rene.kokk@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1745,6 +1895,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/76c477e6-4b49-4d49-ad7b-a4853182a1da/Riina-Sikkut",
     "faction": "Social Democratic Party Parliamentary Group",
     "registeredPartyId": "sde",
+    "factionRole": null,
     "committees": [
       {
         "name": "Anti-Corruption Select Committee",
@@ -1760,6 +1911,7 @@
     "boardRole": null,
     "district": "Mustamäe and Nõmme districts of Tallinn",
     "email": "riina.sikkut@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Social Democratic Party Parliamentary Group",
     "leftFactionDate": "2023-04-18",
     "active": true
@@ -1771,6 +1923,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/71bdc9b2-841d-408f-8ace-909e8c11d7d5/Signe-Kivi",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Cultural Affairs Committee",
@@ -1781,6 +1934,7 @@
     "boardRole": null,
     "district": "City of Tartu",
     "email": "signe.kivi@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1792,6 +1946,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/0e66e826-df65-4fdd-a098-66a7e9a7c911/Signe-Riisalo",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Social Affairs Committee",
@@ -1802,6 +1957,7 @@
     "boardRole": null,
     "district": "Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn",
     "email": "signe.riisalo@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Reform Party Parliamentary Group",
     "leftFactionDate": "2023-04-18",
     "active": true
@@ -1813,6 +1969,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d8b9f165-31aa-46a4-8dbd-964cbe89cfb8/Siim-Pohlak",
     "faction": "Estonian Conservative People’s Party Parliamentary Group",
     "registeredPartyId": "ekre",
+    "factionRole": null,
     "committees": [
       {
         "name": "Rural Affairs Committee",
@@ -1823,6 +1980,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "siim.pohlak@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Conservative People’s Party Parliamentary Group",
     "leftFactionDate": "2024-06-21",
     "active": true
@@ -1834,6 +1992,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/6434e7ab-6aba-4945-9812-e7a2e7c8bf3f/Stig-Rästa",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
+    "factionRole": null,
     "committees": [
       {
         "name": "Anti-Corruption Select Committee",
@@ -1849,6 +2008,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "stig.rasta@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1860,6 +2020,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/561abe91-76eb-45f3-90b0-efa94c663689/Tanel-Kiik",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Social Affairs Committee",
@@ -1870,6 +2031,7 @@
     "boardRole": null,
     "district": "Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn",
     "email": "tanel.kiik@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Centre Party Parliamentary Group",
     "leftFactionDate": "2024-01-05",
     "active": true
@@ -1881,6 +2043,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/4f816f8e-1501-4940-b87a-af029fcd98c0/Tanel-Tein",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
+    "factionRole": null,
     "committees": [
       {
         "name": "Constitutional Committee",
@@ -1896,6 +2059,7 @@
     "boardRole": null,
     "district": "City of Tartu",
     "email": "tanel.tein@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1907,6 +2071,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/236e49d6-eecb-4562-8ad4-bedd586bb149/Tarmo-Tamm",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
+    "factionRole": null,
     "committees": [
       {
         "name": "Environment Committee",
@@ -1922,6 +2087,7 @@
     "boardRole": null,
     "district": "Lääne-Virumaa",
     "email": "tarmo.tamm@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1933,6 +2099,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/9d863d49-8bfb-4314-bd3c-cfa143f518c8/Tiit-Maran",
     "faction": "Social Democratic Party Parliamentary Group",
     "registeredPartyId": "sde",
+    "factionRole": null,
     "committees": [
       {
         "name": "Environment Committee",
@@ -1948,6 +2115,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "tiit.maran@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1959,6 +2127,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/0f9372ee-f108-47f9-9192-82ff84cf3efb/Timo-Suslov",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks",
@@ -1974,6 +2143,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "timo.suslov@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -1985,6 +2155,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/db46f14c-3bdf-47a0-bed4-0172f7d942db/Toomas-Järveoja",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Social Affairs Committee",
@@ -2000,6 +2171,7 @@
     "boardRole": null,
     "district": "Jõgevamaa and Tartumaa",
     "email": "toomas.jarveoja@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -2011,10 +2183,12 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/906f1a0a-0000-4a96-866c-b30f2b6adc49/Toomas-Kivimägi",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [],
     "boardRole": "First Vice-President of the Riigikogu",
     "district": "Pärnumaa",
     "email": "toomas.kivimagi@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -2026,6 +2200,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d0d7a6a5-25de-40d0-b5df-09575a7c9bfc/Toomas-Uibo",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
+    "factionRole": "Faction Chairman",
     "committees": [
       {
         "name": "Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks",
@@ -2041,6 +2216,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "toomas.uibo@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonia 200 Parliamentary Group",
     "leftFactionDate": "2023-09-06",
     "active": true
@@ -2052,6 +2228,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/9a8a55b8-c946-47a2-9e17-9978c3fd23f8/Tõnis-Lukas",
     "faction": "Isamaa Parliamentary Group",
     "registeredPartyId": "isamaa",
+    "factionRole": null,
     "committees": [
       {
         "name": "Cultural Affairs Committee",
@@ -2062,6 +2239,7 @@
     "boardRole": null,
     "district": "City of Tartu",
     "email": "tonis.lukas@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -2073,6 +2251,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d7d9e4d7-699e-4038-83c3-d13369f644c9/Tõnis-Mölder",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Economic Affairs Committee",
@@ -2083,6 +2262,7 @@
     "boardRole": null,
     "district": "Kesklinn, Lasnamäe and Pirita districts of Tallinn",
     "email": "tonis.molder@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Centre Party Parliamentary Group",
     "leftFactionDate": "2023-09-26",
     "active": true
@@ -2094,6 +2274,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/4a332fbb-be05-4cb2-b6a0-5916eb40fe89/Urmas-Kruuse",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Rural Affairs Committee",
@@ -2104,6 +2285,7 @@
     "boardRole": null,
     "district": "Jõgeva- ja Tartumaa (v.a Tartu linn)",
     "email": "urmas.kruuse@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -2115,6 +2297,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/a78027e5-2480-49f2-a340-ee88daf92d53/Urmas-Reinsalu",
     "faction": "Isamaa Parliamentary Group",
     "registeredPartyId": "isamaa",
+    "factionRole": null,
     "committees": [
       {
         "name": "Foreign Affairs Committee",
@@ -2130,6 +2313,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "urmas.reinsalu@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -2141,6 +2325,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/0c571754-914d-406a-baba-6734212353de/Urve-Tiidus",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Economic Affairs Committee",
@@ -2156,6 +2341,7 @@
     "boardRole": null,
     "district": "Hiiumaa, Läänemaa and Saaremaa",
     "email": "urve.tiidus@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": "Estonian Reform Party Parliamentary Group",
     "leftFactionDate": "2024-07-24",
     "active": true
@@ -2167,6 +2353,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/80eac2f1-bb1e-4996-ac5a-4c3dba91bade/Vadim-Belobrovtsev",
     "faction": "Estonian Centre Party Parliamentary Group",
     "registeredPartyId": "center",
+    "factionRole": "Faction Deputy Chairman",
     "committees": [
       {
         "name": "Cultural Affairs Committee",
@@ -2182,6 +2369,7 @@
     "boardRole": null,
     "district": "Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn",
     "email": "vadim.belobrovtsev@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -2193,6 +2381,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/966e7ccd-b097-4e49-923c-c8d39dae2d62/Valdo-Randpere",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": "Faction Deputy Chairman",
     "committees": [
       {
         "name": "Legal Affairs Committee",
@@ -2203,6 +2392,7 @@
     "boardRole": null,
     "district": "Kesklinn, Lasnamäe and Pirita districts of Tallinn",
     "email": "valdo.randpere@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Reform Party Parliamentary Group",
     "leftFactionDate": "2025-04-16",
     "active": true
@@ -2214,6 +2404,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/b5e0d7fe-b784-4057-bf7e-cc3f1873887d/Varro-Vooglaid",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Legal Affairs Committee",
@@ -2224,6 +2415,7 @@
     "boardRole": null,
     "district": "Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn",
     "email": "varro.vooglaid@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Conservative People’s Party Parliamentary Group",
     "leftFactionDate": "2026-05-14",
     "active": true
@@ -2235,6 +2427,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/7b6823ed-96f9-462b-b931-3dd4faceb09e/Vilja-Toomast",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Legal Affairs Committee",
@@ -2245,6 +2438,7 @@
     "boardRole": null,
     "district": "Mustamäe and Nõmme districts of Tallinn",
     "email": "vilja.toomast@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -2256,6 +2450,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/586335bd-0e3f-4cee-a325-7af602224ca7/Vladimir-Arhipov",
     "faction": "Estonian Centre Party Parliamentary Group",
     "registeredPartyId": "center",
+    "factionRole": null,
     "committees": [
       {
         "name": "Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks",
@@ -2276,6 +2471,7 @@
     "boardRole": null,
     "district": "Harjumaa and Raplamaa",
     "email": "vladimir.arhipov@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": null,
     "leftFactionDate": null,
     "active": true
@@ -2287,6 +2483,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/90074aa2-4938-41a9-8275-3a6efa1cee31/Yoko-Alender",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": null,
     "committees": [
       {
         "name": "Environment Committee",
@@ -2297,6 +2494,7 @@
     "boardRole": null,
     "district": "City of Tartu",
     "email": "yoko.alender@riigikogu.ee",
+    "usaFriendship": true,
     "leftFaction": "Estonian Reform Party Parliamentary Group",
     "leftFactionDate": "2024-07-23",
     "active": true
@@ -2308,6 +2506,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/658c9d00-82c9-4161-8314-48ff1d67e3b7/Züleyxa-Izmailova",
     "faction": "Non-affiliated members",
     "registeredPartyId": "independent",
+    "factionRole": null,
     "committees": [
       {
         "name": "Environment Committee",
@@ -2318,6 +2517,7 @@
     "boardRole": null,
     "district": "Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn",
     "email": "zuleyxa.izmailova@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonia 200 Parliamentary Group",
     "leftFactionDate": "2024-06-12",
     "active": true
@@ -2329,6 +2529,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/8d9daaeb-dbaf-4887-8311-881b29bedfa9/Õnne-Pillak",
     "faction": "Estonian Reform Party Parliamentary Group",
     "registeredPartyId": "reform",
+    "factionRole": "Faction Chairman",
     "committees": [
       {
         "name": "Economic Affairs Committee",
@@ -2339,6 +2540,7 @@
     "boardRole": null,
     "district": "Mustamäe and Nõmme districts of Tallinn",
     "email": "onne.pillak@riigikogu.ee",
+    "usaFriendship": false,
     "leftFaction": "Estonian Reform Party Parliamentary Group",
     "leftFactionDate": "2024-07-23",
     "active": true

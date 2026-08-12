@@ -23,6 +23,7 @@ BOARD_ROLES = [
     "First Vice-President of the Riigikogu",
     "Second Vice-President of the Riigikogu",
 ]
+FACTION_ROLES = ["Faction Chairman", "Faction Deputy Chairman"]
 HEX = re.compile(r"^#[0-9A-F]{6}$")
 URL = re.compile(r"^https://[^\s]+$")
 
@@ -76,8 +77,23 @@ def check(data: Path) -> None:
                 err(f"mps.json: {m['name']}: {field} is not a https URL")
         if m.get("boardRole") is not None and m["boardRole"] not in BOARD_ROLES:
             err(f"mps.json: {m['name']}: unknown boardRole {m['boardRole']!r}")
+        if m.get("factionRole") is not None and m["factionRole"] not in FACTION_ROLES:
+            err(f"mps.json: {m['name']}: unknown factionRole {m['factionRole']!r}")
+        if not isinstance(m.get("usaFriendship"), bool):
+            err(f"mps.json: {m['name']}: usaFriendship must be true or false")
         if not m.get("district"):
             warn(f"mps.json: {m['name']}: no electoral district")
+
+    # The Members tab's `Chairs` filter is exactly the faction chairmen, so an
+    # empty or duplicated set of them would silently blank a control.
+    chairs = [m["name"] for m in mps if m.get("factionRole") == "Faction Chairman"]
+    groups = {m["registeredPartyId"] for m in mps if m.get("factionRole") == "Faction Chairman"}
+    if len(chairs) != len(groups):
+        err(f"mps.json: {len(chairs)} faction chairmen across {len(groups)} groups — expected one each")
+    if not chairs:
+        err("mps.json: no faction chairmen resolved")
+    if not any(m.get("usaFriendship") for m in mps):
+        err("mps.json: no MP is in the USA friendship group — the 🇺🇸 filter would be empty")
 
     # ---- board ---------------------------------------------------------- #
     if [b["role"] for b in board] != BOARD_ROLES:
