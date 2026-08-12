@@ -22,6 +22,8 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 API = "https://api.riigikogu.ee/api/plenary-members?lang=EN"
+USERGROUPS = "https://api.riigikogu.ee/api/usergroups?lang=EN"
+USERGROUP = "https://api.riigikogu.ee/api/usergroups/{uuid}?lang=EN"
 WEB_BASE = (
     "https://www.riigikogu.ee/en/parliament-of-estonia/composition/"
     "members-riigikogu/saadik"
@@ -33,6 +35,15 @@ DATA = REPO / "data"
 
 FRAKTSIOON = "FRAKTSIOON"
 NON_AFFILIATED = "Non-affiliated members"
+
+# The parliamentary friendship group behind the 🇺🇸 marker on the Members tab.
+# Matched by name rather than by a hardcoded uuid so a re-created group is still
+# found; the uuid is recorded only to make the lookup traceable.
+USA_GROUP_NAME = "Estonia-USA Parliamentary Friendship Group"
+USA_GROUP_UUID = "359b4825-96a5-c066-6a30-dad416b5b3d5"
+# Sanity band for that group's current membership. It has sat in the thirties
+# all convocation; anything far outside means we resolved the wrong group.
+USA_GROUP_RANGE = (15, 70)
 
 # Party catalogue. Colours are the values measured from the deployed bundle's
 # computed styles in BEHAVIOR_SNAPSHOT.md §6 — do not invent new ones.
@@ -101,6 +112,25 @@ def current_faction(m: dict) -> str | None:
     return None
 
 
+def faction_role(m: dict) -> str | None:
+    """Role held inside the MP's *current* parliamentary group, if any.
+
+    Yields the six Faction Chairmen behind the Members tab's `Chairs` filter and
+    the eight Faction Deputy Chairmen captioned in the party sheet
+    (BEHAVIOR_SNAPSHOT.md §2, §3). `member` is the default and is stored as None
+    so the field only ever carries an office.
+    """
+    for f in m.get("factions") or []:
+        if (f.get("type") or {}).get("code") != FRAKTSIOON:
+            continue
+        mem = f.get("membership") or {}
+        if mem.get("endDate") is not None:
+            continue
+        role = (mem.get("role") or {}).get("value")
+        return None if not role or role == "member" else f"Faction {role}"
+    return None
+
+
 def left_faction(m: dict) -> tuple[str | None, str | None]:
     """(name, endDate) of the most recent group this MP left, if any."""
     ended = [
@@ -155,10 +185,43 @@ def slug(name: str) -> str:
     return name.replace(" ", "-")
 
 
+def usa_friendship_uuids(offline: dict | None = None) -> set[str]:
+    """uuids with a current membership of the Estonia-USA friendship group.
+
+    `/usergroups` is an undocumented endpoint (ARCHITECTURE_PLAN.md §1b), so it
+    is guarded the same way the roster is: resolve the group by name, keep only
+    memberships with a null `endDate`, and refuse a result outside the sanity
+    band rather than silently emptying the Members tab's 🇺🇸 filter.
+    """
+    if offline is not None:
+        group = offline
+    else:
+        groups = fetch(USERGROUPS)
+        matches = [g for g in groups if g.get("name") == USA_GROUP_NAME]
+        if len(matches) != 1:
+            raise RuntimeError(
+                f"expected exactly one {USA_GROUP_NAME!r}, found {len(matches)}"
+            )
+        group = fetch(USERGROUP.format(uuid=matches[0]["uuid"]))
+
+    current = {
+        m["uuid"]
+        for m in group.get("members") or []
+        if ((m.get("membership") or {}).get("endDate")) is None
+    }
+    lo, hi = USA_GROUP_RANGE
+    if not lo <= len(current) <= hi:
+        raise RuntimeError(
+            f"{USA_GROUP_NAME}: {len(current)} current members, outside {lo}-{hi}; "
+            "refusing to publish"
+        )
+    return current
+
+
 # --------------------------------------------------------------------------- #
 # build
 # --------------------------------------------------------------------------- #
-def build_mps(members: list) -> list[dict]:
+def build_mps(members: list, usa: set[str]) -> list[dict]:
     mps = []
     for m in sorted(members, key=lambda x: x["fullName"]):
         faction = current_faction(m)
@@ -175,10 +238,12 @@ def build_mps(members: list) -> list[dict]:
             "profileUrl": f"{WEB_BASE}/{m['uuid']}/{slug(m['fullName'])}",
             "faction": faction,
             "registeredPartyId": BY_FACTION[faction],
+            "factionRole": faction_role(m),
             "committees": committees(m),
             "boardRole": board_role(m),
             "district": district(m),
             "email": m.get("email"),
+            "usaFriendship": m["uuid"] in usa,
             "leftFaction": left_name,
             "leftFactionDate": left_date,
             "active": bool(m.get("active", True)),
@@ -273,6 +338,10 @@ def write(path: Path, obj) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--offline", help="read plenary-members from a file instead of the API")
+    ap.add_argument(
+        "--offline-usa-group",
+        help=f"read the {USA_GROUP_NAME} from a file instead of the API",
+    )
     ap.add_argument("--data", default=str(DATA), help="output directory (default: ./data)")
     args = ap.parse_args()
     out = Path(args.data)
@@ -282,7 +351,15 @@ def main() -> int:
     guard(members)
     print(f"  {len(members)} members")
 
-    mps = build_mps(members)
+    print("Fetching parliamentary friendship group…")
+    usa = usa_friendship_uuids(
+        json.loads(Path(args.offline_usa_group).read_text())
+        if args.offline_usa_group
+        else None
+    )
+    print(f"  {len(usa)} current members of {USA_GROUP_NAME}")
+
+    mps = build_mps(members, usa)
     board = build_board(mps)
 
     alignment_path = out / "alignment.json"

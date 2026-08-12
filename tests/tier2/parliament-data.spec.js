@@ -33,7 +33,7 @@ function hexToRgb(hex) {
 
 const partyById = Object.fromEntries(parties.map((p) => [p.id, p]));
 
-test.describe.skip('Tier 2 — Parliament tab against data/*.json (Phase 4)', () => {
+test.describe('Tier 2 — Parliament tab against data/*.json (Phase 4)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/index.html');
     await page.getByTestId('tab-parliament').click();

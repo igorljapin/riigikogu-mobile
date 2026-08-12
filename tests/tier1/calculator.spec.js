@@ -96,7 +96,16 @@ test.describe('Tier 1 — Vote calculator', () => {
     expect(await calcTotal(page)).toBe(selected);
   });
 
-  test('Coalition and Opposition presets together cover every seat', async ({ page }) => {
+  test('Coalition and Opposition presets together cover every aligned seat', async ({ page }) => {
+    // The presets sweep up parties that have declared a bloc, and nothing else.
+    // MPs who left a group and joined no party have no whip and no common
+    // position, so no preset may claim them — the bundle's Opposition preset
+    // did, silently crediting the opposition with nine votes it does not have
+    // (BEHAVIOR_SNAPSHOT.md §8.4). What must still hold is that between them the
+    // presets account for every seat that IS in a bloc, with none double-counted.
+    const counts = await partyRowCounts(page);
+    const unaligned = counts.Independent.total;
+
     await page.getByRole('button', { name: 'Coalition', exact: true }).click();
     const coalition = await calcTotal(page);
 
@@ -104,7 +113,7 @@ test.describe('Tier 1 — Vote calculator', () => {
     await page.getByRole('button', { name: 'Opposition', exact: true }).click();
     const opposition = await calcTotal(page);
 
-    expect(coalition + opposition).toBe(TOTAL_SEATS);
+    expect(coalition + opposition + unaligned).toBe(TOTAL_SEATS);
   });
 
   test('Reset clears the selection and the verdict', async ({ page }) => {

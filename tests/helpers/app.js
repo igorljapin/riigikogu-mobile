@@ -5,11 +5,14 @@
  * ARIA roles beyond the implicit ones, so everything here is anchored to what a
  * user actually sees: button labels, headings, and visible numbers.
  *
- * ONE exception, deliberately isolated in `modal()` below: the bundle's overlays
- * carry no role, no label and no id, so there is no user-visible handle to scope
- * to them. Phase 4 replaces that single selector with
- * `[data-testid="modal-add-mps"]` / `modal-exclude-mps` / `modal-mp` /
- * `modal-party`. It is the only structural coupling in the Tier-1 suite.
+ * ONE exception, deliberately isolated in `modal()` below: an overlay has no
+ * user-visible handle of its own to scope to. Until Phase 4 that meant a raw
+ * Tailwind class selector against the minified bundle (`div.fixed.inset-0`);
+ * the rebuild replaces it with the `data-overlay` marker every overlay carries
+ * alongside its own `data-testid` (`party-sheet`, `mp-popup`, `modal-add-mps`,
+ * `modal-exclude-mps`). It remains the only structural coupling in Tier 1, and
+ * it is now part of the documented contract rather than an implementation
+ * detail borrowed from a stylesheet.
  *
  * The assertions built on these helpers are *self-consistency* checks: they
  * compare numbers the app displays against other numbers the app displays, so
@@ -48,12 +51,13 @@ async function openTab(page, name) {
  * The only structural selector in Tier-1. See the note at the top of this file.
  */
 function modal(page) {
-  return page.locator('div.fixed.inset-0').last();
+  return page.locator('[data-overlay]').last();
 }
 
 async function closeModal(page) {
   await modal(page).getByRole('button', { name: '×' }).click();
-  await expect(page.locator('div.fixed.inset-0')).toHaveCount(0);
+  // Overlays are removed from the DOM, not hidden — so "closed" is checkable.
+  await expect(page.locator('[data-overlay]')).toHaveCount(0);
 }
 
 /* ------------------------------------------------------------------ *
