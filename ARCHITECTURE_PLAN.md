@@ -359,6 +359,7 @@ src/
 | Resilience | ✅ non-200, malformed payload, count outside 95–105, unknown or **renamed** faction, unlisted committee, board ≠ 3 — all abort non-zero, publishing nothing. Retries with backoff |
 | Workflow repaired | ✅ commits `data/*.json` (nothing gitignored — the report is an artifact), `--base main`, validation + unit + resolver suites run in-job before the PR |
 | Resolver regression tests | ✅ 23 tests against a frozen 2026-08-12 capture in `tests/fixtures/` |
+| `workflow_dispatch` end to end | ⚠️ run 31593950236: fetch, classify, validate, resolver + unit suites, commit and push all green; `gh pr create` refused — **"GitHub Actions is not permitted to create or approve pull requests"**. That is a repository setting (Settings → Actions → General → Workflow permissions), **owner action**, like the Phase 0 default-branch flip. The step now fails with that instruction and a compare link instead of a bare GraphQL error |
 | Deployed-app effect of a merge | ➖ not verified here — no data changed on the day, so nothing user-visible to observe. The mechanism is the same one Phase 4 shipped: the app reads `data/*.json` at runtime |
 
 **One deliberate deviation from §5.2.** The plan had the job classify a new

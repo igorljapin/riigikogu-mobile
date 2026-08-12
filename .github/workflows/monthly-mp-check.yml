@@ -115,6 +115,11 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # A second run in the same month reuses the branch. Fetch it first so
+          # --force-with-lease below has a lease to compare against; the default
+          # checkout only fetches the ref being built, which would make the push
+          # fail with "stale info" rather than update the open PR.
+          git fetch origin "$BRANCH" || true
           git checkout -B "$BRANCH"
 
           # Only the app's data. The change report stays in the runner's temp
@@ -134,18 +139,39 @@ jobs:
           if [ -n "$EXISTING" ]; then
             gh pr edit "$EXISTING" --body-file "$RUNNER_TEMP/pr_body.md"
             echo "Updated PR #$EXISTING"
-          else
-            # ACTION REQUIRED means the overlay is incomplete until a human edits
-            # it, so the PR opens as a draft — mergeable only after they do.
-            DRAFT=""
-            if [ "$ACTION_REQUIRED" = "true" ]; then DRAFT="--draft"; fi
-            gh pr create \
+            exit 0
+          fi
+
+          # ACTION REQUIRED means the overlay is incomplete until a human edits
+          # it, so the PR opens as a draft — mergeable only after they do.
+          DRAFT=""
+          if [ "$ACTION_REQUIRED" = "true" ]; then DRAFT="--draft"; fi
+          if gh pr create \
               --title "MP Data Update - ${MONTH_YEAR}" \
               --body-file "$RUNNER_TEMP/pr_body.md" \
               --base main \
               --head "$BRANCH" \
-              $DRAFT
+              $DRAFT; then
+            exit 0
           fi
+
+          # The data is fetched, validated and pushed either way — only the PR
+          # is missing. The usual cause is one repository setting, so say so
+          # rather than leaving a GraphQL error as the whole explanation.
+          COMPARE="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/main...${BRANCH}?expand=1"
+          {
+            echo "### Data pushed, PR not opened"
+            echo
+            echo "Branch \`${BRANCH}\` is pushed and validated. \`gh pr create\` failed —"
+            echo "if the error above reads *\"GitHub Actions is not permitted to create or"
+            echo "approve pull requests\"*, enable **Settings → Actions → General →"
+            echo "Workflow permissions → Allow GitHub Actions to create and approve pull"
+            echo "requests**, then re-run this workflow."
+            echo
+            echo "Open it by hand meanwhile: ${COMPARE}"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "::error title=PR not opened::Branch ${BRANCH} is pushed and valid. Enable 'Allow GitHub Actions to create and approve pull requests' in Settings → Actions → General, or open it manually: ${COMPARE}"
+          exit 1
 
       - name: Upload the change report
         if: ${{ !cancelled() }}

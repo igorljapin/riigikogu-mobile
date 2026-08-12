@@ -52,6 +52,15 @@ committed file. Do not look for them and do not write instructions around them.
 
 1. **The service worker path is wrong** (see file map). Offline mode does
    not work for anyone, and the PWA specs are `fixme` until Phase 6.
+2. **The monthly job cannot open its own PR yet — one owner checkbox.**
+   Everything else in it works (verified by dispatch on 2026-08-12: fetch,
+   classify, validate, both suites, commit, push all green). `gh pr create`
+   then failed with *"GitHub Actions is not permitted to create or approve
+   pull requests"*. Fix: **Settings → Actions → General → Workflow permissions
+   → Allow GitHub Actions to create and approve pull requests.** Until then the
+   job pushes a validated branch and the run's error message links the compare
+   page. Same class of item as the Phase 0 default-branch flip: nothing in the
+   repo can do it.
 
 Fixed in Phase 5, kept here because older sessions were told otherwise: the
 monthly workflow's gitignored `git add` and missing `--base main` are gone, and
