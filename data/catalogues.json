@@ -1,0 +1,183 @@
+{
+  "factions": [
+    {
+      "uuid": "e4bf6970-f928-4230-961c-615cc54118f9",
+      "name": "Estonia 200 Parliamentary Group",
+      "shortName": "E200",
+      "colorHex": "eb268e",
+      "type": "FRAKTSIOON",
+      "typeName": "faction"
+    },
+    {
+      "uuid": "3c1832c0-7727-18d1-d9d3-e685a58f44b0",
+      "name": "Estonian Centre Party Parliamentary Group",
+      "shortName": "KESK",
+      "colorHex": "3BAC7B",
+      "type": "FRAKTSIOON",
+      "typeName": "faction"
+    },
+    {
+      "uuid": "d4e90963-1d10-4f8a-bf37-a99ca8531ff3",
+      "name": "Estonian Conservative People’s Party Parliamentary Group",
+      "shortName": "EKRE",
+      "colorHex": "2A3DA0",
+      "type": "FRAKTSIOON",
+      "typeName": "faction"
+    },
+    {
+      "uuid": "8772fd6f-3197-6a53-2ffc-8c4d63407d1e",
+      "name": "Estonian Reform Party Parliamentary Group",
+      "shortName": "REF",
+      "colorHex": "FFC000",
+      "type": "FRAKTSIOON",
+      "typeName": "faction"
+    },
+    {
+      "uuid": "a844d128-287d-4c20-bf30-61fcb0af23cf",
+      "name": "Isamaa Parliamentary Group",
+      "shortName": "I",
+      "colorHex": "6FABD4",
+      "type": "FRAKTSIOON",
+      "typeName": "faction"
+    },
+    {
+      "uuid": "c99e4e31-617c-49ad-bfa6-814736842182",
+      "name": "Non-affiliated members",
+      "shortName": null,
+      "colorHex": "C0C0C0",
+      "type": "FRAKTSIOON",
+      "typeName": "faction"
+    },
+    {
+      "uuid": "d188e268-5d01-7e93-0c22-3ae7f0c1e851",
+      "name": "Social Democratic Party Parliamentary Group",
+      "shortName": "SDE",
+      "colorHex": "E35558",
+      "type": "FRAKTSIOON",
+      "typeName": "faction"
+    }
+  ],
+  "committees": [
+    {
+      "uuid": "38144a73-dde6-fd5e-68db-63e2736c85e2",
+      "name": "Constitutional Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ALALINE_KOMISJON",
+      "typeName": "standing committee"
+    },
+    {
+      "uuid": "d8e4e49e-c184-7536-6e62-7ae3a4089893",
+      "name": "Cultural Affairs Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ALALINE_KOMISJON",
+      "typeName": "standing committee"
+    },
+    {
+      "uuid": "c1ea2082-ab92-e19b-4cf2-aa4fa10779ea",
+      "name": "Economic Affairs Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ALALINE_KOMISJON",
+      "typeName": "standing committee"
+    },
+    {
+      "uuid": "4f907fd8-ace5-c3eb-d50a-b65606cd3621",
+      "name": "Environment Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ALALINE_KOMISJON",
+      "typeName": "standing committee"
+    },
+    {
+      "uuid": "fe0c2235-8e81-7b79-a0b3-37936a362e52",
+      "name": "European Union Affairs Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ALALINE_KOMISJON",
+      "typeName": "standing committee"
+    },
+    {
+      "uuid": "527a03f5-d564-70f2-6266-70c1cdb5535f",
+      "name": "Finance Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ALALINE_KOMISJON",
+      "typeName": "standing committee"
+    },
+    {
+      "uuid": "356a272f-ee00-4e88-31c9-8ab5c460efbf",
+      "name": "Foreign Affairs Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ALALINE_KOMISJON",
+      "typeName": "standing committee"
+    },
+    {
+      "uuid": "dfac6020-b820-8d8d-06a6-90cc2672eb49",
+      "name": "Legal Affairs Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ALALINE_KOMISJON",
+      "typeName": "standing committee"
+    },
+    {
+      "uuid": "0ec16e07-01d7-d638-0022-32c19031a915",
+      "name": "National Defence Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ALALINE_KOMISJON",
+      "typeName": "standing committee"
+    },
+    {
+      "uuid": "b40076b0-a453-4efb-acda-2554015471d1",
+      "name": "Rural Affairs Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ALALINE_KOMISJON",
+      "typeName": "standing committee"
+    },
+    {
+      "uuid": "44584179-67a8-ce54-da37-569f1a480919",
+      "name": "Social Affairs Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ALALINE_KOMISJON",
+      "typeName": "standing committee"
+    },
+    {
+      "uuid": "e4f2977a-e8c3-4fa0-8f3d-9df9acd6377f",
+      "name": "Anti-Corruption Select Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ERIKOMISJON",
+      "typeName": "select committee"
+    },
+    {
+      "uuid": "6abb4fe3-17da-4402-8163-d49c06d915cc",
+      "name": "Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ERIKOMISJON",
+      "typeName": "select committee"
+    },
+    {
+      "uuid": "d3826f36-707d-17ad-41e8-8b99f9910b98",
+      "name": "Security Authorities Surveillance Select Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ERIKOMISJON",
+      "typeName": "select committee"
+    },
+    {
+      "uuid": "1c539a07-8d36-a4a4-91e7-fbfe72e9e3fb",
+      "name": "State Budget Control Select Committee",
+      "shortName": null,
+      "colorHex": null,
+      "type": "ERIKOMISJON",
+      "typeName": "select committee"
+    }
+  ],
+  "fetchedAt": "2026-08-12T11:49:23Z"
+}

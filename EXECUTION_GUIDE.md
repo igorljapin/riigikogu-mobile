@@ -188,6 +188,14 @@ workflow_dispatch and link me the PR. Commit, push, open a PR into main.
 
 **Review checklist:** dry-run shows 101 with the correct registered split; the simulated defection produced a clear ACTION REQUIRED block (this is the feature that prevents silently wrong majority math); the test-fired workflow opened a real PR against `main`.
 
+> **Executed 2026-08-12.** Outcome and the two deviations from the plan's text
+> are recorded in `ARCHITECTURE_PLAN.md`, "Phase 5 outcome". The one that
+> changes your routine: a new defection now arrives as a **draft** PR with a
+> 🔴 ACTION REQUIRED block, and stays a draft until you add the MP to
+> `data/alignment.json`. Everything else in that PR is mergeable as it stands —
+> an unclassified MP counts toward no bloc, so the arithmetic is conservative,
+> never inflated.
+
 ---
 
 ## Phase 6 — PWA repair

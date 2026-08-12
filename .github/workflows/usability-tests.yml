@@ -46,6 +46,12 @@ jobs:
       - name: Unit tests (src/lib)
         run: npm run test:unit
 
+      # The Python half of the same idea: the monthly job's resolvers, run
+      # against the frozen API payload in tests/fixtures/. Offline and
+      # deterministic — it is what stops the `factions[0]` bug coming back.
+      - name: Resolver regression tests (scripts/)
+        run: npm run test:resolvers
+
       # The runner has no pre-installed Chromium, so Playwright fetches the
       # build matching the pinned @playwright/test. Locally the config points at
       # the sandbox's /opt/pw-browsers/chromium instead — see playwright.config.js.

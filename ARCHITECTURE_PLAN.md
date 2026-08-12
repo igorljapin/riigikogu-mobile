@@ -350,6 +350,34 @@ src/
 
 **Acceptance:** local dry-run produces valid JSON and a correct, correctly-classified change report; `workflow_dispatch` opens a well-formed PR against `main`; merging it visibly updates the deployed app; a simulated defection is auto-classified `unaligned`, produces the 🔵 block, recomputes both seat counts, and leaves the PR mergeable without human input.
 
+### Phase 5 outcome (2026-08-12)
+
+| Step | Result |
+|---|---|
+| `fetch_mp_data.py` rewritten | ✅ imports `build_data.py`'s resolvers rather than re-implementing them; full schema, both counts, catalogues from `/usergroups`; stages → validates → publishes, so a failed run leaves `data/` untouched |
+| `compare_mp_data.py` five categories | ✅ 🔴 action required / 🟠 roster / 🟡 board / 🟢 routine / ♻️ stale, written as a report the PR body renders |
+| Resilience | ✅ non-200, malformed payload, count outside 95–105, unknown or **renamed** faction, unlisted committee, board ≠ 3 — all abort non-zero, publishing nothing. Retries with backoff |
+| Workflow repaired | ✅ commits `data/*.json` (nothing gitignored — the report is an artifact), `--base main`, validation + unit + resolver suites run in-job before the PR |
+| Resolver regression tests | ✅ 23 tests against a frozen 2026-08-12 capture in `tests/fixtures/` |
+| Deployed-app effect of a merge | ➖ not verified here — no data changed on the day, so nothing user-visible to observe. The mechanism is the same one Phase 4 shipped: the app reads `data/*.json` at runtime |
+
+**One deliberate deviation from §5.2.** The plan had the job classify a new
+defection `unaligned` itself and merge unattended (🔵, no merge gate). The
+executing instruction was the stricter one — *"It must NEVER write
+`data/alignment.json`"* — so the job writes no overlay at all: the MP is counted
+toward **no bloc** (identical arithmetic to the safe default) and surfaced as
+🔴 **ACTION REQUIRED** in a **draft** PR naming them, the group they left and the
+date. The conservative-by-construction property is preserved; what is lost is
+the unattended merge, and what is gained is that the curated file has exactly one
+author. `build_data.py`, hand-run, still applies the safe default.
+
+**Two plan numbers were stale by the time this ran.** §5.4 specifies the fixture
+assertions as "registered split Reform 37 / Non-affiliated 18 … 11 Chairmen and
+11 Deputy Chairmen". The capture shows **Reform 36 / Non-affiliated 20 / E200 12**
+(the erratum's three defections, plus Kiili and Stoicescu) and **10** standing-
+committee Chairmen — the National Defence Committee chair fell vacant on
+2026-08-10 when Stoicescu left it. The tests assert what the fixture contains.
+
 ---
 
 ## Phase 6 — PWA repair

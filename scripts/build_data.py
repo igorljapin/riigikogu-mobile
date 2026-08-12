@@ -24,6 +24,16 @@ from pathlib import Path
 API = "https://api.riigikogu.ee/api/plenary-members?lang=EN"
 USERGROUPS = "https://api.riigikogu.ee/api/usergroups?lang=EN"
 USERGROUP = "https://api.riigikogu.ee/api/usergroups/{uuid}?lang=EN"
+# The catalogue types worth recording: the parliamentary groups an MP can belong
+# to, and the committees they can sit on. Everything else /usergroups returns
+# (delegations, friendship groups, office units) is out of scope here.
+FACTION_TYPES = ("FRAKTSIOON",)
+COMMITTEE_TYPES = ("ALALINE_KOMISJON", "ERIKOMISJON", "UURIMISKOMISJON")
+# Sanity bands for the catalogue. Seven groups and eleven standing committees is
+# the settled shape of this convocation; a result far outside means /usergroups
+# answered with something we should not publish.
+FACTION_COUNT_RANGE = (5, 12)
+STANDING_COMMITTEE_RANGE = (8, 15)
 WEB_BASE = (
     "https://www.riigikogu.ee/en/parliament-of-estonia/composition/"
     "members-riigikogu/saadik"
@@ -185,7 +195,7 @@ def slug(name: str) -> str:
     return name.replace(" ", "-")
 
 
-def usa_friendship_uuids(offline: dict | None = None) -> set[str]:
+def usa_friendship_uuids(groups: list | None = None, offline: dict | None = None) -> set[str]:
     """uuids with a current membership of the Estonia-USA friendship group.
 
     `/usergroups` is an undocumented endpoint (ARCHITECTURE_PLAN.md §1b), so it
@@ -196,7 +206,8 @@ def usa_friendship_uuids(offline: dict | None = None) -> set[str]:
     if offline is not None:
         group = offline
     else:
-        groups = fetch(USERGROUPS)
+        if groups is None:
+            groups = fetch(USERGROUPS)
         matches = [g for g in groups if g.get("name") == USA_GROUP_NAME]
         if len(matches) != 1:
             raise RuntimeError(
@@ -216,6 +227,81 @@ def usa_friendship_uuids(offline: dict | None = None) -> set[str]:
             "refusing to publish"
         )
     return current
+
+
+# --------------------------------------------------------------------------- #
+# catalogues
+# --------------------------------------------------------------------------- #
+def build_catalogues(groups: list) -> dict:
+    """Faction and committee catalogues, refreshed from /usergroups.
+
+    `/usergroups` carries every group this convocation has ever had, active and
+    historical, so the catalogue is the `active` subset. Recording it means a
+    renamed or newly formed committee shows up in the monthly diff without a
+    code change — and, more importantly, a *renamed faction* is caught by
+    `check_catalogue` below instead of silently unmapping a third of the roster.
+    """
+    if not isinstance(groups, list):
+        raise RuntimeError("/usergroups payload is not a list")
+
+    def take(codes: tuple[str, ...]) -> list[dict]:
+        out = [
+            {
+                "uuid": g.get("uuid"),
+                "name": g.get("name"),
+                "shortName": g.get("shortName"),
+                "colorHex": g.get("colorHex"),
+                "type": (g.get("type") or {}).get("code"),
+                "typeName": (g.get("type") or {}).get("value"),
+            }
+            for g in groups
+            if (g.get("type") or {}).get("code") in codes
+            and g.get("active")
+            and g.get("name")
+        ]
+        return sorted(out, key=lambda g: (g["type"] or "", g["name"] or ""))
+
+    return {
+        "factions": take(FACTION_TYPES),
+        "committees": take(COMMITTEE_TYPES),
+        "fetchedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }
+
+
+def check_catalogue(cat: dict, mps: list[dict] | None = None) -> None:
+    """Refuse to publish a catalogue that does not describe this parliament."""
+    names = {f["name"] for f in cat["factions"]}
+    lo, hi = FACTION_COUNT_RANGE
+    if not lo <= len(cat["factions"]) <= hi:
+        raise RuntimeError(
+            f"catalogue: {len(cat['factions'])} active factions, outside {lo}-{hi}"
+        )
+    standing = [c for c in cat["committees"] if c["type"] == "ALALINE_KOMISJON"]
+    lo, hi = STANDING_COMMITTEE_RANGE
+    if not lo <= len(standing) <= hi:
+        raise RuntimeError(
+            f"catalogue: {len(standing)} active standing committees, outside {lo}-{hi}"
+        )
+    # The hard one: every party's factionName must still be a live group name.
+    # If the Chancellery renames a group, this fires here rather than letting
+    # build_mps reject 30 MPs one by one with no explanation of the cause.
+    missing = sorted({p["factionName"] for p in PARTIES} - names)
+    if missing:
+        raise RuntimeError(
+            "catalogue: parties.json faction name(s) no longer active in "
+            f"/usergroups: {missing} — the group was renamed or dissolved; "
+            "PARTIES must be updated before this can publish"
+        )
+    if mps is None:
+        return
+    unknown = sorted(
+        {c["name"] for mp in mps for c in mp["committees"]}
+        - {c["name"] for c in cat["committees"]}
+    )
+    if unknown:
+        raise RuntimeError(
+            f"catalogue: MPs sit on committee(s) absent from /usergroups: {unknown}"
+        )
 
 
 # --------------------------------------------------------------------------- #
@@ -287,7 +373,22 @@ def stale_entries(alignment: dict, mps: list[dict]) -> list[str]:
     return sorted(listed - nonaff)
 
 
-def build_meta(mps: list[dict], alignment: dict) -> dict:
+def build_meta(mps: list[dict], alignment: dict, unclassified: str = "raise") -> dict:
+    """Recompute both seat counts from the roster plus the curated overlay.
+
+    `unclassified` decides what happens to a non-affiliated MP who appears in
+    neither `defectors` nor `unaligned`:
+
+    - `"raise"` (default, used by this script, which appends to `unaligned`
+      itself before calling): a gap here means the overlay is inconsistent.
+    - `"unaligned"` (used by the monthly job, which is forbidden from writing
+      `alignment.json` at all): count them toward no bloc. That is the
+      conservative reading — it can only *understate* a bloc, never manufacture
+      a majority — and the change report raises them as ACTION REQUIRED so the
+      reviewer classifies them before the PR merges.
+    """
+    if unclassified not in ("raise", "unaligned"):
+        raise ValueError(f"unclassified must be 'raise' or 'unaligned', got {unclassified!r}")
     defectors = alignment.get("defectors", {})
     unaligned = set(alignment.get("unaligned", []))
     blocs = alignment.get("blocs", {})
@@ -302,9 +403,9 @@ def build_meta(mps: list[dict], alignment: dict) -> dict:
             voting[mp["registeredPartyId"]] += 1
         elif mp["uuid"] in defectors:
             voting[defectors[mp["uuid"]]["votesWith"]] += 1
-        elif mp["uuid"] in unaligned:
+        elif mp["uuid"] in unaligned or unclassified == "unaligned":
             voting["unaligned"] += 1
-        else:  # unreachable after apply_safe_default
+        else:
             raise RuntimeError(f"{mp['name']}: non-affiliated but absent from the overlay")
 
     coalition = sum(n for pid, n in voting.items() if blocs.get(pid) == "coalition")
@@ -339,6 +440,10 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--offline", help="read plenary-members from a file instead of the API")
     ap.add_argument(
+        "--offline-usergroups",
+        help="read the /usergroups catalogue from a file instead of the API",
+    )
+    ap.add_argument(
         "--offline-usa-group",
         help=f"read the {USA_GROUP_NAME} from a file instead of the API",
     )
@@ -351,15 +456,30 @@ def main() -> int:
     guard(members)
     print(f"  {len(members)} members")
 
+    print("Fetching group catalogue…")
+    groups = (
+        json.loads(Path(args.offline_usergroups).read_text())
+        if args.offline_usergroups
+        else fetch(USERGROUPS)
+    )
+    catalogues = build_catalogues(groups)
+    check_catalogue(catalogues)
+    print(
+        f"  {len(catalogues['factions'])} factions, "
+        f"{len(catalogues['committees'])} committees"
+    )
+
     print("Fetching parliamentary friendship group…")
     usa = usa_friendship_uuids(
-        json.loads(Path(args.offline_usa_group).read_text())
+        groups,
+        offline=json.loads(Path(args.offline_usa_group).read_text())
         if args.offline_usa_group
-        else None
+        else None,
     )
     print(f"  {len(usa)} current members of {USA_GROUP_NAME}")
 
     mps = build_mps(members, usa)
+    check_catalogue(catalogues, mps)
     board = build_board(mps)
 
     alignment_path = out / "alignment.json"
@@ -377,6 +497,7 @@ def main() -> int:
     write(out / "parties.json", PARTIES)
     write(out / "mps.json", mps)
     write(out / "board.json", board)
+    write(out / "catalogues.json", catalogues)
     write(out / "meta.json", meta)
     write(alignment_path, alignment)
 
