@@ -7,11 +7,12 @@ Hosted at https://igorljapin.github.io/riigikogu-mobile/
 ## Current state: mid-rebuild (read this first)
 
 The app is being rebuilt in phases per `ARCHITECTURE_PLAN.md` (v3).
-**Phases 0–5 have landed.** The minified bundle is gone: the shipped app is
+**Phases 0–6 have landed.** The minified bundle is gone: the shipped app is
 plain HTML + CSS + native ES modules, with all source in this repository and
-no build step, and the monthly job now refreshes the JSON the app actually
-reads. Phases 6 (PWA) and 7 (docs) are outstanding. The hand-written monthly
-procedure that used to live in this file is obsolete — the job does it; the
+no build step; the monthly job refreshes the JSON the app actually reads; and
+the PWA installs and works offline on the correct paths. Phase 7 (docs) is
+outstanding. The hand-written monthly procedure that used to live in this
+file is obsolete — the job does it; the
 old text survives in `docs/DEPRECATED_MONTHLY_PROCEDURE.md` as a historical
 record only.
 
@@ -30,7 +31,7 @@ record only.
 | `src/lib/*.js` | Pure, unit-tested logic: `calculator.js`, `factions.js`. No DOM, no I/O. |
 | `src/views/*.js` | `parliament.js`, `mps.js`, `calculator.js`, `board.js`. **The only layer a redesign touches**, together with `styles.css`. |
 | `data/*.json` | The single source of truth, **read by the app at runtime**. See `data/README.md`. |
-| `service-worker.js` | Precaches `/riigikogu-dashboard/...` while the site is served from `/riigikogu-mobile/`. Registration fails; offline mode does not work. Fixed in Phase 6. |
+| `service-worker.js` | Precaches the whole Phase-4 layout — shell, ES modules, `data/*.json` — with **relative** entries, so one list is correct both at `/riigikogu-mobile/` and at `/` under the test server. Bump `CACHE_NAME` whenever the list changes. |
 | `manifest.json`, `offline.html`, `icons/` | PWA assets. |
 | `scripts/build_data.py`, `validate_data.py` | Rebuild `data/` from the live API, and gate it. Both current. |
 | `scripts/fetch_mp_data.py` | The monthly job's fetcher. Same resolvers as `build_data.py` (it imports them), stages + validates before publishing, and **never writes `data/alignment.json`**. |
@@ -50,9 +51,7 @@ committed file. Do not look for them and do not write instructions around them.
 
 ## Known-broken, do not treat as working
 
-1. **The service worker path is wrong** (see file map). Offline mode does
-   not work for anyone, and the PWA specs are `fixme` until Phase 6.
-2. **The monthly job cannot open its own PR yet — one owner checkbox.**
+1. **The monthly job cannot open its own PR yet — one owner checkbox.**
    Everything else in it works (verified by dispatch on 2026-08-12: fetch,
    classify, validate, both suites, commit, push all green). `gh pr create`
    then failed with *"GitHub Actions is not permitted to create or approve
@@ -61,6 +60,11 @@ committed file. Do not look for them and do not write instructions around them.
    job pushes a validated branch and the run's error message links the compare
    page. Same class of item as the Phase 0 default-branch flip: nothing in the
    repo can do it.
+
+Fixed in Phase 6: the service worker's precache paths. Offline mode works, and
+the five PWA specs run for real — `tests/pwa/offline.spec.js` has no `fixme`
+left. MP photos remain the one thing unavailable offline; they are served by
+`api.riigikogu.ee` and the worker leaves cross-origin requests alone.
 
 Fixed in Phase 5, kept here because older sessions were told otherwise: the
 monthly workflow's gitignored `git add` and missing `--base main` are gone, and
@@ -118,7 +122,9 @@ item in `alignment.json`, remove any ♻️ stale entry, then merge — Pages de
 - Never commit directly to the default branch — always a feature branch
   plus a PR.
 - Never change UI layout, CSS, or PWA configuration outside the phase that
-  owns it. Phase 6 owns `service-worker.js` and `manifest.json`.
+  owns it. `service-worker.js` and `manifest.json` were Phase 6's; touching
+  them now means bumping `CACHE_NAME` and keeping `tests/pwa/offline.spec.js`
+  green.
 - Mobile layout is optimised for small screens — do not alter spacing.
 - A redesign may rewrite `styles.css` and `src/views/*` freely, but it must
   keep every `data-testid` in `USABILITY.md` §3 and ship with a green suite.

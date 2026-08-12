@@ -101,10 +101,11 @@ pass?* — so it gets the most coverage.
 
 | # | Must always be true | Enforced by |
 |---|---|---|
-| 5.1 | The service worker registers without error | `pwa/offline.spec.js` — **`fixme`, see §4** |
-| 5.2 | The precache paths match the path the app is served from | `pwa/offline.spec.js` — **`fixme`** |
-| 5.3 | `manifest.json` `start_url` and `scope` match the deployment path | `pwa/offline.spec.js` — **`fixme`** |
-| 5.4 | The app renders after going offline, calculator included | `pwa/offline.spec.js` — **`fixme`** |
+| 5.1 | The service worker registers without error | `pwa/offline.spec.js` |
+| 5.2 | The precache entries resolve under the path the app is served from, and cover `data/*.json` | `pwa/offline.spec.js` |
+| 5.3 | `manifest.json` `start_url` and `scope` match the deployment path | `pwa/offline.spec.js` |
+| 5.4 | The app renders after going offline | `pwa/offline.spec.js` |
+| 5.5 | The calculator works offline, from cached data | `pwa/offline.spec.js` |
 
 ---
 
@@ -115,7 +116,7 @@ tests/
   helpers/app.js              shared text/role selectors and readouts
   tier1/  shell · parliament · members · calculator     ← green now, green forever
   tier2/  parliament-data · roster-data                 ← live since Phase 4
-  pwa/    offline                                       ← fixme until Phase 6
+  pwa/    offline                                       ← live since Phase 6
 ```
 
 ### Tier 1 — behaviour core
@@ -174,9 +175,11 @@ assertion moved from `toContainText` to the array form of `toHaveText`, because
 form throws strict-mode on that. The array form asserts strictly more: exactly
 these committees, in `data/mps.json` order, and no extras.
 
-### PWA — `fixme`
+### PWA
 
-See §4.
+Live since Phase 6 — see §4. These are the only specs that allow service
+workers; everything else blocks them, so a cached roster can never make a
+data-driven assertion lie.
 
 ---
 
@@ -227,10 +230,11 @@ Two rules that go with the table, both load-bearing for the tests above:
 
 ---
 
-## 4. Known-failing on purpose: the PWA specs
+## 4. The PWA specs: from `fixme` to enforced
 
-`tests/pwa/offline.spec.js` is written in full and marked `test.fixme`, because
-the feature is broken in the shipped app and cannot pass:
+Phase 2 wrote `tests/pwa/offline.spec.js` in full and marked every test
+`test.fixme` — a bug report the runner would start enforcing the day the bug was
+fixed, rather than a gap pretended away:
 
 > `service-worker.js` precaches `/riigikogu-dashboard/…` while the site is
 > served from `/riigikogu-mobile/`. Registration fails outright. The Phase-0
@@ -240,10 +244,20 @@ the feature is broken in the shipped app and cannot pass:
 >
 > — `BEHAVIOR_SNAPSHOT.md` §9 defect 1; `ARCHITECTURE_PLAN.md` finding 6
 
-**Offline mode does not work for anyone today.** Marking the specs `fixme`
-records that as a known defect with an owner (Phase 6) rather than pretending
-the suite covers it. Phase 6 fixes the paths and deletes the markers; the specs
-must then pass for real.
+**Phase 6 fixed it and removed the markers. All five pass for real.** The worker
+now precaches the Phase-4 layout — shell, every ES module, and the five
+`data/*.json` files the app reads — with **relative** entries that resolve
+against the worker's own URL, so one list is correct at `/riigikogu-mobile/` in
+production and at `/` under the test server. Install is no longer allowed to
+swallow a failed `addAll()`.
+
+The specs were proven to have teeth the way Phase 2's were: reinstating the
+`/riigikogu-dashboard/` paths turns 4 of the 5 red, including registration and
+both offline tests.
+
+MP photos are the one thing that does not work offline — they are served by
+`api.riigikogu.ee`, and the worker leaves cross-origin requests alone. The
+roster falls back to its placeholders.
 
 ---
 

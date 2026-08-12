@@ -27,9 +27,10 @@ module.exports = defineConfig({
 
   use: {
     baseURL: `http://127.0.0.1:${PORT}`,
-    // The service worker is broken (wrong precache paths — ARCHITECTURE_PLAN.md
-    // finding 6). Blocking it keeps every non-PWA spec deterministic; the PWA
-    // spec opts back in with test.use({ serviceWorkers: 'allow' }).
+    // Blocked so every non-PWA spec sees the network, not a cache: since Phase 6
+    // the worker precaches the whole app including data/*.json, and a stale
+    // cached roster would make data-driven assertions lie. The PWA spec opts
+    // back in with test.use({ serviceWorkers: 'allow' }).
     serviceWorkers: 'block',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',

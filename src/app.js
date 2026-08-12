@@ -106,11 +106,14 @@ async function start() {
 start();
 
 /**
- * The service worker is Phase 6's. Registering it here keeps the app's shape
- * unchanged from the bundle's — the precache paths in `service-worker.js` still
- * point at `/riigikogu-dashboard/`, so installation fails and offline mode does
- * not work, exactly as `BEHAVIOR_SNAPSHOT.md` §9 records. The PWA specs stay
- * `fixme` until that file is fixed.
+ * Register the service worker (Phase 6). Resolved against this module so the
+ * worker's scope is the directory the app is served from — `/riigikogu-mobile/`
+ * in production, `/` under the test server — which is what lets one relative
+ * precache list work in both.
+ *
+ * Failure is swallowed on purpose: the browser may block workers (the suite does
+ * for every non-PWA spec), and an app that renders fine online must not break
+ * because its offline support could not install.
  */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
