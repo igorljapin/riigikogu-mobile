@@ -4,7 +4,7 @@
  * Plain CSS, no build step, no framework. It is one half of the layer a
  * redesign is allowed to rewrite (the other is src/views/), and the Aug-2026
  * redesign rewrote it: the tokens, type scale, radii and spacing below are the
- * ones in `docs/redesign-2026-08/README.md`, recorded in USABILITY.md §9.
+ * ones the Aug-2026 redesign brought in, recorded in USABILITY.md §9.
  *
  * Party colours are NOT written here. `src/app.js` publishes them from
  * `data/parties.json` as `--party-<id>` / `--party-<id>-text`, so a party that
