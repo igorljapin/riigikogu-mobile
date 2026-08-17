@@ -18,9 +18,15 @@
  *    registration instead of being logged and forgotten, so the PWA spec sees it.
  */
 
-// Bumped whenever the precache list changes: activate deletes every cache whose
-// name is not this one, so a bump is what evicts the stale bundle-era assets.
-const CACHE_NAME = 'riigikogu-mobile-v3';
+// Bumped whenever the precache list changes, or whenever what those files
+// contain changes: activate deletes every cache whose name is not this one, so
+// a bump is what evicts stale assets.
+//
+// v4 is the Aug-2026 redesign. The list itself is unchanged — the redesign
+// added no files — but the stylesheet and every view module hold new content,
+// and without a bump the fetch handler hands a returning visitor the
+// pre-redesign copy and only refreshes it for the visit after.
+const CACHE_NAME = 'riigikogu-mobile-v4';
 
 // Where this app is deployed. Not used to build URLs — the relative list above
 // does that — but checked at install time, because a silent mount-point mismatch

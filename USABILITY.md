@@ -438,17 +438,18 @@ in §1 changed: every other promise the bundle kept, the rebuild keeps.
 
 ## 9. The 2026-08 redesign amendment
 
-Source: `docs/redesign-2026-08/README.md` — a high-fidelity, three-tab redesign
-written against this codebase. It reuses the data model unchanged, so **no
+Source: a high-fidelity, three-tab redesign handoff written against this
+codebase, shipped in Aug 2026. It reused the data model unchanged, so **no
 promise about data, arithmetic or blocs moves here.** What follows is the
 complete set of changes; anything not on this list is unchanged and must stay
 green as it is.
 
-> **The handoff is a reference, not a fixture.** It is scheduled for deletion
-> once the redesign ships — this section, not the bundle, is the durable record
-> of what was decided. Nothing in `src/`, `tests/` or `scripts/` may read from
-> it, and its `data/*.json` copies are a 12 Aug snapshot that must never be
-> mistaken for the live `data/` (see 9.3).
+> **This section is the record.** The handoff bundle it came from was deleted
+> once the redesign shipped — it lives in git history and nowhere else, which is
+> the point: a prototype kept alongside the app is a second source of truth, and
+> its `data/*.json` copies were a 12 Aug snapshot that could be mistaken for the
+> live `data/`. Read §9 for what the redesign decided; read the app for what it
+> does.
 
 The rule from §8 still governs: a test may change only because the *promise*
 changed. Each row below states which.

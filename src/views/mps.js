@@ -2,7 +2,7 @@
  * Members tab — the 101-MP directory, its search and filters, and the MP
  * profile the Parliament tab's board rows and party sheet also open.
  *
- * Redesigned in Aug 2026 (`docs/redesign-2026-08/`, recorded in USABILITY.md §9):
+ * Redesigned in Aug 2026 (recorded in USABILITY.md §9):
  * a screen title, a 52px search field, a six-way single-select filter block, a
  * count line, and full-bleed 72px rows carrying the MP's photo. What did **not**
  * change is the thing that matters: an MP's party here is the party they
