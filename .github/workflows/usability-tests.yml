@@ -20,12 +20,16 @@ permissions:
 
 jobs:
   playwright:
-    # NOTE: this job name is the branch-protection check name. Renaming it
-    # silently breaks the required-status-check rule on `main` — every PR would
-    # then sit waiting for a check that never reports. If it ever needs to
-    # change, update the ruleset in the same sitting. (It now covers the unit
-    # suite too, which is why the name reads narrower than the job is.)
-    name: Playwright (Tier 1)
+    # NOTE: this job name is the branch-protection check name — it is the single
+    # entry under "Require status checks to pass" in the ruleset on `main`.
+    # Renaming it silently breaks that rule: every PR then sits waiting for a
+    # check that never reports. If it ever changes again, edit the ruleset in
+    # the same sitting, and edit it BEFORE merging the rename.
+    #
+    # Renamed Aug 2026: the job runs the unit suite, the Python resolver tests
+    # and the whole Playwright suite — Tier 1, Tier 2 and PWA — so the old
+    # "Playwright (Tier 1)" named about a third of what it gates.
+    name: Usability Contract (full suite)
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
