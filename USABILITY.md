@@ -30,6 +30,24 @@
 > because the *contract* changed and not just the markup; both are called out
 > inline below and in §8.
 
+> **Redesign amendment (2026-08-17): the contract moved first, on purpose.**
+> This document was amended **before** any redesign code was written, so the
+> implementation has a fixed target instead of a moving one. The changes are
+> owner-approved and listed in §9; the new and changed testids are in §3.
+> Everything not listed in §9 is unchanged and must stay green **as it is** —
+> in particular the redesign does not touch `data/`, `src/data.js` or
+> `src/lib/`, and no seat count may be hardcoded anywhere.
+>
+> **Three things the redesign proposed and the owner declined or altered.**
+> Recorded here because a future session reading the design bundle will
+> otherwise "fix" the app back towards it:
+>
+> | Design proposed | Decision |
+> |---|---|
+> | Rename the Parliament tab to **Standing**, calculator tab id to `majority` | **Declined.** Tab names and ids stay `Parliament` / `Members` / `Calculator`. |
+> | **Initials circles** in member rows; photos only on the profile | **Altered.** Rows show the MP photo, with the initials circle as the fallback when it is absent or fails to load (see 3.9). |
+> | Header kicker reading `UPDATED 12 AUG 2026` | **Declined as written.** That date is a literal in the prototype. The label renders from `meta.updatedAt` — already required by 2.10. |
+
 ---
 
 ## 1. The features that must survive any change
@@ -55,12 +73,15 @@ one is part of the work that introduces it.
 | 2.2 | The bloc totals account for all 101 seats — no seat is invented or lost — **however many blocs there are** | `tier1/parliament.spec.js` |
 | 2.3 | The party chips sum to the section headings that contain them, and to 101 overall | `tier1/parliament.spec.js` |
 | 2.4 | Every party is shown as a labelled, clickable chip carrying its seat count | `tier1/parliament.spec.js` |
-| 2.5 | Tapping a party opens a member sheet whose stated size equals the chip's number | `tier1/parliament.spec.js` |
+| 2.5 | Tapping a party opens a member list whose stated size equals the chip's number — **as a full-screen overlay** (was a bottom sheet; §9) | `tier1/parliament.spec.js` |
 | 2.6 | The Board of the Riigikogu shows three officers, each opening that MP's profile | `tier1/parliament.spec.js` |
 | 2.7 | Party colours are the canonical ones in `data/parties.json` | `tier2/parliament-data.spec.js` |
 | 2.8 | Headline numbers are **voting-bloc** counts, never registered counts | `tier2/parliament-data.spec.js` |
 | 2.9 | Unaligned MPs are a visible third bucket, never folded into a bloc | `tier2/parliament-data.spec.js` |
 | 2.10 | The staleness label is rendered from `meta.updatedAt`, never hand-typed | `tier2/parliament-data.spec.js` |
+| 2.11 | **New.** The seat chart shows the three blocs in proportion, its segments sum to 101, and each segment's width matches its bloc's share | `tier2/parliament-data.spec.js` |
+| 2.12 | **New.** The chart carries a majority marker positioned from `meta.simpleMajority`, not from a literal | `tier2/parliament-data.spec.js` |
+| 2.13 | **New.** The chart legend states all three bloc totals, and they agree with the bloc headings (2.2) | `tier1/parliament.spec.js` |
 
 ### Members tab
 
@@ -70,10 +91,12 @@ one is part of the work that introduces it.
 | 3.2 | Every row carries a real, distinct MP name and a party label | `tier1/members.spec.js` |
 | 3.3 | Search narrows the list to rows that genuinely match, and clearing it restores all 101 | `tier1/members.spec.js` |
 | 3.4 | A search with no matches empties the list without breaking the app | `tier1/members.spec.js` |
-| 3.5 | Every filter chip yields exactly the number of rows its own label promises | `tier1/members.spec.js` |
+| 3.5 | Every filter yields exactly the number of rows its own label promises — **now including the Coalition, Opposition and Unaligned segments** (§9) | `tier1/members.spec.js` |
 | 3.6 | Tapping an MP opens a popup containing an external `riigikogu.ee` profile link | `tier1/members.spec.js` |
 | 3.7 | Profile URLs, photo URLs and committee lists match `data/mps.json` | `tier2/roster-data.spec.js` |
 | 3.8 | Defectors show the party they vote with plus their party history; unaligned MPs are labelled unaligned | `tier2/roster-data.spec.js` |
+| 3.9 | **New.** Every row carries an avatar: the MP's photo where `photoUrl` resolves, and their initials on the party colour where it does not — so the list stays legible offline (§9) | `tier1/members.spec.js`, `tier2/roster-data.spec.js` |
+| 3.10 | **New.** Filtering is single-select: choosing one filter clears the others, and there is always exactly one active | `tier1/members.spec.js` |
 
 ### Calculator
 
@@ -96,6 +119,9 @@ pass?* — so it gets the most coverage.
 | 4.12 | Reset clears the selection **and** the individual adjustments | `tier1/calculator.spec.js` |
 | 4.13 | The calculator uses voting-bloc counts, and unaligned MPs belong to no preset | `tier2/roster-data.spec.js` |
 | 4.14 | The threshold badges read their values from `meta.json`, not from literals | `tier2/roster-data.spec.js` |
+| 4.15 | **New.** Every individual add or exclude appears as a named adjustment row identifying the MP, and its **Undo** control reverses exactly that one adjustment | `tier1/calculator.spec.js` |
+| 4.16 | **New.** The picker offers only eligible MPs — to add, those in unselected parties; to exclude, those in selected parties — and an MP leaves the pool once adjusted | `tier1/calculator.spec.js` |
+| 4.17 | **New.** The seat total's progress fill is proportional to `total / meta.totalSeats`, and the verdict states the shortfall to `meta.simpleMajority` when it is not met | `tier2/roster-data.spec.js` |
 
 ### PWA
 
@@ -202,9 +228,16 @@ Introduced in Phase 4 and shipping now. `<id>` is always a party id from
 | | `bloc-total-coalition`, `bloc-total-opposition`, `bloc-total-unaligned` | the third one is new in Phase 4 |
 | | `bloc-heading-coalition`, `-opposition`, `-unaligned` | the "Coalition (50 seats)" section headings |
 | | `board-president`, `board-vice-president-1`, `board-vice-president-2` | each also carries `data-party-id` |
-| | `party-sheet`, `party-sheet-member`, `party-sheet-close` | members carry `data-mp-uuid` |
+| | `party-sheet`, `party-sheet-member`, `party-sheet-close` | members carry `data-mp-uuid`. **Names kept deliberately** though the sheet is now a full-screen overlay — renaming them would churn every spec for a pure presentation change |
+| | `seat-chart` **(new)** | carries `data-total` |
+| | `seat-chart-segment-coalition`, `-opposition`, `-unaligned` **(new)** | each carries `data-seats` |
+| | `seat-chart-marker` **(new)** | carries `data-threshold`, sourced from `meta.simpleMajority` |
+| | `seat-chart-legend-coalition`, `-opposition`, `-unaligned` **(new)** | |
 | Members | `mp-search`, `filter-all`, `filter-usa`, `filter-chairs` | |
+| | `filter-coalition`, `filter-opposition`, `filter-unaligned` **(new)** | the bloc segmented control; all six filters carry `data-active="true\|false"` |
 | | `mp-row` | one per MP, each carrying `data-mp-uuid` and `data-party-id` |
+| | `mp-row-avatar` **(new)** | one per row; carries `data-avatar="photo\|initials"` so 3.9 is checkable either way |
+| | `mp-count` **(new)** | the "101 members" line |
 | | `mp-popup`, `mp-photo`, `mp-profile-link`, `mp-popup-close` | |
 | | `mp-party` (with `data-party-id`), `mp-bloc`, `mp-committee`, `mp-party-history` | `mp-committee` is one pill per committee |
 | Calculator | `calc-total`, `calc-verdict` | |
@@ -215,7 +248,9 @@ Introduced in Phase 4 and shipping now. `<id>` is always a party id from
 | | `modal-add-mps`, `modal-exclude-mps` | replaces Tier 1's one structural selector |
 | | `modal-add-mps-close`, `modal-exclude-mps-close`, `picker-back` | picker chrome |
 | | `picker-party` (with `data-party-id`), `picker-mp` (with `data-mp-uuid`) | the two picker steps |
-| | `adjust-chip-add`, `adjust-chip-exclude` | one per individual adjustment; click to undo |
+| | `adjust-chip-add`, `adjust-chip-exclude` | one per individual adjustment, each carrying `data-mp-uuid`. **Behaviour change:** undo now lives on a dedicated child `adjust-undo` button rather than the whole chip being clickable (§9) |
+| | `adjust-undo` **(new)** | one per adjustment row; carries `data-mp-uuid` |
+| | `calc-fill` **(new)** | carries `data-seats` and `data-total` for 4.17 |
 | Every overlay | `data-overlay` | in addition to its own testid — party sheet, MP popup, both pickers |
 
 Two rules that go with the table, both load-bearing for the tests above:
@@ -398,3 +433,58 @@ parliament now has three buckets, not two.**
 Both tests still read their numbers off the app rather than hardcoding today's
 roster, so neither needs revisiting when the next defection lands. Nothing else
 in §1 changed: every other promise the bundle kept, the rebuild keeps.
+
+---
+
+## 9. The 2026-08 redesign amendment
+
+Source: `Riigikogu mobile app redesign/design_handoff_riigikogu_redesign/README.md`
+— a high-fidelity, three-tab redesign written against this codebase. It reuses
+the data model unchanged, so **no promise about data, arithmetic or blocs moves
+here.** What follows is the complete set of changes; anything not on this list is
+unchanged and must stay green as it is.
+
+The rule from §8 still governs: a test may change only because the *promise*
+changed. Each row below states which.
+
+### 9.1 Changed promises
+
+| # | Was | Is | Why it is legitimate |
+|---|---|---|---|
+| 2.5 | Party members open in a **bottom sheet** | …in a **full-screen overlay** | Presentation only. The promise — tapping a party reveals its members, and the count matches the chip — is untouched. The `party-sheet*` testids keep their names so the change costs no test churn. |
+| 3.5 | Filters are All / USA friendship / Chairs | …plus **Coalition, Opposition, Unaligned** segments | The filter set grew. The promise — every filter yields exactly the count its label claims — is unchanged and now covers six filters instead of three. |
+| `adjust-chip-*` | The whole chip is the undo target | Undo is a dedicated **`adjust-undo`** button inside the row | The design replaces compact chips with named rows carrying an explicit control. The promise — one adjustment, reversible in one tap — is unchanged; only what you tap moves. |
+
+### 9.2 Added promises
+
+New surface, so new coverage. None of these relaxes anything.
+
+| # | Promise |
+|---|---|
+| 2.11 | The seat chart's segments are proportional and sum to 101 |
+| 2.12 | Its majority marker is positioned from `meta.simpleMajority` |
+| 2.13 | Its legend agrees with the bloc headings |
+| 3.9 | Every member row has an avatar — photo, or initials when the photo is unavailable |
+| 3.10 | Filtering is single-select, always exactly one active |
+| 4.15 | Every individual adjustment is named and individually undoable |
+| 4.16 | The picker offers only eligible MPs, and an adjusted MP leaves the pool |
+| 4.17 | The calculator's fill is proportional and its verdict states the shortfall |
+
+### 9.3 Explicitly declined
+
+Recorded so a later session reading the design bundle does not "correct" the app
+towards it:
+
+| Design proposed | Decision | Consequence |
+|---|---|---|
+| Parliament tab renamed **Standing**; calculator tab id `majority` | **Declined** | 1.2 unchanged; `tab-parliament` / `tab-members` / `tab-calculator` keep their ids |
+| **Initials only** in member rows, photos on the profile | **Altered** — photo first, initials as fallback | 3.9 as written; the fallback also covers the known offline gap (photos are cross-origin and uncached) |
+| Header kicker `UPDATED 12 AUG 2026` | **Declined as a literal** | 2.10 already forbids it; the label renders from `meta.updatedAt` |
+| The bundle's `data/*.json` copies (a 12 Aug snapshot) | **Not used** | The repo's live `data/` is authoritative; the monthly job has since moved it |
+
+### 9.4 Out of scope for the redesign
+
+Unchanged and not to be touched: `data/`, `src/data.js`, `src/lib/`, the seat
+arithmetic, the three-bloc model, and every §1 promise not listed in 9.1–9.2.
+No seat count, threshold or date may be hardcoded in a view — all of them come
+from `data/*.json`, which is what 2.8, 2.10, 4.14 and 4.17 exist to enforce.
