@@ -1,0 +1,101 @@
+{
+  "_comment": "Curated overlay. blocs and defectors are hand-maintained; the monthly job may only append to unaligned (safe-default rule, ARCHITECTURE_PLAN.md Phase 1). Never add an unaligned MP to a bloc to reach a majority.",
+  "blocs": {
+    "reform": "coalition",
+    "e200": "coalition",
+    "sde": "opposition",
+    "ekre": "opposition",
+    "isamaa": "opposition",
+    "center": "opposition"
+  },
+  "defectors": {
+    "563f86fd-db45-4046-b8ed-b66e5a2aec45": {
+      "name": "Alar Laneman",
+      "votesWith": "reform",
+      "since": "2024-06-14",
+      "note": "Left EKRE Jun 2024, joined Reform Jul 2024"
+    },
+    "80f542c1-393a-46e2-9fca-99948e59850d": {
+      "name": "Andre Hanimägi",
+      "votesWith": "sde",
+      "since": "2024-01-05",
+      "note": "Left Centre Jan 2024, joined SDE"
+    },
+    "c4e3fc0f-80fb-4a3e-b49e-80045c5253d9": {
+      "name": "Ants Frosch",
+      "votesWith": "isamaa",
+      "since": "2024-06-13",
+      "note": "Left EKRE Jun 2024, joined Isamaa Jan 2025"
+    },
+    "d5c54f88-dff3-486b-aac6-2cd124577d38": {
+      "name": "Ester Karuse",
+      "votesWith": "sde",
+      "since": "2024-01-05",
+      "note": "Left Centre Jan 2024, joined SDE"
+    },
+    "65b1d8bb-7f45-48f5-b4aa-7ba4ca459824": {
+      "name": "Henn Põlluaas",
+      "votesWith": "isamaa",
+      "since": "2024-06-13",
+      "note": "Left EKRE Jun 2024, joined Isamaa Jan 2025"
+    },
+    "6b45cfb5-8a17-481c-b674-80fc00c6cf5d": {
+      "name": "Jaak Aab",
+      "votesWith": "sde",
+      "since": "2024-01-05",
+      "note": "Left Centre Jan 2024, joined SDE"
+    },
+    "94351dfe-449e-48db-9396-06cf204ce22e": {
+      "name": "Jaanus Karilaid",
+      "votesWith": "isamaa",
+      "since": "2023-09-18",
+      "note": "Left Centre Sep 2023, joined Isamaa"
+    },
+    "a5af5ad0-6e31-443a-9b12-15769d43e784": {
+      "name": "Maria Jufereva-Skuratovski",
+      "votesWith": "reform",
+      "since": "2023-11-16",
+      "note": "Left Centre Nov 2023, joined Reform"
+    },
+    "f8a770b2-916c-4172-84b3-005ba9906a18": {
+      "name": "Peeter Ernits",
+      "votesWith": "center",
+      "since": "2024-04-01",
+      "note": "Left EKRE Apr 2024, joined Centre May 2025"
+    },
+    "561abe91-76eb-45f3-90b0-efa94c663689": {
+      "name": "Tanel Kiik",
+      "votesWith": "sde",
+      "since": "2024-01-05",
+      "note": "Left Centre Jan 2024, joined SDE"
+    },
+    "658c9d00-82c9-4161-8314-48ff1d67e3b7": {
+      "name": "Züleyxa Izmailova",
+      "votesWith": "sde",
+      "since": "2024-06-12",
+      "note": "Left Eesti 200 May 2024, joined SDE Jun 2024"
+    }
+  },
+  "unaligned": [
+    "07132cc4-5afc-4edb-9537-7c721ec39b2d",
+    "987e47c7-929b-4437-9385-fab4f4fd7824",
+    "54bc0d5b-7c98-4245-8682-4a3a0b6e0275",
+    "db532de2-5abd-4b6d-a82c-2d9a75fd9d18",
+    "caea357b-12c0-4069-b53e-89f69f517212",
+    "fd2d1dd5-ff19-445e-b190-28aabb07763a",
+    "7251e077-1964-4f2b-9dba-349dc127b56e",
+    "d7d9e4d7-699e-4038-83c3-d13369f644c9",
+    "b5e0d7fe-b784-4057-bf7e-cc3f1873887d"
+  ],
+  "unalignedNames": {
+    "07132cc4-5afc-4edb-9537-7c721ec39b2d": "Enn Eesmaa",
+    "987e47c7-929b-4437-9385-fab4f4fd7824": "Grigore-Kalev Stoicescu",
+    "54bc0d5b-7c98-4245-8682-4a3a0b6e0275": "Jaak Valge",
+    "db532de2-5abd-4b6d-a82c-2d9a75fd9d18": "Kalle Grünthal",
+    "caea357b-12c0-4069-b53e-89f69f517212": "Kersti Sarapuu",
+    "fd2d1dd5-ff19-445e-b190-28aabb07763a": "Leo Kunnas",
+    "7251e077-1964-4f2b-9dba-349dc127b56e": "Meelis Kiili",
+    "d7d9e4d7-699e-4038-83c3-d13369f644c9": "Tõnis Mölder",
+    "b5e0d7fe-b784-4057-bf7e-cc3f1873887d": "Varro Vooglaid"
+  }
+}

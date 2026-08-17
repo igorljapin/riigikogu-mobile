@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>*{box-sizing:border-box}input::-webkit-search-cancel-button{display:none}a{color:#0f172a}a:hover{color:#9333ea}</style></helmet>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ isDark }}" hint-size="402px,874px">
+  <div style="position:relative;height:100%;display:flex;flex-direction:column;background:{{ t.bg }};color:{{ t.text }};font:16px/1.45 -apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;-webkit-font-smoothing:antialiased">
+
+    <main style="flex:1;overflow-y:auto;padding:62px 0 24px">
+
+      <!-- ─────────── STANDING ─────────── -->
+      <sc-if value="{{ isStanding }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div style="padding:14px 20px 10px">
+            <p style="margin:0 0 8px;font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:{{ t.muted }}">XV Riigikogu · {{ updatedLabel }}</p>
+            <div style="display:flex;align-items:baseline;gap:9px">
+              <span style="font:700 46px/1 -apple-system,system-ui,sans-serif;letter-spacing:-0.035em;color:{{ t.text }}">{{ coalitionSeats }}</span>
+              <span style="font:600 16px/1.2 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">of 101 coalition seats</span>
+            </div>
+          </div>
+
+          <div style="padding:0 20px 22px">
+            <div style="position:relative;padding-top:18px">
+              <div style="display:flex;height:34px;border-radius:8px;overflow:hidden;background:{{ t.track }}">
+                <sc-for list="{{ blocBars }}" as="b" hint-placeholder-count="3">
+                  <div style="width:{{ b.width }};background:{{ b.color }}"></div>
+                </sc-for>
+              </div>
+              <div style="position:absolute;top:0;bottom:0;left:{{ thresholdPct }};width:2px;background:{{ t.text }}">
+                <span style="position:absolute;top:0;left:5px;white-space:nowrap;font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.04em;color:{{ t.text }}">51-VOTE MAJORITY</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:18px;margin-top:12px">
+              <sc-for list="{{ blocBars }}" as="l" hint-placeholder-count="3">
+                <span style="display:flex;align-items:center;gap:7px;font:500 13px/1 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">
+                  <span style="width:10px;height:10px;border-radius:3px;background:{{ l.color }}"></span>{{ l.label }}
+                </span>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:0 20px">
+            <h2 style="margin:0 0 10px;font:600 13px/1 -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:{{ t.muted }}">Parties by voting bloc</h2>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ partyCards }}" as="p" hint-placeholder-count="7">
+                <button type="button" onClick="{{ p.open }}" style="display:flex;flex-direction:column;gap:10px;width:100%;min-height:76px;padding:14px 16px;border:1px solid {{ t.line }};border-radius:16px;background:{{ t.card }};cursor:pointer;text-align:left">
+                  <span style="display:flex;align-items:center;gap:12px;width:100%">
+                    <span style="width:14px;height:32px;border-radius:5px;flex:0 0 auto;background:{{ p.color }}"></span>
+                    <span style="flex:1;min-width:0">
+                      <span style="display:block;font:600 17px/1.25 -apple-system,system-ui,sans-serif;color:{{ t.text }}">{{ p.name }}</span>
+                      <span style="display:block;font:400 13px/1.3 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">{{ p.sub }}</span>
+                    </span>
+                    <span style="font:700 26px/1 -apple-system,system-ui,sans-serif;letter-spacing:-0.02em;color:{{ t.text }}">{{ p.seats }}</span>
+                  </span>
+                  <span style="display:block;width:100%;height:6px;border-radius:999px;background:{{ t.track }}">
+                    <span style="display:block;height:6px;border-radius:999px;background:{{ p.color }};width:{{ p.pct }}"></span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:26px 20px 0">
+            <h2 style="margin:0 0 10px;font:600 13px/1 -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:{{ t.muted }}">Board of the Riigikogu</h2>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ boardRows }}" as="o" hint-placeholder-count="3">
+                <button type="button" onClick="{{ o.open }}" style="display:flex;align-items:center;gap:14px;width:100%;min-height:64px;padding:12px 16px;border:1px solid {{ t.line }};border-radius:16px;background:{{ t.card }};cursor:pointer;text-align:left">
+                  <span style="width:10px;height:36px;border-radius:4px;flex:0 0 auto;background:{{ o.color }}"></span>
+                  <span style="flex:1;min-width:0">
+                    <span style="display:block;font:600 17px/1.25 -apple-system,system-ui,sans-serif;color:{{ t.text }}">{{ o.name }}</span>
+                    <span style="display:block;font:400 13px/1.3 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">{{ o.role }}</span>
+                  </span>
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="{{ t.muted }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ─────────── MEMBERS ─────────── -->
+      <sc-if value="{{ isMembers }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="padding:12px 20px 10px">
+            <h1 style="margin:0 0 14px;font:700 32px/1.1 -apple-system,system-ui,sans-serif;letter-spacing:-0.03em;color:{{ t.text }}">Members</h1>
+            <div style="display:flex;align-items:center;gap:10px;height:52px;padding:0 16px;border-radius:16px;background:{{ t.card }};border:1px solid {{ t.line }}">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="{{ t.muted }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM21 21l-4.35-4.35"></path></svg>
+              <input type="search" placeholder="Search 101 members" aria-label="Search members" autocomplete="off" value="{{ query }}" onChange="{{ onQuery }}" style="flex:1;border:0;outline:none;background:none;font:400 17px/1.3 -apple-system,system-ui,sans-serif;color:{{ t.text }}">
+              <sc-if value="{{ hasQuery }}" hint-placeholder-val="{{ false }}">
+                <button type="button" aria-label="Clear" onClick="{{ clearQuery }}" style="width:32px;height:32px;border:0;border-radius:50%;background:{{ t.track }};color:{{ t.muted }};font-size:17px;line-height:1;cursor:pointer">×</button>
+              </sc-if>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;padding:10px 20px 12px">
+            <div role="group" aria-label="Voting bloc" style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;padding:3px;border-radius:13px;background:{{ t.track }}">
+              <sc-for list="{{ blocFilters }}" as="f" hint-placeholder-count="4">
+                <button type="button" onClick="{{ f.select }}" style="height:38px;border:0;border-radius:10px;font:600 13px/1 -apple-system,system-ui,sans-serif;cursor:pointer;background:{{ f.bg }};color:{{ f.fg }};box-shadow:{{ f.shadow }}">{{ f.label }}</button>
+              </sc-for>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <sc-for list="{{ roleFilters }}" as="f" hint-placeholder-count="2">
+                <button type="button" aria-pressed="{{ f.pressed }}" onClick="{{ f.select }}" style="height:40px;border:1px solid {{ f.border }};border-radius:11px;font:600 13px/1 -apple-system,system-ui,sans-serif;cursor:pointer;background:{{ f.bg }};color:{{ f.fg }}">{{ f.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <p style="margin:0;padding:0 20px 8px;font:500 13px/1 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">{{ memberCountLabel }}</p>
+          <div>
+            <sc-for list="{{ memberRows }}" as="m" hint-placeholder-count="9">
+              <button type="button" onClick="{{ m.open }}" style="display:flex;align-items:center;gap:14px;width:100%;min-height:72px;padding:10px 20px;border:0;border-top:1px solid {{ t.line }};background:{{ t.card }};cursor:pointer;text-align:left">
+                <span style="width:48px;height:48px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;border-radius:50%;font:700 16px/1 -apple-system,system-ui,sans-serif;background:{{ m.color }};color:{{ m.textColor }}">{{ m.initials }}</span>
+                <span style="flex:1;min-width:0">
+                  <span style="display:block;font:600 17px/1.3 -apple-system,system-ui,sans-serif;color:{{ t.text }}">{{ m.name }}</span>
+                  <span style="display:block;font:400 14px/1.35 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">{{ m.sub }}</span>
+                </span>
+                <span style="padding:5px 10px;border-radius:8px;font:700 12px/1.2 -apple-system,system-ui,sans-serif;background:{{ m.color }};color:{{ m.textColor }}">{{ m.party }}</span>
+              </button>
+            </sc-for>
+            <sc-if value="{{ membersEmpty }}" hint-placeholder-val="{{ false }}">
+              <p style="margin:0;padding:40px 20px;text-align:center;font:400 16px/1.4 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">No member matches “{{ query }}”.</p>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ─────────── MAJORITY ─────────── -->
+      <sc-if value="{{ isMajority }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="padding:12px 20px 0">
+            <h1 style="margin:0 0 16px;font:700 32px/1.1 -apple-system,system-ui,sans-serif;letter-spacing:-0.03em;color:{{ t.text }}">Majority calculator</h1>
+            <div style="padding:20px 18px 18px;border-radius:22px;background:{{ t.hero }};color:#fff">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between">
+                <span style="font:700 56px/0.9 -apple-system,system-ui,sans-serif;letter-spacing:-0.04em">{{ calcSeats }}</span>
+                <span style="font:600 16px/1.3 -apple-system,system-ui,sans-serif;color:{{ calcVerdictColor }};text-align:right">{{ calcVerdict }}</span>
+              </div>
+              <div style="position:relative;height:44px;margin-top:20px">
+                <span style="position:absolute;left:0;right:0;top:14px;height:14px;border-radius:999px;background:rgba(255,255,255,.14)"></span>
+                <span style="position:absolute;left:0;top:14px;height:14px;border-radius:999px;background:{{ calcBarColor }};width:{{ calcPct }}"></span>
+                <sc-for list="{{ marks }}" as="k" hint-placeholder-count="4">
+                  <span style="position:absolute;top:0;left:{{ k.left }};display:flex;flex-direction:column;align-items:center;transform:translateX(-50%)">
+                    <span style="width:2px;height:28px;background:{{ k.tick }}"></span>
+                    <span style="margin-top:3px;font:600 11px/1 ui-monospace,Menlo,monospace;color:{{ k.color }}">{{ k.label }}</span>
+                  </span>
+                </sc-for>
+              </div>
+              <p style="margin:14px 0 0;font:500 15px/1.4 -apple-system,system-ui,sans-serif;color:rgba(255,255,255,.72);text-wrap:pretty">{{ calcHint }}</p>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;padding:14px 20px 0">
+            <sc-for list="{{ presets }}" as="p" hint-placeholder-count="3">
+              <button type="button" onClick="{{ p.act }}" style="flex:1;height:48px;border:1px solid {{ t.line }};border-radius:14px;background:{{ t.card }};font:600 15px/1 -apple-system,system-ui,sans-serif;color:{{ p.fg }};cursor:pointer">{{ p.label }}</button>
+            </sc-for>
+          </div>
+
+          <div style="padding:22px 20px 0">
+            <h2 style="margin:0 0 10px;font:600 13px/1 -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:{{ t.muted }}">Tap a party in or out</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <sc-for list="{{ calcCards }}" as="c" hint-placeholder-count="7">
+                <button type="button" aria-pressed="{{ c.on }}" onClick="{{ c.toggle }}" style="display:flex;flex-direction:column;gap:6px;min-height:96px;padding:14px;border:2px solid {{ c.border }};border-radius:18px;background:{{ c.bg }};cursor:pointer;text-align:left">
+                  <span style="display:flex;align-items:center;gap:8px">
+                    <span style="width:12px;height:12px;flex:0 0 auto;border-radius:4px;background:{{ c.color }}"></span>
+                    <span style="font:600 15px/1.2 -apple-system,system-ui,sans-serif;color:{{ t.text }}">{{ c.short }}</span>
+                  </span>
+                  <span style="display:flex;align-items:baseline;gap:6px">
+                    <span style="font:700 30px/1 -apple-system,system-ui,sans-serif;letter-spacing:-0.03em;color:{{ c.countColor }}">{{ c.count }}</span>
+                    <span style="white-space:nowrap;font:500 13px/1.2 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">of {{ c.total }}</span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:8px;padding:16px 20px 0">
+            <button type="button" onClick="{{ openAdd }}" style="display:flex;align-items:center;gap:12px;min-height:60px;padding:10px 16px;border:1px solid {{ t.line }};border-radius:15px;background:{{ t.card }};cursor:pointer;text-align:left">
+              <span style="width:32px;height:32px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;border-radius:10px;background:#dcfce7;color:#15803d;font:700 17px/1 -apple-system,system-ui,sans-serif">+</span>
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font:600 16px/1.25 -apple-system,system-ui,sans-serif;color:{{ t.text }}">Add individual MPs</span>
+                <span style="display:block;font:400 13px/1.3 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">From non-selected parties</span>
+              </span>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="{{ t.muted }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg>
+            </button>
+            <button type="button" onClick="{{ openExclude }}" style="display:flex;align-items:center;gap:12px;min-height:60px;padding:10px 16px;border:1px solid {{ t.line }};border-radius:15px;background:{{ t.card }};cursor:pointer;text-align:left">
+              <span style="width:32px;height:32px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;border-radius:10px;background:#fee2e2;color:#b91c1c;font:700 17px/1 -apple-system,system-ui,sans-serif">−</span>
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font:600 16px/1.25 -apple-system,system-ui,sans-serif;color:{{ t.text }}">Exclude MPs</span>
+                <span style="display:block;font:400 13px/1.3 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">{{ excludeSub }}</span>
+              </span>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="{{ t.muted }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg>
+            </button>
+          </div>
+
+          <sc-if value="{{ hasAdjustments }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:22px 20px 0">
+              <h2 style="margin:0 0 10px;font:600 13px/1 -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:{{ t.muted }}">Named adjustments</h2>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ adjustments }}" as="a" hint-placeholder-count="2">
+                  <div style="display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 14px;border:1px solid {{ t.line }};border-radius:14px;background:{{ t.card }}">
+                    <span style="width:30px;height:30px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;border-radius:9px;font:700 13px/1 -apple-system,system-ui,sans-serif;background:{{ a.badgeBg }};color:{{ a.badgeFg }}">{{ a.sign }}</span>
+                    <span style="flex:1;min-width:0">
+                      <span style="display:block;font:600 15px/1.25 -apple-system,system-ui,sans-serif;color:{{ t.text }}">{{ a.name }}</span>
+                      <span style="display:block;font:400 13px/1.3 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">{{ a.note }}</span>
+                    </span>
+                    <button type="button" onClick="{{ a.undo }}" style="height:40px;padding:0 14px;border:1px solid {{ t.line }};border-radius:11px;background:none;font:600 14px/1 -apple-system,system-ui,sans-serif;color:{{ t.muted }};cursor:pointer">Undo</button>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </main>
+
+    <nav aria-label="Sections" style="flex:0 0 auto;display:grid;grid-template-columns:repeat(3,1fr);height:72px;background:{{ t.card }};border-top:1px solid {{ t.line }};margin-bottom:34px">
+      <sc-for list="{{ tabs }}" as="n" hint-placeholder-count="3">
+        <button type="button" onClick="{{ n.select }}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:0;background:none;cursor:pointer;color:{{ n.color }}">
+          <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ n.glyph }}"></path></svg>
+          <span style="font:600 12px/1 -apple-system,system-ui,sans-serif">{{ n.label }}</span>
+        </button>
+      </sc-for>
+    </nav>
+
+    <!-- ─────────── FULL-SCREEN DETAIL ─────────── -->
+    <sc-if value="{{ detailOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;background:{{ t.bg }}">
+        <div style="flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:62px 16px 12px;background:{{ t.card }};border-bottom:1px solid {{ t.line }}">
+          <button type="button" aria-label="Back" onClick="{{ closeDetail }}" style="display:flex;align-items:center;gap:6px;height:44px;padding:0 12px 0 8px;border:0;border-radius:12px;background:none;cursor:pointer;color:{{ t.text }};font:600 16px/1 -apple-system,system-ui,sans-serif">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>Back
+          </button>
+          <span style="font:600 16px/1 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">{{ detailKicker }}</span>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:0 20px 40px">
+
+          <sc-if value="{{ isMpDetail }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="display:flex;align-items:center;gap:16px;padding:22px 0 18px">
+                <img src="{{ mp.photo }}" alt="" loading="lazy" style="width:88px;height:88px;flex:0 0 auto;border-radius:26px;object-fit:cover;background:{{ mp.color }}">
+                <div style="min-width:0">
+                  <h2 style="margin:0 0 8px;font:700 25px/1.15 -apple-system,system-ui,sans-serif;letter-spacing:-0.02em;color:{{ t.text }}">{{ mp.name }}</h2>
+                  <div style="display:flex;flex-wrap:wrap;gap:8px">
+                    <span style="padding:6px 11px;border-radius:9px;font:700 13px/1.2 -apple-system,system-ui,sans-serif;background:{{ mp.color }};color:{{ mp.textColor }}">{{ mp.partyShort }}</span>
+                    <span style="padding:6px 11px;border-radius:9px;font:600 13px/1.2 -apple-system,system-ui,sans-serif;background:{{ t.track }};color:{{ mp.blocColor }}">{{ mp.bloc }}</span>
+                  </div>
+                </div>
+              </div>
+              <sc-if value="{{ mp.hasHistory }}" hint-placeholder-val="{{ false }}">
+                <p style="margin:0 0 14px;padding:14px 16px;border-radius:14px;border:1px solid {{ t.warnLine }};background:{{ t.warnBg }};font:500 14px/1.45 -apple-system,system-ui,sans-serif;color:{{ t.warnText }};text-wrap:pretty">{{ mp.history }}</p>
+              </sc-if>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ mp.facts }}" as="f" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:baseline;gap:14px;padding:14px 16px;border:1px solid {{ t.line }};border-radius:14px;background:{{ t.card }}">
+                    <span style="flex:0 0 96px;font:600 12px/1.3 -apple-system,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:{{ t.muted }}">{{ f.key }}</span>
+                    <span style="flex:1;font:500 15px/1.4 -apple-system,system-ui,sans-serif;color:{{ t.text }};text-wrap:pretty">{{ f.value }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <a href="{{ mp.profileUrl }}" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:center;height:52px;margin-top:16px;border-radius:15px;background:{{ t.hero }};color:#fff;font:600 16px/1 -apple-system,system-ui,sans-serif;text-decoration:none">Open riigikogu.ee profile</a>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isPickerDetail }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="padding:22px 0 14px">
+                <h2 style="margin:0 0 6px;font:700 26px/1.15 -apple-system,system-ui,sans-serif;letter-spacing:-0.03em;color:{{ t.text }}">{{ picker.name }}</h2>
+                <p style="margin:0;font:500 15px/1.4 -apple-system,system-ui,sans-serif;color:{{ t.muted }};text-wrap:pretty">{{ picker.sub }}</p>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ picker.rows }}" as="r" hint-placeholder-count="6">
+                  <button type="button" onClick="{{ r.act }}" style="display:flex;align-items:center;gap:13px;width:100%;min-height:68px;padding:10px 14px;border:1px solid {{ t.line }};border-radius:15px;background:{{ t.card }};cursor:pointer;text-align:left">
+                    <span style="width:{{ r.swatchW }};height:{{ r.swatchH }};flex:0 0 auto;display:flex;align-items:center;justify-content:center;border-radius:{{ r.swatchRadius }};font:700 15px/1 -apple-system,system-ui,sans-serif;background:{{ r.color }};color:{{ r.initialsColor }}">{{ r.initials }}</span>
+                    <span style="flex:1;min-width:0">
+                      <span style="display:block;font:600 16px/1.3 -apple-system,system-ui,sans-serif;color:{{ t.text }}">{{ r.name }}</span>
+                      <span style="display:block;font:400 13px/1.35 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">{{ r.sub }}</span>
+                    </span>
+                    <span style="flex:0 0 auto;display:flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 11px;border-radius:11px;font:700 14px/1 -apple-system,system-ui,sans-serif;background:{{ r.actionBg }};color:{{ r.actionFg }}">{{ r.action }}</span>
+                  </button>
+                </sc-for>
+                <sc-if value="{{ picker.empty }}" hint-placeholder-val="{{ false }}">
+                  <p style="margin:0;padding:34px 4px;text-align:center;font:400 15px/1.45 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">{{ picker.emptyText }}</p>
+                </sc-if>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isPartyDetail }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="padding:22px 0 16px">
+                <h2 style="margin:0 0 6px;font:700 28px/1.12 -apple-system,system-ui,sans-serif;letter-spacing:-0.03em;color:{{ t.text }}">{{ partyDetail.name }}</h2>
+                <p style="margin:0;font:500 15px/1.4 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">{{ partyDetail.sub }}</p>
+              </div>
+              <div>
+                <sc-for list="{{ partyDetail.members }}" as="m" hint-placeholder-count="8">
+                  <button type="button" onClick="{{ m.open }}" style="display:flex;align-items:center;gap:14px;width:100%;min-height:68px;padding:10px 4px;border:0;border-top:1px solid {{ t.line }};background:none;cursor:pointer;text-align:left">
+                    <span style="width:44px;height:44px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;border-radius:50%;font:700 15px/1 -apple-system,system-ui,sans-serif;background:{{ m.color }};color:{{ m.textColor }}">{{ m.initials }}</span>
+                    <span style="flex:1;min-width:0">
+                      <span style="display:block;font:600 16px/1.3 -apple-system,system-ui,sans-serif;color:{{ t.text }}">{{ m.name }}</span>
+                      <span style="display:block;font:400 13px/1.35 -apple-system,system-ui,sans-serif;color:{{ t.muted }}">{{ m.sub }}</span>
+                    </span>
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="{{ t.muted }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:402,&quot;height&quot;:874},&quot;initialTab&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;standing&quot;,&quot;members&quot;,&quot;majority&quot;],&quot;default&quot;:&quot;standing&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const TABS = [
+  { id: 'standing', label: 'Standing', glyph: 'M3 20h18M4 20a8 8 0 0 1 16 0M8 20v-3.4M12 20v-4.6M16 20v-3.4' },
+  { id: 'members', label: 'Members', glyph: 'M9.5 5.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6M3.5 19.5a6 6 0 0 1 12 0M15.5 6.2a2.6 2.6 0 0 1 0 5.2M17 19.5a5 5 0 0 0-2.4-4.3' },
+  { id: 'majority', label: 'Calculator', glyph: 'M5 2.5h14v19H5zM8.5 6.5h7M9 12h.01M12 12h.01M15 12h.01M9 16.5h.01M12 16.5h.01M15 16.5h.01' },
+];
+
+const THEMES = {
+  light: {
+    bg: '#f4f6f8', card: '#ffffff', text: '#0f172a', muted: '#64748b', line: '#e4e9ef',
+    track: '#eef1f5', hero: '#0f172a', warnBg: '#fffbeb', warnLine: '#fcd34d', warnText: '#92400e',
+  },
+  dark: {
+    bg: '#080d16', card: '#131b29', text: '#f6f8fb', muted: '#93a1b8', line: '#233046',
+    track: '#1d283b', hero: '#1b2536', warnBg: '#2a2213', warnLine: '#6b5117', warnText: '#f5cf7a',
+  },
+};
+
+class Component extends DCLogic {
+  state = {
+    data: null, tab: null, query: '', filter: 'all',
+    detail: null, sel: { parties: [], added: [], excluded: [] },
+  };
+
+  async componentDidMount() {
+    const names = ['parties', 'mps', 'alignment', 'board', 'meta'];
+    const [parties, mps, alignment, board, meta] = await Promise.all(
+      names.map((n) => fetch(`./data/${n}.json`).then((r) => r.json())),
+    );
+    const roster = mps.filter((mp) => mp.active !== false).map((mp) => {
+      const defector = alignment.defectors[mp.uuid] ?? null;
+      return {
+        ...mp,
+        votingBlocPartyId: defector ? defector.votesWith : mp.registeredPartyId,
+        unaligned: alignment.unaligned.includes(mp.uuid),
+        defector,
+      };
+    });
+    this.setState({
+      data: {
+        parties, roster, alignment, board, meta,
+        partiesById: new Map(parties.map((p) => [p.id, p])),
+      },
+    });
+  }
+
+  get tab() { return this.state.tab ?? this.props.initialTab ?? 'standing'; }
+  party(id) { return this.state.data.partiesById.get(id); }
+  bloc(id) { return this.state.data.alignment.blocs[id] ?? null; }
+  members(partyId) { return this.state.data.roster.filter((mp) => mp.votingBlocPartyId === partyId); }
+
+  blocName(partyId) {
+    const b = this.bloc(partyId);
+    return b === 'coalition' ? 'Coalition' : b === 'opposition' ? 'Opposition' : 'Unaligned';
+  }
+
+  monthYear(iso) {
+    const d = new Date(iso);
+    if (!iso || Number.isNaN(d.getTime())) return null;
+    return new Intl.DateTimeFormat('en-GB', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(d);
+  }
+
+  history(mp) {
+    if (!mp.defector && !mp.unaligned) return null;
+    const left = this.state.data.parties.find((p) => p.factionName === mp.leftFaction)?.short;
+    const when = this.monthYear(mp.leftFactionDate);
+    const departure = left && when ? `Left ${left} in ${when}` : 'Left their parliamentary group';
+    return mp.defector
+      ? `${departure} — registered non-affiliated, votes with ${this.party(mp.defector.votesWith)?.short}.`
+      : `${departure} — no group, no whip. Counted in neither bloc.`;
+  }
+
+  openMp(mp) { this.setState({ detail: { kind: 'mp', uuid: mp.uuid } }); }
+  openParty(id) { this.setState({ detail: { kind: 'party', partyId: id } }); }
+
+  initials(name) {
+    const parts = name.split(/[\s-]+/).filter(Boolean);
+    return ((parts[0]?.[0] ?? '') + (parts[parts.length - 1]?.[0] ?? '')).toUpperCase();
+  }
+
+  memberSub(mp) {
+    const office = mp.boardRole ? mp.boardRole.replace(' of the Riigikogu', '') : mp.factionRole;
+    return office ?? (mp.committees[0]?.name ?? mp.district);
+  }
+
+  renderVals() {
+    const d = this.state.data;
+    const tab = this.tab;
+    const isDark = (this.props.theme ?? 'light') === 'dark';
+    const t = isDark ? THEMES.dark : THEMES.light;
+    const vals = {
+      t, isDark,
+      isStanding: tab === 'standing', isMembers: tab === 'members', isMajority: tab === 'majority',
+      tabs: TABS.map((n) => ({
+        ...n,
+        color: n.id === tab ? '#9333ea' : t.muted,
+        select: () => this.setState({ tab: n.id, detail: null }),
+      })),
+      query: this.state.query, hasQuery: this.state.query.length > 0,
+      onQuery: (e) => this.setState({ query: e.target.value }),
+      clearQuery: () => this.setState({ query: '' }),
+      detailOpen: false, isMpDetail: false, isPartyDetail: false, isPickerDetail: false,
+      closeDetail: () => this.setState({ detail: null }),
+    };
+    if (!d) return vals;
+
+    const { meta } = d;
+    vals.updatedLabel = 'updated 12 Aug 2026';
+    vals.coalitionSeats = meta.coalitionSeats;
+    // stacked seat chart, coalition → unaligned → opposition, with 51-seat threshold
+    const dotColor = { coalition: '#2563eb', opposition: '#e11d48', unaligned: '#94a3b8' };
+    const pct = (n) => `${(n / meta.totalSeats) * 100}%`;
+    vals.blocBars = [
+      { label: `Coalition ${meta.coalitionSeats}`, color: dotColor.coalition, width: pct(meta.coalitionSeats) },
+      { label: `Unaligned ${meta.unalignedSeats}`, color: dotColor.unaligned, width: pct(meta.unalignedSeats) },
+      { label: `Opposition ${meta.oppositionSeats}`, color: dotColor.opposition, width: pct(meta.oppositionSeats) },
+    ];
+    vals.thresholdPct = pct(meta.simpleMajority);
+
+    const ordered = [...d.parties].sort((a, b) => this.members(b.id).length - this.members(a.id).length);
+    vals.partyCards = ordered.map((p) => {
+      const seats = this.members(p.id).length;
+      return {
+        name: p.id === 'independent' ? 'Unaligned members' : p.short,
+        sub: p.id === 'independent' ? 'No group, no whip' : `${this.blocName(p.id)} · ${p.nameEn}`,
+        seats, color: p.color, pct: `${(seats / meta.totalSeats) * 100}%`,
+        open: () => this.openParty(p.id),
+      };
+    });
+
+    vals.boardRows = d.board.map((o) => ({
+      name: o.name, role: o.role,
+      color: this.party(o.partyId)?.color ?? '#808080',
+      open: () => {
+        const mp = d.roster.find((m) => m.uuid === o.uuid);
+        if (mp) this.openMp(mp);
+      },
+    }));
+
+    // Members
+    const filterDefs = [
+      { id: 'all', label: 'All 101', match: () => true },
+      { id: 'coalition', label: 'Coalition', match: (mp) => this.bloc(mp.votingBlocPartyId) === 'coalition' },
+      { id: 'opposition', label: 'Opposition', match: (mp) => this.bloc(mp.votingBlocPartyId) === 'opposition' },
+      { id: 'unaligned', label: 'Unaligned', match: (mp) => mp.unaligned },
+      { id: 'chairs', label: 'Chairs', match: (mp) => Boolean(mp.factionRole) || Boolean(mp.boardRole) },
+      { id: 'usa', label: '🇺🇸 USA group', match: (mp) => mp.usaFriendship === true },
+    ];
+    const pickFilter = (id) => () => this.setState({ filter: id });
+    vals.blocFilters = filterDefs.slice(0, 4).map((f) => {
+      const active = f.id === this.state.filter;
+      return {
+        label: f.id === 'all' ? 'All' : f.label,
+        bg: active ? t.card : 'transparent', fg: active ? t.text : t.muted,
+        shadow: active ? '0 1px 3px rgba(15,23,42,.14)' : 'none',
+        select: pickFilter(f.id),
+      };
+    });
+    vals.roleFilters = filterDefs.slice(4).map((f) => {
+      const active = f.id === this.state.filter;
+      return {
+        label: f.id === 'usa' ? 'USA friendship group' : 'Chairs & officers',
+        pressed: active,
+        bg: active ? t.hero : t.card, fg: active ? '#fff' : t.text,
+        border: active ? t.hero : t.line,
+        select: pickFilter(f.id),
+      };
+    });
+    const needle = this.state.query.trim().toLowerCase();
+    const activeFilter = filterDefs.find((f) => f.id === this.state.filter);
+    const visible = d.roster.filter((mp) => activeFilter.match(mp) && mp.name.toLowerCase().includes(needle));
+    vals.memberCountLabel = `${visible.length} member${visible.length === 1 ? '' : 's'}`;
+    vals.memberRows = visible.map((mp) => {
+      const p = this.party(mp.votingBlocPartyId);
+      return {
+        name: mp.name, initials: this.initials(mp.name), sub: this.memberSub(mp),
+        party: p.short === 'Independent' ? 'Unaligned' : p.short,
+        color: p.color, textColor: p.textColor,
+        open: () => this.openMp(mp),
+      };
+    });
+    vals.membersEmpty = visible.length === 0;
+
+    // Majority
+    const sel = this.state.sel;
+    const setSel = (next) => this.setState({ sel: next });
+    const inParty = d.roster.filter((mp) => sel.parties.includes(mp.votingBlocPartyId) && !sel.excluded.includes(mp.uuid));
+    const extras = d.roster.filter((mp) => !sel.parties.includes(mp.votingBlocPartyId) && sel.added.includes(mp.uuid));
+    const seats = inParty.length + extras.length;
+    vals.calcSeats = seats;
+    const met = seats >= meta.simpleMajority;
+    vals.calcVerdict = met ? 'Passes ordinary\nlegislation' : `${meta.simpleMajority - seats} short of 51`;
+    vals.calcVerdictColor = met ? '#4ade80' : 'rgba(255,255,255,.72)';
+    vals.calcBarColor = met ? '#4ade80' : '#9333ea';
+    vals.calcPct = `${(seats / meta.totalSeats) * 100}%`;
+    const nextMark = [meta.simpleMajority, meta.threeFifths, meta.constitutionalMajority, meta.fourFifths]
+      .find((m) => seats < m);
+    vals.calcHint = seats === 0
+      ? 'Tap parties below, or start from a preset.'
+      : nextMark
+        ? `${nextMark - seats} more seat${nextMark - seats === 1 ? '' : 's'} reaches ${nextMark}.`
+        : 'Clears every constitutional threshold.';
+    vals.marks = [
+      { key: 'simpleMajority', label: '51' }, { key: 'threeFifths', label: '61' },
+      { key: 'constitutionalMajority', label: '68' }, { key: 'fourFifths', label: '81' },
+    ].map((m) => {
+      const need = meta[m.key];
+      const reached = seats >= need;
+      return {
+        label: m.label, left: `${(need / meta.totalSeats) * 100}%`,
+        tick: reached ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.22)',
+        color: reached ? '#fff' : 'rgba(255,255,255,.5)',
+      };
+    });
+    vals.presets = [
+      {
+        label: 'Coalition', fg: t.text,
+        act: () => setSel({ parties: d.parties.filter((p) => this.bloc(p.id) === 'coalition').map((p) => p.id), added: [], excluded: [] }),
+      },
+      {
+        label: 'Opposition', fg: t.text,
+        act: () => setSel({ parties: d.parties.filter((p) => this.bloc(p.id) === 'opposition').map((p) => p.id), added: [], excluded: [] }),
+      },
+      { label: 'Clear', fg: t.muted, act: () => setSel({ parties: [], added: [], excluded: [] }) },
+    ];
+    vals.calcCards = ordered.map((p) => {
+      const pool = this.members(p.id);
+      const selected = sel.parties.includes(p.id);
+      const removed = pool.filter((mp) => sel.excluded.includes(mp.uuid)).length;
+      const added = pool.filter((mp) => sel.added.includes(mp.uuid)).length;
+      const count = selected ? pool.length - removed : added;
+      return {
+        short: p.id === 'independent' ? 'Unaligned' : p.short,
+        color: p.color, total: pool.length, count, on: count > 0,
+        countColor: count > 0 ? t.text : t.muted,
+        bg: count > 0 ? t.card : 'transparent',
+        border: count > 0 ? p.color : t.line,
+        toggle: () => setSel(selected
+          ? { ...sel, parties: sel.parties.filter((id) => id !== p.id), excluded: sel.excluded.filter((u) => !pool.some((mp) => mp.uuid === u)) }
+          : { ...sel, parties: [...sel.parties, p.id], added: sel.added.filter((u) => !pool.some((mp) => mp.uuid === u)) }),
+      };
+    });
+    vals.excludeSub = sel.parties.length === 0 ? 'Select parties first' : 'From selected parties';
+    vals.openAdd = () => this.setState({ detail: { kind: 'picker', add: true, partyId: null } });
+    vals.openExclude = () => this.setState({ detail: { kind: 'picker', add: false, partyId: null } });
+    const addedMps = d.roster.filter((mp) => sel.added.includes(mp.uuid));
+    const excludedMps = d.roster.filter((mp) => sel.excluded.includes(mp.uuid));
+    vals.hasAdjustments = addedMps.length + excludedMps.length > 0;
+    vals.adjustments = [
+      ...excludedMps.map((mp) => ({
+        sign: '−1', name: mp.name, note: `Held out of ${this.party(mp.votingBlocPartyId)?.short}`,
+        badgeBg: '#fee2e2', badgeFg: '#b91c1c',
+        undo: () => setSel({ ...sel, excluded: sel.excluded.filter((u) => u !== mp.uuid) }),
+      })),
+      ...addedMps.map((mp) => ({
+        sign: '+1', name: mp.name, note: `Votes with ${this.party(mp.votingBlocPartyId)?.short}`,
+        badgeBg: '#dcfce7', badgeFg: '#15803d',
+        undo: () => setSel({ ...sel, added: sel.added.filter((u) => u !== mp.uuid) }),
+      })),
+    ];
+
+    // Detail
+    const det = this.state.detail;
+    if (!det) return vals;
+    vals.detailOpen = true;
+
+    if (det.kind === 'mp') {
+      const mp = d.roster.find((m) => m.uuid === det.uuid);
+      const p = this.party(mp.votingBlocPartyId);
+      const hist = this.history(mp);
+      const facts = [];
+      const office = mp.boardRole ?? mp.factionRole;
+      if (office) facts.push({ key: 'Office', value: office });
+      facts.push({ key: 'District', value: mp.district });
+      if (mp.committees.length > 0) {
+        facts.push({
+          key: 'Committees',
+          value: mp.committees.map((c) => (c.role === 'member' ? c.name : `${c.name} (${c.role})`)).join(' · '),
+        });
+      }
+      facts.push({ key: 'Registered', value: this.party(mp.registeredPartyId)?.nameEn ?? '—' });
+      if (mp.usaFriendship) facts.push({ key: 'Groups', value: 'Estonia–USA Parliamentary Friendship Group' });
+      facts.push({ key: 'Email', value: mp.email });
+      Object.assign(vals, {
+        isMpDetail: true, detailKicker: 'Member',
+        mp: {
+          name: mp.name, photo: mp.photoUrl, profileUrl: mp.profileUrl,
+          color: p.color, textColor: p.textColor,
+          partyShort: p.short === 'Independent' ? 'Unaligned' : p.short,
+          bloc: this.blocName(mp.votingBlocPartyId),
+          blocColor: this.blocName(mp.votingBlocPartyId) === 'Unaligned' ? '#b45309' : t.muted,
+          hasHistory: Boolean(hist), history: hist ?? '', facts,
+        },
+      });
+    }
+
+    if (det.kind === 'picker') {
+      const isAdd = det.add;
+      const pool = isAdd
+        ? d.roster.filter((mp) => !sel.parties.includes(mp.votingBlocPartyId) && !sel.added.includes(mp.uuid))
+        : d.roster.filter((mp) => sel.parties.includes(mp.votingBlocPartyId) && !sel.excluded.includes(mp.uuid));
+      const verb = isAdd ? 'available to add' : 'available to exclude';
+      const pid = det.partyId ?? null;
+      let rows;
+      if (pid === null) {
+        rows = ordered
+          .map((p) => ({ p, count: pool.filter((mp) => mp.votingBlocPartyId === p.id).length }))
+          .filter((g) => g.count > 0)
+          .map((g) => ({
+            initials: '', color: g.p.color, initialsColor: g.p.textColor,
+            swatchW: '14px', swatchH: '38px', swatchRadius: '5px',
+            name: g.p.id === 'independent' ? 'Unaligned members' : g.p.short,
+            sub: `${g.count} ${verb}`,
+            action: '›', actionBg: 'transparent', actionFg: t.muted,
+            act: () => this.setState({ detail: { kind: 'picker', add: isAdd, partyId: g.p.id } }),
+          }));
+      } else {
+        const p = this.party(pid);
+        rows = pool.filter((mp) => mp.votingBlocPartyId === pid).map((mp) => ({
+          initials: this.initials(mp.name), color: p.color, initialsColor: p.textColor,
+          swatchW: '44px', swatchH: '44px', swatchRadius: '50%',
+          name: mp.name, sub: this.memberSub(mp),
+          action: isAdd ? '+1' : '−1',
+          actionBg: isAdd ? '#dcfce7' : '#fee2e2',
+          actionFg: isAdd ? '#15803d' : '#b91c1c',
+          act: () => setSel(isAdd
+            ? { ...sel, added: [...sel.added, mp.uuid] }
+            : { ...sel, excluded: [...sel.excluded, mp.uuid] }),
+        }));
+      }
+      Object.assign(vals, {
+        isPickerDetail: true,
+        detailKicker: isAdd ? 'Add individual MPs' : 'Exclude MPs',
+        closeDetail: pid === null
+          ? () => this.setState({ detail: null })
+          : () => this.setState({ detail: { kind: 'picker', add: isAdd, partyId: null } }),
+        picker: {
+          name: pid === null
+            ? (isAdd ? 'Add individual MPs' : 'Exclude MPs')
+            : (this.party(pid).id === 'independent' ? 'Unaligned members' : this.party(pid).short),
+          sub: pid === null
+            ? (isAdd ? 'Pick a party, then the members who vote with your bloc.' : 'Pick a party, then the members to hold out of the count.')
+            : `Tap a member to ${isAdd ? 'add them to' : 'hold them out of'} the count.`,
+          rows,
+          empty: rows.length === 0,
+          emptyText: pid !== null ? 'Nobody left in this party.'
+            : isAdd ? 'Every party is already selected.' : 'Select a party first.',
+        },
+      });
+    }
+
+    if (det.kind === 'party') {
+      const p = this.party(det.partyId);
+      const list = this.members(det.partyId);
+      Object.assign(vals, {
+        isPartyDetail: true, detailKicker: 'Voting bloc',
+        partyDetail: {
+          name: p.id === 'independent' ? 'Unaligned members' : p.nameEn,
+          sub: `${list.length} votes · ${this.blocName(p.id)}${p.id === 'independent' ? '' : ` · registered ${meta.registered[p.id]}`}`,
+          members: list.map((mp) => ({
+            name: mp.name, initials: this.initials(mp.name), sub: this.memberSub(mp),
+            color: p.color, textColor: p.textColor, open: () => this.openMp(mp),
+          })),
+        },
+      });
+    }
+    return vals;
+  }
+}
+</script>
+</body>
+</html>
