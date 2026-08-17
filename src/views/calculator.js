@@ -3,11 +3,12 @@
  *
  * This view renders state and nothing else. Every seat number, every threshold
  * verdict and every eligibility list comes from `src/lib/calculator.js`, which
- * is pure, unit-tested and has no idea a DOM exists. A redesign can rewrite
- * every line below without touching a single sum.
+ * is pure, unit-tested and has no idea a DOM exists. The Aug-2026 redesign
+ * rewrote every line below without touching a single sum — which is the property
+ * the Phase-4 architecture was built for.
  *
- * Two properties worth stating plainly, because they are what the whole
- * three-state data model buys:
+ * Two things worth stating plainly, because they are what the three-state data
+ * model buys:
  *
  * - The counts are **voting bloc**, not registered. Selecting Reform adds 38,
  *   the number of MPs who vote with Reform, not the 36 registered to its group.
@@ -15,6 +16,12 @@
  *   declared bloc, so the nine unaligned MPs are never swept into either.
  *   Coalition + Opposition is therefore 92, not 101 — you can still add any of
  *   those nine individually, which is exactly how their votes actually work.
+ *
+ * Where the design bundle and the Usability Contract disagree, the contract wins
+ * (§7.3): the headline reads `0 / 101` and the verdict still says "No majority"
+ * (4.1), with the design's shortfall added after it (4.17); the reset button is
+ * `Reset`, not "Clear"; the party cards read `0/38` rather than "0 of 38"; and
+ * the opener stays `Add Individual MPs`. Everything else is the design as drawn.
  */
 
 import {
@@ -29,15 +36,16 @@ import {
   removeIndividualMp,
   toggleParty,
 } from '../lib/calculator.js';
-import { partyShort } from '../data.js';
-import { closeButton, el, icon, ICONS, openOverlay, replace } from '../dom.js';
+import { mpsInVotingBloc, partyShort } from '../data.js';
+import { el, icon, ICONS, openOverlay, replace } from '../dom.js';
+import { INDEPENDENT_PARTY_ID } from '../lib/factions.js';
+import { avatar, nameBlock, overlayChrome } from './mps.js';
 
-const THRESHOLD_CARDS = [
-  { key: 'simpleMajority', label: '1/2+1' },
-  { key: 'threeFifths', label: '3/5' },
-  { key: 'constitutionalMajority', label: '2/3' },
-  { key: 'fourFifths', label: '4/5' },
-];
+/** Glyphs this screen draws; `dom.js` owns the shared set. */
+const GLYPH = {
+  plus: 'M12 5v14M5 12h14',
+  minus: 'M5 12h14',
+};
 
 export default function renderCalculator(data) {
   const { meta, parties, roster } = data;
@@ -49,80 +57,150 @@ export default function renderCalculator(data) {
     fourFifths: meta.fourFifths,
   };
 
+  /** Parties largest first, the order the Parliament tab and the picker use. */
+  const ordered = [...parties].sort(
+    (a, b) => mpsInVotingBloc(data, b.id).length - mpsInVotingBloc(data, a.id).length,
+  );
+
   let selection = emptySelection();
 
   /* -------------------------------------------------------------- *
-   * Readout
+   * The hero readout
    * -------------------------------------------------------------- */
 
-  // One text node, not a number in its own element: a bare "51" here would be
-  // indistinguishable from the 51 on the threshold card below it.
   const total = el('div', { className: 'calc-total', 'data-testid': 'calc-total' });
   const verdict = el('div', { className: 'calc-verdict', 'data-testid': 'calc-verdict' });
-  const cards = el('div', { className: 'thresholds' });
-  const partyRows = el('div', { className: 'calc-party-rows' });
+  const hint = el('p', { className: 'calc-hint' });
+  const track = el('div', { className: 'calc-track' });
+  const cards = el('div', { className: 'calc-cards' });
   const adjustments = el('div', { className: 'adjustments' });
-  const excludeSub = el('span', { className: 'picker-open-sub' });
+  const excludeSub = el('span', { className: 'row-sub' });
 
-  function paint() {
-    const state = calculate(selection, roster, thresholds);
+  const fill = el('span', { className: 'calc-fill', 'data-testid': 'calc-fill' });
+  const base = el('span', { className: 'calc-track-base', 'aria-hidden': 'true' });
 
-    total.textContent = `${state.seats}/ ${state.totalSeats}`;
-    verdict.textContent = state.hasMajority ? '✓ Majority' : '✗ No majority';
+  function paintHero(state) {
+    const seats = state.seats;
+    const short = meta.simpleMajority - seats;
+
+    // One element, two text pieces: `0 / 101` is what 4.1 reads, and the
+    // denominator must not be an element of its own — a bare "51" here would be
+    // indistinguishable from the 51 on the threshold mark below it.
+    replace(total, String(seats), el('span', { className: 'calc-total-of' }, [` / ${state.totalSeats}`]));
+
+    verdict.textContent = state.hasMajority
+      ? '✓ Majority · passes ordinary legislation'
+      : `✗ No majority · ${short} short of ${meta.simpleMajority}`;
     verdict.className = `calc-verdict ${state.hasMajority ? 'is-majority' : 'is-minority'}`;
 
-    replace(cards, state.thresholds.map((t) => el('div', {
-      className: `threshold threshold-${t.seats}${t.met ? ' is-met' : ''}`,
+    fill.setAttribute('data-seats', String(seats));
+    fill.setAttribute('data-total', String(state.totalSeats));
+    fill.setAttribute('style', `width:${(seats / state.totalSeats) * 100}%`);
+    fill.classList.toggle('is-majority', state.hasMajority);
+
+    replace(track, base, fill, ...state.thresholds.map((t) => el('span', {
+      className: 'calc-mark',
       'data-testid': `badge-threshold-${t.seats}`,
       'data-met': String(t.met),
+      style: `left:${(t.seats / state.totalSeats) * 100}%`,
+      title: `${t.label} — ${t.seats} seats`,
     }, [
-      el('div', { className: 'threshold-seats' }, [String(t.seats)]),
-      el('div', { className: 'threshold-label' }, [t.label]),
+      el('span', { className: 'calc-mark-tick', 'aria-hidden': 'true' }),
+      el('span', { className: 'calc-mark-label' }, [String(t.seats)]),
     ])));
 
-    replace(partyRows, parties.map((p) => {
-      const row = state.breakdown[p.id] ?? { selected: 0, total: 0 };
-      const isSelected = selection.parties.includes(p.id);
-      const removed = roster.filter((mp) => mp.votingBlocPartyId === p.id && selection.excluded.includes(mp.uuid)).length;
-      const extra = roster.filter((mp) => mp.votingBlocPartyId === p.id && selection.added.includes(mp.uuid)).length;
-
-      return el('button', {
-        type: 'button',
-        className: `calc-party-row${isSelected ? ' is-selected' : ''}`,
-        'data-testid': `calc-party-row-${p.id}`,
-        'data-party-id': p.id,
-        'data-selected': String(isSelected),
-        onclick: () => { selection = toggleParty(selection, p.id); paint(); },
-      }, [
-        el('span', { className: 'calc-swatch', style: `background:var(--party-${p.id})`, 'aria-hidden': 'true' }),
-        el('span', { className: 'calc-party-name' }, [p.short]),
-        el('span', { className: 'calc-party-count' }, [`${row.selected}/${row.total}`]),
-        isSelected && removed > 0 && el('span', { className: 'calc-adjust is-minus' }, [`-${removed}`]),
-        !isSelected && extra > 0 && el('span', { className: 'calc-adjust is-plus' }, [`+${extra}`]),
-      ]);
-    }));
-
-    excludeSub.textContent = selection.parties.length === 0 ? 'Select parties first' : 'From selected parties';
-    paintAdjustments();
+    const next = state.thresholds.find((t) => !t.met);
+    const gap = next ? next.seats - seats : 0;
+    hint.textContent = seats === 0
+      ? 'Tap parties below, or start from a preset.'
+      : next
+        ? `${gap} more seat${gap === 1 ? '' : 's'} reaches ${next.seats}.`
+        : 'Clears every constitutional threshold.';
   }
 
   /* -------------------------------------------------------------- *
-   * Individual adjustments
+   * Party cards
    * -------------------------------------------------------------- */
 
-  function chip(mp, kind) {
-    const undo = kind === 'add'
+  /**
+   * Tapping a card takes the whole party in or out. Taking it out also drops
+   * that party's individual exclusions, and taking it in absorbs its individual
+   * additions, so no adjustment can outlive the state it described.
+   */
+  function togglePartyCard(partyRecord) {
+    const wasSelected = selection.parties.includes(partyRecord.id);
+    const uuids = mpsInVotingBloc(data, partyRecord.id).map((mp) => mp.uuid);
+
+    selection = toggleParty(selection, partyRecord.id);
+    selection = wasSelected
+      ? uuids.reduce((sel, uuid) => includeMp(sel, uuid), selection)
+      : uuids.reduce((sel, uuid) => removeIndividualMp(sel, uuid), selection);
+    paint();
+  }
+
+  function paintCards(state) {
+    replace(cards, ordered.map((p) => {
+      const row = state.breakdown[p.id] ?? { selected: 0, total: 0 };
+      const isSelected = selection.parties.includes(p.id);
+
+      return el('button', {
+        type: 'button',
+        className: 'calc-card',
+        'data-testid': `calc-party-row-${p.id}`,
+        'data-party-id': p.id,
+        'data-selected': String(isSelected),
+        'data-active': String(row.selected > 0),
+        'aria-pressed': String(isSelected),
+        style: `--card-accent:var(--party-${p.id})`,
+        onclick: () => togglePartyCard(p),
+      }, [
+        el('span', { className: 'calc-card-head' }, [
+          el('span', { className: 'calc-swatch', 'aria-hidden': 'true', style: `background:var(--party-${p.id})` }),
+          el('span', { className: 'calc-card-short' }, [p.short]),
+        ]),
+        // "0/38" in one inline run: 4.3 and 4.11 read the row by that shape.
+        el('span', { className: 'calc-card-count' }, [
+          String(row.selected),
+          el('span', { className: 'calc-card-of' }, [`/${row.total}`]),
+        ]),
+      ]);
+    }));
+  }
+
+  /* -------------------------------------------------------------- *
+   * Named adjustments
+   * -------------------------------------------------------------- */
+
+  function adjustmentRow(mp, kind) {
+    const isAdd = kind === 'add';
+    const undo = isAdd
       ? () => { selection = removeIndividualMp(selection, mp.uuid); paint(); }
       : () => { selection = includeMp(selection, mp.uuid); paint(); };
 
-    return el('button', {
-      type: 'button',
-      className: `adjust-chip adjust-${kind}`,
+    return el('div', {
+      className: `adjust-row adjust-${kind}`,
       'data-testid': `adjust-chip-${kind}`,
       'data-mp-uuid': mp.uuid,
-      title: `Undo — ${mp.name}`,
-      onclick: undo,
-    }, [`${kind === 'add' ? '+1' : '-1'} ${mp.name.split(/\s+/).pop()}`]);
+    }, [
+      el('span', { className: 'adjust-badge', 'aria-hidden': 'true' }, [isAdd ? '+1' : '−1']),
+      el('span', { className: 'row-text' }, [
+        el('span', { className: 'adjust-name' }, [mp.name]),
+        el('span', { className: 'row-sub' }, [
+          isAdd
+            ? `Votes with ${partyShort(data, mp.votingBlocPartyId)}`
+            : `Held out of ${partyShort(data, mp.votingBlocPartyId)}`,
+        ]),
+      ]),
+      // Undo is its own control now, not the whole row (§9.1).
+      el('button', {
+        type: 'button',
+        className: 'adjust-undo',
+        'data-testid': 'adjust-undo',
+        'data-mp-uuid': mp.uuid,
+        title: `Undo — ${mp.name}`,
+        onclick: undo,
+      }, ['Undo']),
+    ]);
   }
 
   function paintAdjustments() {
@@ -134,12 +212,22 @@ export default function renderCalculator(data) {
       return;
     }
     replace(adjustments,
-      el('p', { className: 'adjustments-heading' }, ['Individual Adjustments']),
-      el('div', { className: 'adjustment-chips' }, [
-        ...excluded.map((mp) => chip(mp, 'exclude')),
-        ...added.map((mp) => chip(mp, 'add')),
+      el('h2', { className: 'section-heading' }, ['Named adjustments']),
+      el('div', { className: 'adjust-rows' }, [
+        ...excluded.map((mp) => adjustmentRow(mp, 'exclude')),
+        ...added.map((mp) => adjustmentRow(mp, 'add')),
       ]),
     );
+  }
+
+  function paint() {
+    const state = calculate(selection, roster, thresholds);
+    paintHero(state);
+    paintCards(state);
+    excludeSub.textContent = selection.parties.length === 0
+      ? 'Select parties first'
+      : 'From selected parties';
+    paintAdjustments();
   }
 
   /* -------------------------------------------------------------- *
@@ -150,11 +238,14 @@ export default function renderCalculator(data) {
    * Both pickers are the same widget with different verbs, so they are one
    * function. Step 1 lists the eligible parties with how many MPs each still
    * offers; step 2 lists that party's MPs. Choosing an MP does not close the
-   * sheet — you usually want more than one.
+   * overlay — you usually want more than one, and the MP you chose leaves the
+   * pool as they appear under Named adjustments (4.16).
    */
   function openPicker(kind) {
     const isAdd = kind === 'add';
     const testid = isAdd ? 'modal-add-mps' : 'modal-exclude-mps';
+    // Title case is the contract's (`Add Individual MPs` is how 4.10 and 4.16
+    // find the opener); the design bundle sets it in sentence case.
     const title = isAdd ? 'Add Individual MPs' : 'Exclude MPs';
     const verb = isAdd ? 'available to add' : 'available to exclude';
     const eligible = () => (isAdd ? addableMps(selection, roster) : excludableMps(selection, roster));
@@ -163,28 +254,34 @@ export default function renderCalculator(data) {
     let partyId = null;
 
     // The back control carries no text on purpose: it is chrome, and the MP
-    // list below it is what a picker's buttons are supposed to be.
+    // rows below it are what a picker's buttons are supposed to be.
     const back = el('button', {
       type: 'button',
       className: 'picker-back',
       'aria-label': 'Back',
       'data-testid': 'picker-back',
       onclick: () => { partyId = null; paintPicker(); },
-    }, [icon(ICONS.back, { size: 18 })]);
+    }, [icon(ICONS.back, { size: 22 })]);
 
-    const heading = el('h3', { className: 'picker-title' }, [title]);
+    const head = el('div', { className: 'detail-head' });
     const list = el('div', { className: 'picker-list' });
 
     function paintPicker() {
       const pool = eligible();
-      replace(overlay.header, partyId ? back : null, heading, closeButton(overlay.close, `${testid}-close`));
+      replace(overlay.header, overlayChrome(title, overlay.close, `${testid}-close`, partyId ? back : null));
 
       if (partyId === null) {
-        const groups = parties
+        const groups = ordered
           .map((p) => ({ party: p, count: pool.filter((mp) => mp.votingBlocPartyId === p.id).length }))
           .filter((g) => g.count > 0);
 
-        heading.textContent = title;
+        replace(head,
+          el('h2', { className: 'detail-title' }, [title]),
+          el('p', { className: 'detail-sub' }, [isAdd
+            ? 'Pick a party, then the members who vote with your bloc.'
+            : 'Pick a party, then the members to hold out of the count.']),
+        );
+
         replace(list, groups.length === 0
           ? [el('p', { className: 'picker-empty' }, [isAdd ? 'Every party is already selected.' : 'Select a party first.'])]
           : groups.map((g) => el('button', {
@@ -194,15 +291,32 @@ export default function renderCalculator(data) {
             'data-party-id': g.party.id,
             onclick: () => { partyId = g.party.id; paintPicker(); },
           }, [
-            el('span', { className: 'calc-swatch', style: `background:var(--party-${g.party.id})`, 'aria-hidden': 'true' }),
-            el('span', { className: 'picker-row-name' }, [g.party.short]),
-            el('span', { className: 'picker-row-meta' }, [`${g.count} ${verb}`]),
+            el('span', {
+              className: 'picker-bar',
+              'aria-hidden': 'true',
+              style: `background:var(--party-${g.party.id})`,
+            }),
+            el('span', { className: 'row-text' }, [
+              el('span', { className: 'row-name' }, [
+                g.party.id === INDEPENDENT_PARTY_ID ? 'Unaligned members' : g.party.short,
+              ]),
+              el('span', { className: 'row-sub' }, [`${g.count} ${verb}`]),
+            ]),
+            icon(ICONS.chevron, { size: 20 }),
           ])));
         return;
       }
 
       const members = pool.filter((mp) => mp.votingBlocPartyId === partyId);
-      heading.textContent = partyShort(data, partyId);
+      replace(head,
+        el('h2', { className: 'detail-title' }, [
+          partyId === INDEPENDENT_PARTY_ID ? 'Unaligned members' : partyShort(data, partyId),
+        ]),
+        el('p', { className: 'detail-sub' }, [isAdd
+          ? 'Tap a member to add them to the count.'
+          : 'Tap a member to hold them out of the count.']),
+      );
+
       replace(list, members.length === 0
         ? [el('p', { className: 'picker-empty' }, ['Nobody left in this party.'])]
         : members.map((mp) => el('button', {
@@ -216,12 +330,13 @@ export default function renderCalculator(data) {
             paintPicker();
           },
         }, [
-          el('span', { className: 'picker-row-name' }, [mp.name]),
-          el('span', { className: 'picker-row-meta' }, [partyShort(data, mp.votingBlocPartyId)]),
+          avatar(mp, { size: 'sm' }),
+          nameBlock(mp),
+          el('span', { className: `picker-action picker-action-${kind}` }, [isAdd ? '+1' : '−1']),
         ])));
     }
 
-    replace(overlay.body, list);
+    replace(overlay.body, head, list);
     paintPicker();
   }
 
@@ -231,11 +346,11 @@ export default function renderCalculator(data) {
 
   const presets = el('div', { className: 'presets' }, [
     el('button', {
-      type: 'button', className: 'preset preset-coalition', 'data-testid': 'preset-coalition',
+      type: 'button', className: 'preset', 'data-testid': 'preset-coalition',
       onclick: () => { selection = presetSelection('coalition', parties, data.alignment); paint(); },
     }, ['Coalition']),
     el('button', {
-      type: 'button', className: 'preset preset-opposition', 'data-testid': 'preset-opposition',
+      type: 'button', className: 'preset', 'data-testid': 'preset-opposition',
       onclick: () => { selection = presetSelection('opposition', parties, data.alignment); paint(); },
     }, ['Opposition']),
     el('button', {
@@ -244,32 +359,41 @@ export default function renderCalculator(data) {
     }, ['Reset']),
   ]);
 
-  const pickerButtons = el('div', { className: 'picker-openers' }, [
-    el('button', {
-      type: 'button', className: 'picker-open', 'data-testid': 'calc-add-mps',
-      onclick: () => openPicker('add'),
-    }, [
-      el('span', { className: 'picker-open-title' }, ['Add Individual MPs']),
-      el('span', { className: 'picker-open-sub' }, ['From non-selected parties']),
+  const opener = (testid, glyph, kind, title, sub) => el('button', {
+    type: 'button',
+    className: `opener opener-${kind}`,
+    'data-testid': testid,
+    onclick: () => openPicker(kind),
+  }, [
+    el('span', { className: `opener-icon opener-icon-${kind}`, 'aria-hidden': 'true' }, [icon(glyph, { size: 17 })]),
+    el('span', { className: 'row-text' }, [
+      el('span', { className: 'row-name' }, [title]),
+      sub,
     ]),
-    el('button', {
-      type: 'button', className: 'picker-open', 'data-testid': 'calc-exclude-mps',
-      onclick: () => openPicker('exclude'),
-    }, [
-      el('span', { className: 'picker-open-title' }, ['Exclude MPs']),
-      excludeSub,
-    ]),
+    icon(ICONS.chevron, { size: 20 }),
+  ]);
+
+  const openers = el('div', { className: 'openers' }, [
+    opener('calc-add-mps', GLYPH.plus, 'add', 'Add Individual MPs',
+      el('span', { className: 'row-sub' }, ['From non-selected parties'])),
+    opener('calc-exclude-mps', GLYPH.minus, 'exclude', 'Exclude MPs', excludeSub),
   ]);
 
   paint();
 
   return el('div', { className: 'view view-calculator' }, [
-    el('div', { className: 'calc-readout' }, [total, verdict]),
-    cards,
+    el('h1', { className: 'screen-title' }, ['Majority calculator']),
+
+    el('div', { className: 'calc-hero' }, [
+      el('div', { className: 'calc-hero-top' }, [total, verdict]),
+      track,
+      hint,
+    ]),
+
     presets,
     el('h2', { className: 'section-heading' }, ['Select Parties']),
-    partyRows,
-    pickerButtons,
+    cards,
+    openers,
     adjustments,
   ]);
 }

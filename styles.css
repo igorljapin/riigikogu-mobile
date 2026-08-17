@@ -1,46 +1,77 @@
 /*
  * Riigikogu Mobile — the whole stylesheet.
  *
- * Plain CSS, no build step, no framework. It replaces 253 KB of compiled
- * Tailwind with the rules this app actually uses, and it is one half of the
- * layer a redesign is allowed to rewrite (the other is src/views/).
+ * Plain CSS, no build step, no framework. It is one half of the layer a
+ * redesign is allowed to rewrite (the other is src/views/), and the Aug-2026
+ * redesign rewrote it: the tokens, type scale, radii and spacing below are the
+ * ones in `docs/redesign-2026-08/README.md`, recorded in USABILITY.md §9.
  *
  * Party colours are NOT written here. `src/app.js` publishes them from
  * `data/parties.json` as `--party-<id>` / `--party-<id>-text`, so a party that
  * changes colour, appears or disappears is a data change and never a CSS edit.
  *
- * Layout target: 390 x 844 (iPhone-class portrait), the viewport
- * BEHAVIOR_SNAPSHOT.md was captured at. Spacing here is deliberately tight —
- * CLAUDE.md: do not loosen it.
+ * Layout target: 402 x 874 (iPhone 14/15 logical size); the suite runs at
+ * 390 x 844 and everything here is fluid between the two. Every interactive
+ * target is at least 44px.
  */
 
 :root {
-  --ink: #0f172a;          /* slate-900 */
-  --ink-2: #334155;        /* slate-700 */
-  --muted: #64748b;        /* slate-500 */
-  --muted-2: #94a3b8;      /* slate-400 */
-  --line: #e2e8f0;         /* slate-200 */
-  --surface: #ffffff;
-  --surface-2: #f1f5f9;    /* slate-100 */
-  --page: #f8fafc;         /* slate-50 */
-  --accent: #9333ea;       /* purple-600 — the active tab */
-  --ok: #16a34a;
-  --no: #dc2626;
-  --radius: 12px;
-  --tab-bar-height: 60px;
+  /* Design tokens — light */
+  --bg: #f4f6f8;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --line: #e4e9ef;
+  --track: #eef1f5;
+  --hero: #0f172a;
+  --warn-bg: #fffbeb;
+  --warn-line: #fcd34d;
+  --warn-text: #92400e;
+
+  /* Fixed accents — identical in both themes */
+  --coalition: #2563eb;
+  --opposition: #e11d48;
+  --unaligned: #94a3b8;
+  --accent: #9333ea;
+  --pass: #4ade80;
+  --add-bg: #dcfce7;
+  --add-fg: #15803d;
+  --remove-bg: #fee2e2;
+  --remove-fg: #b91c1c;
+  --bloc-unaligned-text: #b45309;
+
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --gutter: 20px;
+  --tab-bar-height: 72px;
+  --shadow-seg: 0 1px 3px rgb(15 23 42 / 14%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #080d16;
+    --card: #131b29;
+    --text: #f6f8fb;
+    --muted: #93a1b8;
+    --line: #233046;
+    --track: #1d283b;
+    --hero: #1b2536;
+    --warn-bg: #2a2213;
+    --warn-line: #6b5117;
+    --warn-text: #f5cf7a;
+    --shadow-seg: 0 1px 3px rgb(0 0 0 / 45%);
+  }
 }
 
 * { box-sizing: border-box; }
 
-html, body {
-  margin: 0;
-  padding: 0;
-}
+html, body { margin: 0; padding: 0; }
 
 body {
-  background: var(--page);
-  color: var(--ink);
-  font: 15px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.45 var(--sans);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -57,42 +88,40 @@ button {
 
 h1, h2, h3, p { margin: 0; }
 
-.boot {
-  padding: 32px 20px;
-  color: var(--muted);
-  text-align: center;
-}
-.boot-error { color: var(--no); }
+[hidden] { display: none !important; }
+
+.boot { padding: 32px var(--gutter); color: var(--muted); text-align: center; }
+.boot-error { color: var(--remove-fg); }
 
 /* ------------------------------------------------------------------ *
  * Shell
+ *
+ * The header is rendered by src/app.js, which a redesign does not touch. It
+ * carries the three facts the contract requires — the parliament, its 101
+ * members and `meta.updatedAt` — so it is styled as the design's kicker rather
+ * than replaced by one.
  * ------------------------------------------------------------------ */
 
 .app-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  padding: 14px 16px 12px;
-  background: var(--ink);
-  color: #fff;
+  padding: 14px var(--gutter) 2px;
+  background: var(--bg);
+  color: var(--muted);
 }
 
-.app-title {
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
+.app-title,
 .app-subtitle {
-  margin-top: 2px;
-  font-size: 12px;
-  color: var(--muted-2);
+  font-family: var(--mono);
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
-.app-main {
-  /* The tab bar is fixed, so the last card needs room to clear it. */
-  padding: 12px 12px calc(var(--tab-bar-height) + 32px);
-}
+.app-title { font-size: 12px; font-weight: 600; line-height: 1.3; letter-spacing: 0.12em; }
+
+/* Sized to keep the whole line — parliament, 101 members, `meta.updatedAt` — on
+   one row at 390px, the narrowest viewport the suite runs at. */
+.app-subtitle { margin-top: 3px; font-size: 10px; font-weight: 500; line-height: 1.4; letter-spacing: 0.055em; }
+
+.app-main { padding-bottom: calc(var(--tab-bar-height) + env(safe-area-inset-bottom) + 40px); }
 
 .tab-bar {
   position: fixed;
@@ -102,9 +131,9 @@ h1, h2, h3, p { margin: 0; }
   z-index: 20;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  height: var(--tab-bar-height);
+  height: calc(var(--tab-bar-height) + env(safe-area-inset-bottom));
   padding-bottom: env(safe-area-inset-bottom);
-  background: var(--surface);
+  background: var(--card);
   border-top: 1px solid var(--line);
 }
 
@@ -113,129 +142,235 @@ h1, h2, h3, p { margin: 0; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  color: var(--muted-2);
+  gap: 5px;
+  color: var(--muted);
 }
 
+.tab svg { width: 25px; height: 25px; stroke-width: 1.9; }
 .tab.is-active { color: var(--accent); }
-.tab-label { font-size: 11px; font-weight: 600; }
+.tab-label { font-size: 12px; font-weight: 600; line-height: 1; }
+
+/* Shared furniture ------------------------------------------------- */
+
+.screen-head { padding: 12px var(--gutter) 10px; }
+
+.screen-title {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.section-heading {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.row-text { flex: 1; min-width: 0; }
+.row-name { display: block; font-size: 16px; font-weight: 600; line-height: 1.3; color: var(--text); }
+.row-sub { display: block; font-size: 13px; font-weight: 400; line-height: 1.35; color: var(--muted); }
+
+.party-badge {
+  flex: 0 0 auto;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Avatars: the photo sits on the initials, which are drawn by CSS so they
+   never join a row's accessible name or its innerText (3.9). */
+
+.avatar {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.avatar::after { content: var(--initials, ""); }
+
+.avatar-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar:not([data-avatar="photo"]) .avatar-photo { visibility: hidden; }
+
+.avatar-sm { width: 44px; height: 44px; font-size: 15px; }
+.avatar-md { width: 48px; height: 48px; font-size: 16px; }
+.avatar-xl { width: 88px; height: 88px; border-radius: 26px; font-size: 28px; }
 
 /* ------------------------------------------------------------------ *
- * Parliament — the three buckets
+ * Parliament
  * ------------------------------------------------------------------ */
 
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+.standing-head {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 6px var(--gutter) 10px;
 }
 
-.stat {
-  padding: 12px 8px;
-  border-radius: var(--radius);
-  background: var(--surface);
+.standing-figure {
+  font-size: 46px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.standing-of { font-size: 16px; font-weight: 600; line-height: 1.2; color: var(--muted); }
+
+.seat-chart-block { padding: 0 var(--gutter) 20px; }
+
+.seat-chart { position: relative; padding-top: 18px; }
+
+.seat-bar {
+  display: flex;
+  height: 34px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--track);
+}
+
+.seat-segment { display: block; height: 100%; }
+.seat-coalition { background: var(--coalition); }
+.seat-opposition { background: var(--opposition); }
+.seat-unaligned { background: var(--unaligned); }
+
+.seat-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--text);
+}
+
+.seat-marker-label {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  white-space: nowrap;
+  font: 600 11px/1 var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.seat-legend { display: flex; gap: 18px; margin-top: 12px; }
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--muted);
+}
+
+.legend-swatch { width: 10px; height: 10px; border-radius: 3px; }
+.legend-value { font-weight: 600; color: var(--text); }
+
+.seat-caption { margin-top: 10px; font-size: 13px; color: var(--muted); }
+
+.floor { padding: 0 var(--gutter); }
+
+.bloc-section + .bloc-section { margin-top: 18px; }
+
+.bloc-heading {
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.bloc-coalition .bloc-heading { color: var(--coalition); }
+.bloc-opposition .bloc-heading { color: var(--opposition); }
+.bloc-unaligned .bloc-heading { color: var(--muted); }
+
+.party-cards { display: flex; flex-direction: column; gap: 10px; }
+
+.party-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-height: 76px;
+  padding: 14px 16px;
   border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+}
+
+.party-card-row { display: flex; align-items: center; gap: 12px; width: 100%; }
+
+/* The seat count is the party-coloured "chip" the contract checks (2.7); it
+   reads first and sits last, where the design puts the figure. */
+.party-card-seats {
+  order: 2;
+  flex: 0 0 auto;
+  min-width: 46px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
   text-align: center;
 }
 
-.stat-number { font-size: 26px; font-weight: 700; line-height: 1.1; }
-.stat-label { margin-top: 2px; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.party-card-name { display: block; font-size: 17px; font-weight: 600; line-height: 1.25; }
+.party-card-sub { display: block; font-size: 13px; line-height: 1.3; color: var(--muted); }
 
-.stat-coalition .stat-number { color: #2563eb; }
-.stat-opposition .stat-number { color: #e11d48; }
-.stat-unaligned .stat-number { color: var(--muted); }
-
-.majority-card {
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: var(--radius);
-  background: var(--surface);
-  border: 1px solid var(--line);
-}
-
-.majority-bar {
-  display: flex;
-  height: 10px;
-  overflow: hidden;
+.party-card-track {
+  display: block;
+  width: 100%;
+  height: 6px;
   border-radius: 999px;
-  background: var(--surface-2);
+  background: var(--track);
 }
 
-.majority-bar-part { display: block; height: 100%; }
-.majority-bar-coalition { background: #2563eb; }
-.majority-bar-opposition { background: #e11d48; }
-.majority-bar-unaligned { background: var(--muted-2); }
-
-.majority-caption { margin-top: 8px; font-size: 12px; color: var(--muted); }
-
-.floor-intro { margin: 18px 2px 8px; }
-.floor-heading { font-size: 17px; font-weight: 700; }
-.floor-subtitle { font-size: 12px; color: var(--muted); }
-
-.bloc-section { margin-bottom: 14px; }
-
-.bloc-heading {
-  margin-bottom: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  text-transform: uppercase;
-}
-
-.party-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-
-.party-chip {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius);
-  box-shadow: 0 1px 2px rgb(15 23 42 / 12%);
-}
-
-.party-chip-lg { width: 154px; height: 80px; }
-.party-chip-sm { width: 100px; height: 64px; }
-
-.party-chip-lg .party-chip-seats { font-size: 30px; }
-.party-chip-sm .party-chip-seats { font-size: 22px; }
-
-.party-chip-seats { font-weight: 700; line-height: 1.05; }
-.party-chip-name { font-size: 12px; font-weight: 600; }
-
-.party-chip:active { transform: scale(0.98); }
+.party-card-fill { display: block; height: 6px; border-radius: 999px; }
 
 /* Board of the Riigikogu */
 
-.board {
-  margin-top: 18px;
-  padding: 14px 12px;
-  border-radius: var(--radius);
-  background: var(--ink);
-}
+.board { padding: 26px var(--gutter) 0; }
+.board-rows { display: flex; flex-direction: column; gap: 8px; }
 
-.board-heading {
-  margin-bottom: 10px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--muted-2);
-  text-transform: uppercase;
-}
-
-.board-officers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-
-.board-officer {
+.board-row {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 10px 8px;
-  border-radius: 10px;
-  color: #fff;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+  color: var(--muted);
 }
 
-.board-role { font-size: 10px; color: var(--muted-2); line-height: 1.2; }
-.board-name { font-size: 13px; font-weight: 700; }
+.board-bar { flex: 0 0 auto; width: 10px; height: 36px; border-radius: 4px; }
+.board-row .row-text { display: flex; flex-direction: column; }
+.board-name { order: 1; font-size: 17px; font-weight: 600; line-height: 1.25; color: var(--text); }
+.board-role { order: 2; font-size: 13px; line-height: 1.3; color: var(--muted); }
 
 /* ------------------------------------------------------------------ *
  * Members
@@ -244,69 +379,135 @@ h1, h2, h3, p { margin: 0; }
 .search-wrap {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 12px;
-  border-radius: var(--radius);
-  background: var(--surface);
+  gap: 10px;
+  height: 52px;
+  padding: 0 16px;
   border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
   color: var(--muted);
 }
 
 .mp-search {
   flex: 1;
-  padding: 11px 0;
+  min-width: 0;
   border: 0;
   outline: none;
   background: none;
-  font: inherit;
-  color: var(--ink);
+  font: 400 17px/1.3 var(--sans);
+  color: var(--text);
 }
 
-.filter-chips { display: flex; gap: 8px; margin: 10px 0; overflow-x: auto; }
+.mp-search::-webkit-search-cancel-button { display: none; }
 
-.filter-chip {
+.search-clear {
   flex: 0 0 auto;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: var(--surface-2);
-  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--track);
+  color: var(--muted);
+}
+
+.filters { display: flex; flex-direction: column; gap: 8px; padding: 10px var(--gutter) 12px; }
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  padding: 3px;
+  border-radius: 13px;
+  background: var(--track);
+}
+
+.filter-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
   font-size: 13px;
   font-weight: 600;
-  white-space: nowrap;
+  line-height: 1;
+  text-align: center;
 }
 
-.filter-chip.is-active { background: #1e293b; color: #fff; }
+.filter-count { font-size: 11px; font-weight: 500; opacity: 0.75; }
 
-.mp-list {
-  border-radius: var(--radius);
-  background: var(--surface);
+.filter-bloc {
+  min-height: 44px;
+  padding: 4px 2px;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+}
+
+.filter-bloc.is-active {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: var(--shadow-seg);
+}
+
+.filter-role {
+  min-height: 44px;
+  padding: 4px 8px;
   border: 1px solid var(--line);
-  overflow: hidden;
+  border-radius: 11px;
+  background: var(--card);
+  color: var(--text);
 }
+
+.filter-role.is-active {
+  border-color: var(--hero);
+  background: var(--hero);
+  color: #fff;
+}
+
+.mp-count {
+  padding: 0 var(--gutter) 8px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--muted);
+}
+
+.mp-list { display: flex; flex-direction: column; }
 
 .mp-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
   width: 100%;
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--line);
-  color: var(--muted-2);
+  min-height: 72px;
+  padding: 10px var(--gutter);
+  border-top: 1px solid var(--line);
+  background: var(--card);
 }
 
-.mp-row:last-child { border-bottom: 0; }
-.mp-row:active { background: var(--surface-2); }
+.mp-row:last-child { border-bottom: 1px solid var(--line); }
+.mp-row:active { background: var(--track); }
 
-.mp-row-text { flex: 1; min-width: 0; }
-.mp-row-name { font-size: 14px; font-weight: 600; color: var(--ink); }
-.mp-row-party { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.mp-row-name { display: block; font-size: 17px; font-weight: 600; line-height: 1.3; }
+.mp-row-sub { display: block; font-size: 14px; line-height: 1.35; color: var(--muted); }
 
-.party-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
-
-.mp-empty { padding: 24px 12px; text-align: center; color: var(--muted); }
+.mp-empty {
+  padding: 40px var(--gutter);
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--muted);
+}
 
 /* ------------------------------------------------------------------ *
- * Overlays — party sheet, MP popup, calculator pickers
+ * Overlays — party sheet, MP profile, calculator pickers
+ *
+ * Full-screen since the redesign (§9.1). Every one is removed from the DOM when
+ * closed, never merely hidden, which is what makes "the sheet closed" checkable.
  * ------------------------------------------------------------------ */
 
 .overlay {
@@ -314,258 +515,433 @@ h1, h2, h3, p { margin: 0; }
   inset: 0;
   z-index: 40;
   display: flex;
-  align-items: flex-end;
-  background: rgb(15 23 42 / 45%);
+  background: var(--bg);
 }
 
 .overlay-sheet {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-height: 88vh;
-  padding: 14px 14px calc(14px + env(safe-area-inset-bottom));
-  border-radius: 18px 18px 0 0;
-  background: var(--surface);
+  height: 100%;
+  background: var(--bg);
 }
 
 .overlay-header {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding-bottom: 10px;
+  gap: 12px;
+  padding: calc(14px + env(safe-area-inset-top)) 16px 12px;
+  background: var(--card);
   border-bottom: 1px solid var(--line);
 }
 
-/* An overlay whose header carries nothing but the close button — the MP popup —
-   should not draw an empty title bar above its content. */
-.overlay-header:has(> .overlay-close:only-child) { padding-bottom: 0; border-bottom: 0; }
+.overlay-kicker { flex: 1; font-size: 16px; font-weight: 600; line-height: 1; color: var(--muted); }
 
-.overlay-body { overflow-y: auto; padding-top: 12px; }
+.overlay-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 var(--gutter) 40px;
+}
 
-.overlay-close {
-  margin-left: auto;
-  width: 32px;
-  height: 32px;
+.overlay-close,
+.picker-back {
   flex: 0 0 auto;
-  border-radius: 50%;
-  background: var(--surface-2);
-  color: var(--ink-2);
-  font-size: 20px;
-  line-height: 1;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--track);
+  color: var(--text);
 }
 
-.party-sheet-title { display: flex; align-items: center; gap: 10px; }
-.party-sheet-count { font-size: 13px; color: var(--muted); }
+.overlay-close { font-size: 22px; line-height: 1; }
+.picker-back { background: none; }
 
-.party-badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
+.detail-head { padding: 22px 0 14px; }
+
+.detail-title {
+  margin-bottom: 6px;
+  font-size: 28px;
   font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
 }
 
-.party-sheet-list { display: flex; flex-direction: column; }
+.detail-sub { font-size: 15px; font-weight: 500; line-height: 1.4; color: var(--muted); }
 
-.party-sheet-member {
+.member-list { display: flex; flex-direction: column; }
+
+.member-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 68px;
+  padding: 10px 4px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.member-row:active { background: var(--track); }
+
+/* MP profile */
+
+.mp-detail-head { display: flex; align-items: center; gap: 16px; padding: 22px 0 18px; }
+
+.mp-detail-name {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.mp-detail-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.mp-detail-chips .party-badge { padding: 6px 11px; border-radius: 9px; font-size: 13px; }
+
+.bloc-chip {
+  padding: 6px 11px;
+  border-radius: 9px;
+  background: var(--track);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--muted);
+}
+
+.bloc-chip.bloc-unaligned { color: var(--bloc-unaligned-text); }
+
+.note-card {
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--warn-line);
+  border-radius: 14px;
+  background: var(--warn-bg);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--warn-text);
+}
+
+.fact-rows { display: flex; flex-direction: column; gap: 8px; }
+
+.fact-row {
   display: flex;
   align-items: baseline;
-  gap: 8px;
-  padding: 9px 2px;
-  border-bottom: 1px solid var(--line);
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
 }
 
-.party-sheet-member:last-child { border-bottom: 0; }
-.party-sheet-name { font-size: 14px; font-weight: 600; }
-.party-sheet-role { font-size: 11px; color: var(--muted); }
+.fact-key {
+  flex: 0 0 96px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 
-/* MP popup */
+.fact-value { flex: 1; font-size: 15px; font-weight: 500; line-height: 1.4; }
 
-.mp-popup-top { display: flex; align-items: center; gap: 12px; }
+.cta-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  margin-top: 16px;
+  border-radius: 15px;
+  background: var(--hero);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+}
 
-.mp-photo {
-  width: 64px;
-  height: 64px;
+/* Pickers */
+
+.picker-list { display: flex; flex-direction: column; gap: 8px; }
+
+.picker-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  min-height: 68px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--card);
+  color: var(--muted);
+}
+
+.picker-row:active { background: var(--track); }
+.picker-bar { flex: 0 0 auto; width: 14px; height: 38px; border-radius: 5px; }
+
+.picker-action {
   flex: 0 0 auto;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.mp-popup-identity { min-width: 0; }
-
-.mp-profile-link {
-  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 11px;
+  border-radius: 11px;
+  font-size: 14px;
   font-weight: 700;
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  line-height: 1;
 }
 
-.mp-popup-badges { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.picker-action-add { background: var(--add-bg); color: var(--add-fg); }
+.picker-action-exclude { background: var(--remove-bg); color: var(--remove-fg); }
 
-.bloc-badge { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-.bloc-badge.bloc-unaligned { color: #b45309; }
-
-.mp-popup-role { margin-top: 12px; font-size: 13px; color: var(--ink-2); }
-.mp-popup-section { margin-top: 12px; }
-.mp-popup-key { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-
-.committee-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-
-.committee-pill {
-  padding: 5px 9px;
-  border-radius: 999px;
-  background: var(--surface-2);
-  font-size: 12px;
-  color: var(--ink-2);
-}
-
-.party-history {
-  margin-top: 6px;
-  padding: 9px 10px;
-  border-radius: 10px;
-  border: 1px solid #fcd34d;
-  background: #fffbeb;
-  font-size: 12px;
-  color: #92400e;
+.picker-empty {
+  padding: 34px 4px;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--muted);
 }
 
 /* ------------------------------------------------------------------ *
  * Calculator
  * ------------------------------------------------------------------ */
 
-.calc-readout {
-  padding: 16px 12px;
-  border-radius: var(--radius);
-  background: var(--ink);
+.view-calculator > .screen-title { padding: 12px var(--gutter) 0; }
+
+.calc-hero {
+  margin: 16px var(--gutter) 0;
+  padding: 20px 18px 18px;
+  border-radius: 22px;
+  background: var(--hero);
   color: #fff;
-  text-align: center;
 }
 
-.calc-total { font-size: 34px; font-weight: 700; line-height: 1.1; }
-.calc-verdict { margin-top: 2px; font-size: 13px; font-weight: 600; }
-.calc-verdict.is-majority { color: #4ade80; }
-.calc-verdict.is-minority { color: #fca5a5; }
+.calc-hero-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
 
-.thresholds { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
-
-.threshold {
-  padding: 9px 4px;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  /* Every card paints a background even when inactive: the Usability Contract
-     compares the met and unmet colours, and "transparent" would resolve to
-     whatever sits behind it. */
-  background: #ffffff;
-  text-align: center;
+.calc-total {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
 }
 
-.threshold-seats { font-size: 17px; font-weight: 700; }
-.threshold-label { font-size: 10px; color: var(--muted); }
+.calc-total-of { font-size: 19px; font-weight: 600; letter-spacing: 0; color: rgb(255 255 255 / 55%); }
 
-.threshold-51.is-met { background: rgb(220 252 231); border-color: #86efac; }
-.threshold-61.is-met { background: rgb(219 234 254); border-color: #93c5fd; }
-.threshold-68.is-met { background: rgb(243 232 255); border-color: #d8b4fe; }
-.threshold-81.is-met { background: rgb(254 243 199); border-color: #fcd34d; }
+.calc-verdict {
+  flex: 0 1 auto;
+  max-width: 52%;
+  padding-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: right;
+  text-wrap: pretty;
+}
 
-.presets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.calc-verdict.is-majority { color: var(--pass); }
+.calc-verdict.is-minority { color: rgb(255 255 255 / 72%); }
+
+.calc-track { position: relative; height: 46px; margin-top: 20px; }
+
+.calc-track-base,
+.calc-fill {
+  position: absolute;
+  left: 0;
+  top: 14px;
+  height: 14px;
+  border-radius: 999px;
+}
+
+.calc-track-base { right: 0; background: rgb(255 255 255 / 14%); }
+.calc-fill { background: var(--accent); }
+.calc-fill.is-majority { background: var(--pass); }
+
+.calc-mark {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateX(-50%);
+}
+
+.calc-mark-tick { width: 2px; height: 28px; background: rgb(255 255 255 / 22%); }
+
+/* The label is a pill so that "met" is a state you can see — and check (4.7,
+   4.8): both states paint a background, and the two differ. */
+.calc-mark-label {
+  margin-top: 3px;
+  padding: 2px 4px;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 8%);
+  font: 600 11px/1 var(--mono);
+  letter-spacing: -0.02em;
+  color: rgb(255 255 255 / 50%);
+}
+
+.calc-mark[data-met="true"] .calc-mark-tick { background: rgb(255 255 255 / 90%); }
+.calc-mark[data-met="true"] .calc-mark-label { background: rgb(255 255 255 / 24%); color: #fff; }
+
+.calc-hint {
+  margin-top: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgb(255 255 255 / 72%);
+  text-wrap: pretty;
+}
+
+.presets { display: flex; gap: 8px; padding: 14px var(--gutter) 0; }
 
 .preset {
-  padding: 10px 6px;
-  border-radius: 10px;
-  background: var(--surface);
+  flex: 1;
+  height: 48px;
   border: 1px solid var(--line);
-  font-size: 13px;
+  border-radius: 14px;
+  background: var(--card);
+  font-size: 15px;
   font-weight: 600;
+  line-height: 1;
   text-align: center;
 }
 
 .preset-reset { color: var(--muted); }
 
-.section-heading { margin: 18px 2px 8px; font-size: 15px; font-weight: 700; }
+.view-calculator > .section-heading { padding: 22px var(--gutter) 0; margin-bottom: 0; }
 
-.calc-party-rows {
-  border-radius: var(--radius);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  overflow: hidden;
-}
-
-.calc-party-row {
-  display: flex;
-  align-items: center;
+.calc-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
-  width: 100%;
-  padding: 11px 12px;
-  border-bottom: 1px solid var(--line);
+  padding: 10px var(--gutter) 0;
 }
 
-.calc-party-row:last-child { border-bottom: 0; }
-.calc-party-row.is-selected { background: #eef2ff; }
-
-.calc-swatch { width: 12px; height: 12px; flex: 0 0 auto; border-radius: 3px; }
-.calc-party-name { flex: 1; font-size: 14px; font-weight: 600; }
-.calc-party-count { font-size: 13px; font-variant-numeric: tabular-nums; color: var(--muted); }
-
-.calc-adjust { padding: 1px 6px; border-radius: 999px; font-size: 11px; font-weight: 700; }
-.calc-adjust.is-minus { background: #fee2e2; color: #b91c1c; }
-.calc-adjust.is-plus { background: #dcfce7; color: #15803d; }
-
-.picker-openers { display: grid; gap: 8px; margin-top: 12px; }
-
-.picker-open {
+.calc-card {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 12px;
-  border-radius: var(--radius);
-  background: var(--surface);
-  border: 1px solid var(--line);
+  gap: 6px;
+  min-height: 96px;
+  padding: 14px;
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  background: transparent;
 }
 
-.picker-open-title { font-size: 14px; font-weight: 600; }
-.picker-open-sub { font-size: 12px; color: var(--muted); }
+.calc-card[data-active="true"] { border-color: var(--card-accent); background: var(--card); }
 
-.adjustments { margin-top: 16px; }
-.adjustments-heading { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-.adjustment-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.calc-card-head { display: flex; align-items: center; gap: 8px; }
+.calc-swatch { flex: 0 0 auto; width: 12px; height: 12px; border-radius: 4px; }
+.calc-card-short { font-size: 15px; font-weight: 600; line-height: 1.2; }
 
-.adjust-chip { padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
-.adjust-chip.adjust-exclude { background: #fee2e2; color: #b91c1c; }
-.adjust-chip.adjust-add { background: #dcfce7; color: #15803d; }
+.calc-card-count {
+  display: block;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--muted);
+}
 
-/* Pickers */
+.calc-card[data-active="true"] .calc-card-count { color: var(--text); }
 
-.picker-back {
-  width: 32px;
-  height: 32px;
+/* Inline, and it must stay inline: "0/38" is one uninterrupted run in the
+   button's accessible name, which is how the contract reads a party row. */
+.calc-card-of { font-size: 13px; font-weight: 500; letter-spacing: 0; color: var(--muted); }
+
+.openers { display: flex; flex-direction: column; gap: 8px; padding: 16px var(--gutter) 0; }
+
+.opener {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--card);
+  color: var(--muted);
+}
+
+.opener .row-name { font-size: 16px; line-height: 1.25; }
+
+.opener-icon {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: var(--surface-2);
-  color: var(--ink-2);
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
 }
 
-.picker-title { font-size: 15px; font-weight: 700; }
-.picker-list { display: flex; flex-direction: column; }
+.opener-icon svg { stroke-width: 3; }
+.opener-icon-add { background: var(--add-bg); color: var(--add-fg); }
+.opener-icon-exclude { background: var(--remove-bg); color: var(--remove-fg); }
 
-.picker-row {
+.adjustments:not(:empty) { padding: 22px var(--gutter) 0; }
+.adjust-rows { display: flex; flex-direction: column; gap: 8px; }
+
+.adjust-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 11px 2px;
-  border-bottom: 1px solid var(--line);
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
 }
 
-.picker-row:last-child { border-bottom: 0; }
-.picker-row-name { flex: 1; font-size: 14px; font-weight: 600; }
-.picker-row-meta { font-size: 12px; color: var(--muted); }
-.picker-empty { padding: 20px 2px; color: var(--muted); }
+.adjust-badge {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.adjust-add .adjust-badge { background: var(--add-bg); color: var(--add-fg); }
+.adjust-exclude .adjust-badge { background: var(--remove-bg); color: var(--remove-fg); }
+
+.adjust-name { display: block; font-size: 15px; font-weight: 600; line-height: 1.25; }
+
+.adjust-undo {
+  flex: 0 0 auto;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--muted);
+}
 
 @media (prefers-reduced-motion: no-preference) {
-  .party-chip, .preset, .filter-chip { transition: transform 80ms ease, background-color 120ms ease; }
+  .party-card,
+  .preset,
+  .calc-card,
+  .filter,
+  .opener { transition: background-color 120ms ease, border-color 120ms ease, transform 80ms ease; }
+
+  .party-card:active,
+  .calc-card:active,
+  .preset:active { transform: scale(0.99); }
 }

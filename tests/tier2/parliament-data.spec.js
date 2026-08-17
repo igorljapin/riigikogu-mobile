@@ -106,6 +106,51 @@ test.describe('Tier 2 — Parliament tab against data/*.json (Phase 4)', () => {
     await expect(label).toContainText(String(year));
   });
 
+  /* 2.11 / 2.12 — the seat chart, new with the Aug-2026 redesign (§9.2). */
+
+  test('the seat chart segments are proportional and sum to 101', async ({ page }) => {
+    const chart = page.getByTestId('seat-chart');
+    await expect(chart).toBeVisible();
+    await expect(chart).toHaveAttribute('data-total', String(meta.totalSeats));
+
+    const blocs = {
+      coalition: meta.coalitionSeats,
+      unaligned: meta.unalignedSeats,
+      opposition: meta.oppositionSeats,
+    };
+
+    let sum = 0;
+    for (const [id, seats] of Object.entries(blocs)) {
+      const segment = page.getByTestId(`seat-chart-segment-${id}`);
+      await expect(segment).toHaveAttribute('data-seats', String(seats));
+
+      // Drawn width, not just the attribute: a chart that says 50 and paints a
+      // third of the bar is the failure this catches.
+      const share = await segment.evaluate((el) => {
+        const bar = el.parentElement.getBoundingClientRect();
+        return el.getBoundingClientRect().width / bar.width;
+      });
+      expect(share).toBeCloseTo(seats / meta.totalSeats, 2);
+      sum += seats;
+    }
+
+    expect(sum).toBe(meta.totalSeats);
+  });
+
+  test('the majority marker is positioned from meta.simpleMajority, not a literal', async ({ page }) => {
+    const marker = page.getByTestId('seat-chart-marker');
+    await expect(marker).toBeVisible();
+    await expect(marker).toHaveAttribute('data-threshold', String(meta.simpleMajority));
+
+    const position = await marker.evaluate((el) => {
+      const chart = el.parentElement.getBoundingClientRect();
+      return (el.getBoundingClientRect().left - chart.left) / chart.width;
+    });
+    // Three places, not two: 51/101 is 50.5%, and a marker hardcoded to the
+    // half-way point would sit inside a looser tolerance.
+    expect(position).toBeCloseTo(meta.simpleMajority / meta.totalSeats, 3);
+  });
+
   test('tapping a party chip lists exactly that party voting bloc', async ({ page }) => {
     const party = partyById.reform;
     await page.getByTestId('party-chip-reform').click();
