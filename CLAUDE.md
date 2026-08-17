@@ -57,6 +57,7 @@ repo has broken before:
 | `ARCHITECTURE_PLAN.md`, `EXECUTION_GUIDE.md` | The rebuild plan and its per-phase prompts. **Executed — historical record**, not a to-do list. |
 | `BEHAVIOR_SNAPSHOT.md`, `snapshot/` | What the app did before the rebuild, plus the after/compare captures. |
 | `docs/DEPRECATED_MONTHLY_PROCEDURE.md` | The hand-written monthly procedure the job replaced. History only — do not follow it. |
+| `docs/redesign-2026-08/` | The redesign handoff — prototypes, screenshots and a README. **Reference only, and temporary:** it is deleted once the redesign ships. `USABILITY.md` §9 is the durable record of what it changed, and wins wherever the two disagree. Its `data/*.json` are a 12 Aug snapshot — never read them, never copy them over `data/`. |
 | `v-stable-pre-rebuild` | Rollback ref for the pre-rebuild app. |
 
 **Files that do not exist**, despite older documents referring to them:
