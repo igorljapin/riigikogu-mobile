@@ -85,6 +85,63 @@ test.describe('Tier 1 — Members directory', () => {
     }
   });
 
+  /**
+   * 3.9 — new with the Aug-2026 redesign (USABILITY.md §9.2).
+   *
+   * The design bundle put initials in the rows and photos only on the profile;
+   * the owner altered that to photo-first with the initials as the fallback
+   * (§9.3), because MP photos are cross-origin and deliberately uncached, so
+   * offline there is no photo to show. Either state is legal — what is not
+   * legal is a row with no avatar at all, or one whose initials are somebody
+   * else's.
+   */
+  test('every row carries an avatar: the MP photo, or their initials as the fallback', async ({ page }) => {
+    const avatars = page.getByTestId('mp-row-avatar');
+    await expect(avatars).toHaveCount(TOTAL_SEATS);
+
+    const rows = await avatars.evaluateAll((els) =>
+      els.map((el) => ({
+        kind: el.getAttribute('data-avatar'),
+        letters: el.getAttribute('data-initials'),
+        photos: el.querySelectorAll('img').length,
+        name: (el.closest('[data-testid="mp-row"]').innerText || '').split('\n')[0].trim(),
+      })),
+    );
+
+    for (const row of rows) {
+      expect(['photo', 'initials']).toContain(row.kind);
+      // A photo state means there is a photo; an initials state still may hold
+      // one that has not loaded, which is the whole point of the fallback.
+      if (row.kind === 'photo') expect(row.photos).toBe(1);
+
+      const parts = row.name.split(/[\s-]+/).filter(Boolean);
+      const expected = (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      expect(row.letters).toBe(expected);
+    }
+  });
+
+  /**
+   * 3.10 — new with the Aug-2026 redesign (USABILITY.md §9.2). The filter set
+   * grew from three chips to six, and with six the "single-select" promise
+   * stops being self-evident: two active filters would silently intersect.
+   */
+  test('filtering is single-select — exactly one filter is active at any time', async ({ page }) => {
+    const ids = ['all', 'coalition', 'opposition', 'unaligned', 'chairs', 'usa'];
+    const active = () =>
+      page.locator('[data-active="true"]').evaluateAll((els) =>
+        els.map((el) => el.getAttribute('data-testid')).filter((id) => id.startsWith('filter-')),
+      );
+
+    // The landing state is "All", and it is on its own.
+    expect(await active()).toEqual(['filter-all']);
+
+    for (const id of ids) {
+      await page.getByTestId(`filter-${id}`).click();
+      expect(await active()).toEqual([`filter-${id}`]);
+      await expect(page.getByTestId(`filter-${id}`)).toHaveAttribute('aria-pressed', 'true');
+    }
+  });
+
   test('tapping an MP opens a popup with an external profile link', async ({ page }) => {
     const row = mpRows(page).first();
     const name = (await row.innerText()).split('\n')[0].replace(/[^\p{L}\s-]/gu, '').trim();

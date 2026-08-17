@@ -66,6 +66,25 @@ test.describe('Tier 2 — Members directory against data/*.json (Phase 4)', () =
     await expect(popup.getByTestId('mp-committee')).toHaveText(mp.committees.map((c) => c.name));
   });
 
+  /** First + last initial, uppercased — what the fallback avatar must show. */
+  function expectedInitials(name) {
+    const parts = name.split(/[\s-]+/).filter(Boolean);
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
+  test('row avatars carry the photo URL from mps.json, or that MP initials', async ({ page }) => {
+    // 3.9, the data half: whichever state a row is in, it has to be that MP's
+    // photo and that MP's initials — not a placeholder, and not the neighbour's.
+    for (const mp of activeMps) {
+      const avatar = page.locator(`[data-testid="mp-row"][data-mp-uuid="${mp.uuid}"] [data-testid="mp-row-avatar"]`);
+      await expect(avatar).toHaveCount(1);
+      await expect(avatar).toHaveAttribute('data-initials', expectedInitials(mp.name));
+      if (mp.photoUrl) {
+        await expect(avatar.locator('img')).toHaveAttribute('src', mp.photoUrl);
+      }
+    }
+  });
+
   test('unaligned MPs are labelled unaligned, not opposition', async ({ page }) => {
     for (const uuid of alignment.unaligned) {
       await page.locator(`[data-testid="mp-row"][data-mp-uuid="${uuid}"]`).click();
@@ -135,6 +154,34 @@ test.describe('Tier 2 — Calculator against data/*.json (Phase 4)', () => {
   test('the threshold badges read their values from meta.json', async ({ page }) => {
     for (const seats of [meta.simpleMajority, meta.threeFifths, meta.constitutionalMajority, meta.fourFifths]) {
       await expect(page.getByTestId(`badge-threshold-${seats}`)).toBeVisible();
+    }
+  });
+
+  /* 4.17 — new with the Aug-2026 redesign (§9.2). */
+
+  test('the seat fill is proportional, and the verdict states the shortfall to a majority', async ({ page }) => {
+    const fill = page.getByTestId('calc-fill');
+    const verdict = page.getByTestId('calc-verdict');
+
+    await expect(fill).toHaveAttribute('data-total', String(meta.totalSeats));
+    await expect(fill).toHaveAttribute('data-seats', '0');
+    // Empty: the whole house is still to be found.
+    await expect(verdict).toContainText(`${meta.simpleMajority} short of ${meta.simpleMajority}`);
+
+    await page.getByTestId('preset-coalition').click();
+    await expect(fill).toHaveAttribute('data-seats', String(meta.coalitionSeats));
+
+    const share = await fill.evaluate((el) => {
+      const track = el.parentElement.getBoundingClientRect();
+      return el.getBoundingClientRect().width / track.width;
+    });
+    expect(share).toBeCloseTo(meta.coalitionSeats / meta.totalSeats, 2);
+
+    if (meta.coalitionHasMajority) {
+      await expect(verdict).toHaveText(/✓/);
+    } else {
+      const short = meta.simpleMajority - meta.coalitionSeats;
+      await expect(verdict).toContainText(`${short} short of ${meta.simpleMajority}`);
     }
   });
 });

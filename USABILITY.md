@@ -494,3 +494,33 @@ Unchanged and not to be touched: `data/`, `src/data.js`, `src/lib/`, the seat
 arithmetic, the three-bloc model, and every §1 promise not listed in 9.1–9.2.
 No seat count, threshold or date may be hardcoded in a view — all of them come
 from `data/*.json`, which is what 2.8, 2.10, 4.14 and 4.17 exist to enforce.
+
+### 9.5 What shipped kept from the app, and what holds it there
+
+Written when the redesign landed. 9.3 records what the *owner* declined; this
+records where the **contract** declined, which is §7.3 working as intended: the
+design bundle calls its copy final, and for each line below a promise in §1 was
+older and won. Every one of them is load-bearing — change the copy and the named
+test goes red, which is the signal, not the obstacle.
+
+| Design bundle | Shipped | Held by |
+|---|---|---|
+| Placeholder `Search 101 members` | `Search MPs...` | 1.3, 3.3 |
+| Preset `Clear` | `Reset` | 4.12 |
+| Opener `Add individual MPs` | `Add Individual MPs` | 4.10, 4.16 |
+| Hero shows the seat total alone | `0 / 101`, denominator set small | 4.1 |
+| Verdict `Passes ordinary legislation` / `<n> short of 51` | `✓ Majority · passes ordinary legislation` / `✗ No majority · <n> short of 51` — one line carrying both | 4.1 states the verdict, 4.17 the shortfall |
+| Calculator cards `0 of 38` | `0/38` | 4.3, 4.11 |
+| One sorted party list on Standing | the same cards, under the three bloc headings | 2.1, 2.2, 2.3 |
+| Section headings `Parties by voting bloc`, `Tap a party in or out` | `Parliament Floor`, `Select Parties` | 1.3, 2.1 |
+| Member badge `Unaligned` for the non-affiliated | `Independent`, the `parties.json` short — the bloc chip beside it says Unaligned | 3.1–3.5 |
+| Party card in `card` white, the figure in `text` | the seat count on a **party-colour** badge, first in reading order and last in the layout | 2.4, 2.7 |
+| Overlay chrome: a chevron labelled `Back` | icon-only back arrow, and `×` to dismiss | §3 ("chrome buttons carry no text"), 2.5, 3.6 |
+| `XV RIIGIKOGU · UPDATED 12 AUG 2026` inside the Standing view | the app header, styled as that kicker, rendering `meta.updatedAt` | 1.1, 2.10 — and `src/app.js` is not a file a design change may touch |
+| New tab glyphs (hemicycle, two figures) | the existing glyphs at the design's size and stroke | the paths live in `src/dom.js`, outside the redesign layer |
+
+Two additions the design does not draw, both there to keep a promise checkable:
+the threshold marks carry a pill behind the label, because 4.7 and 4.8 compare a
+met badge against an unmet one; and the seat chart states
+`Majority threshold: 51 seats` below its legend, because 2.1 asks the screen to
+say it in words.

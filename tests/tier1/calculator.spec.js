@@ -2,6 +2,8 @@ const { test, expect } = require('@playwright/test');
 const {
   gotoApp,
   openTab,
+  modal,
+  closeModal,
   calcTotal,
   calcVerdict,
   thresholdBackground,
@@ -203,6 +205,80 @@ test.describe('Tier 1 — Vote calculator', () => {
     const counts = await partyRowCounts(page);
     const selected = Object.values(counts).reduce((sum, c) => sum + c.selected, 0);
     expect(selected).toBe(before - 1);
+  });
+
+  /* ---------------------------------------------------------------- *
+   * Individual adjustments and the picker — new surface, new coverage
+   * (USABILITY.md §9.2). Both tests read every number off the app.
+   * ---------------------------------------------------------------- */
+
+  test('every individual adjustment is named, and Undo reverses exactly that one', async ({ page }) => {
+    await page.getByRole('button', { name: 'Coalition', exact: true }).click();
+    const preset = await calcTotal(page);
+
+    // Two of each kind on purpose. With one apiece, "undo this adjustment" and
+    // "undo every adjustment" are indistinguishable — and the second is a bug
+    // this test has to be able to see.
+    const [excludedA, excludedB] = [await excludeOneIndividualMp(page), await excludeOneIndividualMp(page)];
+    const [addedA, addedB] = [await addOneIndividualMp(page), await addOneIndividualMp(page)];
+
+    const rows = page.locator('[data-testid="adjust-chip-exclude"], [data-testid="adjust-chip-add"]');
+    await expect(rows).toHaveCount(4);
+    expect(await calcTotal(page)).toBe(preset); // −2 +2
+    for (const name of [excludedA, excludedB, addedA, addedB]) {
+      await expect(rows.filter({ hasText: name })).toHaveCount(1);
+    }
+
+    // Undo one exclusion: one seat back, and the other three rows untouched.
+    await page.getByTestId('adjust-chip-exclude').filter({ hasText: excludedA })
+      .getByTestId('adjust-undo').click();
+    expect(await calcTotal(page)).toBe(preset + 1);
+    await expect(rows).toHaveCount(3);
+    await expect(rows.filter({ hasText: excludedA })).toHaveCount(0);
+    await expect(rows.filter({ hasText: excludedB })).toHaveCount(1);
+
+    // Undo one addition: one seat gone, and the rest still stand.
+    await page.getByTestId('adjust-chip-add').filter({ hasText: addedA })
+      .getByTestId('adjust-undo').click();
+    expect(await calcTotal(page)).toBe(preset);
+    await expect(rows).toHaveCount(2);
+    await expect(rows.filter({ hasText: addedA })).toHaveCount(0);
+    await expect(rows.filter({ hasText: addedB })).toHaveCount(1);
+  });
+
+  test('the picker offers only eligible MPs, and an adjusted MP leaves the pool', async ({ page }) => {
+    await page.getByRole('button', { name: 'Coalition', exact: true }).click();
+
+    const partyIds = (locator) => locator.evaluateAll((els) => els.map((el) => el.dataset.partyId));
+    const selected = await partyIds(page.locator('[data-selected="true"]'));
+    expect(selected.length).toBeGreaterThan(0);
+
+    // Exclude: only parties the selection actually contains.
+    await page.getByTestId('calc-exclude-mps').click();
+    const offeredToExclude = await partyIds(modal(page).getByTestId('picker-party'));
+    expect(offeredToExclude.length).toBeGreaterThan(0);
+    expect(offeredToExclude.filter((id) => !selected.includes(id))).toEqual([]);
+
+    // Step 2: adjusting an MP takes them out of the pool and off the total.
+    const before = await calcTotal(page);
+    await modal(page).getByTestId('picker-party').first().click();
+    const members = modal(page).getByTestId('picker-mp');
+    const pool = await members.count();
+    expect(pool).toBeGreaterThan(0);
+
+    const uuid = await members.first().getAttribute('data-mp-uuid');
+    await members.first().click();
+    await expect(members).toHaveCount(pool - 1);
+    await expect(modal(page).locator(`[data-testid="picker-mp"][data-mp-uuid="${uuid}"]`)).toHaveCount(0);
+    expect(await calcTotal(page)).toBe(before - 1);
+    await closeModal(page);
+
+    // Add: only parties the selection does not contain.
+    await page.getByTestId('calc-add-mps').click();
+    const offeredToAdd = await partyIds(modal(page).getByTestId('picker-party'));
+    expect(offeredToAdd.length).toBeGreaterThan(0);
+    expect(offeredToAdd.filter((id) => selected.includes(id))).toEqual([]);
+    await closeModal(page);
   });
 
   test('Reset also clears individual adjustments', async ({ page }) => {

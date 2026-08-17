@@ -6,35 +6,28 @@
  * a name: when the Riigikogu elects a new Board the monthly job updates the
  * JSON and this panel follows.
  *
- * Each button is tinted with its holder's party colour and opens that MP's
- * popup — the same popup the Members tab opens, not a second implementation.
+ * Each row carries its holder's party colour and opens that MP's profile — the
+ * same overlay the Members tab opens, not a second implementation.
+ *
+ * The redesign turned three cramped tiles into three full-width rows. The role
+ * still comes first in the reading order, ahead of the name, because that is
+ * what the row announces ("Pres. of the Riigikogu Lauri Hussar", 2.6); CSS puts
+ * the name on top, where the design wants it.
  */
 
-import { party } from '../data.js';
-import { el } from '../dom.js';
+import { el, icon, ICONS } from '../dom.js';
 import { openMpPopup } from './mps.js';
 
-/** `#00AEEF` at 19 % — the tint the shipped board buttons rendered. */
-function tint(hex, alpha = 0.19) {
-  const n = Number.parseInt(hex.replace('#', ''), 16);
-  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
-}
-
 /**
- * The compact labels the board buttons show, in Board order. The strings are
- * the shipped app's (`BEHAVIOR_SNAPSHOT.md` §2) and are part of the behaviour
- * this rebuild reproduces; `board.json` carries the full official titles.
+ * The compact labels the board rows show, in Board order. The strings are the
+ * shipped app's (`BEHAVIOR_SNAPSHOT.md` §2) and are part of the behaviour this
+ * rebuild reproduces; `board.json` carries the full official titles.
  */
 const SLOTS = [
   { testid: 'board-president', label: 'Pres. of the Riigikogu' },
   { testid: 'board-vice-president-1', label: 'First V-Pres.' },
   { testid: 'board-vice-president-2', label: 'Second V-Pres.' },
 ];
-
-/** Surname only — what fits on a third of a 390 px screen. */
-function surname(fullName) {
-  return fullName.split(/\s+/).pop();
-}
 
 export default function renderBoard(data) {
   const officers = SLOTS.map((slot, index) => {
@@ -44,21 +37,28 @@ export default function renderBoard(data) {
 
     return el('button', {
       type: 'button',
-      className: 'board-officer',
+      className: 'board-row',
       'data-testid': slot.testid,
       // The party id is the officer's *registered* party: this is a procedural
       // office, not a voting-bloc fact.
       'data-party-id': officer.partyId,
-      style: `background:${tint(party(data, officer.partyId)?.color ?? '#808080')}`,
       onclick: () => mp && openMpPopup(data, mp),
     }, [
-      el('span', { className: 'board-role' }, [slot.label]),
-      el('span', { className: 'board-name' }, [surname(officer.name)]),
+      el('span', {
+        className: 'board-bar',
+        'aria-hidden': 'true',
+        style: `background:var(--party-${officer.partyId})`,
+      }),
+      el('span', { className: 'row-text' }, [
+        el('span', { className: 'board-role' }, [slot.label]),
+        el('span', { className: 'board-name' }, [officer.name]),
+      ]),
+      icon(ICONS.chevron, { size: 20 }),
     ]);
   });
 
   return el('section', { className: 'board' }, [
-    el('h2', { className: 'board-heading' }, ['Board of the Riigikogu']),
-    el('div', { className: 'board-officers' }, officers),
+    el('h2', { className: 'section-heading' }, ['Board of the Riigikogu']),
+    el('div', { className: 'board-rows' }, officers),
   ]);
 }

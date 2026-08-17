@@ -103,6 +103,33 @@ test.describe('Tier 1 — Parliament tab', () => {
     await closeModal(page);
   });
 
+  /**
+   * 2.13 — new with the Aug-2026 redesign (USABILITY.md §9.2).
+   *
+   * The seat chart's legend is a second statement of the same arithmetic the
+   * bloc headings make. Two statements of one number is exactly where a
+   * redesign drifts, so the test is that they agree — and, as everywhere else
+   * in Tier 1, it reads both off the app rather than off today's roster.
+   */
+  test('the seat chart legend states every bloc total, and they agree with the headings', async ({ page }) => {
+    const sections = await allSectionSeats(page);
+    expect(sections.length).toBeGreaterThanOrEqual(2);
+
+    let legendTotal = 0;
+    for (const { bloc, seats } of sections) {
+      const id = bloc.toLowerCase();
+      const legend = page.getByTestId(`seat-chart-legend-${id}`);
+      await expect(legend).toBeVisible();
+      await expect(legend).toContainText(new RegExp(bloc, 'i'));
+
+      const total = page.getByTestId(`bloc-total-${id}`);
+      await expect(total).toHaveText(String(seats));
+      legendTotal += Number(await total.innerText());
+    }
+
+    expect(legendTotal).toBe(TOTAL_SEATS);
+  });
+
   test('the Board of the Riigikogu lists three officers, each opening a profile', async ({ page }) => {
     await expect(page.getByText('BOARD OF THE RIIGIKOGU')).toBeVisible();
 
