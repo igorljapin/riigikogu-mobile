@@ -163,6 +163,19 @@ function factRow(key, value) {
 }
 
 /**
+ * An email address with a break hint after the `@`.
+ *
+ * `<wbr>` contributes nothing to `textContent`, so the value still reads as the
+ * address `data/mps.json` holds — it only tells the browser where the address
+ * may wrap. Without it a long address is one unbreakable word: 34 of the 101
+ * profiles had it running off the edge of its card at 390px.
+ */
+function emailValue(address) {
+  const [local, domain] = String(address).split('@');
+  return domain ? [`${local}@`, el('wbr'), domain] : [address];
+}
+
+/**
  * The committee value: one `mp-committee` element per committee, exactly the
  * name `data/mps.json` gives it, with the role riding alongside rather than
  * inside — 3.7 asserts the pills read as the data does, and the design asks for
@@ -184,14 +197,22 @@ function committeeValue(mp) {
  * Exported because the board rows and the party sheet open the very same
  * overlay; the bundle had two code paths rendering the same thing, and one of
  * them is how a detail like the external-link target goes missing in a redesign.
+ *
+ * `onBack` is how a caller that replaced itself with this profile offers the
+ * reader a way home — the party sheet does, the board and the directory do not.
  */
-export function openMpPopup(data, mp) {
+export function openMpPopup(data, mp, { onBack = null } = {}) {
   const overlay = openOverlay({ testid: 'mp-popup', label: mp.name });
   const bloc = blocLabel(data, mp);
   const history = partyHistory(data, mp);
   const office = mp.boardRole ?? mp.factionRole;
 
-  replace(overlay.header, overlayChrome('Member', overlay.close, 'mp-popup-close'));
+  // Opened from a party's member list, this profile owes the reader a way back
+  // to that list — closing would drop them on the tab instead (2.14).
+  const back = onBack
+    ? overlayBack(() => { overlay.close(); onBack(); }, 'mp-popup-back')
+    : null;
+  replace(overlay.header, overlayChrome('Member', overlay.close, 'mp-popup-close', back));
 
   const photo = avatar(mp, { size: 'xl' });
   const image = photo.querySelector('img');
@@ -205,7 +226,7 @@ export function openMpPopup(data, mp) {
     mp.committees.length > 0 && factRow('Committees', committeeValue(mp)),
     factRow('Registered', party(data, mp.registeredPartyId)?.nameEn ?? '—'),
     mp.usaFriendship && factRow('Groups', 'Estonia–USA Parliamentary Friendship Group'),
-    mp.email && factRow('Email', mp.email),
+    mp.email && factRow('Email', emailValue(mp.email)),
   ].filter(Boolean);
 
   replace(overlay.body,
@@ -268,6 +289,23 @@ export function overlayChrome(kicker, close, closeTestid, back = null) {
     el('span', { className: 'overlay-kicker' }, [kicker]),
     closeButton(close, closeTestid),
   ];
+}
+
+/**
+ * The back arrow an overlay wears when it was opened from another one.
+ *
+ * Icon only, labelled by `aria-label`: chrome carries no text (§3), and a
+ * button reading "Back" here would also be the first thing the picker's tests
+ * mistake for a member row.
+ */
+export function overlayBack(onClick, testid) {
+  return el('button', {
+    type: 'button',
+    className: 'overlay-back',
+    'aria-label': 'Back',
+    'data-testid': testid,
+    onclick: onClick,
+  }, [icon(ICONS.back, { size: 22 })]);
 }
 
 /* ------------------------------------------------------------------ *

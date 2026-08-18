@@ -130,6 +130,40 @@ test.describe('Tier 1 — Parliament tab', () => {
     expect(legendTotal).toBe(TOTAL_SEATS);
   });
 
+  /**
+   * 2.14 — a profile reached from a party's list is a step deeper, not a
+   * detour: closing it used to drop the reader back on the tab, losing the list
+   * they were reading. The back control is the same icon-only chrome the
+   * calculator's picker uses.
+   */
+  test('an MP opened from a party sheet can get back to that sheet', async ({ page }) => {
+    const [first] = await partyChips(page);
+    await page.getByRole('button', { name: `${first.seats} ${first.name}` }).click();
+
+    const member = modal(page).getByTestId('party-sheet-member').first();
+    const name = (await member.innerText()).split('\n')[0].trim();
+    await member.click();
+
+    // The profile is open, and it is the member that was tapped.
+    const popup = modal(page);
+    await expect(popup.getByTestId('mp-profile-link')).toContainText(name);
+
+    await popup.getByTestId('mp-popup-back').click();
+
+    // Back on the party's list, still stating the count the chip claimed.
+    await expect(modal(page).getByText(`${first.seats} members`)).toBeVisible();
+    await expect(modal(page).getByTestId('party-sheet-member').first()).toContainText(name);
+    await closeModal(page);
+  });
+
+  test('an MP opened from the board has no back control', async ({ page }) => {
+    // Nothing to go back to — the board is on the tab behind this overlay, and
+    // a back arrow that just closed would be a lie about where it leads.
+    await page.getByTestId('board-president').click();
+    await expect(modal(page).getByTestId('mp-popup-back')).toHaveCount(0);
+    await closeModal(page);
+  });
+
   test('the Board of the Riigikogu lists three officers, each opening a profile', async ({ page }) => {
     await expect(page.getByText('BOARD OF THE RIIGIKOGU')).toBeVisible();
 

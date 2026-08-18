@@ -55,7 +55,8 @@ function blocLabelOf(data, partyId) {
  * the promise is unchanged: the count it states is the count the card claimed.
  *
  * Its rows are tappable now, and open the MP's profile *in place of* this
- * overlay rather than on top of it, so exactly one overlay is ever open.
+ * overlay rather than on top of it, so exactly one overlay is ever open — and
+ * the profile carries a back arrow that brings this list back (2.14).
  */
 function openPartySheet(data, partyRecord) {
   const members = mpsInVotingBloc(data, partyRecord.id);
@@ -84,7 +85,11 @@ function openPartySheet(data, partyRecord) {
       className: 'member-row',
       'data-testid': 'party-sheet-member',
       'data-mp-uuid': mp.uuid,
-      onclick: () => { overlay.close(); openMpPopup(data, mp); },
+      // Swap this sheet for the profile, and hand the profile a way back to it.
+      onclick: () => {
+        overlay.close();
+        openMpPopup(data, mp, { onBack: () => openPartySheet(data, partyRecord) });
+      },
     }, [
       avatar(mp, { size: 'sm' }),
       nameBlock(mp),

@@ -154,6 +154,11 @@ h1, h2, h3, p { margin: 0; }
 
 .screen-head { padding: 12px var(--gutter) 10px; }
 
+/* The 14px below the title is the design's; the global `h1 { margin: 0 }`
+   reset above wipes it, which is what left the search field crowding the
+   heading on the Members tab. */
+.screen-head .screen-title { margin-bottom: 14px; }
+
 .screen-title {
   font-size: 32px;
   font-weight: 700;
@@ -545,7 +550,7 @@ h1, h2, h3, p { margin: 0; }
 }
 
 .overlay-close,
-.picker-back {
+.overlay-back {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -558,7 +563,7 @@ h1, h2, h3, p { margin: 0; }
 }
 
 .overlay-close { font-size: 22px; line-height: 1; }
-.picker-back { background: none; }
+.overlay-back { background: none; }
 
 .detail-head { padding: 22px 0 14px; }
 
@@ -591,8 +596,13 @@ h1, h2, h3, p { margin: 0; }
 
 .mp-detail-head { display: flex; align-items: center; gap: 16px; padding: 22px 0 18px; }
 
+/* Same `min-width: 0` story as the fact rows: without it a long surname beside
+   the 88px photo cannot wrap and pushes past the screen on a narrow phone. */
+.mp-detail-identity { min-width: 0; }
+
 .mp-detail-name {
   display: block;
+  overflow-wrap: anywhere;
   margin-bottom: 8px;
   font-size: 25px;
   font-weight: 700;
@@ -652,7 +662,20 @@ h1, h2, h3, p { margin: 0; }
   color: var(--muted);
 }
 
-.fact-value { flex: 1; font-size: 15px; font-weight: 500; line-height: 1.4; }
+/* `min-width: 0` is the load-bearing half: a flex item defaults to
+   `min-width: auto`, so it refuses to shrink below the widest unbreakable word
+   it contains — an email with no hyphen in it, and the value runs off the card.
+   `overflow-wrap` then lets that word break if it still has to. Email addresses
+   carry their own <wbr> hints so the break lands after the "@" rather than
+   mid-name. */
+.fact-value {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+}
 
 .cta-link {
   display: flex;
