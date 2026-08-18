@@ -39,7 +39,7 @@ import {
 import { mpsInVotingBloc, partyShort } from '../data.js';
 import { el, icon, ICONS, openOverlay, replace } from '../dom.js';
 import { INDEPENDENT_PARTY_ID } from '../lib/factions.js';
-import { avatar, nameBlock, overlayChrome } from './mps.js';
+import { avatar, nameBlock, overlayBack, overlayChrome } from './mps.js';
 
 /** Glyphs this screen draws; `dom.js` owns the shared set. */
 const GLYPH = {
@@ -253,15 +253,7 @@ export default function renderCalculator(data) {
     const overlay = openOverlay({ testid, label: title });
     let partyId = null;
 
-    // The back control carries no text on purpose: it is chrome, and the MP
-    // rows below it are what a picker's buttons are supposed to be.
-    const back = el('button', {
-      type: 'button',
-      className: 'picker-back',
-      'aria-label': 'Back',
-      'data-testid': 'picker-back',
-      onclick: () => { partyId = null; paintPicker(); },
-    }, [icon(ICONS.back, { size: 22 })]);
+    const back = overlayBack(() => { partyId = null; paintPicker(); }, 'picker-back');
 
     const head = el('div', { className: 'detail-head' });
     const list = el('div', { className: 'picker-list' });

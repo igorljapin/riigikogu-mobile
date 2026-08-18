@@ -82,6 +82,7 @@ one is part of the work that introduces it.
 | 2.11 | **New.** The seat chart shows the three blocs in proportion, its segments sum to 101, and each segment's width matches its bloc's share | `tier2/parliament-data.spec.js` |
 | 2.12 | **New.** The chart carries a majority marker positioned from `meta.simpleMajority`, not from a literal | `tier2/parliament-data.spec.js` |
 | 2.13 | **New.** The chart legend states all three bloc totals, and they agree with the bloc headings (2.2) | `tier1/parliament.spec.js` |
+| 2.14 | **New.** An MP opened from a party's member list can get back to that list — the profile carries a back control, and one opened from anywhere else does not | `tier1/parliament.spec.js` |
 
 ### Members tab
 
@@ -239,6 +240,7 @@ Introduced in Phase 4 and shipping now. `<id>` is always a party id from
 | | `mp-row-avatar` **(new)** | one per row; carries `data-avatar="photo\|initials"` so 3.9 is checkable either way |
 | | `mp-count` **(new)** | the "101 members" line |
 | | `mp-popup`, `mp-photo`, `mp-profile-link`, `mp-popup-close` | |
+| | `mp-popup-back` **(new)** | present **only** when the profile was opened from the party sheet — it returns there (2.14). Icon-only, like `picker-back` |
 | | `mp-party` (with `data-party-id`), `mp-bloc`, `mp-committee`, `mp-party-history` | `mp-committee` is one pill per committee |
 | Calculator | `calc-total`, `calc-verdict` | |
 | | `badge-threshold-51`, `-61`, `-68`, `-81` | each carries `data-met="true\|false"` |
