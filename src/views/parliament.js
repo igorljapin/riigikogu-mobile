@@ -28,7 +28,7 @@ import { buckets, mpsInVotingBloc, votingBlocSeats } from '../data.js';
 import { el, icon, ICONS, openOverlay, replace } from '../dom.js';
 import { INDEPENDENT_PARTY_ID } from '../lib/factions.js';
 import renderBoard from './board.js';
-import { avatar, nameBlock, openMpPopup, overlayChrome } from './mps.js';
+import { avatar, FIRST_SCREEN, nameBlock, openMpPopup, overlayChrome } from './mps.js';
 
 /** The party-less group is a bucket, not a party: it is named for what it is. */
 function partyTitle(partyRecord) {
@@ -80,7 +80,7 @@ function openPartySheet(data, partyRecord) {
       el('p', { className: 'detail-sub' }, [subtitle]),
     ]),
 
-    el('div', { className: 'member-list' }, members.map((mp) => el('button', {
+    el('div', { className: 'member-list' }, members.map((mp, index) => el('button', {
       type: 'button',
       className: 'member-row',
       'data-testid': 'party-sheet-member',
@@ -91,7 +91,7 @@ function openPartySheet(data, partyRecord) {
         openMpPopup(data, mp, { onBack: () => openPartySheet(data, partyRecord) });
       },
     }, [
-      avatar(mp, { size: 'sm' }),
+      avatar(mp, { size: 'sm', eager: index < FIRST_SCREEN }),
       nameBlock(mp),
       icon(ICONS.chevron, { size: 20 }),
     ]))),

@@ -67,9 +67,15 @@ export function initials(name) {
  * `data-avatar` starts at `initials` and flips to `photo` only when the image
  * actually loads, so it always describes what is on screen: photos are served
  * cross-origin by `api.riigikogu.ee` and are deliberately not cached, so offline
- * every row falls back (USABILITY.md §4).
+ * every row falls back (USABILITY.md §4). The stylesheet cross-fades that flip,
+ * so a row settles rather than snapping.
+ *
+ * `eager` is for the avatars that are on screen the moment the list paints. A
+ * lazy image is fetched at low priority after layout, which is what makes a
+ * fresh list pop in one row at a time; the ones you can already see should
+ * arrive with the page, and the rest can stay lazy.
  */
-export function avatar(mp, { size = 'md', testid = null } = {}) {
+export function avatar(mp, { size = 'md', testid = null, eager = false } = {}) {
   const letters = initials(mp.name);
   const node = el('span', {
     className: `avatar avatar-${size}`,
@@ -85,13 +91,23 @@ export function avatar(mp, { size = 'md', testid = null } = {}) {
       className: 'avatar-photo',
       src: mp.photoUrl,
       alt: '',
-      loading: 'lazy',
+      loading: eager ? 'eager' : 'lazy',
+      fetchpriority: eager ? 'high' : 'auto',
+      // Never block the frame on decoding a 140x100 portrait.
+      decoding: 'async',
       onload: () => node.setAttribute('data-avatar', 'photo'),
       onerror: () => node.setAttribute('data-avatar', 'initials'),
     }));
   }
   return node;
 }
+
+/**
+ * Rows visible without scrolling, near enough: a 72px row on the shortest
+ * phone this is built for, plus a few for the scroll that follows. Used to
+ * decide which avatars load eagerly.
+ */
+export const FIRST_SCREEN = 12;
 
 /** The caption under a name in every list: office, else committee, else district. */
 export function memberSub(mp) {
@@ -214,7 +230,7 @@ export function openMpPopup(data, mp, { onBack = null } = {}) {
     : null;
   replace(overlay.header, overlayChrome('Member', overlay.close, 'mp-popup-close', back));
 
-  const photo = avatar(mp, { size: 'xl' });
+  const photo = avatar(mp, { size: 'xl', eager: true });
   const image = photo.querySelector('img');
   // The contract pins this element to the canonical API URL (3.7); the initials
   // behind it are what shows when that URL cannot be reached.
@@ -312,7 +328,7 @@ export function overlayBack(onClick, testid) {
  * The directory
  * ------------------------------------------------------------------ */
 
-function mpRow(data, mp, onOpen) {
+function mpRow(data, mp, onOpen, index) {
   return el('button', {
     type: 'button',
     className: 'mp-row',
@@ -321,7 +337,7 @@ function mpRow(data, mp, onOpen) {
     'data-party-id': mp.votingBlocPartyId,
     onclick: () => onOpen(mp),
   }, [
-    avatar(mp, { size: 'md', testid: 'mp-row-avatar' }),
+    avatar(mp, { size: 'md', testid: 'mp-row-avatar', eager: index < FIRST_SCREEN }),
     nameBlock(mp, { nameClass: 'mp-row-name', subClass: 'mp-row-sub' }),
     partyBadge(data, mp.votingBlocPartyId),
   ]);
@@ -347,7 +363,7 @@ export default function renderMembers(data) {
     count.textContent = `${rows.length} member${rows.length === 1 ? '' : 's'}`;
     replace(list, rows.length === 0
       ? [el('p', { className: 'mp-empty' }, [`No member matches “${query.trim()}”.`])]
-      : rows.map((mp) => mpRow(data, mp, (m) => openMpPopup(data, m))));
+      : rows.map((mp, index) => mpRow(data, mp, (m) => openMpPopup(data, m), index)));
 
     // Single-select, always exactly one active (3.10). `data-active` is the
     // state; the classes only paint it.
