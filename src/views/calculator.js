@@ -39,7 +39,7 @@ import {
 import { mpsInVotingBloc, partyShort } from '../data.js';
 import { el, icon, ICONS, openOverlay, replace } from '../dom.js';
 import { INDEPENDENT_PARTY_ID } from '../lib/factions.js';
-import { avatar, nameBlock, overlayBack, overlayChrome } from './mps.js';
+import { avatar, FIRST_SCREEN, nameBlock, overlayBack, overlayChrome } from './mps.js';
 
 /** Glyphs this screen draws; `dom.js` owns the shared set. */
 const GLYPH = {
@@ -311,7 +311,7 @@ export default function renderCalculator(data) {
 
       replace(list, members.length === 0
         ? [el('p', { className: 'picker-empty' }, ['Nobody left in this party.'])]
-        : members.map((mp) => el('button', {
+        : members.map((mp, index) => el('button', {
           type: 'button',
           className: 'picker-row picker-mp',
           'data-testid': 'picker-mp',
@@ -322,7 +322,7 @@ export default function renderCalculator(data) {
             paintPicker();
           },
         }, [
-          avatar(mp, { size: 'sm' }),
+          avatar(mp, { size: 'sm', eager: index < FIRST_SCREEN }),
           nameBlock(mp),
           el('span', { className: `picker-action picker-action-${kind}` }, [isAdd ? '+1' : '−1']),
         ])));

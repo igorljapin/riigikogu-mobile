@@ -206,15 +206,24 @@ h1, h2, h3, p { margin: 0; }
 
 .avatar::after { content: var(--initials, ""); }
 
+/* The photo fades up over the initials rather than replacing them in one
+   frame. `opacity` rather than `visibility` because it is the property that can
+   animate — and an image that never arrives stays at zero, which is the same
+   thing `visibility: hidden` did for it. */
 .avatar-photo {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
 }
 
-.avatar:not([data-avatar="photo"]) .avatar-photo { visibility: hidden; }
+.avatar[data-avatar="photo"] .avatar-photo { opacity: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .avatar-photo { transition: opacity 220ms ease-out; }
+}
 
 .avatar-sm { width: 44px; height: 44px; font-size: 15px; }
 .avatar-md { width: 48px; height: 48px; font-size: 16px; }
