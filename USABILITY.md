@@ -296,6 +296,14 @@ MP photos are the one thing that does not work offline — they are served by
 `api.riigikogu.ee`, and the worker leaves cross-origin requests alone. The
 roster falls back to its placeholders.
 
+**Phase 3 PR C changed how 5.4 and 5.5 are enforced, and not what they say.**
+They went offline with `context.setOffline(true)`, which a restarted service
+worker does not inherit — so after the reload each of them does, the app was
+quietly back on the network and the assertions would have held against an empty
+precache list. They now run against a throwaway server the test closes
+(`tests/helpers/pwa.js`). The list itself also grew: it covers the desktop
+surface as of that PR, and `CACHE_NAME` is `riigikogu-mobile-v5`. See §10.11.
+
 ---
 
 ## 5. Running it
@@ -549,10 +557,12 @@ say it in words.
 > **Status: enforced, and the design has shipped.** Phase 3 PR A built the
 > *behaviour* and the tests that hold it, over a scaffold stylesheet nobody was
 > meant to mistake for a design; PR B replaced that scaffold with the approved
-> artboards. `desktop/index.html`, `src/views-desktop/` and `desktop.css` are
-> the surface, and every "Enforced by" cell below names a test file that runs in
-> `npm test` — the rows are protections now, not promises. §10.10 records what
-> the design changed and the one spec it moved.
+> artboards; PR C made it an installable app that works offline and taught the
+> monthly job to ask for a seat. `desktop/index.html`, `src/views-desktop/` and
+> `desktop.css` are the surface, and every "Enforced by" cell below names a test
+> file that runs in `npm test` — the rows are protections now, not promises.
+> §10.10 records what the design changed and the one spec it moved; §10.11 and
+> §10.12 are PR C's own promises.
 > Nothing in §1–§9 changed: the desktop surface is a new view over the unchanged
 > DATA and LOGIC layers (10.5), and every existing mobile promise stays exactly
 > as it is.
@@ -682,7 +692,9 @@ writes it, because the API publishes no seat. That has one consequence a later
 session will meet — a roster change needs a hand here, and the validator fails
 on both halves of the join until it gets one. The rules are skipped, with a
 warning, when the file is absent, so the monthly job keeps validating a staging
-directory that holds only the files it generates.
+directory that holds only the files it generates. **PR C is that later session:
+§10.12** — the job now classifies the gap and asks for the seat in its PR body
+rather than failing on a file it may not write.
 
 ### 10.7 Explicitly declined or altered from the retiring desktop app
 
@@ -778,3 +790,110 @@ composing with it — so the spec now derives both counts from `data/mps.json`
 instead. That is the stronger source: a filter that agreed with its own caption
 and with nothing else used to pass, and now does not. Nothing in 10.3 or 10.9
 named the counts, which is why this is a spec edit and not a contract change.
+
+### 10.11 The desktop surface as an installed app
+
+> **Phase 3 PR C.** What PR A and PR B built is now installable and works with
+> the network off — and it does both through **the mobile app's service
+> worker**, not one of its own. Nothing in §1–§9 changed: 5.1–5.5 still say
+> exactly what they said, over a worker that grew a second app to serve.
+
+| # | Must always be true | Enforced by |
+|---|---|---|
+| D5.1 | The desktop shell registers the service worker without a console error, and the worker's scope contains the desktop path | `pwa/desktop-offline.spec.js` |
+| D5.2 | Both surfaces share **one** registration and **one** cache: visiting them in turn creates no second worker and no second copy of `data/*.json` | `pwa/desktop-offline.spec.js` |
+| D5.3 | The precache list names every file the desktop surface ships — its shell, its manifest, `desktop.css`, every `src/views-desktop/` module and `data/seating.json` | `pwa/desktop-offline.spec.js` |
+| D5.4 | Every same-origin URL the desktop surface requests is in that list. MP photos are the documented exception: they are `api.riigikogu.ee`'s, and the worker leaves cross-origin requests alone (§4) | `pwa/desktop-offline.spec.js` |
+| D5.5 | `desktop/manifest.json` is a second app — `scope` and `start_url` are `/riigikogu-mobile/desktop/`, nested inside the mobile scope and not equal to it, icons relative and in both installable sizes | `pwa/desktop-offline.spec.js` |
+| D5.6 | With the server gone, the desktop app opens for a visitor who has only ever loaded the mobile one, renders all 101 seats and still counts a coalition | `pwa/desktop-offline.spec.js` |
+
+**No new `data-testid`.** These promises are about a worker, a manifest and a
+cache; where they need the app they read hooks §10.1–§10.9 already named
+(`nav-parliament`, `floor-grid`, `calc-total`, `calc-preset-coalition`). PR C
+adds nothing to the tables above and renames nothing in them.
+
+**One worker, not two.** A worker's scope is capped by the directory its script
+is served from, so the repository root's `service-worker.js` already covers
+`desktop/`; the desktop shell registers *that* file rather than a
+`desktop/service-worker.js` of its own. A nested worker would win inside the
+nested directory and keep its own copy of `data/*.json` — which is a way to be
+offline with two different rosters, on a repository whose whole reason to exist
+is that two copies of this data disagreed (`DESIGN_AND_MERGE_PLAN.md`, "Why
+merge at all"). `CACHE_NAME` moved to `riigikogu-mobile-v5` with the list, per
+`CLAUDE.md`'s rule 5.
+
+**Two manifests, one deployment.** The mobile app keeps `/riigikogu-mobile/`
+and the desktop one takes `/riigikogu-mobile/desktop/`, so the two install as
+two apps with two start URLs and two icons' worth of identity. The desktop
+manifest is the only one that changed hands: mobile's is byte-identical, because
+its `start_url` **is** its identity and every installed copy is keyed on it.
+
+> **A question for review, raised rather than invented** (the Phase 3 kickoff
+> rule). The desktop scope is *nested inside* the mobile one, which is what the
+> plan asks for and what keeps one deployment. The consequence is browser
+> behaviour no headless suite can assert: with the mobile app installed,
+> navigating to `/riigikogu-mobile/desktop/` is a navigation inside the mobile
+> app's scope, and Chrome and Edge may open it in that app's window rather than
+> offering the desktop app for install. Phase 4 step 1 is where a human tries
+> both. If it reads wrong there, the fix is a scope split — moving the desktop
+> app to a path the mobile scope does not contain — and that is a URL decision,
+> not a code one.
+
+**Offline now means the server is gone.** `context.setOffline(true)` emulates
+the network condition on the browser context, and a service worker restarted
+afterwards — which is what a reload or a navigation does — comes back without
+it. Probed on this sandbox's Chromium: offline, a page fetch of an uncached file
+returns the worker's 503 fallback; after one `page.reload()` the same fetch
+returns 200 from the network. Every offline assertion made after a navigation
+was therefore an assertion about a worker that could still reach the server, and
+would have passed against an empty precache list. `tests/helpers/pwa.js` serves
+the repository from a throwaway origin and closes it instead, so nothing but the
+cache can answer. **5.4 and 5.5 were rewritten onto that mechanism and their
+wording is unchanged** — a spec edit that makes an existing promise true, not a
+contract change (§8's rule). Sabotage proof, run on the way in: deleting one
+entry from the precache list turns D5.3, D5.4 and D5.6 red, and D5.6 fails by
+the app never painting.
+
+### 10.12 The monthly job and the second curated file
+
+> The pipeline half of PR C. `data/seating.json` is curated by hand and the
+> monthly job may not write it (§10.6), so a roster change arrives with a member
+> who has nowhere to sit and a chair nobody is in — the seating twin of a
+> defection arriving unclassified. The job now says so instead of failing.
+
+| # | Must always be true | Enforced by |
+|---|---|---|
+| D6.1 | A roster change the floor plan has not caught up with is classified in both directions — a member with no seat, a seat held by someone who is no longer an MP — and the PR body names the member, the file and the edit | `python/test_resolvers.py` |
+| D6.2 | The monthly job never writes `data/seating.json`, exactly as it never writes `data/alignment.json` | `python/test_resolvers.py` |
+| D6.3 | `--allow-pending-seating` downgrades those two join rules to warnings and **nothing else**; every other seating rule still fails the run | `python/test_seating.py` |
+
+**The gate has two halves, and both had to move.** The flag is one; the other is
+`tests/python/test_seating.py`, which the job runs in-process and which reads the
+committed `data/` on the assumption that its floor plan is complete — true on
+`main` and in any human's PR, false in the job's tree between the fetch and the
+reviewer's edit. Left alone it would fail there on exactly the state the flag
+exists to let through, and the job would abort with no PR to fix it in. The
+workflow therefore sets `PENDING_SEATING=true` for that step, from its own
+compare output and nowhere else, and the module stands down with a reason
+naming the flagged validator as that run's gate. The reviewer's own push — a
+human's, so the Usability Contract workflow does trigger — runs it in full
+against the fixed data.
+
+The bargain is `--allow-pending-alignment`'s, for the same reason: a job that
+cannot fix a file must not fail on it, or the reviewer is left with no PR to fix
+it in. What it publishes meanwhile is honest — the floor plan is one member
+short, and no arithmetic moves, because every count is read from `mps.json` and
+none of it from the seating plan. The PR opens as a **draft** while either file
+is pending, and `generate_pr_body.py` renders a 🪑 CAUTION block that names the
+arriving member, the freed cell and the line to paste. Where **one** member
+arrives and **one** chair is freed it offers that chair, because the Riigikogu
+seats by parliamentary group and a substitute usually inherits it
+(`data/README.md`) — offered, never assumed: the file stays the reviewer's. Where
+two arrive it offers none of them, and says why: nothing in the report says which
+arrival took which chair, and a member in the wrong seat is the one mistake the
+validator cannot catch, because every rule it has still passes on the wrong cell.
+
+A month with no API change at all is the one path where a 🪑 could go quiet —
+there is nothing to commit, so there is no PR to carry it. The job writes it to
+the run summary instead, so a seat merged unresolved is still said out loud
+every month until someone fixes it.

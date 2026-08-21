@@ -39,7 +39,12 @@ def warn(msg: str) -> None:
     warnings.append(msg)
 
 
-def check_seating(data: Path, mps: list[dict], by_uuid: dict[str, dict]) -> None:
+def check_seating(
+    data: Path,
+    mps: list[dict],
+    by_uuid: dict[str, dict],
+    allow_pending_seating: bool = False,
+) -> None:
     """`seating.json` — the desktop surface's floor plan, joined to the roster by uuid.
 
     The join is the whole point: the desktop seating grid paints one tile per
@@ -53,6 +58,15 @@ def check_seating(data: Path, mps: list[dict], by_uuid: dict[str, dict]) -> None
     on a file it is forbidden to write. When the file is missing every rule below
     is skipped with a warning — which is correct for a staging directory and
     loud enough locally, where `data/seating.json` is always present.
+
+    **`--allow-pending-seating` downgrades the two join rules to warnings**, and
+    nothing else. It exists for the same reason `--allow-pending-alignment`
+    does: the monthly job may not write this file either, so a substitution it
+    fetched legitimately reaches the PR with a member who has nowhere to sit and
+    a chair nobody is in. That is publishable — the floor plan shows 100 seats
+    and the arithmetic, which is read from `mps.json` and not from here, is
+    untouched — and it is what the PR body asks the reviewer to fix before
+    merging. Locally the flag is off and both rules are fatal.
     """
     path = data / "seating.json"
     if not path.is_file():
@@ -89,12 +103,15 @@ def check_seating(data: Path, mps: list[dict], by_uuid: dict[str, dict]) -> None
     # wrong as a member with nowhere to sit, and only one of the two is visible
     # on the floor — the other is a hole the reader cannot see.
     active = {m["uuid"] for m in mps if m.get("active") is not False}
+    join = warn if allow_pending_seating else err
+    pending = " — PENDING SEAT ASSIGNMENT" if allow_pending_seating else ""
     for uid in sorted(set(seats) - active):
         entry = seats[uid]
         name = (entry.get("name") if isinstance(entry, dict) else None) or uid
-        err(f"seating.json: seat for {name} ({uid}) — not an active MP")
+        join(f"seating.json: seat for {name} ({uid}) — not an active MP{pending}")
     for uid in sorted(active - set(seats)):
-        err(f"seating.json: {by_uuid[uid]['name']} has no seat — the floor would drop them")
+        join(f"seating.json: {by_uuid[uid]['name']} has no seat — the floor "
+             f"would drop them{pending}")
 
     occupied: dict[tuple[int, int], str] = {}
     for uid, seat in sorted(seats.items()):
@@ -125,7 +142,7 @@ def check_seating(data: Path, mps: list[dict], by_uuid: dict[str, dict]) -> None
           f"{(rows * cols - len(seats)) if isinstance(rows, int) and isinstance(cols, int) else '?'} empty")
 
 
-def check(data: Path, allow_pending: bool = False) -> None:
+def check(data: Path, allow_pending: bool = False, allow_pending_seating: bool = False) -> None:
     parties = json.loads((data / "parties.json").read_text(encoding="utf-8"))
     mps = json.loads((data / "mps.json").read_text(encoding="utf-8"))
     alignment = json.loads((data / "alignment.json").read_text(encoding="utf-8"))
@@ -216,7 +233,7 @@ def check(data: Path, allow_pending: bool = False) -> None:
             err(f"board.json: {b['name']} is not in the roster")
 
     # ---- seating plan ----------------------------------------------------- #
-    check_seating(data, mps, by_uuid)
+    check_seating(data, mps, by_uuid, allow_pending_seating=allow_pending_seating)
 
     # ---- alignment overlay ---------------------------------------------- #
     blocs = alignment.get("blocs", {})
@@ -310,11 +327,21 @@ def main() -> int:
         help="downgrade 'non-affiliated MP missing from the overlay' to a warning "
              "(the monthly job only — it may not write alignment.json)",
     )
+    ap.add_argument(
+        "--allow-pending-seating",
+        action="store_true",
+        help="downgrade the seating join ('no seat' / 'not an active MP') to a "
+             "warning (the monthly job only — it may not write seating.json)",
+    )
     args = ap.parse_args()
 
     print(f"Validating {args.data} …")
     try:
-        check(Path(args.data), allow_pending=args.allow_pending_alignment)
+        check(
+            Path(args.data),
+            allow_pending=args.allow_pending_alignment,
+            allow_pending_seating=args.allow_pending_seating,
+        )
     except FileNotFoundError as exc:
         print(f"FAIL: missing file: {exc}", file=sys.stderr)
         return 1

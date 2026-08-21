@@ -1,5 +1,13 @@
 /**
- * Service worker for the XV Riigikogu dashboard.
+ * Service worker for the XV Riigikogu dashboard — **both surfaces**.
+ *
+ * Since Phase 3 PR C it also covers the desktop surface at `desktop/`. One
+ * worker, not two: a worker's scope is capped by the directory its script is
+ * served from, so this one's scope is the whole deployment and already contains
+ * `desktop/`. A nested `desktop/service-worker.js` would win inside that
+ * directory and hold its own copy of `data/*.json`, which is a way to be
+ * offline with two different rosters. The desktop shell registers *this* file
+ * (`src/views-desktop/app.js`), and `USABILITY.md` §10.11 records the decision.
  *
  * Phase 6 of ARCHITECTURE_PLAN.md. The previous version precached
  * `/riigikogu-dashboard/index.html` and four other absolute paths under a
@@ -26,7 +34,10 @@
 // added no files — but the stylesheet and every view module hold new content,
 // and without a bump the fetch handler hands a returning visitor the
 // pre-redesign copy and only refreshes it for the visit after.
-const CACHE_NAME = 'riigikogu-mobile-v4';
+//
+// v5 adds the desktop surface: its shell and manifest, `desktop.css`, every
+// `src/views-desktop/` module and `data/seating.json`.
+const CACHE_NAME = 'riigikogu-mobile-v5';
 
 // Where this app is deployed. Not used to build URLs — the relative list above
 // does that — but checked at install time, because a silent mount-point mismatch
@@ -36,14 +47,19 @@ const DEPLOY_SCOPE = '/riigikogu-mobile/';
 const OFFLINE_URL = './offline.html';
 
 /**
- * The Phase-4 file layout, in full: the shell, every ES module, and the JSON the
- * app fetches at runtime. The data matters as much as the code here — the app
- * renders nothing without `data/*.json`, so a shell-only precache would give an
- * offline user a permanent "Could not load data".
+ * The whole file layout, both surfaces: the two shells, every ES module either
+ * one imports, and the JSON they fetch at runtime. The data matters as much as
+ * the code here — neither app renders anything without `data/*.json`, so a
+ * shell-only precache would give an offline user a permanent "Could not load
+ * data".
+ *
+ * The shared layers appear once and are listed once, because they *are* shared:
+ * `src/data.js`, `src/dom.js` and `src/lib/*` are the same modules under both
+ * surfaces, and `data/seating.json` is read only by the desktop one.
  *
  * MP photos are deliberately absent: they live on `api.riigikogu.ee`, a
  * different origin, and the fetch handler leaves cross-origin requests alone.
- * Offline, the roster renders with its photo placeholders.
+ * Offline, both rosters render with their photo placeholders.
  */
 const PRECACHE_ASSETS = [
   './',
@@ -52,23 +68,44 @@ const PRECACHE_ASSETS = [
   './manifest.json',
   './styles.css',
 
-  './src/app.js',
+  // The desktop surface's shell and its own manifest — a second app, nested
+  // inside this one's scope (USABILITY.md §10.11). Both the directory URL and
+  // the file are listed, for the same reason `./` and `./index.html` are: a
+  // visitor may have either in their history.
+  './desktop/',
+  './desktop/index.html',
+  './desktop/manifest.json',
+  './desktop.css',
+
+  // Shared by both surfaces.
   './src/data.js',
   './src/dom.js',
   './src/lib/calculator.js',
   './src/lib/factions.js',
+
+  './src/app.js',
   './src/views/parliament.js',
   './src/views/mps.js',
   './src/views/calculator.js',
   './src/views/board.js',
 
-  // The five files src/data.js loads. `catalogues.json` is intentionally not
-  // here: the monthly job writes it, nothing in the app reads it.
+  './src/views-desktop/app.js',
+  './src/views-desktop/parts.js',
+  './src/views-desktop/floor.js',
+  './src/views-desktop/seating.js',
+  './src/views-desktop/parliament.js',
+  './src/views-desktop/directory.js',
+  './src/views-desktop/calculator.js',
+
+  // The five files src/data.js loads, plus the floor plan the desktop surface
+  // loads for itself. `catalogues.json` is intentionally absent: the monthly job
+  // writes it, nothing in either app reads it.
   './data/parties.json',
   './data/mps.json',
   './data/alignment.json',
   './data/board.json',
   './data/meta.json',
+  './data/seating.json',
 
   './icons/icon.svg',
   './icons/icon-192x192.png',

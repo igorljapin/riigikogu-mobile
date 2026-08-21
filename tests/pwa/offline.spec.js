@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const { withServerDown, workerReady } = require('../helpers/pwa');
 
 /**
  * PWA install + offline.
@@ -83,40 +84,44 @@ test.describe('PWA — install and offline', () => {
     expect(manifest.icons.length).toBeGreaterThan(0);
   });
 
-  test('the app still renders after going offline', async ({ page, context }) => {
-    await page.goto('/index.html');
-    await page.evaluate(() => navigator.serviceWorker.ready);
+  test('the app still renders after going offline', async ({ page }) => {
+    // Offline here means the server is gone, not `context.setOffline` — see
+    // `tests/helpers/pwa.js`. Phase 3 PR C changed the mechanism and not the
+    // promise: 5.4 said the same thing before, over an emulation a restarted
+    // worker did not inherit, so the app was quietly still on the network.
+    await withServerDown(async (origin, unplug) => {
+      await page.goto(`${origin}/index.html`);
+      await workerReady(page);
 
-    await context.setOffline(true);
-    await page.reload();
+      await unplug();
+      await page.reload();
 
-    await expect(page.getByText('XV Riigikogu', { exact: true })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Calculator', exact: true })).toBeVisible();
-
-    await context.setOffline(false);
+      await expect(page.getByText('XV Riigikogu', { exact: true })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Calculator', exact: true })).toBeVisible();
+    });
   });
 
-  test('the calculator works offline, from cached data', async ({ page, context }) => {
+  test('the calculator works offline, from cached data', async ({ page }) => {
     // Phase 4 moved the roster into data/*.json fetched at runtime, so offline
     // support has to cover the data as well as the shell.
-    await page.goto('/index.html');
-    await page.evaluate(() => navigator.serviceWorker.ready);
+    await withServerDown(async (origin, unplug) => {
+      await page.goto(`${origin}/index.html`);
+      await workerReady(page);
 
-    await context.setOffline(true);
-    await page.reload();
+      await unplug();
+      await page.reload();
 
-    await page.getByRole('button', { name: 'Calculator', exact: true }).click();
-    await page.getByRole('button', { name: 'Coalition', exact: true }).click();
+      await page.getByRole('button', { name: 'Calculator', exact: true }).click();
+      await page.getByRole('button', { name: 'Coalition', exact: true }).click();
 
-    const total = await page.evaluate(() => {
-      for (const el of document.querySelectorAll('*')) {
-        const m = /^(\d+)\s*\/\s*101$/.exec((el.textContent || '').trim());
-        if (m) return Number(m[1]);
-      }
-      return 0;
+      const total = await page.evaluate(() => {
+        for (const el of document.querySelectorAll('*')) {
+          const m = /^(\d+)\s*\/\s*101$/.exec((el.textContent || '').trim());
+          if (m) return Number(m[1]);
+        }
+        return 0;
+      });
+      expect(total).toBeGreaterThan(0);
     });
-    expect(total).toBeGreaterThan(0);
-
-    await context.setOffline(false);
   });
 });

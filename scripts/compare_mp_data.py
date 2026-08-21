@@ -16,6 +16,11 @@ committed baseline and the freshly fetched one — and writes a change report:
                         district, friendship-group membership, name spelling.
     ♻️  Stale alignment  a uuid in `alignment.json` that is no longer
                         non-affiliated — rejoined a group, or left parliament.
+    🪑 Seating          an MP with no seat, or a seat held by someone who is no
+                        longer an MP. `data/seating.json` is curated by hand —
+                        the API publishes no seat — so a roster change leaves
+                        both halves of that join for the reviewer, exactly as a
+                        defection leaves `alignment.json`.
 
 The report is data, not prose: `generate_pr_body.py` renders it. Both the
 report and the exit signalling stay silent about `meta.updatedAt`, which changes
@@ -84,6 +89,7 @@ def classify(base_dir: Path, cur_dir: Path) -> dict:
         "board": [],
         "routine": [],
         "stale_alignment": [],
+        "seating": {"present": False, "needs_seat": [], "orphan_seat": []},
         "seats": {
             "before": {
                 "registered": base_meta.get("registered"),
@@ -177,6 +183,40 @@ def classify(base_dir: Path, cur_dir: Path) -> dict:
                 "reason": f"now registered with {m['faction']}",
             })
 
+    # ---- 🪑 seating ------------------------------------------------------- #
+    # Both directions of the join, computed against the *current* roster rather
+    # than against the diff: a gap a previous run surfaced and nobody filled is
+    # still a gap, the same way an unclassified non-affiliated MP is re-flagged
+    # every month until the overlay names them.
+    #
+    # Absent is not a finding. `fetch_mp_data.py` stages only the files it
+    # generates, so a staging directory holds no seating plan and there is
+    # nothing to be said about it — the same rule `validate_data.py` follows.
+    seating_path = cur_dir / "seating.json"
+    if seating_path.is_file():
+        # Hand-edited, so nothing here assumes a shape. A file that is broken
+        # rather than merely out of date is `validate_data.py`'s to report, in
+        # sentences; this step's job is only to notice who has no chair.
+        plan = load(seating_path)
+        seats = plan.get("seats") if isinstance(plan, dict) else None
+        seats = seats if isinstance(seats, dict) else {}
+        report["seating"]["present"] = True
+        active = {uid for uid, m in cur.items() if m.get("active") is not False}
+        for uid in sorted(active - set(seats), key=lambda u: cur[u]["name"]):
+            report["seating"]["needs_seat"].append({
+                "uuid": uid,
+                "name": cur[uid]["name"],
+                "faction": cur[uid]["faction"],
+            })
+        for uid in sorted(set(seats) - active):
+            seat = seats[uid] if isinstance(seats[uid], dict) else {}
+            report["seating"]["orphan_seat"].append({
+                "uuid": uid,
+                "name": seat.get("name") or (base[uid]["name"] if uid in base else uid),
+                "row": seat.get("row"),
+                "col": seat.get("col"),
+            })
+
     # ---- 🟡 board --------------------------------------------------------- #
     base_roles = {b["role"]: b for b in base_board}
     for b in cur_board:
@@ -218,6 +258,20 @@ def classify(base_dir: Path, cur_dir: Path) -> dict:
     return report
 
 
+def needs_seating(report: dict) -> bool:
+    """Does `data/seating.json` need a hand before this PR is complete?
+
+    Kept out of `has_changes` on purpose: the job cannot write the floor plan,
+    so a seat gap on its own gives it nothing to commit and therefore nothing to
+    open a PR with. It is a flag *on* a change — in practice always a roster
+    change, which is a change in its own right — not a reason for one. The
+    workflow still says it out loud on a month with no changes, in the run
+    summary, so a gap nobody filled is not silently carried forward.
+    """
+    seating = report.get("seating") or {}
+    return bool(seating.get("needs_seat") or seating.get("orphan_seat"))
+
+
 def has_changes(report: dict) -> bool:
     return bool(
         report["action_required"]
@@ -252,9 +306,11 @@ def main() -> int:
 
     changes = has_changes(report)
     action = bool(report["action_required"])
+    seating = needs_seating(report)
     emit_output(
         changes_detected="true" if changes else "false",
         action_required="true" if action else "false",
+        seating_required="true" if seating else "false",
     )
 
     print(f"Report written to {args.report}")
@@ -264,7 +320,16 @@ def main() -> int:
     print(f"  board           : {len(report['board'])}")
     print(f"  routine         : {len(report['routine'])}")
     print(f"  stale alignment : {len(report['stale_alignment'])}")
+    print(f"  seating         : {len(report['seating']['needs_seat'])} without a seat, "
+          f"{len(report['seating']['orphan_seat'])} orphaned"
+          f"{'' if report['seating']['present'] else ' (no seating.json here)'}")
     print(f"Changes detected: {changes}")
+
+    for item in report["seating"]["needs_seat"]:
+        print(f"  🪑 {item['name']} has no seat — assign one in data/seating.json before merge")
+    for item in report["seating"]["orphan_seat"]:
+        print(f"  🪑 row {item['row']}, col {item['col']} is still {item['name']}'s — "
+              "free it in data/seating.json before merge")
 
     for item in report["action_required"]:
         if item["reason"] == "unexpected_faction_change":
