@@ -7,7 +7,7 @@
 ![PWA](https://img.shields.io/badge/PWA-installable%20%2B%20offline-purple)
 
 **Live:** [igorljapin.github.io/riigikogu-mobile](https://igorljapin.github.io/riigikogu-mobile/)
-· **Desktop version:** [riigikogu-desktop](https://igorljapin.github.io/riigikogu-desktop/)
+· **Desktop version:** [igorljapin.github.io/riigikogu-mobile/desktop](https://igorljapin.github.io/riigikogu-mobile/desktop/)
 
 ---
 
@@ -115,16 +115,19 @@ build step** — the source in this repository is exactly what GitHub Pages
 serves.
 
 ```
-index.html            shell: <div id=app> and one <script type=module>
-styles.css            the whole stylesheet
+index.html            mobile shell: <div id=app> and one <script type=module>
+styles.css            the mobile stylesheet
+desktop/               desktop shell: index.html + its own manifest.json
+desktop.css           the desktop stylesheet, same tokens as styles.css
 src/
   app.js              tab router + mount
-  data.js             fetches data/*.json at runtime
+  data.js             fetches data/*.json at runtime — shared by both surfaces
   dom.js              three DOM helpers
   lib/                pure, unit-tested logic — calculator.js, factions.js
-  views/              parliament.js · mps.js · calculator.js · board.js
-data/                  parties · mps · alignment · board · meta · catalogues
-service-worker.js     precache + offline
+  views/              mobile: parliament.js · mps.js · calculator.js · board.js
+  views-desktop/      desktop: app.js · parliament.js · directory.js · calculator.js · …
+data/                  parties · mps · alignment · board · meta · catalogues · seating
+service-worker.js     precache + offline, shared by both surfaces
 manifest.json  offline.html  icons/
 scripts/              build_data.py · validate_data.py · fetch_mp_data.py · …
 tests/                unit · tier1 · tier2 · pwa · python
