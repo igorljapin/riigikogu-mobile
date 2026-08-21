@@ -41,9 +41,13 @@ repo has broken before:
 | `src/app.js`, `src/data.js`, `src/dom.js` | Entry point + tab router; runtime loader for `data/*.json`; three DOM helpers. |
 | `src/lib/*.js` | Pure, unit-tested logic: `calculator.js`, `factions.js`. No DOM, no I/O. |
 | `src/views/*.js` | `parliament.js` (composition + Board), `mps.js`, `calculator.js`, `board.js`. **The redesign layer**, together with `styles.css`. |
+| `desktop/index.html`, `desktop/manifest.json` | The desktop surface's own shell (same hand-written-shell rule as `index.html`) and its own manifest — `scope` is `/riigikogu-mobile/desktop/`, nested inside the mobile app's, so the two install as two separate apps. |
+| `desktop.css` | The desktop stylesheet, built on the same design tokens as `styles.css` at desktop density. Party colours are data-driven here too, never hardcoded. |
+| `src/views-desktop/*.js` | `app.js` (shell + router), `parts.js`, `floor.js`, `seating.js`, `parliament.js`, `directory.js`, `calculator.js`. **The desktop redesign layer**, together with `desktop.css`. Reuses `src/data.js` and `src/lib/*.js` untouched — see `USABILITY.md` §10. |
 | `data/*.json` | The single source of truth, **read by the app at runtime**. See `data/README.md`. |
-| `service-worker.js` | Precaches the whole layout — shell, ES modules, `data/*.json` — with **relative** entries, so one list is correct both at `/riigikogu-mobile/` and at `/` under the test server. Bump `CACHE_NAME` whenever the list changes. |
-| `manifest.json`, `offline.html`, `icons/` | PWA assets. `start_url` and `scope` are `/riigikogu-mobile/`. |
+| `data/seating.json` | The one dataset only the desktop surface reads: each MP's session-hall seat position, keyed by uuid. Hand-maintained — see "Updating MP data" below. |
+| `service-worker.js` | Precaches the whole layout for **both** surfaces — mobile shell, desktop shell, ES modules, `data/*.json` including `seating.json` — with **relative** entries, so one list is correct both at `/riigikogu-mobile/` and at `/` under the test server. One registration, one cache, shared by both apps (`USABILITY.md` §10.11). Bump `CACHE_NAME` whenever the list changes. |
+| `manifest.json`, `offline.html`, `icons/` | Mobile PWA assets. `start_url` and `scope` are `/riigikogu-mobile/`. |
 | `scripts/build_data.py`, `validate_data.py` | Rebuild `data/` from the live API, and gate it. |
 | `scripts/fetch_mp_data.py` | The monthly job's fetcher. Same resolvers as `build_data.py` (it imports them), stages + validates before publishing, and **never writes `data/alignment.json`**. |
 | `scripts/compare_mp_data.py`, `generate_pr_body.py` | Classify a fetch into the six change categories, and render the PR body — ACTION REQUIRED first. |
