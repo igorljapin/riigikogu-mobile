@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>
+*{box-sizing:border-box}
+:root,[data-theme="light"]{--bg:#f4f6f8;--card:#ffffff;--text:#0f172a;--muted:#64748b;--line:#e4e9ef;--track:#eef1f5;--hero:#0f172a;--warnBg:#fffbeb;--warnLine:#fcd34d;--warnText:#92400e;--shadow:0 1px 3px rgba(15,23,42,.14);--pop:0 14px 34px rgba(15,23,42,.16)}
+[data-theme="dark"]{--bg:#080d16;--card:#131b29;--text:#f6f8fb;--muted:#93a1b8;--line:#233046;--track:#1d283b;--hero:#1b2536;--warnBg:#2a2213;--warnLine:#6b5117;--warnText:#f5cf7a;--shadow:0 1px 3px rgba(0,0,0,.5);--pop:0 14px 34px rgba(0,0,0,.55)}
+:root{--coalition:#2563eb;--opposition:#e11d48;--unaligned:#94a3b8;--accent:#9333ea;--pass:#4ade80;--addBg:#dcfce7;--addFg:#15803d;--remBg:#fee2e2;--remFg:#b91c1c;--unalignedText:#b45309}
+input::-webkit-search-cancel-button{display:none}
+a{color:#0f172a;text-decoration:none}a:hover{color:#9333ea}
+[data-theme="dark"] a{color:#f6f8fb}[data-theme="dark"] a:hover{color:#c084fc}
+</style></helmet>
+
+<div data-theme="{{ theme }}" style="width:1920px;height:1080px;display:flex;overflow:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;-webkit-font-smoothing:antialiased">
+
+  <nav style="flex:0 0 104px;width:104px;display:flex;flex-direction:column;align-items:center;padding:22px 0 20px;background:var(--card);border-right:1px solid var(--line)">
+    <span style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin-bottom:18px;border-radius:13px;background:var(--hero);color:#fff;font-weight:700;font-size:15px;line-height:1;letter-spacing:.02em">XV</span>
+    <span style="display:flex;flex-direction:column;gap:4px">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="3">
+        <button type="button" onClick="{{ n.go }}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;width:82px;height:76px;border:0;border-radius:17px;cursor:pointer;background:{{ n.bg }};color:{{ n.color }}">
+          <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.d }}"></path></svg>
+          <span style="font-weight:600;font-size:12px;line-height:1">{{ n.label }}</span>
+        </button>
+      </sc-for>
+    </span>
+    <span style="flex:1"></span>
+    <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600;font-size:10px;line-height:1;letter-spacing:.14em;color:var(--muted)">{{ themeLabel }}</span>
+  </nav>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;padding:26px 34px 28px">
+
+    <header style="display:flex;align-items:flex-start;justify-content:space-between;gap:48px;padding-bottom:22px">
+      <div style="min-width:0">
+        <p style="margin:0 0 9px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600;font-size:12px;line-height:1;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">XV Riigikogu · {{ updatedLabel }}</p>
+        <h1 style="margin:0;font-weight:700;font-size:34px;line-height:1.05;letter-spacing:-0.03em;color:var(--text)">{{ viewTitle }}</h1>
+        <p style="margin:7px 0 0;font-weight:500;font-size:15px;line-height:1.35;color:var(--muted)">{{ viewSub }}</p>
+      </div>
+
+      <sc-if value="{{ showHeaderBar }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:0 0 780px;width:780px">
+          <div style="display:flex;align-items:baseline;gap:10px;justify-content:flex-end">
+            <span style="font-weight:700;font-size:46px;line-height:1;letter-spacing:-0.035em;color:var(--text)">{{ coalitionSeats }}</span>
+            <span style="font-weight:600;font-size:16px;line-height:1.2;color:var(--muted)">of 101 coalition seats</span>
+          </div>
+          <div style="position:relative;padding-top:18px;margin-top:10px">
+            <div style="display:flex;height:34px;border-radius:8px;overflow:hidden;background:var(--track)">
+              <sc-for list="{{ blocBars }}" as="b" hint-placeholder-count="3">
+                <div style="width:{{ b.width }};background:{{ b.color }}"></div>
+              </sc-for>
+            </div>
+            <div style="position:absolute;top:0;bottom:0;left:{{ thresholdPct }};width:2px;background:var(--text)">
+              <span style="position:absolute;top:0;left:5px;white-space:nowrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600;font-size:11px;line-height:1;letter-spacing:.04em;color:var(--text)">51-VOTE MAJORITY</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:20px;margin-top:12px">
+            <sc-for list="{{ blocBars }}" as="l" hint-placeholder-count="3">
+              <span style="display:flex;align-items:center;gap:7px;font-weight:500;font-size:13px;line-height:1;color:var(--muted)">
+                <span style="width:10px;height:10px;border-radius:3px;background:{{ l.color }}"></span>{{ l.label }}
+              </span>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </header>
+
+    <!-- ══════════ PARLIAMENT ══════════ -->
+    <sc-if value="{{ isParliament }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;min-height:0;display:flex;gap:20px">
+
+        <section style="flex:0 0 1108px;width:1108px;position:relative;display:flex;flex-direction:column;padding:22px;border:1px solid var(--line);border-radius:20px;background:var(--card)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:16px">
+            <div>
+              <h2 style="margin:0;font-weight:600;font-size:18px;line-height:1.2;color:var(--text)">Session hall seating plan</h2>
+              <p style="margin:5px 0 0;font-weight:400;font-size:13px;line-height:1.3;color:var(--muted)">Layout from riigikogu.ee · coloured by voting bloc party</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px">
+              <span style="display:flex;align-items:center;gap:7px;font-weight:500;font-size:12px;line-height:1;color:var(--muted)">
+                <span style="width:9px;height:9px;border-radius:50%;background:#808080;box-shadow:0 0 0 2px var(--card)"></span>registered elsewhere
+              </span>
+              <span style="font-weight:500;font-size:12px;line-height:1;color:var(--muted)">Hover a seat · click for the profile</span>
+            </div>
+          </div>
+
+          <div style="position:relative">
+            <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:5px">
+              <sc-for list="{{ seatCells }}" as="c" hint-placeholder-count="120">
+                <div style="position:relative;height:54px">
+                  <button type="button" onClick="{{ c.click }}" onMouseEnter="{{ c.enter }}" onMouseLeave="{{ c.leave }}" style="{{ c.style }}"><span style="display:block;white-space:pre-line;font-weight:600;font-size:9px;line-height:1.2;letter-spacing:-0.01em">{{ c.label }}</span></button>
+                  <span style="{{ c.markStyle }}"></span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="{{ tipStyle }}">
+              <span style="display:block;font-weight:600;font-size:14px;line-height:1.2;color:#fff">{{ tipName }}</span>
+              <span style="display:block;margin-top:4px;font-weight:500;font-size:12px;line-height:1.25;color:rgba(255,255,255,.72)">{{ tipSub }}</span>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:18px">
+            <sc-for list="{{ legendParties }}" as="l" hint-placeholder-count="7">
+              <button type="button" onClick="{{ l.toggle }}" style="{{ l.style }}">
+                <span style="{{ l.swatch }}"></span>
+                <span style="font-weight:600;font-size:13px;line-height:1">{{ l.short }}</span>
+                <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600;font-size:13px;line-height:1;opacity:.6">{{ l.seats }}</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)">
+            <span style="font-weight:500;font-size:14px;line-height:1.3;color:var(--muted)">{{ floorCaption }}</span>
+            <span style="display:flex;gap:22px">
+              <span style="font-weight:600;font-size:14px;line-height:1;color:var(--text)">Coalition <span style="color:var(--coalition)">{{ coalitionSeats }}</span></span>
+              <span style="font-weight:600;font-size:14px;line-height:1;color:var(--text)">Unaligned <span style="color:var(--unaligned)">{{ unalignedSeats }}</span></span>
+              <span style="font-weight:600;font-size:14px;line-height:1;color:var(--text)">Opposition <span style="color:var(--opposition)">{{ oppositionSeats }}</span></span>
+            </span>
+          </div>
+
+          <div style="position:absolute;display:{{ popupDisplay }};right:22px;bottom:22px;z-index:40;width:352px;padding:18px;border:1px solid var(--line);border-radius:20px;background:var(--card);box-shadow:var(--pop)">
+            <div style="display:flex;gap:14px">
+              <span style="position:relative;flex:0 0 72px;width:72px;height:72px;border-radius:20px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:{{ popup.color }};color:{{ popup.textColor }};font-weight:700;font-size:24px;line-height:1">{{ popup.initials }}
+                <span style="{{ popup.photoStyle }}"></span>
+              </span>
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font-weight:700;font-size:19px;line-height:1.2;color:var(--text)">{{ popup.name }}</span>
+                <span style="display:flex;gap:6px;margin-top:8px">
+                  <span style="padding:5px 10px;border-radius:8px;font-weight:700;font-size:12px;line-height:1.2;background:{{ popup.color }};color:{{ popup.textColor }}">{{ popup.short }}</span>
+                  <span style="padding:5px 10px;border-radius:8px;font-weight:600;font-size:12px;line-height:1.2;background:var(--track);color:{{ popup.blocColor }}">{{ popup.bloc }}</span>
+                </span>
+              </span>
+              <button type="button" onClick="{{ closePopup }}" style="flex:0 0 32px;width:32px;height:32px;border:0;border-radius:50%;background:var(--track);color:var(--muted);font-size:15px;line-height:1;cursor:pointer">×</button>
+            </div>
+            <p style="margin:14px 0 0;font-weight:500;font-size:13px;line-height:1.45;color:var(--muted)">{{ popup.role }}</p>
+            <p style="margin:8px 0 0;font-weight:500;font-size:13px;line-height:1.45;color:var(--text)">{{ popup.committees }}</p>
+            <p style="margin:8px 0 0;font-weight:400;font-size:13px;line-height:1.45;color:var(--muted)">{{ popup.district }}</p>
+            <button type="button" onClick="{{ openInDirectory }}" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:42px;margin-top:14px;border:1px solid var(--line);border-radius:12px;background:transparent;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px;line-height:1;color:var(--text)" style-hover="border-color:var(--accent);color:var(--accent)">Open full profile
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg>
+            </button>
+          </div>
+        </section>
+
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px">
+          <section style="padding:18px;border:1px solid var(--line);border-radius:20px;background:var(--card)">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px">
+              <h2 style="margin:0;font-weight:600;font-size:13px;line-height:1;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Parties by voting bloc</h2>
+              <button type="button" onClick="{{ clearHighlight }}" style="{{ clearStyle }}">{{ clearLabel }}</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ partyRows }}" as="p" hint-placeholder-count="7">
+                <button type="button" onClick="{{ p.toggle }}" style="{{ p.style }}">
+                  <span style="display:flex;align-items:center;gap:12px">
+                    <span style="flex:0 0 12px;width:12px;height:28px;border-radius:5px;background:{{ p.color }}"></span>
+                    <span style="flex:1;min-width:0">
+                      <span style="display:block;font-weight:600;font-size:16px;line-height:1.25;color:var(--text)">{{ p.name }}</span>
+                      <span style="display:block;font-weight:400;font-size:12px;line-height:1.3;color:var(--muted)">{{ p.sub }}</span>
+                    </span>
+                    <span style="font-weight:700;font-size:24px;line-height:1;letter-spacing:-0.02em;color:var(--text)">{{ p.seats }}</span>
+                  </span>
+                  <span style="display:block;width:100%;height:5px;border-radius:999px;background:var(--track)">
+                    <span style="display:block;height:100%;border-radius:999px;width:{{ p.width }};background:{{ p.color }}"></span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+          </section>
+
+          <section style="padding:18px;border:1px solid var(--line);border-radius:20px;background:var(--card)">
+            <h2 style="margin:0 0 11px;font-weight:600;font-size:13px;line-height:1;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Board of the Riigikogu</h2>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ boardRows }}" as="b" hint-placeholder-count="3">
+                <button type="button" onClick="{{ b.open }}" style="display:flex;align-items:center;gap:13px;width:100%;min-height:60px;padding:11px 13px;border:1px solid var(--line);border-radius:14px;background:transparent;cursor:pointer;text-align:left">
+                  <span style="flex:0 0 10px;width:10px;height:34px;border-radius:4px;background:{{ b.color }}"></span>
+                  <span style="flex:1;min-width:0">
+                    <span style="display:block;font-weight:600;font-size:16px;line-height:1.25;color:var(--text)">{{ b.name }}</span>
+                    <span style="display:block;font-weight:400;font-size:12px;line-height:1.3;color:var(--muted)">{{ b.role }}</span>
+                  </span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg>
+                </button>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ══════════ DIRECTORY ══════════ -->
+    <sc-if value="{{ isDirectory }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;min-height:0;display:flex;gap:20px">
+
+        <section style="flex:0 0 660px;width:660px;display:flex;flex-direction:column;min-height:0;border:1px solid var(--line);border-radius:20px;background:var(--card);overflow:hidden">
+          <div style="padding:18px 20px 14px;border-bottom:1px solid var(--line)">
+            <div style="display:flex;align-items:center;gap:10px;height:52px;padding:0 16px;border:1px solid var(--line);border-radius:16px;background:var(--bg)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M16.5 16.5 21 21"></path></svg>
+              <input type="search" placeholder="Search 101 members" value="{{ query }}" onChange="{{ onQuery }}" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font-family:inherit;font-weight:400;font-size:17px;line-height:1.3;color:var(--text)">
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;padding:3px;margin-top:12px;border-radius:13px;background:var(--track)">
+              <sc-for list="{{ blocFilters }}" as="f" hint-placeholder-count="4">
+                <button type="button" onClick="{{ f.pick }}" style="height:38px;border:0;border-radius:10px;cursor:pointer;font-family:inherit;font-weight:600;font-size:13px;line-height:1;background:{{ f.bg }};color:{{ f.color }};box-shadow:{{ f.shadow }}">{{ f.label }}</button>
+              </sc-for>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+              <sc-for list="{{ tagFilters }}" as="f" hint-placeholder-count="2">
+                <button type="button" onClick="{{ f.pick }}" style="height:40px;border:1px solid {{ f.border }};border-radius:11px;cursor:pointer;font-family:inherit;font-weight:600;font-size:13px;line-height:1;background:{{ f.bg }};color:{{ f.color }}">{{ f.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <p style="margin:0;padding:12px 20px 8px;font-weight:500;font-size:13px;line-height:1;color:var(--muted)">{{ countLabel }}</p>
+          <div style="flex:1;min-height:0;overflow-y:auto">
+            <sc-for list="{{ memberRows }}" as="m" hint-placeholder-count="9">
+              <button type="button" onClick="{{ m.pick }}" style="{{ m.style }}">
+                <span style="{{ m.avatar }}">{{ m.initials }}</span>
+                <span style="flex:1;min-width:0">
+                  <span style="display:block;font-weight:600;font-size:16px;line-height:1.3;color:var(--text)">{{ m.name }}</span>
+                  <span style="display:block;font-weight:400;font-size:13px;line-height:1.35;color:var(--muted)">{{ m.sub }}</span>
+                </span>
+                <span style="{{ m.badgeStyle }}">{{ m.badge }}</span>
+              </button>
+            </sc-for>
+            <p style="display:{{ emptyDisplay }};margin:0;padding:40px 20px;text-align:center;font-weight:400;font-size:16px;line-height:1.4;color:var(--muted)">{{ emptyLabel }}</p>
+          </div>
+        </section>
+
+        <section style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0;padding:30px 34px;border:1px solid var(--line);border-radius:20px;background:var(--card);overflow-y:auto">
+          <div style="display:flex;align-items:center;gap:24px">
+            <span style="position:relative;flex:0 0 128px;width:128px;height:128px;border-radius:32px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:{{ profile.color }};color:{{ profile.textColor }};font-weight:700;font-size:44px;line-height:1">{{ profile.initials }}
+              <span style="{{ profile.photoStyle }}"></span>
+            </span>
+            <div style="flex:1;min-width:0">
+              <h2 style="margin:0;font-weight:700;font-size:32px;line-height:1.12;letter-spacing:-0.025em;color:var(--text)">{{ profile.name }}</h2>
+              <div style="display:flex;gap:8px;margin-top:12px">
+                <span style="padding:6px 11px;border-radius:9px;font-weight:700;font-size:13px;line-height:1.2;background:{{ profile.color }};color:{{ profile.textColor }}">{{ profile.short }}</span>
+                <span style="padding:6px 11px;border-radius:9px;font-weight:600;font-size:13px;line-height:1.2;background:var(--track);color:{{ profile.blocColor }}">{{ profile.bloc }}</span>
+                <span style="display:{{ profile.usaDisplay }};padding:6px 11px;border-radius:9px;font-weight:600;font-size:13px;line-height:1.2;background:var(--track);color:var(--muted)">Estonia–USA Friendship Group</span>
+              </div>
+            </div>
+            <a href="{{ profile.url }}" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;flex:0 0 auto;height:48px;padding:0 22px;border-radius:14px;background:var(--hero);color:#fff;font-weight:600;font-size:15px;line-height:1">Open riigikogu.ee profile</a>
+          </div>
+
+          <p style="display:{{ profile.warnDisplay }};margin:22px 0 0;padding:14px 16px;border:1px solid var(--warnLine);border-radius:14px;background:var(--warnBg);color:var(--warnText);font-weight:500;font-size:14px;line-height:1.45">{{ profile.warn }}</p>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px">
+            <sc-for list="{{ profileFacts }}" as="f" hint-placeholder-count="6">
+              <span style="display:flex;gap:14px;grid-column:{{ f.span }};padding:14px 16px;border:1px solid var(--line);border-radius:14px">
+                <span style="flex:0 0 104px;font-weight:600;font-size:12px;line-height:1.3;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">{{ f.label }}</span>
+                <span style="flex:1;min-width:0;font-weight:500;font-size:15px;line-height:1.4;color:var(--text)">{{ f.value }}</span>
+              </span>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:26px;margin-top:10px;padding:16px;border:1px solid var(--line);border-radius:14px">
+            <span style="display:grid;grid-template-columns:repeat(12,10px);gap:2px">
+              <sc-for list="{{ profileSeatCells }}" as="s" hint-placeholder-count="120">
+                <span style="{{ s.style }}"></span>
+              </sc-for>
+            </span>
+            <span style="min-width:0">
+              <span style="display:block;font-weight:600;font-size:12px;line-height:1.3;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Seat on the floor</span>
+              <span style="display:block;margin-top:5px;font-weight:500;font-size:15px;line-height:1.4;color:var(--text)">{{ profile.seatLabel }}</span>
+            </span>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+
+    <!-- ══════════ CALCULATOR ══════════ -->
+    <sc-if value="{{ isCalculator }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;min-height:0;display:flex;gap:20px">
+
+        <section style="flex:0 0 1108px;width:1108px;display:flex;flex-direction:column;padding:22px;border:1px solid var(--line);border-radius:20px;background:var(--card)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:16px">
+            <div>
+              <h2 style="margin:0;font-weight:600;font-size:18px;line-height:1.2;color:var(--text)">Session hall seating plan</h2>
+              <p style="margin:5px 0 0;font-weight:400;font-size:13px;line-height:1.3;color:var(--muted)">Click any seat to add that member to the count, or hold them out of it</p>
+            </div>
+            <span style="padding:7px 13px;border-radius:11px;background:var(--track);font-weight:600;font-size:13px;line-height:1.2;color:var(--text)">{{ selSeats }} of 101 selected</span>
+          </div>
+
+          <div style="position:relative">
+            <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:5px">
+              <sc-for list="{{ seatCells }}" as="c" hint-placeholder-count="120">
+                <div style="position:relative;height:54px">
+                  <button type="button" onClick="{{ c.click }}" onMouseEnter="{{ c.enter }}" onMouseLeave="{{ c.leave }}" style="{{ c.style }}"><span style="display:block;white-space:pre-line;font-weight:600;font-size:9px;line-height:1.2;letter-spacing:-0.01em">{{ c.label }}</span></button>
+                  <span style="{{ c.markStyle }}"></span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="{{ tipStyle }}">
+              <span style="display:block;font-weight:600;font-size:14px;line-height:1.2;color:#fff">{{ tipName }}</span>
+              <span style="display:block;margin-top:4px;font-weight:500;font-size:12px;line-height:1.25;color:rgba(255,255,255,.72)">{{ tipSub }}</span>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:26px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line)">
+            <span style="display:flex;align-items:center;gap:8px;font-weight:500;font-size:13px;line-height:1;color:var(--muted)"><span style="width:14px;height:14px;border-radius:4px;background:var(--track);box-shadow:0 0 0 2px var(--text)"></span>in the count</span>
+            <span style="display:flex;align-items:center;gap:8px;font-weight:500;font-size:13px;line-height:1;color:var(--muted)"><span style="width:14px;height:14px;border-radius:4px;background:var(--track);opacity:.35"></span>not counted</span>
+            <span style="display:flex;align-items:center;gap:8px;font-weight:500;font-size:13px;line-height:1;color:var(--muted)"><span style="width:14px;height:14px;border-radius:4px;background:var(--remBg);box-shadow:0 0 0 2px var(--remFg)"></span>held out of a selected party</span>
+          </div>
+        </section>
+
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px;overflow-y:auto">
+          <div style="padding:20px 20px 18px;border-radius:22px;background:var(--hero);color:#fff">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px">
+              <span style="font-weight:700;font-size:56px;line-height:.9;letter-spacing:-0.04em">{{ selSeats }}</span>
+              <span style="text-align:right;font-weight:600;font-size:16px;line-height:1.3;color:{{ verdictColor }}">{{ verdict }}</span>
+            </div>
+            <div style="position:relative;height:44px;margin-top:20px">
+              <div style="position:absolute;left:0;right:0;top:14px;height:14px;border-radius:999px;background:rgba(255,255,255,.14)"></div>
+              <div style="position:absolute;left:0;top:14px;height:14px;border-radius:999px;width:{{ selPct }};background:{{ fillColor }}"></div>
+              <sc-for list="{{ marks }}" as="k" hint-placeholder-count="4">
+                <span style="position:absolute;top:0;left:{{ k.left }};transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px">
+                  <span style="width:2px;height:28px;background:{{ k.tick }}"></span>
+                  <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600;font-size:11px;line-height:1;color:{{ k.color }}">{{ k.need }}</span>
+                </span>
+              </sc-for>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px">
+              <sc-for list="{{ marks }}" as="k" hint-placeholder-count="4">
+                <span style="display:flex;flex-direction:column;gap:5px;padding:10px 11px;border:1px solid {{ k.chipBorder }};border-radius:12px;background:{{ k.chipBg }}">
+                  <span style="font-weight:700;font-size:15px;line-height:1;color:{{ k.chipFg }}">{{ k.fraction }}</span>
+                  <span style="font-weight:500;font-size:11px;line-height:1.25;color:rgba(255,255,255,.66)">{{ k.chipNote }}</span>
+                </span>
+              </sc-for>
+            </div>
+            <p style="margin:14px 0 0;font-weight:500;font-size:15px;line-height:1.4;color:rgba(255,255,255,.72)">{{ hint }}</p>
+          </div>
+
+          <div style="display:flex;gap:8px">
+            <sc-for list="{{ presets }}" as="p" hint-placeholder-count="3">
+              <button type="button" onClick="{{ p.run }}" style="flex:1;height:46px;border:1px solid var(--line);border-radius:14px;background:var(--card);cursor:pointer;font-family:inherit;font-weight:600;font-size:15px;line-height:1;color:{{ p.color }}">{{ p.label }}</button>
+            </sc-for>
+          </div>
+
+          <div>
+            <h2 style="margin:4px 0 10px;font-weight:600;font-size:13px;line-height:1;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Tap a party in or out</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <sc-for list="{{ calcParties }}" as="p" hint-placeholder-count="7">
+                <button type="button" onClick="{{ p.toggle }}" style="display:flex;flex-direction:column;gap:6px;min-height:80px;padding:13px;border:2px solid {{ p.border }};border-radius:18px;background:{{ p.bg }};cursor:pointer;text-align:left">
+                  <span style="display:flex;align-items:center;gap:8px">
+                    <span style="width:12px;height:12px;border-radius:4px;background:{{ p.color }}"></span>
+                    <span style="font-weight:600;font-size:15px;line-height:1.2;color:var(--text)">{{ p.short }}</span>
+                  </span>
+                  <span style="display:flex;align-items:baseline;gap:6px">
+                    <span style="font-weight:700;font-size:28px;line-height:1;letter-spacing:-0.03em;color:{{ p.countColor }}">{{ p.count }}</span>
+                    <span style="font-weight:500;font-size:13px;line-height:1.2;color:var(--muted)">of {{ p.total }}</span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div>
+            <h2 style="margin:4px 0 10px;font-weight:600;font-size:13px;line-height:1;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Named adjustments</h2>
+            <p style="display:{{ noAdjDisplay }};margin:0;padding:14px 16px;border:1px dashed var(--line);border-radius:14px;font-weight:400;font-size:14px;line-height:1.4;color:var(--muted)">Click a seat on the floor plan to add a member from a non-selected party, or hold a selected party's member out of the count.</p>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ adjustments }}" as="a" hint-placeholder-count="1">
+                <span style="display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card)">
+                  <span style="display:flex;flex:0 0 30px;width:30px;height:30px;align-items:center;justify-content:center;border-radius:9px;font-weight:700;font-size:13px;line-height:1;background:{{ a.badgeBg }};color:{{ a.badgeFg }}">{{ a.badge }}</span>
+                  <span style="flex:1;min-width:0">
+                    <span style="display:block;font-weight:600;font-size:15px;line-height:1.25;color:var(--text)">{{ a.name }}</span>
+                    <span style="display:block;font-weight:400;font-size:13px;line-height:1.3;color:var(--muted)">{{ a.note }}</span>
+                  </span>
+                  <button type="button" onClick="{{ a.undo }}" style="height:40px;padding:0 14px;border:1px solid var(--line);border-radius:11px;background:transparent;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px;line-height:1;color:var(--muted)">Undo</button>
+                </span>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1920,&quot;height&quot;:1080},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;parliament&quot;,&quot;directory&quot;,&quot;calculator&quot;],&quot;default&quot;:&quot;parliament&quot;,&quot;tsType&quot;:&quot;'parliament' | 'directory' | 'calculator'&quot;},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light' | 'dark'&quot;},&quot;showSeatNames&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Seating plan&quot;},&quot;showDefectorMarks&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Seating plan&quot;}}">
+const NAV = [
+  { id: 'parliament', label: 'Parliament', d: 'M3 20h18M4 20a8 8 0 0 1 16 0M8 20v-3.4M12 20v-4.6M16 20v-3.4' },
+  { id: 'directory', label: 'Directory', d: 'M9.5 5.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6M3.5 19.5a6 6 0 0 1 12 0M15.5 6.2a2.6 2.6 0 0 1 0 5.2M17 19.5a5 5 0 0 0-2.4-4.3' },
+  { id: 'calculator', label: 'Calculator', d: 'M5 2.5h14v19H5zM8.5 6.5h7M9 12h.01M12 12h.01M15 12h.01M9 16.5h.01M12 16.5h.01M15 16.5h.01' }
+];
+const NOOP = () => {};
+const CLEAR_BTN = 'flex:0 0 auto;height:28px;padding:0 11px;border:1px solid var(--line);border-radius:9px;background:transparent;font-family:inherit;font-weight:600;font-size:12px;line-height:1;color:var(--muted);';
+const photoStyle = url => 'position:absolute;inset:0;background-size:cover;background-position:center top' + (url ? ';background-image:url(' + url + ')' : '');
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const FRACTIONS = [
+  { need: 51, fraction: '1/2+1', note: 'Ordinary legislation' },
+  { need: 61, fraction: '3/5', note: 'Constitution, 2nd route' },
+  { need: 68, fraction: '2/3', note: 'Constitutional amendment' },
+  { need: 81, fraction: '4/5', note: 'Urgent amendment' }
+];
+
+class Component extends DCLogic {
+  state = {
+    data: null, view: null, hover: null, popup: null,
+    query: '', filter: 'all', selected: '563f86fd-db45-4046-b8ed-b66e5a2aec45', highlight: [],
+    sel: { parties: ['reform', 'e200'], added: ['987e47c7-929b-4437-9385-fab4f4fd7824'], excluded: [] }
+  };
+
+  componentDidMount() {
+    if (this.props.data) return;
+    const files = ['parties', 'mps', 'alignment', 'board', 'meta', 'seating'];
+    Promise.all(files.map(f => fetch('./data/' + f + '.json').then(r => r.json())))
+      .then(([parties, mps, alignment, board, meta, seating]) =>
+        this.setState({ data: { parties, mps, alignment, board, meta, seating } }))
+      .catch(e => console.error('data load failed', e));
+  }
+
+  view() { return this.state.view || this.props.view || 'parliament'; }
+  set(k, v) { this.setState({ [k]: v }); }
+
+  toggleHighlight(id) {
+    this.setState(st => ({
+      highlight: st.highlight.includes(id) ? st.highlight.filter(x => x !== id) : st.highlight.concat(id),
+      popup: null
+    }));
+  }
+
+  model() {
+    const d = this.props.data || this.state.data;
+    if (!d) return null;
+    const roster = d.mps.filter(m => m.active !== false);
+    const party = {}; d.parties.forEach(p => { party[p.id] = p; });
+    const defectors = d.alignment.defectors || {};
+    const unaligned = new Set(d.alignment.unaligned || []);
+    const blocOf = id => d.alignment.blocs[id] || null;
+    const vb = m => (defectors[m.uuid] ? defectors[m.uuid].votesWith : m.registeredPartyId);
+    const byUuid = new Map(roster.map(m => [m.uuid, m]));
+    const counts = {};
+    roster.forEach(m => { const p = vb(m); counts[p] = (counts[p] || 0) + 1; });
+    const blocSeats = { coalition: 0, opposition: 0, unaligned: 0 };
+    roster.forEach(m => {
+      const b = unaligned.has(m.uuid) ? 'unaligned' : (blocOf(vb(m)) || 'unaligned');
+      blocSeats[b] += 1;
+    });
+    return { d, roster, party, defectors, unaligned, blocOf, vb, byUuid, counts, blocSeats };
+  }
+
+  initials(name) {
+    const parts = String(name || '').trim().split(/\s+/);
+    const a = parts[0] || '', b = parts.length > 1 ? parts[parts.length - 1] : '';
+    return ((a[0] || '') + (b[0] || '')).toUpperCase();
+  }
+  blocLabel(b) { return b === 'coalition' ? 'Coalition' : b === 'opposition' ? 'Opposition' : 'Unaligned'; }
+  blocTint(b) { return b === 'coalition' ? 'var(--coalition)' : b === 'opposition' ? 'var(--opposition)' : 'var(--unalignedText)'; }
+  shortOf(m, id) { const p = m.party[id]; return !p ? '—' : (id === 'independent' ? 'Unaligned' : p.short); }
+  monthYear(iso) { if (!iso) return ''; const dt = new Date(iso); return MONTHS[dt.getUTCMonth()] + ' ' + dt.getUTCFullYear(); }
+  factionShort(m, factionName) {
+    const hit = m.d.parties.find(p => p.factionName === factionName);
+    return hit ? hit.short : String(factionName || '').replace(' Parliamentary Group', '');
+  }
+  subLine(mp) {
+    if (mp.boardRole) return mp.boardRole.replace(' of the Riigikogu', '');
+    if (mp.factionRole) return mp.factionRole;
+    if (mp.committees && mp.committees.length) return mp.committees[0].name;
+    return mp.district || '';
+  }
+
+  selSet(m) {
+    const { roster, vb } = m, s = this.state.sel;
+    const out = new Set();
+    roster.forEach(mp => {
+      const inParty = s.parties.includes(vb(mp));
+      if (inParty && !s.excluded.includes(mp.uuid)) out.add(mp.uuid);
+      if (!inParty && s.added.includes(mp.uuid)) out.add(mp.uuid);
+    });
+    return out;
+  }
+
+  toggleSeat(m, uuid) {
+    const mp = m.byUuid.get(uuid); if (!mp) return;
+    const s = this.state.sel, p = m.vb(mp), inParty = s.parties.includes(p);
+    const next = { parties: s.parties.slice(), added: s.added.slice(), excluded: s.excluded.slice() };
+    if (inParty) {
+      next.excluded = s.excluded.includes(uuid) ? s.excluded.filter(u => u !== uuid) : s.excluded.concat(uuid);
+    } else {
+      next.added = s.added.includes(uuid) ? s.added.filter(u => u !== uuid) : s.added.concat(uuid);
+    }
+    this.setState({ sel: next });
+  }
+
+  togglePartyCalc(m, id) {
+    const s = this.state.sel, on = s.parties.includes(id);
+    const ids = new Set(m.roster.filter(mp => m.vb(mp) === id).map(mp => mp.uuid));
+    this.setState({ sel: {
+      parties: on ? s.parties.filter(p => p !== id) : s.parties.concat(id),
+      added: on ? s.added : s.added.filter(u => !ids.has(u)),
+      excluded: on ? s.excluded.filter(u => !ids.has(u)) : s.excluded
+    } });
+  }
+
+  renderVals() {
+    const view = this.view();
+    const theme = this.props.theme === 'dark' ? 'dark' : 'light';
+    const showNames = this.props.showSeatNames !== false;
+    const showMarks = this.props.showDefectorMarks !== false;
+    const base = {
+      theme, themeLabel: theme === 'dark' ? 'DARK' : 'LIGHT',
+      isParliament: view === 'parliament', isDirectory: view === 'directory', isCalculator: view === 'calculator',
+      showHeaderBar: view === 'parliament',
+      viewTitle: view === 'directory' ? 'Members of the Riigikogu' : view === 'calculator' ? 'Coalition calculator' : 'Parliament',
+      viewSub: view === 'directory' ? 'All 101 members — search, filter by voting bloc, read a profile'
+        : view === 'calculator' ? 'Build a voting group and see which constitutional thresholds it clears'
+        : 'Seating plan, voting-bloc composition and the Board',
+      navItems: NAV.map(n => ({ ...n, go: () => this.setState({ view: n.id, popup: null }),
+        bg: n.id === view ? 'var(--track)' : 'transparent', color: n.id === view ? 'var(--accent)' : 'var(--muted)' })),
+      updatedLabel: 'Updated —', coalitionSeats: 0, oppositionSeats: 0, unalignedSeats: 0,
+      thresholdPct: '50.5%', blocBars: [], partyRows: [], boardRows: [], seatCells: [],
+      legendParties: [], floorCaption: '', popupDisplay: 'none', popup: {},
+      clearHighlight: () => this.set('highlight', []), clearStyle: CLEAR_BTN + 'visibility:hidden;pointer-events:none', clearLabel: 'Clear',
+      tipStyle: 'display:none', tipName: '', tipSub: '',
+      closePopup: () => this.set('popup', null),
+      openInDirectory: () => this.setState(st => (st.popup
+        ? { view: 'directory', selected: st.popup, popup: null, query: '', filter: 'all', highlight: [] }
+        : null)),
+      query: this.state.query, onQuery: e => this.setState({ query: e.target.value }),
+      countLabel: '', emptyDisplay: 'none', emptyLabel: '', blocFilters: [], tagFilters: [],
+      memberRows: [], profile: {}, profileFacts: [], profileSeatCells: [],
+      selSeats: 0, selPct: '0%', verdict: '', verdictColor: '#fff', fillColor: 'var(--accent)',
+      marks: [], presets: [], calcParties: [], adjustments: [], noAdjDisplay: 'none', hint: ''
+    };
+    const m = this.model();
+    if (!m) return base;
+
+    const meta = m.d.meta, total = meta.totalSeats;
+    const pct = n => (n / total * 100).toFixed(3) + '%';
+    base.updatedLabel = 'Updated ' + (() => { const dt = new Date(meta.sourceDate); return dt.getUTCDate() + ' ' + MONTHS[dt.getUTCMonth()].toUpperCase() + ' ' + dt.getUTCFullYear(); })();
+    base.coalitionSeats = m.blocSeats.coalition;
+    base.oppositionSeats = m.blocSeats.opposition;
+    base.unalignedSeats = m.blocSeats.unaligned;
+    base.thresholdPct = pct(meta.simpleMajority);
+    base.blocBars = [
+      { label: 'Coalition ' + m.blocSeats.coalition, color: 'var(--coalition)', width: pct(m.blocSeats.coalition) },
+      { label: 'Unaligned ' + m.blocSeats.unaligned, color: 'var(--unaligned)', width: pct(m.blocSeats.unaligned) },
+      { label: 'Opposition ' + m.blocSeats.opposition, color: 'var(--opposition)', width: pct(m.blocSeats.opposition) }
+    ];
+
+    const partyIds = Object.keys(m.counts).sort((a, b) => m.counts[b] - m.counts[a]);
+    const hlSet = this.state.highlight;
+    base.partyRows = partyIds.map(id => {
+      const p = m.party[id], isUn = id === 'independent', on = hlSet.includes(id);
+      return {
+        color: p.color, seats: m.counts[id], width: pct(m.counts[id]),
+        name: isUn ? 'Unaligned members' : p.short,
+        sub: isUn ? 'No group, no whip' : this.blocLabel(m.blocOf(id)) + ' · ' + p.nameEn,
+        toggle: () => this.toggleHighlight(id),
+        style: 'display:flex;flex-direction:column;gap:7px;width:100%;padding:9px 13px;border:1px solid '
+          + (on ? p.color : 'var(--line)') + ';border-radius:14px;cursor:pointer;text-align:left;font-family:inherit;background:'
+          + (on ? 'var(--track)' : 'transparent') + (on ? ';box-shadow:inset 0 0 0 1px ' + p.color : '')
+      };
+    });
+
+    const BLOC_ORDER = { coalition: 0, unaligned: 1, opposition: 2 };
+    base.legendParties = partyIds.slice().sort((a, b) => {
+      const ba = a === 'independent' ? 1 : BLOC_ORDER[m.blocOf(a)] ?? 1;
+      const bb = b === 'independent' ? 1 : BLOC_ORDER[m.blocOf(b)] ?? 1;
+      return ba - bb || m.counts[b] - m.counts[a];
+    }).map(id => {
+      const p = m.party[id], on = hlSet.includes(id), dim = hlSet.length && !on;
+      return {
+        short: id === 'independent' ? 'Unaligned' : p.short, seats: m.counts[id],
+        toggle: () => this.toggleHighlight(id),
+        style: 'display:flex;align-items:center;gap:8px;height:32px;padding:0 12px;border:1px solid '
+          + (on ? p.color : 'var(--line)') + ';border-radius:10px;cursor:pointer;font-family:inherit;color:var(--text);background:'
+          + (on ? 'var(--track)' : 'transparent') + ';opacity:' + (dim ? '.45' : '1'),
+        swatch: 'width:11px;height:11px;border-radius:3px;flex:0 0 11px;background:' + p.color
+      };
+    });
+    base.floorCaption = hlSet.length
+      ? hlSet.map(id => (id === 'independent' ? 'Unaligned' : m.party[id].short)).join(' + ') + ' — '
+        + hlSet.reduce((n, id) => n + m.counts[id], 0) + ' of 101 seats highlighted'
+      : 'Click a party to highlight its members on the floor. Tiles are coloured by the party a member votes with.';
+    if (hlSet.length) base.clearStyle = CLEAR_BTN + 'cursor:pointer';
+
+    base.boardRows = m.d.board.map(b => ({
+      name: b.name, role: b.role, color: (m.party[b.partyId] || {}).color || '#808080',
+      open: () => this.setState({ view: 'directory', selected: b.uuid, query: '', filter: 'all' })
+    }));
+
+    // ── seating grid ──
+    const grid = m.d.seating, rows = grid.gridDimensions.rows, cols = grid.gridDimensions.cols;
+    const at = {};
+    Object.keys(grid.seats).forEach(u => { const s = grid.seats[u]; at[s.row + ':' + s.col] = u; });
+    const isCalc = view === 'calculator';
+    const inCount = isCalc ? this.selSet(m) : new Set();
+    const hl = isCalc ? [] : this.state.highlight;
+    const cells = [];
+    if (view !== 'directory') for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      const uuid = at[r + ':' + c], mp = uuid ? m.byUuid.get(uuid) : null;
+      if (!mp) { cells.push({ style: 'display:none', markStyle: 'display:none', label: '', click: NOOP, enter: NOOP, leave: NOOP }); continue; }
+      const pid = m.vb(mp), p = m.party[pid] || { color: '#808080', textColor: '#fff' };
+      const parts = mp.name.split(' ');
+      const def = m.defectors[mp.uuid];
+      const un = m.unaligned.has(mp.uuid);
+      const bloc = un ? 'unaligned' : (m.blocOf(pid) || 'unaligned');
+      const lit = hl.length ? hl.includes(pid) : true;
+      const held = this.state.sel.excluded.includes(mp.uuid);
+      const counted = inCount.has(mp.uuid);
+      let ring = 'none', opacity = 1, bg = p.color;
+      if (isCalc) {
+        if (held) { ring = '0 0 0 2px var(--remFg)'; opacity = 1; }
+        else if (counted) { ring = '0 0 0 2px var(--text)'; }
+        else { opacity = .32; }
+      } else if (hl.length) {
+        if (lit) ring = '0 0 0 2px var(--text)'; else opacity = .32;
+      }
+      cells.push({
+        style: 'display:flex;align-items:center;justify-content:center;width:100%;height:100%;padding:3px 2px;border:0;border-radius:7px;cursor:pointer;text-align:center;background:' + bg + ';color:' + p.textColor + ';opacity:' + opacity + ';box-shadow:' + ring,
+        markStyle: showMarks && def
+          ? 'position:absolute;top:3px;right:3px;width:9px;height:9px;border-radius:50%;background:' + ((m.party[mp.registeredPartyId] || {}).color || '#808080') + ';box-shadow:0 0 0 2px ' + bg
+          : 'display:none',
+        label: showNames ? parts[0] + '\n' + parts.slice(1).join(' ') : '',
+        enter: () => this.set('hover', mp.uuid),
+        leave: () => this.setState(st => (st.hover === mp.uuid ? { hover: null } : null)),
+        click: isCalc ? () => this.toggleSeat(m, mp.uuid) : () => this.set('popup', mp.uuid)
+      });
+      if (this.state.hover === mp.uuid) {
+        base.tipName = mp.name;
+        base.tipSub = (def ? 'Votes with ' + this.shortOf(m, pid) + ' · registered ' + this.shortOf(m, mp.registeredPartyId) : this.shortOf(m, pid))
+          + ' · ' + this.blocLabel(bloc)
+          + (mp.factionRole ? ' · ' + mp.factionRole : mp.boardRole ? ' · ' + mp.boardRole.replace(' of the Riigikogu', '') : '');
+        base.tipStyle = 'position:absolute;left:' + ((c + 0.5) / cols * 100).toFixed(3) + '%;top:' + (r * 59 - 8) + 'px;transform:translate(-50%,-100%);z-index:30;padding:10px 13px;border-radius:12px;background:var(--hero);box-shadow:var(--pop);white-space:nowrap;pointer-events:none';
+      }
+    }
+    base.seatCells = cells;
+
+    if (this.state.popup && m.byUuid.get(this.state.popup)) {
+      const mp = m.byUuid.get(this.state.popup), pid = m.vb(mp), p = m.party[pid] || {};
+      const bloc = m.unaligned.has(mp.uuid) ? 'unaligned' : (m.blocOf(pid) || 'unaligned');
+      base.popupDisplay = 'block';
+      base.popup = {
+        name: mp.name, initials: this.initials(mp.name), photoStyle: photoStyle(mp.photoUrl),
+        color: p.color || '#808080', textColor: p.textColor || '#fff',
+        short: bloc === 'unaligned' ? 'Non-affiliated' : this.shortOf(m, pid), bloc: this.blocLabel(bloc), blocColor: this.blocTint(bloc),
+        role: mp.boardRole || mp.factionRole || (m.defectors[mp.uuid] ? 'Registered ' + this.shortOf(m, mp.registeredPartyId) + ' · votes with ' + this.shortOf(m, pid) : 'Member'),
+        committees: (mp.committees || []).map(c => c.name + (c.role && c.role !== 'member' ? ' (' + c.role + ')' : '')).join(' · ') || '—',
+        district: mp.district
+      };
+    }
+
+    // ── directory ──
+    if (view === 'directory') {
+    const q = this.state.query.trim().toLowerCase(), f = this.state.filter;
+    const passes = mp => {
+      if (f === 'coalition' || f === 'opposition') return !m.unaligned.has(mp.uuid) && m.blocOf(m.vb(mp)) === f;
+      if (f === 'unaligned') return m.unaligned.has(mp.uuid);
+      if (f === 'chairs') return !!(mp.factionRole || mp.boardRole);
+      if (f === 'usa') return mp.usaFriendship === true;
+      return true;
+    };
+    const list = m.roster.filter(mp => passes(mp) && (!q || mp.name.toLowerCase().includes(q)));
+    base.countLabel = list.length + (list.length === 1 ? ' member' : ' members');
+    base.emptyDisplay = list.length ? 'none' : 'block';
+    base.emptyLabel = 'No member matches “' + this.state.query + '”.';
+    base.blocFilters = [['all', 'All'], ['coalition', 'Coalition'], ['opposition', 'Opposition'], ['unaligned', 'Unaligned']].map(([id, label]) => ({
+      label, pick: () => this.set('filter', id),
+      bg: f === id ? 'var(--card)' : 'transparent', color: f === id ? 'var(--text)' : 'var(--muted)',
+      shadow: f === id ? 'var(--shadow)' : 'none'
+    }));
+    base.tagFilters = [['chairs', 'Chairs & officers'], ['usa', 'USA friendship group']].map(([id, label]) => ({
+      label, pick: () => this.set('filter', f === id ? 'all' : id),
+      bg: f === id ? 'var(--hero)' : 'var(--card)', color: f === id ? '#fff' : 'var(--text)',
+      border: f === id ? 'var(--hero)' : 'var(--line)'
+    }));
+    base.memberRows = list.map(mp => {
+      const pid = m.vb(mp), p = m.party[pid] || {};
+      const on = this.state.selected === mp.uuid;
+      const col = p.color || '#808080', fgc = p.textColor || '#fff';
+      return {
+        name: mp.name, sub: this.subLine(mp), initials: this.initials(mp.name), badge: this.shortOf(m, pid),
+        style: 'display:flex;align-items:center;gap:14px;width:100%;min-height:68px;padding:10px 20px;border:0;border-top:1px solid var(--line);border-left:3px solid ' + (on ? 'var(--accent)' : 'transparent') + ';cursor:pointer;text-align:left;background:' + (on ? 'var(--track)' : 'transparent'),
+        avatar: 'display:flex;flex:0 0 44px;width:44px;height:44px;align-items:center;justify-content:center;border-radius:50%;font-weight:700;font-size:15px;line-height:1;background:' + col + ';color:' + fgc,
+        badgeStyle: 'padding:5px 10px;border-radius:8px;font-weight:700;font-size:12px;line-height:1.2;background:' + col + ';color:' + fgc,
+        pick: () => this.set('selected', mp.uuid)
+      };
+    });
+
+    const sel = m.byUuid.get(this.state.selected) || m.roster[0];
+    if (sel) {
+      const pid = m.vb(sel), p = m.party[pid] || {};
+      const un = m.unaligned.has(sel.uuid), bloc = un ? 'unaligned' : (m.blocOf(pid) || 'unaligned');
+      const def = m.defectors[sel.uuid];
+      let warn = '';
+      if (def) warn = def.note + ' — registered non-affiliated, counted with ' + this.shortOf(m, pid) + ' in bloc arithmetic.';
+      else if (un && sel.leftFaction) warn = 'Left ' + this.factionShort(m, sel.leftFaction) + ' in ' + this.monthYear(sel.leftFactionDate) + ' — no group, no whip. Counted in neither bloc.';
+      base.profile = {
+        name: sel.name, initials: this.initials(sel.name), photoStyle: photoStyle(sel.photoUrl), url: sel.profileUrl,
+        color: p.color || '#808080', textColor: p.textColor || '#fff',
+        short: bloc === 'unaligned' ? 'Non-affiliated' : this.shortOf(m, pid), bloc: this.blocLabel(bloc), blocColor: this.blocTint(bloc),
+        usaDisplay: sel.usaFriendship ? 'inline-flex' : 'none',
+        warn, warnDisplay: warn ? 'block' : 'none'
+      };
+      const facts = [];
+      const office = sel.boardRole || sel.factionRole;
+      if (office) facts.push({ label: 'Office', value: office, span: '1 / -1' });
+      facts.push({ label: 'District', value: sel.district || '—', span: 'auto' });
+      facts.push({ label: 'Registered', value: (m.party[sel.registeredPartyId] || {}).nameEn || '—', span: 'auto' });
+      facts.push({ label: 'Committees', value: (sel.committees || []).map(c => c.name + (c.role && c.role !== 'member' ? ' (' + c.role + ')' : '')).join(' · ') || '—', span: '1 / -1' });
+      facts.push({ label: 'Votes with', value: pid === sel.registeredPartyId ? 'Own group' : this.shortOf(m, pid) + ' (defected)', span: 'auto' });
+      facts.push({ label: 'Email', value: sel.email || '—', span: 'auto' });
+      base.profileFacts = facts;
+
+      const mySeat = grid.seats[sel.uuid];
+      base.profile.seatLabel = mySeat ? 'Row ' + (mySeat.row + 1) + ', column ' + (mySeat.col + 1) + ' of the 10 × 12 floor grid' : 'No seat recorded';
+      const mini = [];
+      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+        const u = at[r + ':' + c];
+        const isMe = u === sel.uuid;
+        mini.push({ style: 'height:8px;border-radius:2px;background:' + (!u ? 'transparent' : isMe ? (p.color || '#808080') : 'var(--track)') + (isMe ? ';box-shadow:0 0 0 2px var(--text)' : '') });
+      }
+      base.profileSeatCells = mini;
+    }
+    }
+
+    // ── calculator ──
+    if (view === 'calculator') {
+    const seats = inCount.size;
+    const next = FRACTIONS.find(t => seats < t.need);
+    base.selSeats = seats;
+    base.selPct = pct(seats);
+    base.verdict = seats >= meta.simpleMajority ? 'Passes ordinary legislation' : (meta.simpleMajority - seats) + ' short of 51';
+    base.verdictColor = seats >= meta.simpleMajority ? 'var(--pass)' : 'rgba(255,255,255,.72)';
+    base.fillColor = seats >= meta.simpleMajority ? 'var(--pass)' : 'var(--accent)';
+    base.hint = seats === 0 ? 'Pick parties below, or click seats on the floor plan.'
+      : next ? (next.need - seats) + (next.need - seats === 1 ? ' more seat reaches ' : ' more seats reach ') + next.fraction + ' (' + next.need + ').'
+      : 'Clears every constitutional threshold.';
+    base.marks = FRACTIONS.map(t => {
+      const hit = seats >= t.need;
+      return {
+        need: t.need, fraction: t.fraction, left: pct(t.need),
+        tick: hit ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.22)',
+        color: hit ? '#fff' : 'rgba(255,255,255,.5)',
+        chipBg: hit ? 'rgba(74,222,128,.16)' : 'rgba(255,255,255,.06)',
+        chipBorder: hit ? 'rgba(74,222,128,.5)' : 'rgba(255,255,255,.14)',
+        chipFg: hit ? 'var(--pass)' : 'rgba(255,255,255,.82)',
+        chipNote: (hit ? '✓ ' : '✕ ') + t.need + ' · ' + t.note
+      };
+    });
+    base.presets = [
+      { label: 'Coalition', color: 'var(--text)', run: () => this.setState({ sel: { parties: Object.keys(m.d.alignment.blocs).filter(k => m.d.alignment.blocs[k] === 'coalition'), added: [], excluded: [] } }) },
+      { label: 'Opposition', color: 'var(--text)', run: () => this.setState({ sel: { parties: Object.keys(m.d.alignment.blocs).filter(k => m.d.alignment.blocs[k] === 'opposition'), added: [], excluded: [] } }) },
+      { label: 'Clear', color: 'var(--muted)', run: () => this.setState({ sel: { parties: [], added: [], excluded: [] } }) }
+    ];
+    base.calcParties = partyIds.map(id => {
+      const p = m.party[id];
+      const count = m.roster.filter(mp => m.vb(mp) === id && inCount.has(mp.uuid)).length;
+      const on = count > 0;
+      return {
+        short: id === 'independent' ? 'Unaligned' : p.short, color: p.color,
+        count, total: m.counts[id], toggle: () => this.togglePartyCalc(m, id),
+        border: on ? p.color : 'var(--line)', bg: on ? 'var(--card)' : 'transparent',
+        countColor: on ? 'var(--text)' : 'var(--muted)'
+      };
+    });
+    const adj = [];
+    this.state.sel.excluded.forEach(u => {
+      const mp = m.byUuid.get(u); if (!mp) return;
+      adj.push({ name: mp.name, note: 'Held out of ' + this.shortOf(m, m.vb(mp)), badge: '−1', badgeBg: 'var(--remBg)', badgeFg: 'var(--remFg)',
+        undo: () => this.setState(s => ({ sel: { ...s.sel, excluded: s.sel.excluded.filter(x => x !== u) } })) });
+    });
+    this.state.sel.added.forEach(u => {
+      const mp = m.byUuid.get(u); if (!mp) return;
+      adj.push({ name: mp.name, note: 'Votes with the group · ' + this.shortOf(m, m.vb(mp)), badge: '+1', badgeBg: 'var(--addBg)', badgeFg: 'var(--addFg)',
+        undo: () => this.setState(s => ({ sel: { ...s.sel, added: s.sel.added.filter(x => x !== u) } })) });
+    });
+    base.adjustments = adj;
+    base.noAdjDisplay = adj.length ? 'none' : 'block';
+    }
+    return base;
+  }
+}
+
+</script>
+</body>
+</html>
