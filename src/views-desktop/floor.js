@@ -63,6 +63,12 @@ function tooltipLines(data, mp) {
   return [mp.name, [party, blocWord, office].filter(Boolean).join(' · ')];
 }
 
+/** "Anastassia Kovalenko-Kõlvart" → given name, newline, the rest. */
+function nameplate(name) {
+  const parts = String(name).split(' ');
+  return `${parts[0]}\n${parts.slice(1).join(' ')}`.trim();
+}
+
 /**
  * Build a floor plan.
  *
@@ -101,14 +107,12 @@ export function createFloor({ data, grid }, { prefix, stateOf, onSelect }) {
   };
 
   const cells = grid.cells.map(({ row, col, mp }) => {
+    // Every cell is a positioned box, occupied or not. 19 of the 120 cells in
+    // the XV Riigikogu's hall have no seat, and dropping them would let the
+    // remaining 101 reflow into a solid block — a floor plan that is no longer
+    // the room.
     if (!mp) {
-      // Kept, not skipped: 19 of the 120 cells are empty and the remaining 101
-      // must not reflow into a solid block that no longer matches the room.
-      return el('span', {
-        className: 'dk-seat dk-seat-empty',
-        'aria-hidden': 'true',
-        'data-empty': 'true',
-      });
+      return el('span', { className: 'dk-seat-cell', 'aria-hidden': 'true', 'data-empty': 'true' });
     }
 
     const tile = el('button', {
@@ -121,8 +125,8 @@ export function createFloor({ data, grid }, { prefix, stateOf, onSelect }) {
       'data-row': String(row),
       'data-col': String(col),
       'data-seat-state': stateOf(mp),
-      // The floor is a picture; the name beside the tile is 9px and decorative,
-      // so the accessible name has to carry what the tooltip shows.
+      // The floor is a picture; the name on the tile is 9px and redundant, so
+      // the accessible name has to carry what the tooltip shows.
       'aria-label': tooltipLines(data, mp).join(' — '),
       style: `background:var(--party-${mp.votingBlocPartyId});color:var(--party-${mp.votingBlocPartyId}-text)`,
       onclick: () => onSelect(mp),
@@ -131,7 +135,20 @@ export function createFloor({ data, grid }, { prefix, stateOf, onSelect }) {
       onfocus: () => showTooltip(mp),
       onblur: () => { tooltip.hidden = true; },
     }, [
-      el('span', { className: 'dk-seat-name' }, [mp.name]),
+      // Given name on the first line, the rest on the second, so a tile reads
+      // as a nameplate rather than as wrapped prose.
+      el('span', { className: 'dk-seat-name' }, [nameplate(mp.name)]),
+    ]);
+
+    tiles.push({ mp, tile });
+
+    return el('span', { className: 'dk-seat-cell' }, [
+      tile,
+      // A sibling of the tile rather than a child, and that is load-bearing:
+      // a dimmed tile carries `opacity`, and a child could not escape it. The
+      // marker answers "where is this member on the books" and has to stay
+      // legible on a floor where everything else has dropped back.
+      //
       // Present only where registration and vote disagree, in the *registered*
       // party's colour — the only place the floor shows registration at all.
       mp.defector && el('span', {
@@ -139,12 +156,10 @@ export function createFloor({ data, grid }, { prefix, stateOf, onSelect }) {
         'data-testid': `seat-defector-${mp.uuid}`,
         'aria-hidden': 'true',
         'data-party-id': mp.registeredPartyId,
-        style: `background:var(--party-${mp.registeredPartyId})`,
+        style: `background:var(--party-${mp.registeredPartyId});`
+          + `box-shadow:0 0 0 2px var(--party-${mp.votingBlocPartyId})`,
       }),
     ]);
-
-    tiles.push({ mp, tile });
-    return tile;
   });
 
   const node = el('div', {

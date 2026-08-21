@@ -26,10 +26,10 @@
  */
 
 import { loadData } from '../data.js';
-import { el, icon, ICONS, replace } from '../dom.js';
+import { el, icon, replace } from '../dom.js';
 import { emptySelection } from '../lib/calculator.js';
 import { buildGrid, loadSeating } from './seating.js';
-import { formatUpdated } from './parts.js';
+import { formatUpdated, RAIL_ICONS } from './parts.js';
 import renderParliament, { composition } from './parliament.js';
 import renderDirectory from './directory.js';
 import renderCalculator from './calculator.js';
@@ -40,7 +40,7 @@ const VIEWS = [
     label: 'Parliament',
     title: 'Parliament',
     sub: 'Seating plan, voting-bloc composition and the Board',
-    glyph: ICONS.building,
+    glyph: RAIL_ICONS.parliament,
     render: renderParliament,
   },
   {
@@ -48,7 +48,7 @@ const VIEWS = [
     label: 'Directory',
     title: 'Members of the Riigikogu',
     sub: 'All 101 members — search, filter by voting bloc, read a profile',
-    glyph: ICONS.users,
+    glyph: RAIL_ICONS.directory,
     render: renderDirectory,
   },
   {
@@ -56,7 +56,7 @@ const VIEWS = [
     label: 'Calculator',
     title: 'Coalition calculator',
     sub: 'Build a voting group and see which constitutional thresholds it clears',
-    glyph: ICONS.calculator,
+    glyph: RAIL_ICONS.calculator,
     render: renderCalculator,
   },
 ];
@@ -93,7 +93,7 @@ function rail(active, onSelect) {
       'aria-current': view.id === active ? 'page' : null,
       onclick: () => onSelect(view.id),
     }, [
-      icon(view.glyph, { size: 22 }),
+      icon(view.glyph, { size: 25, stroke: 1.9 }),
       el('span', { className: 'dk-rail-label' }, [view.label]),
     ])),
   ]);

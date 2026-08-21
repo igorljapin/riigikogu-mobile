@@ -45,10 +45,25 @@ const FILTERS = [
   { id: 'usa', testid: 'filter-usa', row: 'tag', label: 'USA friendship group', match: (mp) => mp.usaFriendship === true },
 ];
 
-/** One label/value tile of the profile's fact grid. */
-function fact(label, value) {
+/**
+ * Rows on screen before the list is scrolled, near enough. Their avatars load
+ * with the page; the rest stay lazy, so opening the Directory does not ask
+ * `api.riigikogu.ee` for a hundred portraits at once.
+ */
+const FIRST_SCREEN = 10;
+
+/**
+ * One label/value tile of the profile's fact grid.
+ *
+ * `wide` is the artboards' rhythm rather than a rule about content: Office and
+ * Committees run the width of the grid, the four short facts pair up. Because
+ * the two wide rows are fixed, the pairing never depends on whether a member
+ * holds an office, which is what would leave a hole beside `Registered`.
+ */
+function fact(label, value, { wide = false } = {}) {
   return el('div', {
     className: 'dk-fact',
+    'data-wide': wide ? 'true' : null,
     'data-testid': `mp-fact-${label.toLowerCase().replace(/\s+/g, '-')}`,
   }, [
     el('span', { className: 'dk-fact-key' }, [label]),
@@ -83,7 +98,7 @@ export default function renderDirectory(ctx) {
 
     replace(profile,
       el('div', { className: 'dk-profile-head' }, [
-        avatar(mp, { size: 'xl' }),
+        avatar(mp, { size: 'xl', eager: true }),
         el('div', { className: 'dk-profile-identity' }, [
           el('h2', { className: 'dk-profile-name', 'data-testid': 'mp-profile-name' }, [mp.name]),
           el('div', { className: 'dk-profile-chips' }, [
@@ -92,6 +107,10 @@ export default function renderDirectory(ctx) {
               label: profilePartyLabel(data, mp),
             }),
             blocChip(data, mp, { testid: 'mp-profile-bloc' }),
+            // A membership, not a bloc and not a party: it earns a chip of its
+            // own rather than a colour borrowed from either.
+            mp.usaFriendship && el('span', { className: 'dk-group-chip' },
+              ['Estonia–USA Friendship Group']),
           ]),
         ]),
         el('a', {
@@ -110,11 +129,11 @@ export default function renderDirectory(ctx) {
       note && el('p', { className: 'dk-note', 'data-testid': 'mp-note' }, [note]),
 
       el('div', { className: 'dk-facts' }, [
-        office && fact('Office', office),
+        office && fact('Office', office, { wide: true }),
         fact('District', mp.district ?? '—'),
         fact('Registered', data.partiesById.get(mp.registeredPartyId)?.nameEn
           ?? registeredLabel(data, mp.registeredPartyId)),
-        fact('Committees', committeeLine(mp)),
+        fact('Committees', committeeLine(mp), { wide: true }),
         fact('Votes with', votesWithLabel(data, mp)),
         fact('Email', mp.email ?? '—'),
       ].filter(Boolean)),
@@ -123,7 +142,7 @@ export default function renderDirectory(ctx) {
         seatLocator(ctx, mp),
         el('div', { className: 'dk-locator-text' }, [
           el('span', { className: 'dk-kicker' }, ['Seat on the floor']),
-          el('span', {}, [seatLabel(ctx.grid, mp)]),
+          el('span', { className: 'dk-locator-value' }, [seatLabel(ctx.grid, mp)]),
         ]),
       ]),
     );
@@ -131,7 +150,7 @@ export default function renderDirectory(ctx) {
 
   /* ---- the list ---------------------------------------------------- */
 
-  function memberRow(mp) {
+  function memberRow(mp, index) {
     return el('button', {
       type: 'button',
       className: 'dk-mp-row',
@@ -144,7 +163,7 @@ export default function renderDirectory(ctx) {
         paint();
       },
     }, [
-      avatar(mp),
+      avatar(mp, { eager: index < FIRST_SCREEN }),
       el('span', { className: 'dk-mp-text' }, [
         el('span', { className: 'dk-mp-name', 'data-testid': 'mp-name' }, [mp.name]),
         el('span', { className: 'dk-mp-sub' }, [memberSub(mp)]),
@@ -199,11 +218,7 @@ export default function renderDirectory(ctx) {
       own.filter = own.filter === filter.id && filter.row === 'tag' ? 'bloc-all' : filter.id;
       paint();
     },
-  }, [
-    el('span', { className: 'dk-filter-label' }, [filter.label]),
-    el('span', { className: 'dk-filter-count' },
-      [`(${data.mps.filter((mp) => filter.match(mp, data)).length})`]),
-  ]));
+  }, [filter.label]));
 
   const byRow = (row) => filterButtons.filter((_, i) => FILTERS[i].row === row);
 
@@ -211,9 +226,11 @@ export default function renderDirectory(ctx) {
 
   return el('div', { className: 'dk-view dk-view-directory' }, [
     el('section', { className: 'dk-card dk-list-pane' }, [
-      el('div', { className: 'dk-search-wrap' }, [icon(ICONS.search, { size: 20 }), search]),
-      el('div', { className: 'dk-segmented', role: 'group', 'aria-label': 'Voting bloc' }, byRow('bloc')),
-      el('div', { className: 'dk-tag-filters', role: 'group', 'aria-label': 'Role' }, byRow('tag')),
+      el('div', { className: 'dk-list-head' }, [
+        el('div', { className: 'dk-search-wrap' }, [icon(ICONS.search, { size: 20 }), search]),
+        el('div', { className: 'dk-segmented', role: 'group', 'aria-label': 'Voting bloc' }, byRow('bloc')),
+        el('div', { className: 'dk-tag-filters', role: 'group', 'aria-label': 'Role' }, byRow('tag')),
+      ]),
       count,
       list,
     ]),

@@ -86,24 +86,34 @@ test.describe('Tier 1 desktop — Directory', () => {
   });
 
   test('D3.5 — the tag filters replace the bloc filter rather than composing', async ({ page }) => {
-    await page.getByTestId('filter-bloc-all').click();
-    const allChairs = Number(/\((\d+)\)/.exec(
-      await page.getByTestId('filter-chairs').innerText(),
-    )[1]);
+    // The number to compare against is read from the roster rather than from a
+    // count printed beside the filter: the approved artboards label these two
+    // controls and nothing else. It is the stronger source anyway — a filter
+    // that agreed with its own caption and with nothing else would still pass.
+    const roster = require('../../../data/mps.json').filter((mp) => mp.active !== false);
+    const chairs = roster.filter((mp) => mp.factionRole || mp.boardRole).length;
+    const usa = roster.filter((mp) => mp.usaFriendship === true).length;
+
+    // Both are a real subset of the house, so "replaced" and "composed" are
+    // different numbers and the equalities below can tell them apart.
+    expect(chairs).toBeGreaterThan(0);
+    expect(chairs).toBeLessThan(roster.length);
+    expect(usa).toBeGreaterThan(0);
+    expect(usa).toBeLessThan(roster.length);
 
     await page.getByTestId('filter-bloc-coalition').click();
     const coalition = await resultCount(page);
-    expect(coalition).toBeLessThan(allChairs + coalition); // sanity: the filter did something
+    expect(coalition).toBeGreaterThan(0);
+    expect(coalition).toBeLessThan(roster.length); // sanity: the filter did something
 
     await page.getByTestId('filter-chairs').click();
     // Replaced: the whole set of chairs and officers, not the coalition's share
     // of them. "The chairs" is a list people want whole.
-    expect(await resultCount(page)).toBe(allChairs);
+    expect(await resultCount(page)).toBe(chairs);
     await expect(page.getByTestId('filter-bloc-coalition')).toHaveAttribute('data-active', 'false');
     await expect(page.getByTestId('filter-chairs')).toHaveAttribute('data-active', 'true');
 
     await page.getByTestId('filter-usa').click();
-    const usa = Number(/\((\d+)\)/.exec(await page.getByTestId('filter-usa').innerText())[1]);
     expect(await resultCount(page)).toBe(usa);
     await expect(page.getByTestId('filter-chairs')).toHaveAttribute('data-active', 'false');
     await expect(page.locator('[data-testid^="filter-"][data-active="true"]')).toHaveCount(1);

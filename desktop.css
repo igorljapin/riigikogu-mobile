@@ -1,31 +1,43 @@
 /*
- * Riigikogu Desktop — scaffold stylesheet.
+ * Riigikogu Desktop — the whole stylesheet for the desktop surface.
  *
- * ─────────────────────────────────────────────────────────────────────────────
- * THIS IS NOT THE DESIGN. Phase 3 PR A ships the desktop surface's behaviour and
- * its Usability Contract tests; PR B replaces every rule below with the approved
- * 1920×1080 artboards (docs/desktop-2026/mockups/, DESIGN_NOTES.md). What is
- * here is the minimum that makes the views legible and gives the floor plan its
- * geometry — deliberately plain, so nobody mistakes it for the design.
- * ─────────────────────────────────────────────────────────────────────────────
+ * Plain CSS, no build step, no framework, and the desktop half of the layer a
+ * redesign is allowed to rewrite (the other half is `src/views-desktop/`).
+ * What is here is the Phase-1 design: the six approved 1920×1080 artboards in
+ * `docs/desktop-2026/mockups/`, whose clickable specification is
+ * `docs/desktop-2026/prototype/riigikogu-desktop-standalone.html`.
  *
- * Two things PR B inherits and must keep:
+ * Three rules hold this file to the rest of the repository.
  *
  * 1. **Party colours are never written here.** `src/views-desktop/app.js`
  *    publishes them from `data/parties.json` as `--party-<id>` and
- *    `--party-<id>-text`, so a party that changes colour is a data change. The
- *    text colour is content too — Reform stays black-on-yellow in dark mode.
- * 2. **Seat state is an attribute, not a class.** `[data-seat-state]` is what
- *    the contract's tests read; the rules that paint it are free to change
- *    completely (USABILITY.md §10.2, §10.4).
+ *    `--party-<id>-text`, so a party that changes colour, appears or disappears
+ *    is a data change and never a CSS edit. Where a control has to take *its
+ *    own* party's colour — a lit party row, a counting party card — the view
+ *    hands it down as `--party` and the rule below reads that.
+ * 2. **The per-party `textColor` is content, not theme.** Reform seats stay
+ *    black-on-yellow in dark mode, because that is the party's own pairing
+ *    (`USABILITY.md` §10.5).
+ * 3. **State arrives in attributes, not classes.** `[data-seat-state]`,
+ *    `[data-active]`, `[data-selected]`, `[data-met]` and the rest are the
+ *    Usability Contract's (§10.9); the rules that paint them are this file's
+ *    and may be rewritten whole. That separation is what makes a redesign
+ *    survivable — the lesson of `4dae72b`, recorded in `CLAUDE.md`.
  *
- * The tokens are the mobile stylesheet's, at desktop density. They are copied
- * rather than imported because `styles.css` is the mobile app's whole
- * stylesheet, and pulling it in would drag 900 lines of phone layout with it;
- * the values are the ones DESIGN_NOTES.md fixes for both surfaces.
+ * The tokens are `styles.css`'s, at desktop density. They are copied rather
+ * than imported because that file is the mobile app's entire stylesheet and
+ * pulling it in would drag nine hundred lines of phone layout with it; the
+ * values are the ones `docs/desktop-2026/DESIGN_NOTES.md` fixes for both
+ * surfaces. Theme follows the OS: there is no toggle, and the prototype's
+ * LIGHT/DARK button was a review affordance, not a promise.
+ *
+ * Layout target: 1920×1080, which is what the artboards were drawn at and what
+ * `tests/helpers/desktop.js` runs the suite at. Below that width the page
+ * scrolls rather than reflows — responsive behaviour was out of Phase-1 scope.
  */
 
 :root {
+  /* Design tokens — light */
   --bg: #f4f6f8;
   --card: #ffffff;
   --text: #0f172a;
@@ -43,14 +55,23 @@
   --unaligned: #94a3b8;
   --accent: #9333ea;
   --pass: #4ade80;
+  --add-bg: #dcfce7;
+  --add-fg: #15803d;
+  --remove-bg: #fee2e2;
   --remove-fg: #b91c1c;
   --bloc-unaligned-text: #b45309;
 
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --gutter: 20px;
   --radius: 20px;
   --rail-width: 104px;
+  --seat-height: 54px;
+  --seat-gap: 5px;
+
+  --shadow-seg: 0 1px 3px rgb(15 23 42 / 14%);
+  --shadow-pop: 0 14px 34px rgb(15 23 42 / 16%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -61,10 +82,15 @@
     --muted: #93a1b8;
     --line: #233046;
     --track: #1d283b;
+    /* The one token whose *feel* differs between themes: a near-black card on
+       a near-black page disappears, so dark lifts it to slate. */
     --hero: #1b2536;
     --warn-bg: #2a2213;
     --warn-line: #6b5117;
     --warn-text: #f5cf7a;
+
+    --shadow-seg: 0 1px 3px rgb(0 0 0 / 50%);
+    --shadow-pop: 0 14px 34px rgb(0 0 0 / 55%);
   }
 }
 
@@ -86,23 +112,32 @@ button {
   cursor: pointer;
 }
 
+a { color: inherit; text-decoration: none; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .boot { padding: 40px; color: var(--muted); }
 .boot-error { color: var(--opposition); }
 
 /* ------------------------------------------------------------------ *
- * Shell
+ * Shell — the rail, the page, the header
  * ------------------------------------------------------------------ */
 
-#app { display: flex; align-items: flex-start; min-height: 100vh; }
+#app { display: flex; height: 100vh; }
 
-.dk-rail-slot { position: sticky; top: 0; flex: 0 0 var(--rail-width); }
+.dk-rail-slot { display: flex; flex: 0 0 var(--rail-width); align-self: stretch; }
 
 .dk-rail {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: 8px;
   align-items: center;
-  padding: 18px 8px;
+  padding: 22px 0 20px;
+  border-right: 1px solid var(--line);
+  background: var(--card);
 }
 
 .dk-rail-badge {
@@ -111,56 +146,175 @@ button {
   height: 44px;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
-  margin-bottom: 10px;
+  border-radius: 13px;
+  margin-bottom: 18px;
   background: var(--hero);
   color: #fff;
+  font-size: 15px;
   font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
 }
 
 .dk-rail-item {
   display: flex;
-  width: 88px;
+  width: 82px;
+  height: 76px;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
-  padding: 12px 4px;
+  justify-content: center;
+  gap: 7px;
   border: 0;
-  border-radius: 14px;
+  border-radius: 17px;
   background: transparent;
   color: var(--muted);
-  font-size: 12px;
 }
 
+.dk-rail-item + .dk-rail-item { margin-top: 4px; }
+.dk-rail-item:hover { color: var(--text); }
 .dk-rail-item[data-active="true"] { background: var(--track); color: var(--accent); }
+.dk-rail-label { font-size: 12px; font-weight: 600; line-height: 1; }
 
-.dk-page { flex: 1; min-width: 0; padding: 26px 34px 40px; }
+.dk-page {
+  display: flex;
+  flex: 1;
+  min-width: 1600px;
+  flex-direction: column;
+  padding: 26px 34px 28px;
+}
 
 .dk-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 40px;
-  margin-bottom: 22px;
+  gap: 48px;
+  padding-bottom: 22px;
 }
+
+.dk-head-text { min-width: 0; }
+/* Contributes no box of its own, so the header does not reserve 780px on the
+   two destinations that draw nothing here. */
+.dk-head-aside { display: contents; }
 
 .dk-kicker {
   margin: 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.08em;
+  line-height: 1;
   text-transform: uppercase;
 }
 
-.dk-title { margin: 6px 0 4px; font-size: 34px; line-height: 1.1; }
-.dk-subtitle { margin: 0; color: var(--muted); }
+.dk-provenance {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+}
+
+.dk-title {
+  margin: 9px 0 0;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.dk-subtitle {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.dk-main { display: flex; flex: 1; min-height: 0; }
+
+/* ------------------------------------------------------------------ *
+ * Composition — the header figure and the stacked bloc bar
+ * ------------------------------------------------------------------ */
+
+.dk-composition { flex: 0 0 780px; width: 780px; }
+
+.dk-standing {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 0;
+}
+
+.dk-standing-figure {
+  font-size: 46px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.dk-standing-of { color: var(--muted); font-size: 16px; font-weight: 600; line-height: 1.2; }
+
+/* The padding is the marker's label's room: the line runs the full height of
+   this box so the caption sits clear above the bar. */
+.dk-bloc-bar-wrap { position: relative; margin-top: 10px; padding-top: 18px; }
+
+.dk-bloc-bar {
+  display: flex;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--track);
+  overflow: hidden;
+}
+
+.dk-bloc-segment { display: block; height: 100%; }
+.dk-bloc-segment[data-bloc="coalition"] { background: var(--coalition); }
+.dk-bloc-segment[data-bloc="opposition"] { background: var(--opposition); }
+.dk-bloc-segment[data-bloc="unaligned"] { background: var(--unaligned); }
+
+.dk-majority-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--text);
+}
+
+.dk-majority-label {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dk-bloc-legend { display: flex; gap: 20px; margin-top: 12px; }
+
+.dk-bloc-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.dk-legend-text { display: flex; gap: 5px; }
+.dk-swatch { width: 10px; height: 10px; flex: 0 0 10px; border-radius: 3px; }
+.dk-swatch[data-bloc="coalition"] { background: var(--coalition); }
+.dk-swatch[data-bloc="opposition"] { background: var(--opposition); }
+.dk-swatch[data-bloc="unaligned"] { background: var(--unaligned); }
 
 /* ------------------------------------------------------------------ *
  * Cards and view frames
  * ------------------------------------------------------------------ */
 
-.dk-view { display: flex; align-items: flex-start; gap: var(--gutter); }
+.dk-view { display: flex; flex: 1; min-width: 0; min-height: 0; gap: var(--gutter); }
 
 .dk-card {
   padding: 22px;
@@ -169,22 +323,61 @@ button {
   background: var(--card);
 }
 
-.dk-card + .dk-card { margin-top: var(--gutter); }
-
 .dk-card-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
-.dk-card-title { margin: 0; font-size: 18px; }
-.dk-card-sub { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
-.dk-side { flex: 1; min-width: 0; }
-.dk-floor-card { flex: 0 0 1108px; max-width: 1108px; }
-.dk-floor-key { margin: 0; color: var(--muted); font-size: 12px; }
-.dk-key-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--unaligned); }
+.dk-card-title { margin: 0; font-size: 18px; font-weight: 600; line-height: 1.2; }
+.dk-card-sub { margin: 5px 0 0; color: var(--muted); font-size: 13px; line-height: 1.3; }
+
+.dk-side {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dk-side .dk-card { padding: 18px; }
+.dk-side .dk-card-head { margin-bottom: 11px; }
+/* A section title that opens a card, rather than sharing a head row with a control. */
+.dk-card-kicker { margin-bottom: 11px; }
+
+/* Parliament and the Calculator share one 1108px floor card, so the seating
+   grid is pixel-identical between them. */
+.dk-floor-card {
+  position: relative;
+  display: flex;
+  flex: 0 0 1108px;
+  width: 1108px;
+  flex-direction: column;
+}
+
+.dk-floor-key { display: flex; align-items: center; gap: 14px; }
+
+.dk-key-note {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.dk-key-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  /* The same grey the defector dot is painted in, and from the same place. */
+  background: var(--party-independent);
+  box-shadow: 0 0 0 2px var(--card);
+}
 
 /* ------------------------------------------------------------------ *
  * The floor plan
@@ -195,96 +388,151 @@ button {
 .dk-floor-grid {
   display: grid;
   grid-template-columns: repeat(var(--floor-cols), 1fr);
-  gap: 5px;
+  gap: var(--seat-gap);
 }
+
+/* Occupied or not, every cell is a box of the same size: 19 of the 120 cells
+   have no seat, and dropping them would let the remaining 101 reflow into a
+   solid block that is no longer the room. */
+.dk-seat-cell { position: relative; height: var(--seat-height); }
 
 .dk-seat {
   position: relative;
   display: flex;
-  height: 54px;
+  width: 100%;
+  height: 100%;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: 3px 2px;
   border: 0;
   border-radius: 7px;
-  font-size: 9px;
-  font-weight: 600;
-  line-height: 1.2;
   text-align: center;
 }
 
-/* The 19 cells with no seat keep their space so the grid stays the room. */
-.dk-seat-empty { background: transparent; visibility: hidden; }
+.dk-seat-name {
+  display: block;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  white-space: pre-line;
+}
 
+/* The four states the contract names, plus `default`, which paints nothing.
+   Highlight and count share one treatment on purpose: they are the same
+   sentence — "this seat is part of what you asked about". */
 .dk-seat[data-seat-state="dimmed"] { opacity: 0.32; }
-.dk-seat[data-seat-state="highlighted"],
-.dk-seat[data-seat-state="counted"] { box-shadow: inset 0 0 0 2px var(--text); }
-.dk-seat[data-seat-state="held"] { box-shadow: inset 0 0 0 2px var(--remove-fg); }
 
+.dk-seat[data-seat-state="highlighted"],
+.dk-seat[data-seat-state="counted"] {
+  z-index: 1;
+  box-shadow: 0 0 0 2px var(--text);
+}
+
+.dk-seat[data-seat-state="held"] {
+  z-index: 1;
+  box-shadow: 0 0 0 2px var(--remove-fg);
+}
+
+/* Outside the tile, so a dimmed seat's opacity cannot take it with it. */
 .dk-seat-defector {
   position: absolute;
+  z-index: 2;
   top: 3px;
   right: 3px;
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  box-shadow: 0 0 0 2px var(--card);
 }
 
 .dk-seat-tooltip {
   position: absolute;
   z-index: 30;
-  top: calc(var(--seat-row) * 59px - 8px);
+  top: calc(var(--seat-row) * (var(--seat-height) + var(--seat-gap)) - 8px);
   left: calc((var(--seat-col) + 0.5) / var(--floor-cols) * 100%);
   display: flex;
   flex-direction: column;
+  gap: 4px;
   padding: 10px 13px;
   border-radius: 12px;
   transform: translate(-50%, -100%);
   background: var(--hero);
-  color: #fff;
+  box-shadow: var(--shadow-pop);
   pointer-events: none;
   white-space: nowrap;
 }
 
 .dk-seat-tooltip[hidden] { display: none; }
-.dk-tooltip-name { font-weight: 700; }
-.dk-tooltip-sub { color: rgb(255 255 255 / 72%); font-size: 12px; }
-
-.dk-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-.dk-floor-caption { margin: 14px 0 0; color: var(--muted); font-size: 13px; }
-.dk-seat-key { display: flex; gap: 18px; margin-top: 16px; color: var(--muted); font-size: 12px; }
+.dk-tooltip-name { color: #fff; font-size: 14px; font-weight: 600; line-height: 1.2; }
+.dk-tooltip-sub { color: rgb(255 255 255 / 72%); font-size: 12px; font-weight: 500; line-height: 1.25; }
 
 /* ------------------------------------------------------------------ *
- * Parliament
+ * Parliament — legend, caption, party rows, the Board
  * ------------------------------------------------------------------ */
 
-.dk-composition { min-width: 780px; }
-.dk-standing { display: flex; align-items: baseline; justify-content: flex-end; gap: 8px; margin: 0 0 10px; }
-.dk-standing-figure { font-size: 40px; font-weight: 700; line-height: 1; }
-.dk-standing-of { color: var(--muted); }
+.dk-legend { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
 
-.dk-bloc-bar { position: relative; display: flex; height: 34px; border-radius: 8px; overflow: hidden; }
-.dk-bloc-segment { display: block; height: 100%; }
-.dk-bloc-coalition { background: var(--coalition); }
-.dk-bloc-opposition { background: var(--opposition); }
-.dk-bloc-unaligned { background: var(--unaligned); }
+.dk-party-chip {
+  display: flex;
+  height: 32px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: transparent;
+}
 
-.dk-majority-marker { position: absolute; top: -12px; bottom: -4px; width: 2px; background: var(--text); }
-.dk-majority-label { position: absolute; bottom: 100%; left: 4px; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+.dk-party-chip[data-active="true"] { border-color: var(--party); background: var(--track); }
+/* A chip for a party nobody lit drops back exactly as its seats do. */
+.dk-party-chip[data-dim="true"] { opacity: 0.45; }
 
-.dk-bloc-legend { display: flex; justify-content: flex-end; gap: 18px; margin-top: 8px; font-size: 13px; }
-.dk-bloc-legend-item { display: flex; align-items: center; gap: 6px; }
-.dk-swatch, .dk-party-swatch { width: 11px; height: 11px; border-radius: 3px; flex: 0 0 11px; }
-.dk-legend-value { font-weight: 700; }
+.dk-party-swatch { width: 11px; height: 11px; flex: 0 0 11px; border-radius: 3px; background: var(--party); }
+.dk-chip-name { font-size: 13px; font-weight: 600; line-height: 1; }
+.dk-chip-seats { font-family: var(--mono); font-size: 13px; font-weight: 600; line-height: 1; opacity: 0.6; }
 
-.dk-party-rows { display: flex; flex-direction: column; gap: 9px; }
-
-.dk-party-row, .dk-party-chip, .dk-calc-party {
+.dk-floor-foot {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.dk-floor-caption { color: var(--muted); font-size: 14px; font-weight: 500; line-height: 1.3; }
+.dk-floor-totals { display: flex; flex: 0 0 auto; gap: 22px; }
+.dk-floor-total { font-size: 14px; font-weight: 600; line-height: 1; white-space: nowrap; }
+.dk-total-value[data-bloc="coalition"] { color: var(--coalition); }
+.dk-total-value[data-bloc="opposition"] { color: var(--opposition); }
+.dk-total-value[data-bloc="unaligned"] { color: var(--unaligned); }
+
+/* Visibility only, never presence, so lighting a party cannot reflow the list
+   under the cursor (D2.8). */
+.dk-clear {
+  flex: 0 0 auto;
+  height: 28px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.dk-clear[data-visible="false"] { visibility: hidden; pointer-events: none; }
+.dk-clear:hover { border-color: var(--accent); color: var(--accent); }
+
+.dk-party-rows { display: flex; flex-direction: column; gap: 8px; }
+
+.dk-party-row {
+  display: flex;
   width: 100%;
+  flex-direction: column;
+  gap: 7px;
   padding: 9px 13px;
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -292,39 +540,51 @@ button {
   text-align: left;
 }
 
-.dk-party-row[data-active="true"],
-.dk-party-chip[data-active="true"],
-.dk-calc-party[data-active="true"] { background: var(--track); border-color: var(--text); }
+.dk-party-row[data-active="true"] {
+  border-color: var(--party);
+  background: var(--track);
+  box-shadow: inset 0 0 0 1px var(--party);
+}
 
-.dk-party-chip { width: auto; padding: 6px 12px; border-radius: 10px; font-size: 13px; }
-.dk-party-text { display: flex; flex: 1; flex-direction: column; min-width: 0; }
-.dk-party-name { font-weight: 600; }
-.dk-party-sub, .dk-chip-seats { color: var(--muted); font-size: 12px; }
-.dk-party-seats { font-size: 22px; font-weight: 700; }
+.dk-party-line { display: flex; align-items: center; gap: 12px; }
+.dk-party-bar { width: 12px; height: 28px; flex: 0 0 12px; border-radius: 5px; background: var(--party); }
+.dk-party-text { display: flex; flex: 1; min-width: 0; flex-direction: column; }
+.dk-party-name { font-size: 16px; font-weight: 600; line-height: 1.25; }
+.dk-party-sub { color: var(--muted); font-size: 12px; line-height: 1.3; }
+.dk-party-seats { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
 
-/* Visibility only — never presence, so lighting a party cannot reflow the
-   list under the cursor (D2.8). */
-.dk-clear { border: 0; background: transparent; color: var(--muted); font-size: 13px; }
-.dk-clear[data-visible="false"] { visibility: hidden; }
+.dk-party-share {
+  display: block;
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
 
-.dk-board-rows { display: flex; flex-direction: column; gap: 9px; }
+.dk-party-share-fill { display: block; height: 100%; border-radius: 999px; background: var(--party); }
+
+.dk-board-rows { display: flex; flex-direction: column; gap: 8px; }
 
 .dk-board-row {
   display: flex;
-  align-items: center;
-  gap: 12px;
   width: 100%;
-  padding: 12px 14px;
+  min-height: 60px;
+  align-items: center;
+  gap: 13px;
+  padding: 11px 13px;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: transparent;
+  color: var(--muted);
   text-align: left;
 }
 
-.dk-board-bar { width: 5px; height: 34px; border-radius: 3px; }
-.dk-board-text { display: flex; flex: 1; flex-direction: column; }
-.dk-board-name { font-weight: 600; }
-.dk-board-role { color: var(--muted); font-size: 12px; }
+.dk-board-row:hover { border-color: var(--accent); }
+.dk-board-bar { width: 10px; height: 34px; flex: 0 0 10px; border-radius: 4px; background: var(--party); }
+.dk-board-text { display: flex; flex: 1; min-width: 0; flex-direction: column; }
+.dk-board-name { color: var(--text); font-size: 16px; font-weight: 600; line-height: 1.25; }
+.dk-board-role { font-size: 12px; line-height: 1.3; }
 
 /* ------------------------------------------------------------------ *
  * The seat popup
@@ -333,22 +593,36 @@ button {
 .dk-popup {
   position: absolute;
   z-index: 40;
+  right: 22px;
   bottom: 22px;
-  left: 22px;
-  width: 320px;
-  padding: 16px;
+  width: 352px;
+  padding: 18px;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: var(--radius);
   background: var(--card);
-  box-shadow: 0 12px 40px rgb(15 23 42 / 22%);
+  box-shadow: var(--shadow-pop);
 }
 
-.dk-floor-card { position: relative; }
-.dk-popup-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-.dk-popup-name { font-size: 17px; font-weight: 700; }
-.dk-popup-close { flex: 0 0 32px; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--track); color: var(--muted); }
-.dk-popup-role, .dk-popup-committees, .dk-popup-district { margin: 8px 0 0; font-size: 13px; }
-.dk-popup-role, .dk-popup-district { color: var(--muted); }
+.dk-popup-head { display: flex; gap: 14px; }
+.dk-popup-identity { flex: 1; min-width: 0; }
+.dk-popup-name { display: block; font-size: 19px; font-weight: 700; line-height: 1.2; }
+.dk-popup-chips { display: flex; gap: 6px; margin-top: 8px; }
+
+.dk-popup-close {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--track);
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.dk-popup-role { margin: 14px 0 0; color: var(--muted); font-size: 13px; font-weight: 500; line-height: 1.45; }
+.dk-popup-committees { margin: 8px 0 0; font-size: 13px; font-weight: 500; line-height: 1.45; }
+.dk-popup-district { margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
 
 .dk-popup-cta {
   display: flex;
@@ -361,38 +635,165 @@ button {
   border: 1px solid var(--line);
   border-radius: 12px;
   background: transparent;
+  font-size: 14px;
   font-weight: 600;
+  line-height: 1;
 }
+
+.dk-popup-cta:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ------------------------------------------------------------------ *
+ * Avatars, badges and chips
+ * ------------------------------------------------------------------ */
+
+.dk-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  line-height: 1;
+  overflow: hidden;
+}
+
+/* Painted, not a text node: the initials are decoration beside a name that is
+   already there, and a text node would join the row's accessible name. */
+.dk-avatar::after { content: var(--initials); }
+
+.dk-avatar-md { width: 44px; height: 44px; flex: 0 0 44px; border-radius: 50%; font-size: 15px; }
+.dk-avatar-lg { width: 72px; height: 72px; flex: 0 0 72px; border-radius: 20px; font-size: 24px; }
+.dk-avatar-xl { width: 128px; height: 128px; flex: 0 0 128px; border-radius: 32px; font-size: 44px; }
+
+.dk-avatar-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* The flip happens on `load`, so the attribute always describes what is on
+   screen — offline, `api.riigikogu.ee` never answers and the letters stay. */
+.dk-avatar[data-avatar="photo"] .dk-avatar-photo { opacity: 1; }
+
+.dk-party-badge {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.dk-bloc-chip {
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--track);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.dk-bloc-chip[data-bloc="coalition"] { color: var(--coalition); }
+.dk-bloc-chip[data-bloc="opposition"] { color: var(--opposition); }
+.dk-bloc-chip[data-bloc="unaligned"] { color: var(--bloc-unaligned-text); }
 
 /* ------------------------------------------------------------------ *
  * Directory
  * ------------------------------------------------------------------ */
 
-.dk-list-pane { flex: 0 0 660px; }
-.dk-profile { flex: 1; min-width: 0; }
+.dk-list-pane {
+  display: flex;
+  flex: 0 0 660px;
+  width: 660px;
+  min-height: 0;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
 
-.dk-search-wrap { display: flex; align-items: center; gap: 10px; padding: 0 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--track); color: var(--muted); }
-.dk-search { width: 100%; height: 52px; border: 0; background: transparent; color: var(--text); font: inherit; outline: none; }
+.dk-list-head { padding: 18px 20px 14px; border-bottom: 1px solid var(--line); }
 
-.dk-segmented { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 14px; padding: 4px; border-radius: 14px; background: var(--track); }
-.dk-tag-filters { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+.dk-search-wrap {
+  display: flex;
+  height: 52px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--bg);
+  color: var(--muted);
+}
 
-.dk-filter { padding: 10px 8px; border: 1px solid transparent; border-radius: 10px; background: transparent; color: var(--muted); font-size: 13px; }
-.dk-filter-tag { border-color: var(--line); background: var(--card); color: var(--text); }
-.dk-filter[data-active="true"] { background: var(--card); border-color: var(--line); color: var(--text); font-weight: 600; }
-.dk-filter-tag[data-active="true"] { background: var(--hero); border-color: var(--hero); color: #fff; }
-.dk-filter-count { margin-left: 5px; opacity: 0.7; }
+.dk-search {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: 400 17px/1.3 var(--sans);
+  outline: 0;
+}
 
-.dk-mp-count { margin: 16px 0 6px; color: var(--muted); font-size: 13px; }
-.dk-mp-list { max-height: 620px; overflow-y: auto; }
+.dk-search::-webkit-search-cancel-button { display: none; }
+
+.dk-segmented {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  margin-top: 12px;
+  padding: 3px;
+  border-radius: 13px;
+  background: var(--track);
+}
+
+.dk-filter-bloc {
+  height: 38px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.dk-filter-bloc[data-active="true"] {
+  background: var(--card);
+  box-shadow: var(--shadow-seg);
+  color: var(--text);
+}
+
+.dk-tag-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+
+.dk-filter-tag {
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.dk-filter-tag[data-active="true"] { border-color: var(--hero); background: var(--hero); color: #fff; }
+
+.dk-mp-count { margin: 0; padding: 12px 20px 8px; color: var(--muted); font-size: 13px; font-weight: 500; line-height: 1; }
+.dk-mp-list { flex: 1; min-height: 0; overflow-y: auto; }
 
 .dk-mp-row {
   display: flex;
-  align-items: center;
-  gap: 14px;
   width: 100%;
   min-height: 68px;
-  padding: 10px 16px;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 20px;
   border: 0;
   border-top: 1px solid var(--line);
   border-left: 3px solid transparent;
@@ -400,73 +801,333 @@ button {
   text-align: left;
 }
 
+.dk-mp-row:hover { background: var(--bg); }
 .dk-mp-row[data-selected="true"] { border-left-color: var(--accent); background: var(--track); }
-.dk-mp-text { display: flex; flex: 1; flex-direction: column; min-width: 0; }
-.dk-mp-name { font-weight: 600; }
-.dk-mp-sub { color: var(--muted); font-size: 12px; }
-.dk-mp-empty { padding: 24px 16px; color: var(--muted); }
+.dk-mp-text { display: flex; flex: 1; min-width: 0; flex-direction: column; }
+.dk-mp-name { font-size: 16px; font-weight: 600; line-height: 1.3; }
+.dk-mp-sub { color: var(--muted); font-size: 13px; line-height: 1.35; }
+.dk-mp-empty { margin: 0; padding: 40px 20px; color: var(--muted); font-size: 16px; line-height: 1.4; text-align: center; }
 
-.dk-avatar { display: inline-flex; width: 44px; height: 44px; flex: 0 0 44px; align-items: center; justify-content: center; border-radius: 50%; font-size: 15px; font-weight: 700; }
-.dk-avatar-xl { width: 124px; height: 124px; flex-basis: 124px; font-size: 40px; }
+.dk-profile {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+  padding: 30px 34px;
+  overflow-y: auto;
+}
 
-.dk-party-badge { padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; white-space: nowrap; }
-.dk-bloc-chip { padding: 5px 10px; border-radius: 8px; background: var(--track); font-size: 12px; font-weight: 600; }
-.dk-bloc-chip[data-bloc="coalition"] { color: var(--coalition); }
-.dk-bloc-chip[data-bloc="opposition"] { color: var(--opposition); }
-.dk-bloc-chip[data-bloc="unaligned"] { color: var(--bloc-unaligned-text); }
-
-.dk-profile-head { display: flex; align-items: flex-start; gap: 22px; }
+.dk-profile-head { display: flex; align-items: center; gap: 24px; }
 .dk-profile-identity { flex: 1; min-width: 0; }
-.dk-profile-name { margin: 0 0 10px; font-size: 32px; line-height: 1.1; }
-.dk-profile-chips { display: flex; gap: 8px; }
-.dk-profile-cta { padding: 13px 20px; border-radius: 12px; background: var(--hero); color: #fff; font-weight: 600; text-decoration: none; }
+.dk-profile-name { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.12; }
+.dk-profile-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 
-.dk-note { margin: 20px 0 0; padding: 14px 18px; border: 1px solid var(--warn-line); border-radius: 12px; background: var(--warn-bg); color: var(--warn-text); font-weight: 500; }
+.dk-profile-chips .dk-party-badge,
+.dk-profile-chips .dk-bloc-chip,
+.dk-group-chip {
+  padding: 6px 11px;
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1.2;
+}
 
-.dk-facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
-.dk-fact { display: flex; align-items: baseline; gap: 16px; padding: 14px 18px; border: 1px solid var(--line); border-radius: 12px; }
-.dk-fact-key { flex: 0 0 118px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+/* A membership, not a bloc and not a party: it borrows neither's colour. */
+.dk-group-chip { background: var(--track); color: var(--muted); font-weight: 600; white-space: nowrap; }
 
-.dk-locator-block { display: flex; align-items: center; gap: 26px; margin-top: 20px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; }
-.dk-locator { display: grid; grid-template-columns: repeat(var(--floor-cols), 6px); gap: 2px; }
+.dk-profile-cta {
+  display: flex;
+  height: 48px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px;
+  border-radius: 14px;
+  background: var(--hero);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.dk-note {
+  margin: 22px 0 0;
+  padding: 14px 16px;
+  border: 1px solid var(--warn-line);
+  border-radius: 14px;
+  background: var(--warn-bg);
+  color: var(--warn-text);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.dk-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+
+.dk-fact {
+  display: flex;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+/* Office and Committees run the width, so the four short facts always pair up
+   whether or not this member holds an office. */
+.dk-fact[data-wide="true"] { grid-column: 1 / -1; }
+
+.dk-fact-key {
+  flex: 0 0 104px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.dk-fact-value { flex: 1; min-width: 0; font-size: 15px; font-weight: 500; line-height: 1.4; }
+
+.dk-locator-block {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  margin-top: 10px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.dk-locator { display: grid; grid-template-columns: repeat(var(--floor-cols), 10px); gap: 2px; }
 .dk-locator-cell { height: 8px; border-radius: 2px; background: var(--track); }
 .dk-locator-cell[data-empty="true"] { background: transparent; }
 .dk-locator-cell[data-self="true"] { box-shadow: 0 0 0 2px var(--text); }
-.dk-locator-text { display: flex; flex-direction: column; gap: 4px; }
+.dk-locator-text { display: flex; min-width: 0; flex-direction: column; gap: 5px; }
+.dk-locator-text .dk-kicker { font-size: 12px; letter-spacing: 0.06em; line-height: 1.3; }
+.dk-locator-value { font-size: 15px; font-weight: 500; line-height: 1.4; }
 
 /* ------------------------------------------------------------------ *
  * Calculator
  * ------------------------------------------------------------------ */
 
-.dk-hero { background: var(--hero); color: #fff; }
-.dk-hero-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; }
-.dk-calc-total { font-size: 56px; font-weight: 700; line-height: 1; }
-.dk-calc-verdict { margin: 0; font-weight: 600; }
+.dk-view-calculator .dk-side { overflow-y: auto; }
+
+.dk-seat-key {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.dk-key { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; font-weight: 500; line-height: 1; }
+.dk-key-swatch { width: 14px; height: 14px; border-radius: 4px; background: var(--track); }
+.dk-key-swatch[data-seat-state="counted"] { box-shadow: 0 0 0 2px var(--text); }
+.dk-key-swatch[data-seat-state="dimmed"] { opacity: 0.35; }
+.dk-key-swatch[data-seat-state="held"] { background: var(--remove-bg); box-shadow: 0 0 0 2px var(--remove-fg); }
+
+.dk-hero { padding: 20px 20px 18px; border-radius: 22px; background: var(--hero); color: #fff; }
+.dk-hero-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.dk-calc-total { font-size: 56px; font-weight: 700; letter-spacing: -0.04em; line-height: 0.9; }
+
+.dk-calc-verdict {
+  margin: 0;
+  color: rgb(255 255 255 / 72%);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: right;
+}
+
 .dk-calc-verdict[data-met="true"] { color: var(--pass); }
-.dk-calc-hint { margin: 14px 0 0; color: rgb(255 255 255 / 72%); font-size: 13px; }
-.dk-calc-chip { padding: 7px 13px; border-radius: 11px; background: var(--track); font-size: 13px; font-weight: 600; }
 
-.dk-thresholds { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
-.dk-threshold { padding: 12px; border: 1px solid rgb(255 255 255 / 18%); border-radius: 12px; }
-.dk-threshold[data-met="true"] { border-color: var(--pass); color: var(--pass); }
-.dk-threshold-fraction { display: block; font-weight: 700; }
-.dk-threshold-note { display: block; margin-top: 4px; font-size: 11px; opacity: 0.75; }
+.dk-calc-chip {
+  padding: 7px 13px;
+  border-radius: 11px;
+  background: var(--track);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
 
-.dk-presets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: var(--gutter); }
-.dk-preset { padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); font-weight: 600; }
+/* The mobile hero's threshold track at desktop width: the selection as a
+   length, with the four constitutional marks standing on it. */
+.dk-track { position: relative; height: 44px; margin-top: 20px; }
+
+.dk-track-rail,
+.dk-track-fill {
+  position: absolute;
+  top: 14px;
+  height: 14px;
+  border-radius: 999px;
+}
+
+.dk-track-rail { left: 0; right: 0; background: rgb(255 255 255 / 14%); }
+.dk-track-fill { left: 0; background: var(--accent); transition: width 0.18s ease; }
+.dk-track-fill[data-met="true"] { background: var(--pass); }
+
+.dk-track-marks { position: absolute; inset: 0; }
+
+.dk-track-mark {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transform: translateX(-50%);
+}
+
+.dk-track-tick { width: 2px; height: 28px; background: rgb(255 255 255 / 22%); }
+.dk-track-mark[data-met="true"] .dk-track-tick { background: rgb(255 255 255 / 90%); }
+
+.dk-track-figure {
+  color: rgb(255 255 255 / 50%);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.dk-track-mark[data-met="true"] .dk-track-figure { color: #fff; }
+
+.dk-thresholds { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 16px; }
+
+.dk-threshold {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 11px;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 12px;
+  background: rgb(255 255 255 / 6%);
+}
+
+.dk-threshold[data-met="true"] { border-color: rgb(74 222 128 / 50%); background: rgb(74 222 128 / 16%); }
+.dk-threshold-fraction { color: rgb(255 255 255 / 82%); font-size: 15px; font-weight: 700; line-height: 1; }
+.dk-threshold[data-met="true"] .dk-threshold-fraction { color: var(--pass); }
+.dk-threshold-note { color: rgb(255 255 255 / 66%); font-size: 11px; font-weight: 500; line-height: 1.25; }
+
+.dk-calc-hint { margin: 14px 0 0; color: rgb(255 255 255 / 72%); font-size: 15px; font-weight: 500; line-height: 1.4; }
+
+.dk-presets { display: flex; gap: 8px; }
+
+.dk-preset {
+  flex: 1;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.dk-preset:hover { border-color: var(--accent); color: var(--accent); }
 .dk-preset-clear { color: var(--muted); }
 
-.dk-calc-parties { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.dk-calc-party { flex-direction: column; align-items: flex-start; gap: 6px; }
-.dk-calc-party-head { display: flex; align-items: center; gap: 8px; font-weight: 600; }
-.dk-calc-party-selected { font-size: 24px; font-weight: 700; }
-.dk-calc-party-total { color: var(--muted); }
+.dk-block { display: flex; flex-direction: column; }
+.dk-block-title { margin: 4px 0 10px; }
 
-.dk-adjustments { display: flex; flex-direction: column; gap: 10px; }
-.dk-adjustments-empty { margin: 0; color: var(--muted); font-size: 13px; }
-.dk-adjustment { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; }
-.dk-adjustment-badge { padding: 5px 9px; border-radius: 8px; background: var(--track); font-weight: 700; }
-.dk-adjustment-text { display: flex; flex: 1; flex-direction: column; min-width: 0; }
-.dk-adjustment-name { font-weight: 600; }
-.dk-adjustment-note { color: var(--muted); font-size: 12px; }
-.dk-adjustment-undo { padding: 8px 14px; border: 1px solid var(--line); border-radius: 10px; background: transparent; font-weight: 600; }
+.dk-calc-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.dk-calc-party {
+  display: flex;
+  min-height: 80px;
+  flex-direction: column;
+  gap: 6px;
+  padding: 13px;
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  background: transparent;
+  text-align: left;
+}
+
+/* Lit when the party is selected or contributing, which in every frame the
+   artboards draw is the same thing — Reform and Eesti 200 are both, Unaligned
+   is contributing without being selected. They come apart in one state the
+   mockups do not show: a party selected with every member held out. Painting
+   from `data-counting` alone would leave that card looking unselected, and the
+   next click on it would silently drop hold-outs the reader had built up. */
+.dk-calc-party[data-counting="true"],
+.dk-calc-party[data-active="true"] { border-color: var(--party); background: var(--card); }
+.dk-calc-party-head { display: flex; align-items: center; gap: 8px; }
+.dk-calc-party .dk-party-swatch { width: 12px; height: 12px; flex-basis: 12px; border-radius: 4px; }
+.dk-calc-party-name { font-size: 15px; font-weight: 600; line-height: 1.2; }
+.dk-calc-party-count { display: flex; align-items: baseline; gap: 6px; }
+
+.dk-calc-party-selected {
+  color: var(--muted);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* The figure itself still follows the count alone: a nought is not emphatic. */
+.dk-calc-party[data-counting="true"] .dk-calc-party-selected { color: var(--text); }
+.dk-calc-party-total { color: var(--muted); font-size: 13px; font-weight: 500; line-height: 1.2; }
+
+.dk-adjustments { display: flex; flex-direction: column; gap: 8px; }
+
+.dk-adjustments-empty {
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.dk-adjustment {
+  display: flex;
+  min-height: 56px;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+}
+
+.dk-adjustment-badge {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: var(--add-bg);
+  color: var(--add-fg);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.dk-adjustment[data-kind="excluded"] .dk-adjustment-badge { background: var(--remove-bg); color: var(--remove-fg); }
+.dk-adjustment-text { display: flex; flex: 1; min-width: 0; flex-direction: column; }
+.dk-adjustment-name { font-size: 15px; font-weight: 600; line-height: 1.25; }
+.dk-adjustment-note { color: var(--muted); font-size: 13px; line-height: 1.3; }
+
+.dk-adjustment-undo {
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.dk-adjustment-undo:hover { border-color: var(--accent); color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-avatar-photo,
+  .dk-track-fill { transition: none; }
+}
