@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1920">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="description" content="Desktop dashboard for the XV Riigikogu — the session hall seating plan, the member directory and a coalition calculator.">
+  <title>XV Riigikogu Desktop</title>
+
+  <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../desktop.css">
+</head>
+<body>
+  <!--
+    The desktop surface's shell, and nothing else — the same rule the mobile
+    `index.html` follows: no data, no view markup, no inline styles. Everything
+    visible is rendered by src/views-desktop/ into #app.
+
+    It is a second VIEW over the unchanged DATA and LOGIC layers: `src/data.js`
+    and `src/lib/*` are shared with the mobile app and are not touched by this
+    surface (USABILITY.md §10.5). `data/seating.json` is the one dataset only
+    this surface reads.
+
+    No service worker is registered here yet — the desktop scope, the precache
+    additions and its manifest are Phase 3 PR C
+    (docs/desktop-2026/DESIGN_AND_MERGE_PLAN.md).
+  -->
+  <div id="app" role="application" aria-label="XV Riigikogu Desktop Dashboard">
+    <p class="boot">Loading the Riigikogu…</p>
+  </div>
+
+  <noscript>
+    <p class="boot">This dashboard needs JavaScript to read <code>data/*.json</code>.</p>
+  </noscript>
+
+  <script type="module" src="../src/views-desktop/app.js"></script>
+</body>
+</html>

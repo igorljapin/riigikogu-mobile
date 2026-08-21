@@ -1,0 +1,515 @@
+{
+  "_comment": "Session-hall seat positions, keyed by MP uuid — the one dataset the desktop surface needs that the API cannot provide, so no build script writes this file (data/README.md, \"Who writes what\"). Seat positions only: the source bundle's party data was stale (pre-2026-08-09) and was deliberately not carried over. row and col are 0-based; the grid is 10 rows × 12 columns and 19 of its 120 cells are empty. `name` is a review aid — mps.json is the authority on names, and the validator only warns when the two drift.",
+  "source": "riigikogu-desktop index.html bundle (eV constant, column-major eV[col][row]), extracted 2026-08-19 by Phase 0 of docs/desktop-2026/DESIGN_AND_MERGE_PLAN.md",
+  "gridDimensions": {
+    "rows": 10,
+    "cols": 12
+  },
+  "seats": {
+    "afc264da-dc7d-4885-a971-0e645995e6de": {
+      "name": "Evelin Poolamets",
+      "row": 0,
+      "col": 0
+    },
+    "94ffc777-09a5-4472-bf5d-ce16e78a2341": {
+      "name": "Rain Epler",
+      "row": 1,
+      "col": 0
+    },
+    "98008392-64a2-4429-8a41-fb051823e402": {
+      "name": "Martin Helme",
+      "row": 2,
+      "col": 0
+    },
+    "4b96f3e5-af5e-41ce-86c9-3fdee3ce51da": {
+      "name": "Mart Helme",
+      "row": 3,
+      "col": 0
+    },
+    "694b084f-e151-4f7e-8a5c-2664a40cee7a": {
+      "name": "Rene Kokk",
+      "row": 4,
+      "col": 0
+    },
+    "bc9c1725-2fd8-4f54-a0e3-58b87e9dfe1f": {
+      "name": "Anti Poolamets",
+      "row": 5,
+      "col": 0
+    },
+    "94351dfe-449e-48db-9396-06cf204ce22e": {
+      "name": "Jaanus Karilaid",
+      "row": 6,
+      "col": 0
+    },
+    "65b1d8bb-7f45-48f5-b4aa-7ba4ca459824": {
+      "name": "Henn Põlluaas",
+      "row": 7,
+      "col": 0
+    },
+    "a39c4392-bbc8-4036-b923-0f5f2b3d9766": {
+      "name": "Arvo Aller",
+      "row": 0,
+      "col": 1
+    },
+    "b5e0d7fe-b784-4057-bf7e-cc3f1873887d": {
+      "name": "Varro Vooglaid",
+      "row": 2,
+      "col": 1
+    },
+    "f4e5d00e-19d1-428a-ba5e-5ce9ae4ef2c2": {
+      "name": "Helle-Moonika Helme",
+      "row": 3,
+      "col": 1
+    },
+    "d8b9f165-31aa-46a4-8dbd-964cbe89cfb8": {
+      "name": "Siim Pohlak",
+      "row": 4,
+      "col": 1
+    },
+    "c4e3fc0f-80fb-4a3e-b49e-80045c5253d9": {
+      "name": "Ants Frosch",
+      "row": 7,
+      "col": 1
+    },
+    "9a8a55b8-c946-47a2-9e17-9978c3fd23f8": {
+      "name": "Tõnis Lukas",
+      "row": 0,
+      "col": 2
+    },
+    "2dcb35ed-acbc-4bcf-9e9d-9da681842d6d": {
+      "name": "Aivar Kokk",
+      "row": 1,
+      "col": 2
+    },
+    "a78027e5-2480-49f2-a340-ee88daf92d53": {
+      "name": "Urmas Reinsalu",
+      "row": 2,
+      "col": 2
+    },
+    "23161df7-bc1b-442e-b4cd-2d1f37627658": {
+      "name": "Helir-Valdor Seeder",
+      "row": 3,
+      "col": 2
+    },
+    "a5af5ad0-6e31-443a-9b12-15769d43e784": {
+      "name": "Maria Jufereva-Skuratovski",
+      "row": 4,
+      "col": 2
+    },
+    "4a332fbb-be05-4cb2-b6a0-5916eb40fe89": {
+      "name": "Urmas Kruuse",
+      "row": 5,
+      "col": 2
+    },
+    "71bdc9b2-841d-408f-8ace-909e8c11d7d5": {
+      "name": "Signe Kivi",
+      "row": 6,
+      "col": 2
+    },
+    "001dd80c-38c3-4557-b3ee-408d3ffd5cd7": {
+      "name": "Katrin Kuusemäe",
+      "row": 7,
+      "col": 2
+    },
+    "31eee189-0019-469f-8469-7da564bf1af9": {
+      "name": "Kalle Laanet",
+      "row": 8,
+      "col": 2
+    },
+    "7b6823ed-96f9-462b-b931-3dd4faceb09e": {
+      "name": "Vilja Toomast",
+      "row": 9,
+      "col": 2
+    },
+    "7f83e40c-4854-4632-9372-448b3a5dc93a": {
+      "name": "Lea Danilson-Järg",
+      "row": 0,
+      "col": 3
+    },
+    "d5f3dddb-d809-448a-a94f-adbf208e408a": {
+      "name": "Andres Metsoja",
+      "row": 1,
+      "col": 3
+    },
+    "8940964b-6bfd-482d-a4f5-53f2cccb149d": {
+      "name": "Priit Sibul",
+      "row": 2,
+      "col": 3
+    },
+    "29068268-672d-451a-a08a-5727ec4300f4": {
+      "name": "Mart Maastik",
+      "row": 3,
+      "col": 3
+    },
+    "966e7ccd-b097-4e49-923c-c8d39dae2d62": {
+      "name": "Valdo Randpere",
+      "row": 4,
+      "col": 3
+    },
+    "5650dddf-f2ca-4b94-8888-e7482808f81b": {
+      "name": "Aivar Sõerd",
+      "row": 5,
+      "col": 3
+    },
+    "90074aa2-4938-41a9-8275-3a6efa1cee31": {
+      "name": "Yoko Alender",
+      "row": 6,
+      "col": 3
+    },
+    "58be6531-1f4b-4b0b-9c21-92566a40ae8b": {
+      "name": "Marko Mihkelson",
+      "row": 7,
+      "col": 3
+    },
+    "7251e077-1964-4f2b-9dba-349dc127b56e": {
+      "name": "Meelis Kiili",
+      "row": 8,
+      "col": 3
+    },
+    "0f9372ee-f108-47f9-9192-82ff84cf3efb": {
+      "name": "Timo Suslov",
+      "row": 9,
+      "col": 3
+    },
+    "db46f14c-3bdf-47a0-bed4-0172f7d942db": {
+      "name": "Toomas Järveoja",
+      "row": 0,
+      "col": 4
+    },
+    "1600fe77-4b45-44ab-972a-181a5ef71767": {
+      "name": "Kristo Enn Vaga",
+      "row": 1,
+      "col": 4
+    },
+    "0c571754-914d-406a-baba-6734212353de": {
+      "name": "Urve Tiidus",
+      "row": 2,
+      "col": 4
+    },
+    "fd57045c-5dde-4c26-bf60-e5c294da0e4c": {
+      "name": "Andrus Seeme",
+      "row": 3,
+      "col": 4
+    },
+    "8600af41-4dcc-424d-9d05-7c851e5270b5": {
+      "name": "Mart Võrklaev",
+      "row": 4,
+      "col": 4
+    },
+    "9035e217-d990-40ca-87ed-54c77653c6d7": {
+      "name": "Pipi-Liis Siemann",
+      "row": 5,
+      "col": 4
+    },
+    "17d27ea5-b5e6-43e0-86db-ebc15bdd5788": {
+      "name": "Luisa Rõivas",
+      "row": 6,
+      "col": 4
+    },
+    "8d9daaeb-dbaf-4887-8311-881b29bedfa9": {
+      "name": "Õnne Pillak",
+      "row": 7,
+      "col": 4
+    },
+    "315ea785-8f59-40e5-a158-3de8b908572f": {
+      "name": "Maris Lauri",
+      "row": 8,
+      "col": 4
+    },
+    "7655e8d3-b658-49f0-8e09-f6cbc4a2c714": {
+      "name": "Annely Akkermann",
+      "row": 9,
+      "col": 4
+    },
+    "09500870-255e-416d-8eda-f80e9929adda": {
+      "name": "Jüri Jaanson",
+      "row": 0,
+      "col": 5
+    },
+    "ee639cdf-b86c-48b7-9b34-fbba9b83826d": {
+      "name": "Margit Sutrop",
+      "row": 1,
+      "col": 5
+    },
+    "429e71ce-d5ba-4617-8db4-d546482d43bc": {
+      "name": "Madis Timpson",
+      "row": 2,
+      "col": 5
+    },
+    "0e66e826-df65-4fdd-a098-66a7e9a7c911": {
+      "name": "Signe Riisalo",
+      "row": 3,
+      "col": 5
+    },
+    "d4effc9d-0aee-4450-9926-5246efcda08c": {
+      "name": "Maido Ruusmann",
+      "row": 4,
+      "col": 5
+    },
+    "07003549-aa42-4764-8bdd-cab06cb94a92": {
+      "name": "Anti Haugas",
+      "row": 5,
+      "col": 5
+    },
+    "906f1a0a-0000-4a96-866c-b30f2b6adc49": {
+      "name": "Toomas Kivimägi",
+      "row": 6,
+      "col": 5
+    },
+    "1c173f0d-6c5e-445a-934f-32e7edf903db": {
+      "name": "Mihkel Lees",
+      "row": 7,
+      "col": 5
+    },
+    "d18cee4c-7b30-405f-96f2-4ab6f81efaf2": {
+      "name": "Hanah Lahe",
+      "row": 8,
+      "col": 5
+    },
+    "b2226516-4cd4-4471-b93b-696c40b7a9e2": {
+      "name": "Eerik-Niiles Kross",
+      "row": 9,
+      "col": 5
+    },
+    "122e850b-5e6b-41f6-8b91-830ca8de8450": {
+      "name": "Mait Klaassen",
+      "row": 0,
+      "col": 6
+    },
+    "28e48bd7-9f1f-4d6a-b40c-9c6ff6d445e5": {
+      "name": "Kristina Šmigun-Vähi",
+      "row": 1,
+      "col": 6
+    },
+    "a12ffc5c-0809-46cb-abc4-cc99a7fa3f60": {
+      "name": "Liina Kersna",
+      "row": 2,
+      "col": 6
+    },
+    "4e2e1744-16b5-4d88-a08a-cf250c776956": {
+      "name": "Ando Kiviberg",
+      "row": 3,
+      "col": 6
+    },
+    "a5d17c31-61e5-4e45-87b0-5834b6728fe6": {
+      "name": "Juku-Kalle Raid",
+      "row": 4,
+      "col": 6
+    },
+    "4f816f8e-1501-4940-b87a-af029fcd98c0": {
+      "name": "Tanel Tein",
+      "row": 5,
+      "col": 6
+    },
+    "d0d7a6a5-25de-40d0-b5df-09575a7c9bfc": {
+      "name": "Toomas Uibo",
+      "row": 6,
+      "col": 6
+    },
+    "8946b072-80c5-436e-95b2-41f928a7c636": {
+      "name": "Diana Ingerainen",
+      "row": 7,
+      "col": 6
+    },
+    "64c0141f-371b-4520-8a50-09e65231f775": {
+      "name": "Lauri Hussar",
+      "row": 8,
+      "col": 6
+    },
+    "b6f8dff5-7c69-4d4c-b978-be0a2ad6e161": {
+      "name": "Peeter Tali",
+      "row": 9,
+      "col": 6
+    },
+    "410c0030-7bcd-4977-85c2-27af3439770f": {
+      "name": "Mati Raidma",
+      "row": 0,
+      "col": 7
+    },
+    "7d6b0605-e425-41c8-9a53-3b92b81f21b1": {
+      "name": "Eero Merilind",
+      "row": 1,
+      "col": 7
+    },
+    "53141769-f7bb-4995-8d12-5ff0d9c1eca1": {
+      "name": "Mario Kadastik",
+      "row": 2,
+      "col": 7
+    },
+    "798de8ee-0587-4543-aa2e-89c3f6c8f914": {
+      "name": "Marek Reinaas",
+      "row": 3,
+      "col": 7
+    },
+    "2bc608c1-1c67-4db8-968b-94bc3947dfac": {
+      "name": "Kadri Tali",
+      "row": 4,
+      "col": 7
+    },
+    "987e47c7-929b-4437-9385-fab4f4fd7824": {
+      "name": "Grigore-Kalev Stoicescu",
+      "row": 5,
+      "col": 7
+    },
+    "3febb869-f443-4aba-908e-7c0c30f8c4dd": {
+      "name": "Irja Lutsar",
+      "row": 6,
+      "col": 7
+    },
+    "236e49d6-eecb-4562-8ad4-bedd586bb149": {
+      "name": "Tarmo Tamm",
+      "row": 7,
+      "col": 7
+    },
+    "6434e7ab-6aba-4945-9812-e7a2e7c8bf3f": {
+      "name": "Stig Rästa",
+      "row": 8,
+      "col": 7
+    },
+    "fe6fcd51-6911-4dc6-9232-ddeac5ec1155": {
+      "name": "Aleksandr Tšaplõgin",
+      "row": 0,
+      "col": 8
+    },
+    "80eac2f1-bb1e-4996-ac5a-4c3dba91bade": {
+      "name": "Vadim Belobrovtsev",
+      "row": 1,
+      "col": 8
+    },
+    "a62b7530-a1fb-4c0b-b041-f10c2cfaa31a": {
+      "name": "Andrei Korobeinik",
+      "row": 2,
+      "col": 8
+    },
+    "f8a770b2-916c-4172-84b3-005ba9906a18": {
+      "name": "Peeter Ernits",
+      "row": 3,
+      "col": 8
+    },
+    "07132cc4-5afc-4edb-9537-7c721ec39b2d": {
+      "name": "Enn Eesmaa",
+      "row": 4,
+      "col": 8
+    },
+    "80f542c1-393a-46e2-9fca-99948e59850d": {
+      "name": "Andre Hanimägi",
+      "row": 5,
+      "col": 8
+    },
+    "561abe91-76eb-45f3-90b0-efa94c663689": {
+      "name": "Tanel Kiik",
+      "row": 6,
+      "col": 8
+    },
+    "563f86fd-db45-4046-b8ed-b66e5a2aec45": {
+      "name": "Alar Laneman",
+      "row": 7,
+      "col": 8
+    },
+    "fd2d1dd5-ff19-445e-b190-28aabb07763a": {
+      "name": "Leo Kunnas",
+      "row": 8,
+      "col": 8
+    },
+    "54bc0d5b-7c98-4245-8682-4a3a0b6e0275": {
+      "name": "Jaak Valge",
+      "row": 9,
+      "col": 8
+    },
+    "04510d7c-b12a-48aa-8402-80b0efb114a6": {
+      "name": "Anastassia Kovalenko-Kõlvart",
+      "row": 0,
+      "col": 9
+    },
+    "0ef9e676-8ee6-481a-ae29-e1ce75af5aaa": {
+      "name": "Aleksei Jevgrafov",
+      "row": 1,
+      "col": 9
+    },
+    "1839253a-aec0-4019-995a-1c031db8fd10": {
+      "name": "Lauri Laats",
+      "row": 2,
+      "col": 9
+    },
+    "586335bd-0e3f-4cee-a325-7af602224ca7": {
+      "name": "Vladimir Arhipov",
+      "row": 3,
+      "col": 9
+    },
+    "caea357b-12c0-4069-b53e-89f69f517212": {
+      "name": "Kersti Sarapuu",
+      "row": 4,
+      "col": 9
+    },
+    "6b45cfb5-8a17-481c-b674-80fc00c6cf5d": {
+      "name": "Jaak Aab",
+      "row": 5,
+      "col": 9
+    },
+    "d5c54f88-dff3-486b-aac6-2cd124577d38": {
+      "name": "Ester Karuse",
+      "row": 6,
+      "col": 9
+    },
+    "76c477e6-4b49-4d49-ad7b-a4853182a1da": {
+      "name": "Riina Sikkut",
+      "row": 0,
+      "col": 10
+    },
+    "1d0b281d-b769-4e94-8c67-faa1cb1b1395": {
+      "name": "Helmen Kütt",
+      "row": 1,
+      "col": 10
+    },
+    "d557812c-971d-415b-827d-aa6a382ec6ef": {
+      "name": "Lauri Läänemets",
+      "row": 2,
+      "col": 10
+    },
+    "b5922bb2-56bb-4de6-a7e1-754553191c27": {
+      "name": "Heljo Pikhof",
+      "row": 3,
+      "col": 10
+    },
+    "988995d4-3cbe-4ea7-acdd-6222d0b658b1": {
+      "name": "Reili Rand",
+      "row": 4,
+      "col": 10
+    },
+    "658c9d00-82c9-4161-8314-48ff1d67e3b7": {
+      "name": "Züleyxa Izmailova",
+      "row": 5,
+      "col": 10
+    },
+    "db532de2-5abd-4b6d-a82c-2d9a75fd9d18": {
+      "name": "Kalle Grünthal",
+      "row": 6,
+      "col": 10
+    },
+    "d7d9e4d7-699e-4038-83c3-d13369f644c9": {
+      "name": "Tõnis Mölder",
+      "row": 7,
+      "col": 10
+    },
+    "989194b6-b6cc-4c8f-9e6a-8eb8913d103e": {
+      "name": "Raimond Kaljulaid",
+      "row": 0,
+      "col": 11
+    },
+    "f6353ede-a0a5-4918-ab8b-790a1957c5cd": {
+      "name": "Anti Allas",
+      "row": 1,
+      "col": 11
+    },
+    "c7f4f213-58a3-4b6f-a236-153644653d17": {
+      "name": "Madis Kallas",
+      "row": 2,
+      "col": 11
+    },
+    "9d863d49-8bfb-4314-bd3c-cfa143f518c8": {
+      "name": "Tiit Maran",
+      "row": 3,
+      "col": 11
+    }
+  }
+}

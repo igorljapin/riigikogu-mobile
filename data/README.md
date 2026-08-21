@@ -1,7 +1,7 @@
 # `data/` — the single source of truth
 
 The app fetches these files at runtime. Every one of them except
-`alignment.json` is **generated**. Regenerate with:
+`alignment.json` and `seating.json` is **generated**. Regenerate with:
 
 ```bash
 python3 scripts/build_data.py          # fetches the live API
@@ -9,12 +9,14 @@ python3 scripts/validate_data.py       # exit 0 = safe to publish
 ```
 
 Do not hand-edit `mps.json`, `board.json`, `catalogues.json`, `meta.json` or
-`parties.json` — the next build overwrites them. The one file you may edit by
-hand is `alignment.json`, and only its `blocs` and `defectors` sections.
+`parties.json` — the next build overwrites them. Two files are yours:
+`alignment.json` (its `blocs` and `defectors` sections) and `seating.json`,
+which no script can generate because the API does not publish seats.
 
 Once a month `.github/workflows/monthly-mp-check.yml` does the same thing
 unattended via `scripts/fetch_mp_data.py` and opens a PR with the diff. **That
-job never writes `alignment.json`** — see "Who writes what" below.
+job never writes `alignment.json` or `seating.json`** — see "Who writes what"
+below.
 
 ---
 
@@ -89,7 +91,7 @@ API string and is how `mps.json` joins to a party.
   > the bundle's "Jan 2026" vintage. The bundle's 33 are a strict subset of the
   > API's 38, so this is a refresh, not a resolver disagreement.
 
-### `alignment.json` — the only curated file
+### `alignment.json` — the curated voting overlay
 
 ```jsonc
 {
@@ -115,11 +117,14 @@ they must not be silently attributed.
 
 #### Who writes what
 
-| Tool | May write `alignment.json`? |
-|---|---|
-| You, by hand | yes — it is your file |
-| `scripts/build_data.py` (hand-run) | appends a new uuid to `unaligned`, nothing else |
-| `scripts/fetch_mp_data.py` (the monthly job) | **never** |
+Two files in here are curated rather than generated, and neither is safe for an
+unattended job to touch.
+
+| Tool | `alignment.json` | `seating.json` |
+|---|---|---|
+| You, by hand | yes — it is your file | yes — it is your file |
+| `scripts/build_data.py` (hand-run) | appends a new uuid to `unaligned`, nothing else | **never** |
+| `scripts/fetch_mp_data.py` (the monthly job) | **never** | **never** |
 
 Phase 5 tightened `ARCHITECTURE_PLAN.md` §5.2 on the last row: the *unattended*
 job does not touch the curated overlay at all. A newly non-affiliated MP reaches
@@ -138,6 +143,35 @@ they actually join a party. If it never happens, the published numbers stay
 conservative and defensible. Nothing automated ever writes a `votesWith`.
 
 Change `blocs` when a government changes.
+
+### `seating.json` — the curated floor plan, read by the desktop surface only
+
+```jsonc
+{ "gridDimensions": { "rows": 10, "cols": 12 },
+  "seats": { "<uuid>": { "name": "Evelin Poolamets", "row": 0, "col": 0 } } }
+```
+
+101 seats on a 10 × 12 grid; `row` and `col` are 0-based, so 19 of the 120 cells
+are empty and render as invisible placeholders that keep the grid rigid. The
+desktop surface joins this to `mps.json` by uuid and colours each tile with the
+party its member **votes with** — the same rule as every other count in the app
+(`USABILITY.md` §10.2). The mobile app never reads it.
+
+**Nothing generates this file.** The Riigikogu API exposes no seat, so the
+positions were harvested once from the retiring `riigikogu-desktop` bundle
+(Phase 0 of `docs/desktop-2026/DESIGN_AND_MERGE_PLAN.md`) and are maintained by
+hand from there. Only the seat positions were carried over: that bundle's party
+data was stale — pre-2026-08-09, before two defections — which is the reason the
+two apps were merged in the first place.
+
+`name` is a review aid, so a diff reads as people rather than uuids; `mps.json`
+is the authority and the validator only *warns* when the two disagree.
+
+**When the roster changes, this file needs a hand.** An MP who joins parliament
+has no seat until you give them one, and the validator fails on both halves of
+that join — a member with no seat and a seat for someone who has left. Take the
+departing member's cell unless you know better; the Riigikogu seats by
+parliamentary group, so a substitute usually inherits the seat.
 
 ### `board.json` — derived from `plenaryMembership.jobTitle`
 
@@ -215,6 +249,14 @@ Eesti 200 (Aug 9) and Meelis Kiili left Reform (Aug 10).
   agreeing with the arithmetic
 - colours are `#RRGGBB` uppercase; photo/profile URLs are https
 - the Board has exactly the three roles, all present in the roster
+- `seating.json` holds exactly 101 seats, every one of them an active MP, every
+  active MP among them, each at integer coordinates inside `gridDimensions` and
+  no two in the same cell
+
+The seating rules are **skipped, with a warning, when the file is absent** —
+`fetch_mp_data.py` validates a staging directory holding only the files it
+generates, and requiring a file that job may not write would fail it every
+month. Locally, `data/seating.json` is always there and the rules always run.
 
 It is deliberately paranoid about the seat arithmetic, because that is the number
 readers act on.
