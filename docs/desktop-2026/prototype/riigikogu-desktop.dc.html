@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#0f172a"/><text x="50" y="58" font-family="system-ui,sans-serif" font-size="26" font-weight="700" fill="#fff" text-anchor="middle">XV</text></svg></template>
+</head>
+<body>
+<x-dc>
+<helmet><style>
+*{box-sizing:border-box}
+:root,[data-theme="light"]{--bg:#f4f6f8;--card:#ffffff;--text:#0f172a;--muted:#64748b;--line:#e4e9ef;--track:#eef1f5;--hero:#0f172a;--warnBg:#fffbeb;--warnLine:#fcd34d;--warnText:#92400e;--shadow:0 1px 3px rgba(15,23,42,.14);--pop:0 14px 34px rgba(15,23,42,.16)}
+[data-theme="dark"]{--bg:#080d16;--card:#131b29;--text:#f6f8fb;--muted:#93a1b8;--line:#233046;--track:#1d283b;--hero:#1b2536;--warnBg:#2a2213;--warnLine:#6b5117;--warnText:#f5cf7a;--shadow:0 1px 3px rgba(0,0,0,.5);--pop:0 14px 34px rgba(0,0,0,.55)}
+:root{--coalition:#2563eb;--opposition:#e11d48;--unaligned:#94a3b8;--accent:#9333ea;--pass:#4ade80;--addBg:#dcfce7;--addFg:#15803d;--remBg:#fee2e2;--remFg:#b91c1c;--unalignedText:#b45309}
+input::-webkit-search-cancel-button{display:none}
+a{color:#0f172a;text-decoration:none}a:hover{color:#9333ea}
+[data-theme="dark"] a{color:#f6f8fb}[data-theme="dark"] a:hover{color:#c084fc}
+</style>
+<script type="application/json" id="rk-data">{"parties":[{"id":"reform","nameEn":"Estonian Reform Party","nameEt":"Eesti Reformierakond","short":"Reform","color":"#FFD700","textColor":"#000000","factionName":"Estonian Reform Party Parliamentary Group"},{"id":"e200","nameEn":"Estonia 200","nameEt":"Eesti 200","short":"Eesti 200","color":"#00AEEF","textColor":"#FFFFFF","factionName":"Estonia 200 Parliamentary Group"},{"id":"sde","nameEn":"Social Democratic Party","nameEt":"Sotsiaaldemokraatlik Erakond","short":"SDE","color":"#E4002B","textColor":"#FFFFFF","factionName":"Social Democratic Party Parliamentary Group"},{"id":"ekre","nameEn":"Estonian Conservative People's Party","nameEt":"Eesti Konservatiivne Rahvaerakond","short":"EKRE","color":"#8B4513","textColor":"#FFFFFF","factionName":"Estonian Conservative People’s Party Parliamentary Group"},{"id":"isamaa","nameEn":"Isamaa","nameEt":"Isamaa","short":"Isamaa","color":"#0072BC","textColor":"#FFFFFF","factionName":"Isamaa Parliamentary Group"},{"id":"center","nameEn":"Estonian Centre Party","nameEt":"Eesti Keskerakond","short":"Center","color":"#007438","textColor":"#FFFFFF","factionName":"Estonian Centre Party Parliamentary Group"},{"id":"independent","nameEn":"Non-affiliated members","nameEt":"Fraktsiooni mittekuuluvad liikmed","short":"Independent","color":"#808080","textColor":"#FFFFFF","factionName":"Non-affiliated members"}],"mps":[{"name":"Aivar Kokk","uuid":"2dcb35ed-acbc-4bcf-9e9d-9da681842d6d","photoUrl":"https://api.riigikogu.ee/api/files/26b8b649-075d-487d-9864-9da9c643b2aa/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/2dcb35ed-acbc-4bcf-9e9d-9da681842d6d/Aivar-Kokk","faction":"Isamaa Parliamentary Group","registeredPartyId":"isamaa","factionRole":null,"committees":[{"name":"Finance Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"Security Authorities Surveillance Select Committee","role":"Deputy Chairman","type":"ERIKOMISJON"}],"boardRole":null,"district":"Jõgevamaa and Tartumaa","email":"aivar.kokk@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Aivar Sõerd","uuid":"5650dddf-f2ca-4b94-8888-e7482808f81b","photoUrl":"https://api.riigikogu.ee/api/files/fa935faf-5725-4505-a7ee-5d47242feec6/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/5650dddf-f2ca-4b94-8888-e7482808f81b/Aivar-Sõerd","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"Finance Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"aivar.soerd@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Alar Laneman","uuid":"563f86fd-db45-4046-b8ed-b66e5a2aec45","photoUrl":"https://api.riigikogu.ee/api/files/b5cc0128-45bd-404c-a4e2-ec82f70fccc3/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/563f86fd-db45-4046-b8ed-b66e5a2aec45/Alar-Laneman","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"National Defence Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Pärnumaa","email":"alar.laneman@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Conservative People’s Party Parliamentary Group","leftFactionDate":"2024-06-14","active":true},{"name":"Aleksandr Tšaplõgin","uuid":"fe6fcd51-6911-4dc6-9232-ddeac5ec1155","photoUrl":"https://api.riigikogu.ee/api/files/43c65805-01bb-4b66-9ca1-97fcdaafee3d/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/fe6fcd51-6911-4dc6-9232-ddeac5ec1155/Aleksandr-Tšaplõgin","faction":"Estonian Centre Party Parliamentary Group","registeredPartyId":"center","factionRole":null,"committees":[{"name":"Social Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Kesklinn, Lasnamäe and Pirita districts of Tallinn","email":"aleksandr.tsaplogin@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Aleksei Jevgrafov","uuid":"0ef9e676-8ee6-481a-ae29-e1ce75af5aaa","photoUrl":"https://api.riigikogu.ee/api/files/c69699d3-c8de-4c96-a841-7a8f7c344e76/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/0ef9e676-8ee6-481a-ae29-e1ce75af5aaa/Aleksei-Jevgrafov","faction":"Estonian Centre Party Parliamentary Group","registeredPartyId":"center","factionRole":null,"committees":[{"name":"Economic Affairs Committee","role":"Deputy Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Ida-Virumaa","email":"aleksei.jevgrafov@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Anastassia Kovalenko-Kõlvart","uuid":"04510d7c-b12a-48aa-8402-80b0efb114a6","photoUrl":"https://api.riigikogu.ee/api/files/094d764f-eea6-4a53-84f6-28ee97ae5aba/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/04510d7c-b12a-48aa-8402-80b0efb114a6/Anastassia-Kovalenko-Kõlvart","faction":"Estonian Centre Party Parliamentary Group","registeredPartyId":"center","factionRole":null,"committees":[{"name":"Anti-Corruption Select Committee","role":"Chairman","type":"ERIKOMISJON"},{"name":"Constitutional Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn","email":"anastassia.kovalenko-kolvart@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Ando Kiviberg","uuid":"4e2e1744-16b5-4d88-a08a-cf250c776956","photoUrl":"https://api.riigikogu.ee/api/files/67e8056f-6d19-4205-966f-5f625e0317b4/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/4e2e1744-16b5-4d88-a08a-cf250c776956/Ando-Kiviberg","faction":"Estonia 200 Parliamentary Group","registeredPartyId":"e200","factionRole":null,"committees":[{"name":"Constitutional Committee","role":"Chairman","type":"ALALINE_KOMISJON"},{"name":"Security Authorities Surveillance Select Committee","role":"member","type":"ERIKOMISJON"}],"boardRole":null,"district":"Järvamaa and Viljandimaa","email":"ando.kiviberg@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Andre Hanimägi","uuid":"80f542c1-393a-46e2-9fca-99948e59850d","photoUrl":"https://api.riigikogu.ee/api/files/96ea9ebe-da66-42d3-998c-2a1b1b2b97eb/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/80f542c1-393a-46e2-9fca-99948e59850d/Andre-Hanimägi","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Legal Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn","email":"andre.hanimagi@riigikogu.ee","usaFriendship":true,"leftFaction":"Estonian Centre Party Parliamentary Group","leftFactionDate":"2024-01-05","active":true},{"name":"Andrei Korobeinik","uuid":"a62b7530-a1fb-4c0b-b041-f10c2cfaa31a","photoUrl":"https://api.riigikogu.ee/api/files/2cabcac0-c944-4f15-8b3c-dc783f2ceacc/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/a62b7530-a1fb-4c0b-b041-f10c2cfaa31a/Andrei-Korobeinik","faction":"Estonian Centre Party Parliamentary Group","registeredPartyId":"center","factionRole":null,"committees":[{"name":"Finance Committee","role":"Deputy Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Pärnumaa","email":"andrei.korobeinik@riigikogu.ee","usaFriendship":true,"leftFaction":"Estonian Centre Party Parliamentary Group","leftFactionDate":"2024-03-06","active":true},{"name":"Andres Metsoja","uuid":"d5f3dddb-d809-448a-a94f-adbf208e408a","photoUrl":"https://api.riigikogu.ee/api/files/609150e1-4689-4035-82fd-6e864c247ecf/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d5f3dddb-d809-448a-a94f-adbf208e408a/Andres-Metsoja","faction":"Isamaa Parliamentary Group","registeredPartyId":"isamaa","factionRole":null,"committees":[{"name":"Environment Committee","role":"Deputy Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Pärnumaa","email":"andres.metsoja@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Andrus Seeme","uuid":"fd57045c-5dde-4c26-bf60-e5c294da0e4c","photoUrl":"https://api.riigikogu.ee/api/files/665fa9a8-f31f-4795-b387-46e5d121caef/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/fd57045c-5dde-4c26-bf60-e5c294da0e4c/Andrus-Seeme","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Rural Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Võrumaa, Valgamaa and Põlvamaa","email":"andrus.seeme@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Annely Akkermann","uuid":"7655e8d3-b658-49f0-8e09-f6cbc4a2c714","photoUrl":"https://api.riigikogu.ee/api/files/21b54bac-aee9-45cc-b575-1ce0679f1dc4/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/7655e8d3-b658-49f0-8e09-f6cbc4a2c714/Annely-Akkermann","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Finance Committee","role":"Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Pärnumaa","email":"annely.akkermann@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Anti Allas","uuid":"f6353ede-a0a5-4918-ab8b-790a1957c5cd","photoUrl":"https://api.riigikogu.ee/api/files/8f2ad62d-b63d-457b-91a1-aa1a5442b600/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/f6353ede-a0a5-4918-ab8b-790a1957c5cd/Anti-Allas","faction":"Social Democratic Party Parliamentary Group","registeredPartyId":"sde","factionRole":null,"committees":[{"name":"Rural Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"State Budget Control Select Committee","role":"member","type":"ERIKOMISJON"}],"boardRole":null,"district":"Võrumaa, Valgamaa and Põlvamaa","email":"anti.allas@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Anti Haugas","uuid":"07003549-aa42-4764-8bdd-cab06cb94a92","photoUrl":"https://api.riigikogu.ee/api/files/0ba9421d-f7ca-489c-9b59-57704f508f3e/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/07003549-aa42-4764-8bdd-cab06cb94a92/Anti-Haugas","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Legal Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Võrumaa, Valgamaa and Põlvamaa","email":"anti.haugas@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Anti Poolamets","uuid":"bc9c1725-2fd8-4f54-a0e3-58b87e9dfe1f","photoUrl":"https://api.riigikogu.ee/api/files/c07e89bd-ab49-4ec1-a355-de4e3a65e11d/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/bc9c1725-2fd8-4f54-a0e3-58b87e9dfe1f/Anti-Poolamets","faction":"Estonian Conservative People’s Party Parliamentary Group","registeredPartyId":"ekre","factionRole":null,"committees":[{"name":"Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks","role":"Deputy Chairman","type":"ERIKOMISJON"},{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"Legal Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Lääne-Virumaa","email":"anti.poolamets@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Ants Frosch","uuid":"c4e3fc0f-80fb-4a3e-b49e-80045c5253d9","photoUrl":"https://api.riigikogu.ee/api/files/d29edccd-bd24-4dd3-85a6-2ada06cff8ec/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/c4e3fc0f-80fb-4a3e-b49e-80045c5253d9/Ants-Frosch","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Constitutional Committee","role":"Deputy Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Võrumaa, Valgamaa and Põlvamaa","email":"ants.frosch@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Conservative People’s Party Parliamentary Group","leftFactionDate":"2024-06-13","active":true},{"name":"Arvo Aller","uuid":"a39c4392-bbc8-4036-b923-0f5f2b3d9766","photoUrl":"https://api.riigikogu.ee/api/files/42527173-9469-44a2-a778-0d2da02fe194/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/a39c4392-bbc8-4036-b923-0f5f2b3d9766/Arvo-Aller","faction":"Estonian Conservative People’s Party Parliamentary Group","registeredPartyId":"ekre","factionRole":null,"committees":[{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":"Second Vice-President of the Riigikogu","district":"Ida-Virumaa","email":"arvo.aller@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Diana Ingerainen","uuid":"8946b072-80c5-436e-95b2-41f928a7c636","photoUrl":"https://api.riigikogu.ee/api/files/9b7311ae-f9c7-41f7-b301-91e1b930a595/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/8946b072-80c5-436e-95b2-41f928a7c636/Diana-Ingerainen","faction":"Estonia 200 Parliamentary Group","registeredPartyId":"e200","factionRole":null,"committees":[{"name":"Finance Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"State Budget Control Select Committee","role":"member","type":"ERIKOMISJON"}],"boardRole":null,"district":"Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn","email":"diana.ingerainen@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Eerik-Niiles Kross","uuid":"b2226516-4cd4-4471-b93b-696c40b7a9e2","photoUrl":"https://api.riigikogu.ee/api/files/224753d3-1071-481b-a69e-86d774dd2d86/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/b2226516-4cd4-4471-b93b-696c40b7a9e2/Eerik-Niiles-Kross","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Anti-Corruption Select Committee","role":"Deputy Chairman","type":"ERIKOMISJON"},{"name":"Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks","role":"Chairman","type":"ERIKOMISJON"},{"name":"Foreign Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Võrumaa, Valgamaa and Põlvamaa","email":"eerik-niiles.kross@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Eero Merilind","uuid":"7d6b0605-e425-41c8-9a53-3b92b81f21b1","photoUrl":"https://api.riigikogu.ee/api/files/646374dd-1cc2-4205-a344-d3a4265d59a8/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/7d6b0605-e425-41c8-9a53-3b92b81f21b1/Eero-Merilind","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Social Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Mustamäe and Nõmme districts of Tallinn","email":"eero.merilind@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Enn Eesmaa","uuid":"07132cc4-5afc-4edb-9537-7c721ec39b2d","photoUrl":"https://api.riigikogu.ee/api/files/ee200820-ef47-494b-b49b-bb865b1862c0/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/07132cc4-5afc-4edb-9537-7c721ec39b2d/Enn-Eesmaa","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"National Defence Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Pärnumaa","email":"enn.eesmaa@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Centre Party Parliamentary Group","leftFactionDate":"2024-01-05","active":true},{"name":"Ester Karuse","uuid":"d5c54f88-dff3-486b-aac6-2cd124577d38","photoUrl":"https://api.riigikogu.ee/api/files/651427c9-570a-4c76-96e6-84a38047e6c4/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d5c54f88-dff3-486b-aac6-2cd124577d38/Ester-Karuse","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Foreign Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Võrumaa, Valgamaa and Põlvamaa","email":"ester.karuse@riigikogu.ee","usaFriendship":true,"leftFaction":"Estonian Centre Party Parliamentary Group","leftFactionDate":"2024-01-05","active":true},{"name":"Evelin Poolamets","uuid":"afc264da-dc7d-4885-a971-0e645995e6de","photoUrl":"https://api.riigikogu.ee/api/files/400a722c-fab6-403e-a547-59d143f7e106/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/afc264da-dc7d-4885-a971-0e645995e6de/Evelin-Poolamets","faction":"Estonian Conservative People’s Party Parliamentary Group","registeredPartyId":"ekre","factionRole":null,"committees":[{"name":"Constitutional Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"State Budget Control Select Committee","role":"member","type":"ERIKOMISJON"}],"boardRole":null,"district":"Lääne-Virumaa","email":"evelin.poolamets@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Grigore-Kalev Stoicescu","uuid":"987e47c7-929b-4437-9385-fab4f4fd7824","photoUrl":"https://api.riigikogu.ee/api/files/b92df041-5a40-4d9b-aa80-5ba06a0f9d24/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/987e47c7-929b-4437-9385-fab4f4fd7824/Grigore-Kalev-Stoicescu","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Rural Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Hiiumaa, Läänemaa and Saaremaa","email":"kalev.stoicescu@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonia 200 Parliamentary Group","leftFactionDate":"2026-08-10","active":true},{"name":"Hanah Lahe","uuid":"d18cee4c-7b30-405f-96f2-4ab6f81efaf2","photoUrl":"https://api.riigikogu.ee/api/files/cce54067-6401-423d-ac4b-0b6e07496a71/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d18cee4c-7b30-405f-96f2-4ab6f81efaf2/Hanah-Lahe","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Environment Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn","email":"hanah.lahe@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Helir-Valdor Seeder","uuid":"23161df7-bc1b-442e-b4cd-2d1f37627658","photoUrl":"https://api.riigikogu.ee/api/files/69f558e5-af54-4c81-90b2-cc302ffde6a0/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/23161df7-bc1b-442e-b4cd-2d1f37627658/Helir-Valdor-Seeder","faction":"Isamaa Parliamentary Group","registeredPartyId":"isamaa","factionRole":"Faction Chairman","committees":[{"name":"Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks","role":"member","type":"ERIKOMISJON"},{"name":"Constitutional Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Järvamaa and Viljandimaa","email":"helir-valdor.seeder@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Heljo Pikhof","uuid":"b5922bb2-56bb-4de6-a7e1-754553191c27","photoUrl":"https://api.riigikogu.ee/api/files/e74efe9d-a7e1-4ad4-a617-e451e12f1cd4/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/b5922bb2-56bb-4de6-a7e1-754553191c27/Heljo-Pikhof","faction":"Social Democratic Party Parliamentary Group","registeredPartyId":"sde","factionRole":null,"committees":[{"name":"Legal Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"City of Tartu","email":"heljo.pikhof@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Helle-Moonika Helme","uuid":"f4e5d00e-19d1-428a-ba5e-5ce9ae4ef2c2","photoUrl":"https://api.riigikogu.ee/api/files/4a4ad9bc-5d24-4fc4-bb60-62dbfdb6637e/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/f4e5d00e-19d1-428a-ba5e-5ce9ae4ef2c2/Helle-Moonika-Helme","faction":"Estonian Conservative People’s Party Parliamentary Group","registeredPartyId":"ekre","factionRole":"Faction Deputy Chairman","committees":[{"name":"Cultural Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Hiiumaa, Läänemaa and Saaremaa","email":"helle-moonika.helme@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Helmen Kütt","uuid":"1d0b281d-b769-4e94-8c67-faa1cb1b1395","photoUrl":"https://api.riigikogu.ee/api/files/26995256-aa6e-4223-9f78-a141ca7016a9/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/1d0b281d-b769-4e94-8c67-faa1cb1b1395/Helmen-Kütt","faction":"Social Democratic Party Parliamentary Group","registeredPartyId":"sde","factionRole":"Faction Deputy Chairman","committees":[{"name":"Social Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Järvamaa and Viljandimaa","email":"helmen.kytt@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Henn Põlluaas","uuid":"65b1d8bb-7f45-48f5-b4aa-7ba4ca459824","photoUrl":"https://api.riigikogu.ee/api/files/313d79cd-640c-4bb2-b076-48598760fc47/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/65b1d8bb-7f45-48f5-b4aa-7ba4ca459824/Henn-Põlluaas","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Foreign Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"henn.polluaas@riigikogu.ee","usaFriendship":true,"leftFaction":"Estonian Conservative People’s Party Parliamentary Group","leftFactionDate":"2024-06-13","active":true},{"name":"Irja Lutsar","uuid":"3febb869-f443-4aba-908e-7c0c30f8c4dd","photoUrl":"https://api.riigikogu.ee/api/files/da6acf92-e06b-4f3e-aec6-668b4e8257ac/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/3febb869-f443-4aba-908e-7c0c30f8c4dd/Irja-Lutsar","faction":"Estonia 200 Parliamentary Group","registeredPartyId":"e200","factionRole":"Faction Deputy Chairman","committees":[{"name":"Anti-Corruption Select Committee","role":"member","type":"ERIKOMISJON"},{"name":"Social Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Jõgevamaa and Tartumaa","email":"irja.lutsar@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonia 200 Parliamentary Group","leftFactionDate":"2025-04-21","active":true},{"name":"Jaak Aab","uuid":"6b45cfb5-8a17-481c-b674-80fc00c6cf5d","photoUrl":"https://api.riigikogu.ee/api/files/56c9f016-bd26-4a7a-94db-99d188b71d58/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/6b45cfb5-8a17-481c-b674-80fc00c6cf5d/Jaak-Aab","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Economic Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Järvamaa and Viljandimaa","email":"jaak.aab@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Centre Party Parliamentary Group","leftFactionDate":"2024-01-05","active":true},{"name":"Jaak Valge","uuid":"54bc0d5b-7c98-4245-8682-4a3a0b6e0275","photoUrl":"https://api.riigikogu.ee/api/files/74f1e233-9dae-4221-8d9a-e0d60f7fbaca/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/54bc0d5b-7c98-4245-8682-4a3a0b6e0275/Jaak-Valge","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Constitutional Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"City of Tartu","email":"jaak.valge@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Conservative People’s Party Parliamentary Group","leftFactionDate":"2024-06-13","active":true},{"name":"Jaanus Karilaid","uuid":"94351dfe-449e-48db-9396-06cf204ce22e","photoUrl":"https://api.riigikogu.ee/api/files/45a6ff64-20c9-4fb1-810e-bf6e624b52b6/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/94351dfe-449e-48db-9396-06cf204ce22e/Jaanus-Karilaid","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Social Affairs Committee","role":"Deputy Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Hiiumaa, Läänemaa and Saaremaa","email":"jaanus.karilaid@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Centre Party Parliamentary Group","leftFactionDate":"2023-09-18","active":true},{"name":"Juku-Kalle Raid","uuid":"a5d17c31-61e5-4e45-87b0-5834b6728fe6","photoUrl":"https://api.riigikogu.ee/api/files/58074f56-6b71-4665-a401-226ae1694179/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/a5d17c31-61e5-4e45-87b0-5834b6728fe6/Juku-Kalle-Raid","faction":"Estonia 200 Parliamentary Group","registeredPartyId":"e200","factionRole":null,"committees":[{"name":"Foreign Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"Security Authorities Surveillance Select Committee","role":"member","type":"ERIKOMISJON"}],"boardRole":null,"district":"Mustamäe and Nõmme districts of Tallinn","email":"juku-kalle.raid@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Jüri Jaanson","uuid":"09500870-255e-416d-8eda-f80e9929adda","photoUrl":"https://api.riigikogu.ee/api/files/52f2f6a3-f092-430f-a143-bfe2b46c9299/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/09500870-255e-416d-8eda-f80e9929adda/Jüri-Jaanson","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Environment Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Pärnumaa","email":"jyri.jaanson@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Kadri Tali","uuid":"2bc608c1-1c67-4db8-968b-94bc3947dfac","photoUrl":"https://api.riigikogu.ee/api/files/e274e4cf-6155-4a3f-bccf-d494761e01cc/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/2bc608c1-1c67-4db8-968b-94bc3947dfac/Kadri-Tali","faction":"Estonia 200 Parliamentary Group","registeredPartyId":"e200","factionRole":"Faction Deputy Chairman","committees":[{"name":"Cultural Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Pärnumaa","email":"kadri.tali@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Kalle Grünthal","uuid":"db532de2-5abd-4b6d-a82c-2d9a75fd9d18","photoUrl":"https://api.riigikogu.ee/api/files/c6392028-0068-46b7-a787-445bf206ce5c/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/db532de2-5abd-4b6d-a82c-2d9a75fd9d18/Kalle-Grünthal","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Social Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Järvamaa and Viljandimaa","email":"kalle.grynthal@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Conservative People’s Party Parliamentary Group","leftFactionDate":"2023-10-18","active":true},{"name":"Kalle Laanet","uuid":"31eee189-0019-469f-8469-7da564bf1af9","photoUrl":"https://api.riigikogu.ee/api/files/0cf4348c-aca2-4fa5-93e4-bb401dc6cde4/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/31eee189-0019-469f-8469-7da564bf1af9/Kalle-Laanet","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Constitutional Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Hiiumaa, Läänemaa and Saaremaa","email":"kalle.laanet@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Reform Party Parliamentary Group","leftFactionDate":"2023-04-18","active":true},{"name":"Katrin Kuusemäe","uuid":"001dd80c-38c3-4557-b3ee-408d3ffd5cd7","photoUrl":"https://api.riigikogu.ee/api/files/3c844aff-9a63-4f8a-bdee-f3db5d1d8cd9/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/001dd80c-38c3-4557-b3ee-408d3ffd5cd7/Katrin-Kuusemäe","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Constitutional Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Lääne-Virumaa","email":"katrin.kuusemae@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Kersti Sarapuu","uuid":"caea357b-12c0-4069-b53e-89f69f517212","photoUrl":"https://api.riigikogu.ee/api/files/05c63cf5-a57f-414d-b372-8a565de404af/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/caea357b-12c0-4069-b53e-89f69f517212/Kersti-Sarapuu","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Finance Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Järvamaa and Viljandimaa","email":"kersti.sarapuu@riigikogu.ee","usaFriendship":true,"leftFaction":"Estonian Centre Party Parliamentary Group","leftFactionDate":"2024-01-05","active":true},{"name":"Kristina Šmigun-Vähi","uuid":"28e48bd7-9f1f-4d6a-b40c-9c6ff6d445e5","photoUrl":"https://api.riigikogu.ee/api/files/f3d582bc-afe8-4a36-89d2-569a760f4e5f/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/28e48bd7-9f1f-4d6a-b40c-9c6ff6d445e5/Kristina-Šmigun-Vähi","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Economic Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"kristina.smigun-vahi@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Kristo Enn Vaga","uuid":"1600fe77-4b45-44ab-972a-181a5ef71767","photoUrl":"https://api.riigikogu.ee/api/files/0fe76c5b-e2ba-427b-93bf-05c6f8567d41/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/1600fe77-4b45-44ab-972a-181a5ef71767/Kristo-Enn-Vaga","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"National Defence Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"State Budget Control Select Committee","role":"Deputy Chairman","type":"ERIKOMISJON"}],"boardRole":null,"district":"Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn","email":"kristoenn.vaga@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Lauri Hussar","uuid":"64c0141f-371b-4520-8a50-09e65231f775","photoUrl":"https://api.riigikogu.ee/api/files/a838c086-1911-48f3-a6f1-48e1e9ffc76a/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/64c0141f-371b-4520-8a50-09e65231f775/Lauri-Hussar","faction":"Estonia 200 Parliamentary Group","registeredPartyId":"e200","factionRole":null,"committees":[],"boardRole":"President of the Riigikogu","district":"Harjumaa and Raplamaa","email":"lauri.hussar@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Lauri Laats","uuid":"1839253a-aec0-4019-995a-1c031db8fd10","photoUrl":"https://api.riigikogu.ee/api/files/727d5144-5afe-4fbe-9c0e-bd2219f03d59/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/1839253a-aec0-4019-995a-1c031db8fd10/Lauri-Laats","faction":"Estonian Centre Party Parliamentary Group","registeredPartyId":"center","factionRole":"Faction Chairman","committees":[{"name":"Environment Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"Security Authorities Surveillance Select Committee","role":"member","type":"ERIKOMISJON"}],"boardRole":null,"district":"Mustamäe and Nõmme districts of Tallinn","email":"lauri.laats@riigikogu.ee","usaFriendship":true,"leftFaction":"Estonian Centre Party Parliamentary Group","leftFactionDate":"2024-03-06","active":true},{"name":"Lauri Läänemets","uuid":"d557812c-971d-415b-827d-aa6a382ec6ef","photoUrl":"https://api.riigikogu.ee/api/files/aa8a58b7-5b65-444e-b5a8-1c4e71ebda5c/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d557812c-971d-415b-827d-aa6a382ec6ef/Lauri-Läänemets","faction":"Social Democratic Party Parliamentary Group","registeredPartyId":"sde","factionRole":"Faction Chairman","committees":[{"name":"Constitutional Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Järvamaa and Viljandimaa","email":"lauri.laanemets@riigikogu.ee","usaFriendship":false,"leftFaction":"Social Democratic Party Parliamentary Group","leftFactionDate":"2025-03-17","active":true},{"name":"Lea Danilson-Järg","uuid":"7f83e40c-4854-4632-9372-448b3a5dc93a","photoUrl":"https://api.riigikogu.ee/api/files/84928c6f-0cf8-4547-922b-873dc07625ee/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/7f83e40c-4854-4632-9372-448b3a5dc93a/Lea-Danilson-Järg","faction":"Isamaa Parliamentary Group","registeredPartyId":"isamaa","factionRole":null,"committees":[{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"Legal Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Mustamäe and Nõmme districts of Tallinn","email":"lea.danilson-jarg@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Leo Kunnas","uuid":"fd2d1dd5-ff19-445e-b190-28aabb07763a","photoUrl":"https://api.riigikogu.ee/api/files/baefb354-6832-4c98-9f65-73155a781f44/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/fd2d1dd5-ff19-445e-b190-28aabb07763a/Leo-Kunnas","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"National Defence Committee","role":"Deputy Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Kesklinn, Lasnamäe and Pirita districts of Tallinn","email":"leo.kunnas@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Conservative People’s Party Parliamentary Group","leftFactionDate":"2024-06-14","active":true},{"name":"Liina Kersna","uuid":"a12ffc5c-0809-46cb-abc4-cc99a7fa3f60","photoUrl":"https://api.riigikogu.ee/api/files/0be959b6-c273-4b2a-9eeb-a019b066c893/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/a12ffc5c-0809-46cb-abc4-cc99a7fa3f60/Liina-Kersna","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Cultural Affairs Committee","role":"Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Võrumaa, Valgamaa and Põlvamaa","email":"liina.kersna@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Reform Party Parliamentary Group","leftFactionDate":"2025-04-16","active":true},{"name":"Luisa Rõivas","uuid":"17d27ea5-b5e6-43e0-86db-ebc15bdd5788","photoUrl":"https://api.riigikogu.ee/api/files/dbe76aca-fefd-4b62-8173-4e352954d91d/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/17d27ea5-b5e6-43e0-86db-ebc15bdd5788/Luisa-Rõivas","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"Foreign Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Jõgevamaa and Tartumaa","email":"luisa.vark@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Madis Kallas","uuid":"c7f4f213-58a3-4b6f-a236-153644653d17","photoUrl":"https://api.riigikogu.ee/api/files/978911ea-1639-4254-83fc-c3876c2186c0/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/c7f4f213-58a3-4b6f-a236-153644653d17/Madis-Kallas","faction":"Social Democratic Party Parliamentary Group","registeredPartyId":"sde","factionRole":null,"committees":[{"name":"Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks","role":"member","type":"ERIKOMISJON"},{"name":"Cultural Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Hiiumaa, Läänemaa and Saaremaa","email":"madis.kallas@riigikogu.ee","usaFriendship":false,"leftFaction":"Social Democratic Party Parliamentary Group","leftFactionDate":"2025-03-17","active":true},{"name":"Madis Timpson","uuid":"429e71ce-d5ba-4617-8db4-d546482d43bc","photoUrl":"https://api.riigikogu.ee/api/files/288e87ce-87a1-4423-9ed2-ba32c16c71bd/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/429e71ce-d5ba-4617-8db4-d546482d43bc/Madis-Timpson","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Legal Affairs Committee","role":"Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Järvamaa and Viljandimaa","email":"madis.timpson@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Maido Ruusmann","uuid":"d4effc9d-0aee-4450-9926-5246efcda08c","photoUrl":"https://api.riigikogu.ee/api/files/22ae5e6d-2aef-47d6-a9e4-b1ce45ba1674/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d4effc9d-0aee-4450-9926-5246efcda08c/Maido-Ruusmann","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"Rural Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Võrumaa, Valgamaa and Põlvamaa","email":"maido.ruusmann@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Mait Klaassen","uuid":"122e850b-5e6b-41f6-8b91-830ca8de8450","photoUrl":"https://api.riigikogu.ee/api/files/f1348513-4ced-4e87-9c1e-3dffd3628dda/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/122e850b-5e6b-41f6-8b91-830ca8de8450/Mait-Klaassen","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Environment Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Võrumaa, Valgamaa and Põlvamaa","email":"mait.klaassen@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Marek Reinaas","uuid":"798de8ee-0587-4543-aa2e-89c3f6c8f914","photoUrl":"https://api.riigikogu.ee/api/files/59c95203-e29e-492a-ac9c-8bcde9d38d0a/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/798de8ee-0587-4543-aa2e-89c3f6c8f914/Marek-Reinaas","faction":"Estonia 200 Parliamentary Group","registeredPartyId":"e200","factionRole":null,"committees":[{"name":"Economic Affairs Committee","role":"Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Kesklinn, Lasnamäe and Pirita districts of Tallinn","email":"marek.reinaas@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonia 200 Parliamentary Group","leftFactionDate":"2025-04-21","active":true},{"name":"Margit Sutrop","uuid":"ee639cdf-b86c-48b7-9b34-fbba9b83826d","photoUrl":"https://api.riigikogu.ee/api/files/239f1b9a-073f-4509-a18f-d446e69055e7/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/ee639cdf-b86c-48b7-9b34-fbba9b83826d/Margit-Sutrop","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Cultural Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"City of Tartu","email":"margit.sutrop@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Maria Jufereva-Skuratovski","uuid":"a5af5ad0-6e31-443a-9b12-15769d43e784","photoUrl":"https://api.riigikogu.ee/api/files/8159c88d-add5-4aea-b4e5-7e1fc3ce6d01/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/a5af5ad0-6e31-443a-9b12-15769d43e784/Maria-Jufereva-Skuratovski","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Legal Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Kesklinn, Lasnamäe and Pirita districts of Tallinn","email":"maria.jufereva-skuratovski@riigikogu.ee","usaFriendship":true,"leftFaction":"Estonian Centre Party Parliamentary Group","leftFactionDate":"2023-11-16","active":true},{"name":"Mario Kadastik","uuid":"53141769-f7bb-4995-8d12-5ff0d9c1eca1","photoUrl":"https://api.riigikogu.ee/api/files/a1d40424-476c-431a-97c2-026e200d65a4/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/53141769-f7bb-4995-8d12-5ff0d9c1eca1/Mario-Kadastik","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Anti-Corruption Select Committee","role":"member","type":"ERIKOMISJON"},{"name":"Economic Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"mario.kadastik@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Maris Lauri","uuid":"315ea785-8f59-40e5-a158-3de8b908572f","photoUrl":"https://api.riigikogu.ee/api/files/1d3489f8-6c3d-4702-81f8-44ae01ad8867/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/315ea785-8f59-40e5-a158-3de8b908572f/Maris-Lauri","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Finance Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"Security Authorities Surveillance Select Committee","role":"Chairman","type":"ERIKOMISJON"}],"boardRole":null,"district":"Mustamäe and Nõmme districts of Tallinn","email":"maris.lauri@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Marko Mihkelson","uuid":"58be6531-1f4b-4b0b-9c21-92566a40ae8b","photoUrl":"https://api.riigikogu.ee/api/files/b169413e-e072-45eb-8ac9-7f54b1c73c69/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/58be6531-1f4b-4b0b-9c21-92566a40ae8b/Marko-Mihkelson","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Foreign Affairs Committee","role":"Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"marko.mihkelson@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Mart Helme","uuid":"4b96f3e5-af5e-41ce-86c9-3fdee3ce51da","photoUrl":"https://api.riigikogu.ee/api/files/a5bf78eb-ca40-4325-a876-f5aa171ef779/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/4b96f3e5-af5e-41ce-86c9-3fdee3ce51da/Mart-Helme","faction":"Estonian Conservative People’s Party Parliamentary Group","registeredPartyId":"ekre","factionRole":null,"committees":[{"name":"Foreign Affairs Committee","role":"Deputy Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Pärnumaa","email":"mart.helme@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Mart Maastik","uuid":"29068268-672d-451a-a08a-5727ec4300f4","photoUrl":"https://api.riigikogu.ee/api/files/f251fac2-fe0a-4fe1-9863-e3d6cefeb747/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/29068268-672d-451a-a08a-5727ec4300f4/Mart-Maastik","faction":"Isamaa Parliamentary Group","registeredPartyId":"isamaa","factionRole":null,"committees":[{"name":"Economic Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Hiiumaa, Läänemaa and Saaremaa","email":"mart.maastik@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Mart Võrklaev","uuid":"8600af41-4dcc-424d-9d05-7c851e5270b5","photoUrl":"https://api.riigikogu.ee/api/files/88902571-09c1-41fb-af6d-a215e4796008/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/8600af41-4dcc-424d-9d05-7c851e5270b5/Mart-Võrklaev","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Finance Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"Security Authorities Surveillance Select Committee","role":"member","type":"ERIKOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"mart.vorklaev@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Reform Party Parliamentary Group","leftFactionDate":"2023-04-18","active":true},{"name":"Martin Helme","uuid":"98008392-64a2-4429-8a41-fb051823e402","photoUrl":"https://api.riigikogu.ee/api/files/f7b6f696-a7b7-4fea-9907-029008e316c4/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/98008392-64a2-4429-8a41-fb051823e402/Martin-Helme","faction":"Estonian Conservative People’s Party Parliamentary Group","registeredPartyId":"ekre","factionRole":"Faction Chairman","committees":[{"name":"Finance Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Mustamäe and Nõmme districts of Tallinn","email":"martin.helme@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Mati Raidma","uuid":"410c0030-7bcd-4977-85c2-27af3439770f","photoUrl":"https://api.riigikogu.ee/api/files/ca9b9e6c-fa00-418c-b5c0-6662aecdbb1f/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/410c0030-7bcd-4977-85c2-27af3439770f/Mati-Raidma","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"National Defence Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn","email":"mati.raidma@riigikogu.ee","usaFriendship":true,"leftFaction":"Estonian Reform Party Parliamentary Group","leftFactionDate":"2025-03-25","active":true},{"name":"Meelis Kiili","uuid":"7251e077-1964-4f2b-9dba-349dc127b56e","photoUrl":"https://api.riigikogu.ee/api/files/98df865b-ec47-4a12-9bb9-9389d10f2ae3/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/7251e077-1964-4f2b-9dba-349dc127b56e/Meelis-Kiili","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"National Defence Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Ida-Virumaa","email":"meelis.kiili@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Reform Party Parliamentary Group","leftFactionDate":"2026-08-10","active":true},{"name":"Mihkel Lees","uuid":"1c173f0d-6c5e-445a-934f-32e7edf903db","photoUrl":"https://api.riigikogu.ee/api/files/220560e8-2631-412c-bac8-23b0c045a5f4/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/1c173f0d-6c5e-445a-934f-32e7edf903db/Mihkel-Lees","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":"Faction Deputy Chairman","committees":[{"name":"Social Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"City of Tartu","email":"mihkel.lees@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Reform Party Parliamentary Group","leftFactionDate":"2024-07-23","active":true},{"name":"Peeter Ernits","uuid":"f8a770b2-916c-4172-84b3-005ba9906a18","photoUrl":"https://api.riigikogu.ee/api/files/ed85883e-3635-447a-b1e6-7824417aa6ef/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/f8a770b2-916c-4172-84b3-005ba9906a18/Peeter-Ernits","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Legal Affairs Committee","role":"Deputy Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Jõgevamaa and Tartumaa","email":"peeter.ernits@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Peeter Tali","uuid":"b6f8dff5-7c69-4d4c-b978-be0a2ad6e161","photoUrl":"https://api.riigikogu.ee/api/files/e4036098-c2cd-4444-a601-b678f5d15047/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/b6f8dff5-7c69-4d4c-b978-be0a2ad6e161/Peeter-Tali","faction":"Estonia 200 Parliamentary Group","registeredPartyId":"e200","factionRole":null,"committees":[{"name":"Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks","role":"member","type":"ERIKOMISJON"},{"name":"European Union Affairs Committee","role":"Chairman","type":"ALALINE_KOMISJON"},{"name":"National Defence Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Pärnumaa","email":"peeter.tali@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Pipi-Liis Siemann","uuid":"9035e217-d990-40ca-87ed-54c77653c6d7","photoUrl":"https://api.riigikogu.ee/api/files/1fe933b5-c0f1-426f-a3dd-993aadbb7291/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/9035e217-d990-40ca-87ed-54c77653c6d7/Pipi-Liis-Siemann","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Constitutional Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Järvamaa and Viljandimaa","email":"pipi-liis.siemann@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Priit Sibul","uuid":"8940964b-6bfd-482d-a4f5-53f2cccb149d","photoUrl":"https://api.riigikogu.ee/api/files/228dabc3-1a5b-418a-8595-c80267845d14/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/8940964b-6bfd-482d-a4f5-53f2cccb149d/Priit-Sibul","faction":"Isamaa Parliamentary Group","registeredPartyId":"isamaa","factionRole":"Faction Deputy Chairman","committees":[{"name":"Anti-Corruption Select Committee","role":"member","type":"ERIKOMISJON"},{"name":"National Defence Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Võrumaa, Valgamaa and Põlvamaa","email":"priit.sibul@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Raimond Kaljulaid","uuid":"989194b6-b6cc-4c8f-9e6a-8eb8913d103e","photoUrl":"https://api.riigikogu.ee/api/files/34b6472e-2a7d-48b8-b0ca-40201802871b/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/989194b6-b6cc-4c8f-9e6a-8eb8913d103e/Raimond-Kaljulaid","faction":"Social Democratic Party Parliamentary Group","registeredPartyId":"sde","factionRole":null,"committees":[{"name":"National Defence Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"Security Authorities Surveillance Select Committee","role":"member","type":"ERIKOMISJON"}],"boardRole":null,"district":"Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn","email":"raimond.kaljulaid@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Rain Epler","uuid":"94ffc777-09a5-4472-bf5d-ce16e78a2341","photoUrl":"https://api.riigikogu.ee/api/files/bc8ce74b-4c6a-4095-b6b9-9618e27fa510/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/94ffc777-09a5-4472-bf5d-ce16e78a2341/Rain-Epler","faction":"Estonian Conservative People’s Party Parliamentary Group","registeredPartyId":"ekre","factionRole":null,"committees":[{"name":"Anti-Corruption Select Committee","role":"member","type":"ERIKOMISJON"},{"name":"Environment Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Võrumaa, Valgamaa and Põlvamaa","email":"rain.epler@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Reili Rand","uuid":"988995d4-3cbe-4ea7-acdd-6222d0b658b1","photoUrl":"https://api.riigikogu.ee/api/files/892552e7-e8b9-4e68-afe8-4961aee63cf3/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/988995d4-3cbe-4ea7-acdd-6222d0b658b1/Reili-Rand","faction":"Social Democratic Party Parliamentary Group","registeredPartyId":"sde","factionRole":null,"committees":[{"name":"Economic Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Hiiumaa, Läänemaa and Saaremaa","email":"reili.rand@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Rene Kokk","uuid":"694b084f-e151-4f7e-8a5c-2664a40cee7a","photoUrl":"https://api.riigikogu.ee/api/files/58507ae0-561f-4a33-a57f-67d1bb8fe4d5/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/694b084f-e151-4f7e-8a5c-2664a40cee7a/Rene-Kokk","faction":"Estonian Conservative People’s Party Parliamentary Group","registeredPartyId":"ekre","factionRole":null,"committees":[{"name":"Economic Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"Security Authorities Surveillance Select Committee","role":"member","type":"ERIKOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"rene.kokk@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Riina Sikkut","uuid":"76c477e6-4b49-4d49-ad7b-a4853182a1da","photoUrl":"https://api.riigikogu.ee/api/files/ea3c5d25-325d-4433-a35f-a3b30e68dc9c/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/76c477e6-4b49-4d49-ad7b-a4853182a1da/Riina-Sikkut","faction":"Social Democratic Party Parliamentary Group","registeredPartyId":"sde","factionRole":null,"committees":[{"name":"Anti-Corruption Select Committee","role":"member","type":"ERIKOMISJON"},{"name":"Finance Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Mustamäe and Nõmme districts of Tallinn","email":"riina.sikkut@riigikogu.ee","usaFriendship":false,"leftFaction":"Social Democratic Party Parliamentary Group","leftFactionDate":"2023-04-18","active":true},{"name":"Signe Kivi","uuid":"71bdc9b2-841d-408f-8ace-909e8c11d7d5","photoUrl":"https://api.riigikogu.ee/api/files/b2c00e0d-3426-43e6-b87c-df6981c4e3e3/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/71bdc9b2-841d-408f-8ace-909e8c11d7d5/Signe-Kivi","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Cultural Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"City of Tartu","email":"signe.kivi@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Signe Riisalo","uuid":"0e66e826-df65-4fdd-a098-66a7e9a7c911","photoUrl":"https://api.riigikogu.ee/api/files/7176eb4b-00e5-43f6-b89b-a498c1bb0f47/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/0e66e826-df65-4fdd-a098-66a7e9a7c911/Signe-Riisalo","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Social Affairs Committee","role":"Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn","email":"signe.riisalo@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Reform Party Parliamentary Group","leftFactionDate":"2023-04-18","active":true},{"name":"Siim Pohlak","uuid":"d8b9f165-31aa-46a4-8dbd-964cbe89cfb8","photoUrl":"https://api.riigikogu.ee/api/files/c7ed3113-9330-44bc-bc85-6b1c5e91a0f2/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d8b9f165-31aa-46a4-8dbd-964cbe89cfb8/Siim-Pohlak","faction":"Estonian Conservative People’s Party Parliamentary Group","registeredPartyId":"ekre","factionRole":null,"committees":[{"name":"Rural Affairs Committee","role":"Deputy Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"siim.pohlak@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Conservative People’s Party Parliamentary Group","leftFactionDate":"2024-06-21","active":true},{"name":"Stig Rästa","uuid":"6434e7ab-6aba-4945-9812-e7a2e7c8bf3f","photoUrl":"https://api.riigikogu.ee/api/files/9a34e48c-12ec-4ac9-b839-2315dc93a39f/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/6434e7ab-6aba-4945-9812-e7a2e7c8bf3f/Stig-Rästa","faction":"Estonia 200 Parliamentary Group","registeredPartyId":"e200","factionRole":null,"committees":[{"name":"Anti-Corruption Select Committee","role":"member","type":"ERIKOMISJON"},{"name":"Legal Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"stig.rasta@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Tanel Kiik","uuid":"561abe91-76eb-45f3-90b0-efa94c663689","photoUrl":"https://api.riigikogu.ee/api/files/17093b86-700e-453f-8a45-0ea061df223e/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/561abe91-76eb-45f3-90b0-efa94c663689/Tanel-Kiik","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Social Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn","email":"tanel.kiik@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Centre Party Parliamentary Group","leftFactionDate":"2024-01-05","active":true},{"name":"Tanel Tein","uuid":"4f816f8e-1501-4940-b87a-af029fcd98c0","photoUrl":"https://api.riigikogu.ee/api/files/626ff531-fe8b-4361-9346-56668775ce09/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/4f816f8e-1501-4940-b87a-af029fcd98c0/Tanel-Tein","faction":"Estonia 200 Parliamentary Group","registeredPartyId":"e200","factionRole":null,"committees":[{"name":"Constitutional Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"State Budget Control Select Committee","role":"member","type":"ERIKOMISJON"}],"boardRole":null,"district":"City of Tartu","email":"tanel.tein@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Tarmo Tamm","uuid":"236e49d6-eecb-4562-8ad4-bedd586bb149","photoUrl":"https://api.riigikogu.ee/api/files/e62f4263-876d-4be3-bcd3-68dcb4ebfb39/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/236e49d6-eecb-4562-8ad4-bedd586bb149/Tarmo-Tamm","faction":"Estonia 200 Parliamentary Group","registeredPartyId":"e200","factionRole":null,"committees":[{"name":"Environment Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Lääne-Virumaa","email":"tarmo.tamm@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Tiit Maran","uuid":"9d863d49-8bfb-4314-bd3c-cfa143f518c8","photoUrl":"https://api.riigikogu.ee/api/files/b6030aa1-162b-4ea7-ae4d-2be3e7fe2607/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/9d863d49-8bfb-4314-bd3c-cfa143f518c8/Tiit-Maran","faction":"Social Democratic Party Parliamentary Group","registeredPartyId":"sde","factionRole":null,"committees":[{"name":"Environment Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"tiit.maran@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Timo Suslov","uuid":"0f9372ee-f108-47f9-9192-82ff84cf3efb","photoUrl":"https://api.riigikogu.ee/api/files/13dca007-7adf-4ce1-b61d-c98050bdba12/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/0f9372ee-f108-47f9-9192-82ff84cf3efb/Timo-Suslov","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks","role":"member","type":"ERIKOMISJON"},{"name":"Constitutional Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"timo.suslov@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Toomas Järveoja","uuid":"db46f14c-3bdf-47a0-bed4-0172f7d942db","photoUrl":"https://api.riigikogu.ee/api/files/a5a1593e-2634-40ad-a626-bc43eae610dd/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/db46f14c-3bdf-47a0-bed4-0172f7d942db/Toomas-Järveoja","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Social Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"State Budget Control Select Committee","role":"member","type":"ERIKOMISJON"}],"boardRole":null,"district":"Jõgevamaa and Tartumaa","email":"toomas.jarveoja@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Toomas Kivimägi","uuid":"906f1a0a-0000-4a96-866c-b30f2b6adc49","photoUrl":"https://api.riigikogu.ee/api/files/20403af2-1d89-4385-8859-c7a9930e18b4/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/906f1a0a-0000-4a96-866c-b30f2b6adc49/Toomas-Kivimägi","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[],"boardRole":"First Vice-President of the Riigikogu","district":"Pärnumaa","email":"toomas.kivimagi@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Toomas Uibo","uuid":"d0d7a6a5-25de-40d0-b5df-09575a7c9bfc","photoUrl":"https://api.riigikogu.ee/api/files/8d027b31-8456-4ed0-ae0e-e8145410ec5c/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d0d7a6a5-25de-40d0-b5df-09575a7c9bfc/Toomas-Uibo","faction":"Estonia 200 Parliamentary Group","registeredPartyId":"e200","factionRole":"Faction Chairman","committees":[{"name":"Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks","role":"member","type":"ERIKOMISJON"},{"name":"National Defence Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"toomas.uibo@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonia 200 Parliamentary Group","leftFactionDate":"2023-09-06","active":true},{"name":"Tõnis Lukas","uuid":"9a8a55b8-c946-47a2-9e17-9978c3fd23f8","photoUrl":"https://api.riigikogu.ee/api/files/582f2265-25ad-4f00-b379-726de474266b/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/9a8a55b8-c946-47a2-9e17-9978c3fd23f8/Tõnis-Lukas","faction":"Isamaa Parliamentary Group","registeredPartyId":"isamaa","factionRole":null,"committees":[{"name":"Cultural Affairs Committee","role":"Deputy Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"City of Tartu","email":"tonis.lukas@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Tõnis Mölder","uuid":"d7d9e4d7-699e-4038-83c3-d13369f644c9","photoUrl":"https://api.riigikogu.ee/api/files/a054e0a0-c3a8-494f-aead-9115a453a959/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/d7d9e4d7-699e-4038-83c3-d13369f644c9/Tõnis-Mölder","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Economic Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Kesklinn, Lasnamäe and Pirita districts of Tallinn","email":"tonis.molder@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Centre Party Parliamentary Group","leftFactionDate":"2023-09-26","active":true},{"name":"Urmas Kruuse","uuid":"4a332fbb-be05-4cb2-b6a0-5916eb40fe89","photoUrl":"https://api.riigikogu.ee/api/files/5bcade1f-cca6-4f5d-ad81-f7c94c0abb0d/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/4a332fbb-be05-4cb2-b6a0-5916eb40fe89/Urmas-Kruuse","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Rural Affairs Committee","role":"Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Jõgeva- ja Tartumaa (v.a Tartu linn)","email":"urmas.kruuse@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Urmas Reinsalu","uuid":"a78027e5-2480-49f2-a340-ee88daf92d53","photoUrl":"https://api.riigikogu.ee/api/files/ba3cd57c-bc45-4b76-9984-fe38e82592a7/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/a78027e5-2480-49f2-a340-ee88daf92d53/Urmas-Reinsalu","faction":"Isamaa Parliamentary Group","registeredPartyId":"isamaa","factionRole":null,"committees":[{"name":"Foreign Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"State Budget Control Select Committee","role":"Chairman","type":"ERIKOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"urmas.reinsalu@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Urve Tiidus","uuid":"0c571754-914d-406a-baba-6734212353de","photoUrl":"https://api.riigikogu.ee/api/files/62404e46-6ebb-4926-93b6-aa3c35491dac/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/0c571754-914d-406a-baba-6734212353de/Urve-Tiidus","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Economic Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"European Union Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Hiiumaa, Läänemaa and Saaremaa","email":"urve.tiidus@riigikogu.ee","usaFriendship":true,"leftFaction":"Estonian Reform Party Parliamentary Group","leftFactionDate":"2024-07-24","active":true},{"name":"Vadim Belobrovtsev","uuid":"80eac2f1-bb1e-4996-ac5a-4c3dba91bade","photoUrl":"https://api.riigikogu.ee/api/files/dcbcf3b9-e381-4e22-a855-8014b75b37cf/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/80eac2f1-bb1e-4996-ac5a-4c3dba91bade/Vadim-Belobrovtsev","faction":"Estonian Centre Party Parliamentary Group","registeredPartyId":"center","factionRole":"Faction Deputy Chairman","committees":[{"name":"Cultural Affairs Committee","role":"member","type":"ALALINE_KOMISJON"},{"name":"State Budget Control Select Committee","role":"member","type":"ERIKOMISJON"}],"boardRole":null,"district":"Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn","email":"vadim.belobrovtsev@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Valdo Randpere","uuid":"966e7ccd-b097-4e49-923c-c8d39dae2d62","photoUrl":"https://api.riigikogu.ee/api/files/adeea7d9-f479-492a-a6ca-ecc7ac66a3f3/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/966e7ccd-b097-4e49-923c-c8d39dae2d62/Valdo-Randpere","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":"Faction Deputy Chairman","committees":[{"name":"Legal Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Kesklinn, Lasnamäe and Pirita districts of Tallinn","email":"valdo.randpere@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Reform Party Parliamentary Group","leftFactionDate":"2025-04-16","active":true},{"name":"Varro Vooglaid","uuid":"b5e0d7fe-b784-4057-bf7e-cc3f1873887d","photoUrl":"https://api.riigikogu.ee/api/files/1c6fdeeb-8c8d-44bc-b7d3-54d8698fc953/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/b5e0d7fe-b784-4057-bf7e-cc3f1873887d/Varro-Vooglaid","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Legal Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn","email":"varro.vooglaid@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Conservative People’s Party Parliamentary Group","leftFactionDate":"2026-05-14","active":true},{"name":"Vilja Toomast","uuid":"7b6823ed-96f9-462b-b931-3dd4faceb09e","photoUrl":"https://api.riigikogu.ee/api/files/b0d807a5-9956-4c37-bead-c04b7fcd167d/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/7b6823ed-96f9-462b-b931-3dd4faceb09e/Vilja-Toomast","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Legal Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Mustamäe and Nõmme districts of Tallinn","email":"vilja.toomast@riigikogu.ee","usaFriendship":false,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Vladimir Arhipov","uuid":"586335bd-0e3f-4cee-a325-7af602224ca7","photoUrl":"https://api.riigikogu.ee/api/files/82b30f98-dc20-4f29-9632-dc46d8139690/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/586335bd-0e3f-4cee-a325-7af602224ca7/Vladimir-Arhipov","faction":"Estonian Centre Party Parliamentary Group","registeredPartyId":"center","factionRole":null,"committees":[{"name":"Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks","role":"member","type":"ERIKOMISJON"},{"name":"European Union Affairs Committee","role":"Deputy Chairman","type":"ALALINE_KOMISJON"},{"name":"National Defence Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Harjumaa and Raplamaa","email":"vladimir.arhipov@riigikogu.ee","usaFriendship":true,"leftFaction":null,"leftFactionDate":null,"active":true},{"name":"Yoko Alender","uuid":"90074aa2-4938-41a9-8275-3a6efa1cee31","photoUrl":"https://api.riigikogu.ee/api/files/edc2fe2a-5d10-47e5-b7d0-9b2e4d9423f6/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/90074aa2-4938-41a9-8275-3a6efa1cee31/Yoko-Alender","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":null,"committees":[{"name":"Environment Committee","role":"Chairman","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"City of Tartu","email":"yoko.alender@riigikogu.ee","usaFriendship":true,"leftFaction":"Estonian Reform Party Parliamentary Group","leftFactionDate":"2024-07-23","active":true},{"name":"Züleyxa Izmailova","uuid":"658c9d00-82c9-4161-8314-48ff1d67e3b7","photoUrl":"https://api.riigikogu.ee/api/files/e1f99cab-aadd-47d8-a329-9bba12fc58bf/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/658c9d00-82c9-4161-8314-48ff1d67e3b7/Züleyxa-Izmailova","faction":"Non-affiliated members","registeredPartyId":"independent","factionRole":null,"committees":[{"name":"Environment Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn","email":"zuleyxa.izmailova@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonia 200 Parliamentary Group","leftFactionDate":"2024-06-12","active":true},{"name":"Õnne Pillak","uuid":"8d9daaeb-dbaf-4887-8311-881b29bedfa9","photoUrl":"https://api.riigikogu.ee/api/files/d0823172-f9fe-424f-92cd-fa234ceb96d0/download","profileUrl":"https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/8d9daaeb-dbaf-4887-8311-881b29bedfa9/Õnne-Pillak","faction":"Estonian Reform Party Parliamentary Group","registeredPartyId":"reform","factionRole":"Faction Chairman","committees":[{"name":"Economic Affairs Committee","role":"member","type":"ALALINE_KOMISJON"}],"boardRole":null,"district":"Mustamäe and Nõmme districts of Tallinn","email":"onne.pillak@riigikogu.ee","usaFriendship":false,"leftFaction":"Estonian Reform Party Parliamentary Group","leftFactionDate":"2024-07-23","active":true}],"alignment":{"_comment":"Curated overlay. blocs and defectors are hand-maintained; the monthly job may only append to unaligned (safe-default rule, ARCHITECTURE_PLAN.md Phase 1). Never add an unaligned MP to a bloc to reach a majority.","blocs":{"reform":"coalition","e200":"coalition","sde":"opposition","ekre":"opposition","isamaa":"opposition","center":"opposition"},"defectors":{"563f86fd-db45-4046-b8ed-b66e5a2aec45":{"name":"Alar Laneman","votesWith":"reform","since":"2024-06-14","note":"Left EKRE Jun 2024, joined Reform Jul 2024"},"80f542c1-393a-46e2-9fca-99948e59850d":{"name":"Andre Hanimägi","votesWith":"sde","since":"2024-01-05","note":"Left Centre Jan 2024, joined SDE"},"c4e3fc0f-80fb-4a3e-b49e-80045c5253d9":{"name":"Ants Frosch","votesWith":"isamaa","since":"2024-06-13","note":"Left EKRE Jun 2024, joined Isamaa Jan 2025"},"d5c54f88-dff3-486b-aac6-2cd124577d38":{"name":"Ester Karuse","votesWith":"sde","since":"2024-01-05","note":"Left Centre Jan 2024, joined SDE"},"65b1d8bb-7f45-48f5-b4aa-7ba4ca459824":{"name":"Henn Põlluaas","votesWith":"isamaa","since":"2024-06-13","note":"Left EKRE Jun 2024, joined Isamaa Jan 2025"},"6b45cfb5-8a17-481c-b674-80fc00c6cf5d":{"name":"Jaak Aab","votesWith":"sde","since":"2024-01-05","note":"Left Centre Jan 2024, joined SDE"},"94351dfe-449e-48db-9396-06cf204ce22e":{"name":"Jaanus Karilaid","votesWith":"isamaa","since":"2023-09-18","note":"Left Centre Sep 2023, joined Isamaa"},"a5af5ad0-6e31-443a-9b12-15769d43e784":{"name":"Maria Jufereva-Skuratovski","votesWith":"reform","since":"2023-11-16","note":"Left Centre Nov 2023, joined Reform"},"f8a770b2-916c-4172-84b3-005ba9906a18":{"name":"Peeter Ernits","votesWith":"center","since":"2024-04-01","note":"Left EKRE Apr 2024, joined Centre May 2025"},"561abe91-76eb-45f3-90b0-efa94c663689":{"name":"Tanel Kiik","votesWith":"sde","since":"2024-01-05","note":"Left Centre Jan 2024, joined SDE"},"658c9d00-82c9-4161-8314-48ff1d67e3b7":{"name":"Züleyxa Izmailova","votesWith":"sde","since":"2024-06-12","note":"Left Eesti 200 May 2024, joined SDE Jun 2024"}},"unaligned":["07132cc4-5afc-4edb-9537-7c721ec39b2d","987e47c7-929b-4437-9385-fab4f4fd7824","54bc0d5b-7c98-4245-8682-4a3a0b6e0275","db532de2-5abd-4b6d-a82c-2d9a75fd9d18","caea357b-12c0-4069-b53e-89f69f517212","fd2d1dd5-ff19-445e-b190-28aabb07763a","7251e077-1964-4f2b-9dba-349dc127b56e","d7d9e4d7-699e-4038-83c3-d13369f644c9","b5e0d7fe-b784-4057-bf7e-cc3f1873887d"],"unalignedNames":{"07132cc4-5afc-4edb-9537-7c721ec39b2d":"Enn Eesmaa","987e47c7-929b-4437-9385-fab4f4fd7824":"Grigore-Kalev Stoicescu","54bc0d5b-7c98-4245-8682-4a3a0b6e0275":"Jaak Valge","db532de2-5abd-4b6d-a82c-2d9a75fd9d18":"Kalle Grünthal","caea357b-12c0-4069-b53e-89f69f517212":"Kersti Sarapuu","fd2d1dd5-ff19-445e-b190-28aabb07763a":"Leo Kunnas","7251e077-1964-4f2b-9dba-349dc127b56e":"Meelis Kiili","d7d9e4d7-699e-4038-83c3-d13369f644c9":"Tõnis Mölder","b5e0d7fe-b784-4057-bf7e-cc3f1873887d":"Varro Vooglaid"}},"board":[{"role":"President of the Riigikogu","name":"Lauri Hussar","uuid":"64c0141f-371b-4520-8a50-09e65231f775","partyId":"e200"},{"role":"First Vice-President of the Riigikogu","name":"Toomas Kivimägi","uuid":"906f1a0a-0000-4a96-866c-b30f2b6adc49","partyId":"reform"},{"role":"Second Vice-President of the Riigikogu","name":"Arvo Aller","uuid":"a39c4392-bbc8-4036-b923-0f5f2b3d9766","partyId":"ekre"}],"meta":{"totalSeats":101,"simpleMajority":51,"threeFifths":61,"constitutionalMajority":68,"fourFifths":81,"registered":{"reform":36,"e200":12,"sde":9,"ekre":9,"isamaa":8,"center":7,"independent":20},"votingBloc":{"reform":38,"e200":12,"sde":14,"ekre":9,"isamaa":11,"center":8,"unaligned":9},"coalitionSeats":50,"oppositionSeats":42,"unalignedSeats":9,"coalitionHasMajority":false,"updatedAt":"2026-08-12T11:49:24Z","sourceDate":"2026-08-12"},"seating":{"$schema":"seating.json — draft, Phase 0 of DESIGN_AND_MERGE_PLAN.md","source":"index.html bundle (eV constant), extracted 2026-08-19","note":"Seat position data only. Party/faction fields in the source bundle are stale (pre-2026-08-09) and were NOT carried over; see BEHAVIOR_SNAPSHOT.md Assumptions. Grid is 10 rows x 12 columns; the eV constant in the bundle is column-major (eV[col][row]) -- verified against the live DOM's grid-template-columns (12 cols) and child order.","gridDimensions":{"rows":10,"cols":12},"seats":{"afc264da-dc7d-4885-a971-0e645995e6de":{"name":"Evelin Poolamets","row":0,"col":0},"94ffc777-09a5-4472-bf5d-ce16e78a2341":{"name":"Rain Epler","row":1,"col":0},"98008392-64a2-4429-8a41-fb051823e402":{"name":"Martin Helme","row":2,"col":0},"4b96f3e5-af5e-41ce-86c9-3fdee3ce51da":{"name":"Mart Helme","row":3,"col":0},"694b084f-e151-4f7e-8a5c-2664a40cee7a":{"name":"Rene Kokk","row":4,"col":0},"bc9c1725-2fd8-4f54-a0e3-58b87e9dfe1f":{"name":"Anti Poolamets","row":5,"col":0},"94351dfe-449e-48db-9396-06cf204ce22e":{"name":"Jaanus Karilaid","row":6,"col":0},"65b1d8bb-7f45-48f5-b4aa-7ba4ca459824":{"name":"Henn Põlluaas","row":7,"col":0},"a39c4392-bbc8-4036-b923-0f5f2b3d9766":{"name":"Arvo Aller","row":0,"col":1},"b5e0d7fe-b784-4057-bf7e-cc3f1873887d":{"name":"Varro Vooglaid","row":2,"col":1},"f4e5d00e-19d1-428a-ba5e-5ce9ae4ef2c2":{"name":"Helle-Moonika Helme","row":3,"col":1},"d8b9f165-31aa-46a4-8dbd-964cbe89cfb8":{"name":"Siim Pohlak","row":4,"col":1},"c4e3fc0f-80fb-4a3e-b49e-80045c5253d9":{"name":"Ants Frosch","row":7,"col":1},"9a8a55b8-c946-47a2-9e17-9978c3fd23f8":{"name":"Tõnis Lukas","row":0,"col":2},"2dcb35ed-acbc-4bcf-9e9d-9da681842d6d":{"name":"Aivar Kokk","row":1,"col":2},"a78027e5-2480-49f2-a340-ee88daf92d53":{"name":"Urmas Reinsalu","row":2,"col":2},"23161df7-bc1b-442e-b4cd-2d1f37627658":{"name":"Helir-Valdor Seeder","row":3,"col":2},"a5af5ad0-6e31-443a-9b12-15769d43e784":{"name":"Maria Jufereva-Skuratovski","row":4,"col":2},"4a332fbb-be05-4cb2-b6a0-5916eb40fe89":{"name":"Urmas Kruuse","row":5,"col":2},"71bdc9b2-841d-408f-8ace-909e8c11d7d5":{"name":"Signe Kivi","row":6,"col":2},"001dd80c-38c3-4557-b3ee-408d3ffd5cd7":{"name":"Katrin Kuusemäe","row":7,"col":2},"31eee189-0019-469f-8469-7da564bf1af9":{"name":"Kalle Laanet","row":8,"col":2},"7b6823ed-96f9-462b-b931-3dd4faceb09e":{"name":"Vilja Toomast","row":9,"col":2},"7f83e40c-4854-4632-9372-448b3a5dc93a":{"name":"Lea Danilson-Järg","row":0,"col":3},"d5f3dddb-d809-448a-a94f-adbf208e408a":{"name":"Andres Metsoja","row":1,"col":3},"8940964b-6bfd-482d-a4f5-53f2cccb149d":{"name":"Priit Sibul","row":2,"col":3},"29068268-672d-451a-a08a-5727ec4300f4":{"name":"Mart Maastik","row":3,"col":3},"966e7ccd-b097-4e49-923c-c8d39dae2d62":{"name":"Valdo Randpere","row":4,"col":3},"5650dddf-f2ca-4b94-8888-e7482808f81b":{"name":"Aivar Sõerd","row":5,"col":3},"90074aa2-4938-41a9-8275-3a6efa1cee31":{"name":"Yoko Alender","row":6,"col":3},"58be6531-1f4b-4b0b-9c21-92566a40ae8b":{"name":"Marko Mihkelson","row":7,"col":3},"7251e077-1964-4f2b-9dba-349dc127b56e":{"name":"Meelis Kiili","row":8,"col":3},"0f9372ee-f108-47f9-9192-82ff84cf3efb":{"name":"Timo Suslov","row":9,"col":3},"db46f14c-3bdf-47a0-bed4-0172f7d942db":{"name":"Toomas Järveoja","row":0,"col":4},"1600fe77-4b45-44ab-972a-181a5ef71767":{"name":"Kristo Enn Vaga","row":1,"col":4},"0c571754-914d-406a-baba-6734212353de":{"name":"Urve Tiidus","row":2,"col":4},"fd57045c-5dde-4c26-bf60-e5c294da0e4c":{"name":"Andrus Seeme","row":3,"col":4},"8600af41-4dcc-424d-9d05-7c851e5270b5":{"name":"Mart Võrklaev","row":4,"col":4},"9035e217-d990-40ca-87ed-54c77653c6d7":{"name":"Pipi-Liis Siemann","row":5,"col":4},"17d27ea5-b5e6-43e0-86db-ebc15bdd5788":{"name":"Luisa Rõivas","row":6,"col":4},"8d9daaeb-dbaf-4887-8311-881b29bedfa9":{"name":"Õnne Pillak","row":7,"col":4},"315ea785-8f59-40e5-a158-3de8b908572f":{"name":"Maris Lauri","row":8,"col":4},"7655e8d3-b658-49f0-8e09-f6cbc4a2c714":{"name":"Annely Akkermann","row":9,"col":4},"09500870-255e-416d-8eda-f80e9929adda":{"name":"Jüri Jaanson","row":0,"col":5},"ee639cdf-b86c-48b7-9b34-fbba9b83826d":{"name":"Margit Sutrop","row":1,"col":5},"429e71ce-d5ba-4617-8db4-d546482d43bc":{"name":"Madis Timpson","row":2,"col":5},"0e66e826-df65-4fdd-a098-66a7e9a7c911":{"name":"Signe Riisalo","row":3,"col":5},"d4effc9d-0aee-4450-9926-5246efcda08c":{"name":"Maido Ruusmann","row":4,"col":5},"07003549-aa42-4764-8bdd-cab06cb94a92":{"name":"Anti Haugas","row":5,"col":5},"906f1a0a-0000-4a96-866c-b30f2b6adc49":{"name":"Toomas Kivimägi","row":6,"col":5},"1c173f0d-6c5e-445a-934f-32e7edf903db":{"name":"Mihkel Lees","row":7,"col":5},"d18cee4c-7b30-405f-96f2-4ab6f81efaf2":{"name":"Hanah Lahe","row":8,"col":5},"b2226516-4cd4-4471-b93b-696c40b7a9e2":{"name":"Eerik-Niiles Kross","row":9,"col":5},"122e850b-5e6b-41f6-8b91-830ca8de8450":{"name":"Mait Klaassen","row":0,"col":6},"28e48bd7-9f1f-4d6a-b40c-9c6ff6d445e5":{"name":"Kristina Šmigun-Vähi","row":1,"col":6},"a12ffc5c-0809-46cb-abc4-cc99a7fa3f60":{"name":"Liina Kersna","row":2,"col":6},"4e2e1744-16b5-4d88-a08a-cf250c776956":{"name":"Ando Kiviberg","row":3,"col":6},"a5d17c31-61e5-4e45-87b0-5834b6728fe6":{"name":"Juku-Kalle Raid","row":4,"col":6},"4f816f8e-1501-4940-b87a-af029fcd98c0":{"name":"Tanel Tein","row":5,"col":6},"d0d7a6a5-25de-40d0-b5df-09575a7c9bfc":{"name":"Toomas Uibo","row":6,"col":6},"8946b072-80c5-436e-95b2-41f928a7c636":{"name":"Diana Ingerainen","row":7,"col":6},"64c0141f-371b-4520-8a50-09e65231f775":{"name":"Lauri Hussar","row":8,"col":6},"b6f8dff5-7c69-4d4c-b978-be0a2ad6e161":{"name":"Peeter Tali","row":9,"col":6},"410c0030-7bcd-4977-85c2-27af3439770f":{"name":"Mati Raidma","row":0,"col":7},"7d6b0605-e425-41c8-9a53-3b92b81f21b1":{"name":"Eero Merilind","row":1,"col":7},"53141769-f7bb-4995-8d12-5ff0d9c1eca1":{"name":"Mario Kadastik","row":2,"col":7},"798de8ee-0587-4543-aa2e-89c3f6c8f914":{"name":"Marek Reinaas","row":3,"col":7},"2bc608c1-1c67-4db8-968b-94bc3947dfac":{"name":"Kadri Tali","row":4,"col":7},"987e47c7-929b-4437-9385-fab4f4fd7824":{"name":"Grigore-Kalev Stoicescu","row":5,"col":7},"3febb869-f443-4aba-908e-7c0c30f8c4dd":{"name":"Irja Lutsar","row":6,"col":7},"236e49d6-eecb-4562-8ad4-bedd586bb149":{"name":"Tarmo Tamm","row":7,"col":7},"6434e7ab-6aba-4945-9812-e7a2e7c8bf3f":{"name":"Stig Rästa","row":8,"col":7},"fe6fcd51-6911-4dc6-9232-ddeac5ec1155":{"name":"Aleksandr Tšaplõgin","row":0,"col":8},"80eac2f1-bb1e-4996-ac5a-4c3dba91bade":{"name":"Vadim Belobrovtsev","row":1,"col":8},"a62b7530-a1fb-4c0b-b041-f10c2cfaa31a":{"name":"Andrei Korobeinik","row":2,"col":8},"f8a770b2-916c-4172-84b3-005ba9906a18":{"name":"Peeter Ernits","row":3,"col":8},"07132cc4-5afc-4edb-9537-7c721ec39b2d":{"name":"Enn Eesmaa","row":4,"col":8},"80f542c1-393a-46e2-9fca-99948e59850d":{"name":"Andre Hanimägi","row":5,"col":8},"561abe91-76eb-45f3-90b0-efa94c663689":{"name":"Tanel Kiik","row":6,"col":8},"563f86fd-db45-4046-b8ed-b66e5a2aec45":{"name":"Alar Laneman","row":7,"col":8},"fd2d1dd5-ff19-445e-b190-28aabb07763a":{"name":"Leo Kunnas","row":8,"col":8},"54bc0d5b-7c98-4245-8682-4a3a0b6e0275":{"name":"Jaak Valge","row":9,"col":8},"04510d7c-b12a-48aa-8402-80b0efb114a6":{"name":"Anastassia Kovalenko-Kõlvart","row":0,"col":9},"0ef9e676-8ee6-481a-ae29-e1ce75af5aaa":{"name":"Aleksei Jevgrafov","row":1,"col":9},"1839253a-aec0-4019-995a-1c031db8fd10":{"name":"Lauri Laats","row":2,"col":9},"586335bd-0e3f-4cee-a325-7af602224ca7":{"name":"Vladimir Arhipov","row":3,"col":9},"caea357b-12c0-4069-b53e-89f69f517212":{"name":"Kersti Sarapuu","row":4,"col":9},"6b45cfb5-8a17-481c-b674-80fc00c6cf5d":{"name":"Jaak Aab","row":5,"col":9},"d5c54f88-dff3-486b-aac6-2cd124577d38":{"name":"Ester Karuse","row":6,"col":9},"76c477e6-4b49-4d49-ad7b-a4853182a1da":{"name":"Riina Sikkut","row":0,"col":10},"1d0b281d-b769-4e94-8c67-faa1cb1b1395":{"name":"Helmen Kütt","row":1,"col":10},"d557812c-971d-415b-827d-aa6a382ec6ef":{"name":"Lauri Läänemets","row":2,"col":10},"b5922bb2-56bb-4de6-a7e1-754553191c27":{"name":"Heljo Pikhof","row":3,"col":10},"988995d4-3cbe-4ea7-acdd-6222d0b658b1":{"name":"Reili Rand","row":4,"col":10},"658c9d00-82c9-4161-8314-48ff1d67e3b7":{"name":"Züleyxa Izmailova","row":5,"col":10},"db532de2-5abd-4b6d-a82c-2d9a75fd9d18":{"name":"Kalle Grünthal","row":6,"col":10},"d7d9e4d7-699e-4038-83c3-d13369f644c9":{"name":"Tõnis Mölder","row":7,"col":10},"989194b6-b6cc-4c8f-9e6a-8eb8913d103e":{"name":"Raimond Kaljulaid","row":0,"col":11},"f6353ede-a0a5-4918-ab8b-790a1957c5cd":{"name":"Anti Allas","row":1,"col":11},"c7f4f213-58a3-4b6f-a236-153644653d17":{"name":"Madis Kallas","row":2,"col":11},"9d863d49-8bfb-4314-bd3c-cfa143f518c8":{"name":"Tiit Maran","row":3,"col":11}}}}</script></helmet>
+
+<div data-theme="{{ theme }}" style="width:1920px;height:1080px;display:flex;overflow:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;-webkit-font-smoothing:antialiased">
+
+  <nav style="flex:0 0 104px;width:104px;display:flex;flex-direction:column;align-items:center;padding:22px 0 20px;background:var(--card);border-right:1px solid var(--line)">
+    <span style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin-bottom:18px;border-radius:13px;background:var(--hero);color:#fff;font-weight:700;font-size:15px;line-height:1;letter-spacing:.02em">XV</span>
+    <span style="display:flex;flex-direction:column;gap:4px">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="3">
+        <button type="button" onClick="{{ n.go }}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;width:82px;height:76px;border:0;border-radius:17px;cursor:pointer;background:{{ n.bg }};color:{{ n.color }}">
+          <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.d }}"></path></svg>
+          <span style="font-weight:600;font-size:12px;line-height:1">{{ n.label }}</span>
+        </button>
+      </sc-for>
+    </span>
+    <span style="flex:1"></span>
+    <button type="button" onClick="{{ toggleTheme }}" style="display:flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:transparent;cursor:pointer;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600;font-size:10px;line-height:1;letter-spacing:.14em;color:var(--muted)" style-hover="color:var(--accent);border-color:var(--accent)">{{ themeLabel }}</button>
+  </nav>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;padding:26px 34px 28px">
+
+    <header style="display:flex;align-items:flex-start;justify-content:space-between;gap:48px;padding-bottom:22px">
+      <div style="min-width:0">
+        <p style="margin:0 0 9px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600;font-size:12px;line-height:1;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">XV Riigikogu · {{ updatedLabel }}</p>
+        <h1 style="margin:0;font-weight:700;font-size:34px;line-height:1.05;letter-spacing:-0.03em;color:var(--text)">{{ viewTitle }}</h1>
+        <p style="margin:7px 0 0;font-weight:500;font-size:15px;line-height:1.35;color:var(--muted)">{{ viewSub }}</p>
+      </div>
+
+      <sc-if value="{{ showHeaderBar }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:0 0 780px;width:780px">
+          <div style="display:flex;align-items:baseline;gap:10px;justify-content:flex-end">
+            <span style="font-weight:700;font-size:46px;line-height:1;letter-spacing:-0.035em;color:var(--text)">{{ coalitionSeats }}</span>
+            <span style="font-weight:600;font-size:16px;line-height:1.2;color:var(--muted)">of 101 coalition seats</span>
+          </div>
+          <div style="position:relative;padding-top:18px;margin-top:10px">
+            <div style="display:flex;height:34px;border-radius:8px;overflow:hidden;background:var(--track)">
+              <sc-for list="{{ blocBars }}" as="b" hint-placeholder-count="3">
+                <div style="width:{{ b.width }};background:{{ b.color }}"></div>
+              </sc-for>
+            </div>
+            <div style="position:absolute;top:0;bottom:0;left:{{ thresholdPct }};width:2px;background:var(--text)">
+              <span style="position:absolute;top:0;left:5px;white-space:nowrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600;font-size:11px;line-height:1;letter-spacing:.04em;color:var(--text)">51-VOTE MAJORITY</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:20px;margin-top:12px">
+            <sc-for list="{{ blocBars }}" as="l" hint-placeholder-count="3">
+              <span style="display:flex;align-items:center;gap:7px;font-weight:500;font-size:13px;line-height:1;color:var(--muted)">
+                <span style="width:10px;height:10px;border-radius:3px;background:{{ l.color }}"></span>{{ l.label }}
+              </span>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </header>
+
+    <!-- ══════════ PARLIAMENT ══════════ -->
+    <sc-if value="{{ isParliament }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;min-height:0;display:flex;gap:20px">
+
+        <section style="flex:0 0 1108px;width:1108px;position:relative;display:flex;flex-direction:column;padding:22px;border:1px solid var(--line);border-radius:20px;background:var(--card)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:16px">
+            <div>
+              <h2 style="margin:0;font-weight:600;font-size:18px;line-height:1.2;color:var(--text)">Session hall seating plan</h2>
+              <p style="margin:5px 0 0;font-weight:400;font-size:13px;line-height:1.3;color:var(--muted)">Layout from riigikogu.ee · coloured by voting bloc party</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px">
+              <span style="display:flex;align-items:center;gap:7px;font-weight:500;font-size:12px;line-height:1;color:var(--muted)">
+                <span style="width:9px;height:9px;border-radius:50%;background:#808080;box-shadow:0 0 0 2px var(--card)"></span>registered elsewhere
+              </span>
+              <span style="font-weight:500;font-size:12px;line-height:1;color:var(--muted)">Hover a seat · click for the profile</span>
+            </div>
+          </div>
+
+          <div style="position:relative">
+            <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:5px">
+              <sc-for list="{{ seatCells }}" as="c" hint-placeholder-count="120">
+                <div style="position:relative;height:54px">
+                  <button type="button" onClick="{{ c.click }}" onMouseEnter="{{ c.enter }}" onMouseLeave="{{ c.leave }}" style="{{ c.style }}"><span style="display:block;white-space:pre-line;font-weight:600;font-size:9px;line-height:1.2;letter-spacing:-0.01em">{{ c.label }}</span></button>
+                  <span style="{{ c.markStyle }}"></span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="{{ tipStyle }}">
+              <span style="display:block;font-weight:600;font-size:14px;line-height:1.2;color:#fff">{{ tipName }}</span>
+              <span style="display:block;margin-top:4px;font-weight:500;font-size:12px;line-height:1.25;color:rgba(255,255,255,.72)">{{ tipSub }}</span>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:18px">
+            <sc-for list="{{ legendParties }}" as="l" hint-placeholder-count="7">
+              <button type="button" onClick="{{ l.toggle }}" style="{{ l.style }}">
+                <span style="{{ l.swatch }}"></span>
+                <span style="font-weight:600;font-size:13px;line-height:1">{{ l.short }}</span>
+                <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600;font-size:13px;line-height:1;opacity:.6">{{ l.seats }}</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)">
+            <span style="font-weight:500;font-size:14px;line-height:1.3;color:var(--muted)">{{ floorCaption }}</span>
+            <span style="display:flex;gap:22px">
+              <span style="font-weight:600;font-size:14px;line-height:1;color:var(--text)">Coalition <span style="color:var(--coalition)">{{ coalitionSeats }}</span></span>
+              <span style="font-weight:600;font-size:14px;line-height:1;color:var(--text)">Unaligned <span style="color:var(--unaligned)">{{ unalignedSeats }}</span></span>
+              <span style="font-weight:600;font-size:14px;line-height:1;color:var(--text)">Opposition <span style="color:var(--opposition)">{{ oppositionSeats }}</span></span>
+            </span>
+          </div>
+
+          <div style="position:absolute;display:{{ popupDisplay }};right:22px;bottom:22px;z-index:40;width:352px;padding:18px;border:1px solid var(--line);border-radius:20px;background:var(--card);box-shadow:var(--pop)">
+            <div style="display:flex;gap:14px">
+              <span style="position:relative;flex:0 0 72px;width:72px;height:72px;border-radius:20px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:{{ popup.color }};color:{{ popup.textColor }};font-weight:700;font-size:24px;line-height:1">{{ popup.initials }}
+                <span style="{{ popup.photoStyle }}"></span>
+              </span>
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font-weight:700;font-size:19px;line-height:1.2;color:var(--text)">{{ popup.name }}</span>
+                <span style="display:flex;gap:6px;margin-top:8px">
+                  <span style="padding:5px 10px;border-radius:8px;font-weight:700;font-size:12px;line-height:1.2;background:{{ popup.color }};color:{{ popup.textColor }}">{{ popup.short }}</span>
+                  <span style="padding:5px 10px;border-radius:8px;font-weight:600;font-size:12px;line-height:1.2;background:var(--track);color:{{ popup.blocColor }}">{{ popup.bloc }}</span>
+                </span>
+              </span>
+              <button type="button" onClick="{{ closePopup }}" style="flex:0 0 32px;width:32px;height:32px;border:0;border-radius:50%;background:var(--track);color:var(--muted);font-size:15px;line-height:1;cursor:pointer">×</button>
+            </div>
+            <p style="margin:14px 0 0;font-weight:500;font-size:13px;line-height:1.45;color:var(--muted)">{{ popup.role }}</p>
+            <p style="margin:8px 0 0;font-weight:500;font-size:13px;line-height:1.45;color:var(--text)">{{ popup.committees }}</p>
+            <p style="margin:8px 0 0;font-weight:400;font-size:13px;line-height:1.45;color:var(--muted)">{{ popup.district }}</p>
+            <button type="button" onClick="{{ openInDirectory }}" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:42px;margin-top:14px;border:1px solid var(--line);border-radius:12px;background:transparent;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px;line-height:1;color:var(--text)" style-hover="border-color:var(--accent);color:var(--accent)">Open full profile
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg>
+            </button>
+          </div>
+        </section>
+
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px">
+          <section style="padding:18px;border:1px solid var(--line);border-radius:20px;background:var(--card)">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px">
+              <h2 style="margin:0;font-weight:600;font-size:13px;line-height:1;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Parties by voting bloc</h2>
+              <button type="button" onClick="{{ clearHighlight }}" style="{{ clearStyle }}">{{ clearLabel }}</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ partyRows }}" as="p" hint-placeholder-count="7">
+                <button type="button" onClick="{{ p.toggle }}" style="{{ p.style }}">
+                  <span style="display:flex;align-items:center;gap:12px">
+                    <span style="flex:0 0 12px;width:12px;height:28px;border-radius:5px;background:{{ p.color }}"></span>
+                    <span style="flex:1;min-width:0">
+                      <span style="display:block;font-weight:600;font-size:16px;line-height:1.25;color:var(--text)">{{ p.name }}</span>
+                      <span style="display:block;font-weight:400;font-size:12px;line-height:1.3;color:var(--muted)">{{ p.sub }}</span>
+                    </span>
+                    <span style="font-weight:700;font-size:24px;line-height:1;letter-spacing:-0.02em;color:var(--text)">{{ p.seats }}</span>
+                  </span>
+                  <span style="display:block;width:100%;height:5px;border-radius:999px;background:var(--track)">
+                    <span style="display:block;height:100%;border-radius:999px;width:{{ p.width }};background:{{ p.color }}"></span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+          </section>
+
+          <section style="padding:18px;border:1px solid var(--line);border-radius:20px;background:var(--card)">
+            <h2 style="margin:0 0 11px;font-weight:600;font-size:13px;line-height:1;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Board of the Riigikogu</h2>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ boardRows }}" as="b" hint-placeholder-count="3">
+                <button type="button" onClick="{{ b.open }}" style="display:flex;align-items:center;gap:13px;width:100%;min-height:60px;padding:11px 13px;border:1px solid var(--line);border-radius:14px;background:transparent;cursor:pointer;text-align:left">
+                  <span style="flex:0 0 10px;width:10px;height:34px;border-radius:4px;background:{{ b.color }}"></span>
+                  <span style="flex:1;min-width:0">
+                    <span style="display:block;font-weight:600;font-size:16px;line-height:1.25;color:var(--text)">{{ b.name }}</span>
+                    <span style="display:block;font-weight:400;font-size:12px;line-height:1.3;color:var(--muted)">{{ b.role }}</span>
+                  </span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg>
+                </button>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ══════════ DIRECTORY ══════════ -->
+    <sc-if value="{{ isDirectory }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;min-height:0;display:flex;gap:20px">
+
+        <section style="flex:0 0 660px;width:660px;display:flex;flex-direction:column;min-height:0;border:1px solid var(--line);border-radius:20px;background:var(--card);overflow:hidden">
+          <div style="padding:18px 20px 14px;border-bottom:1px solid var(--line)">
+            <div style="display:flex;align-items:center;gap:10px;height:52px;padding:0 16px;border:1px solid var(--line);border-radius:16px;background:var(--bg)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M16.5 16.5 21 21"></path></svg>
+              <input type="search" placeholder="Search 101 members" value="{{ query }}" onChange="{{ onQuery }}" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font-family:inherit;font-weight:400;font-size:17px;line-height:1.3;color:var(--text)">
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;padding:3px;margin-top:12px;border-radius:13px;background:var(--track)">
+              <sc-for list="{{ blocFilters }}" as="f" hint-placeholder-count="4">
+                <button type="button" onClick="{{ f.pick }}" style="height:38px;border:0;border-radius:10px;cursor:pointer;font-family:inherit;font-weight:600;font-size:13px;line-height:1;background:{{ f.bg }};color:{{ f.color }};box-shadow:{{ f.shadow }}">{{ f.label }}</button>
+              </sc-for>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+              <sc-for list="{{ tagFilters }}" as="f" hint-placeholder-count="2">
+                <button type="button" onClick="{{ f.pick }}" style="height:40px;border:1px solid {{ f.border }};border-radius:11px;cursor:pointer;font-family:inherit;font-weight:600;font-size:13px;line-height:1;background:{{ f.bg }};color:{{ f.color }}">{{ f.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <p style="margin:0;padding:12px 20px 8px;font-weight:500;font-size:13px;line-height:1;color:var(--muted)">{{ countLabel }}</p>
+          <div style="flex:1;min-height:0;overflow-y:auto">
+            <sc-for list="{{ memberRows }}" as="m" hint-placeholder-count="9">
+              <button type="button" onClick="{{ m.pick }}" style="{{ m.style }}">
+                <span style="{{ m.avatar }}">{{ m.initials }}</span>
+                <span style="flex:1;min-width:0">
+                  <span style="display:block;font-weight:600;font-size:16px;line-height:1.3;color:var(--text)">{{ m.name }}</span>
+                  <span style="display:block;font-weight:400;font-size:13px;line-height:1.35;color:var(--muted)">{{ m.sub }}</span>
+                </span>
+                <span style="{{ m.badgeStyle }}">{{ m.badge }}</span>
+              </button>
+            </sc-for>
+            <p style="display:{{ emptyDisplay }};margin:0;padding:40px 20px;text-align:center;font-weight:400;font-size:16px;line-height:1.4;color:var(--muted)">{{ emptyLabel }}</p>
+          </div>
+        </section>
+
+        <section style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:0;padding:30px 34px;border:1px solid var(--line);border-radius:20px;background:var(--card);overflow-y:auto">
+          <div style="display:flex;align-items:center;gap:24px">
+            <span style="position:relative;flex:0 0 128px;width:128px;height:128px;border-radius:32px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:{{ profile.color }};color:{{ profile.textColor }};font-weight:700;font-size:44px;line-height:1">{{ profile.initials }}
+              <span style="{{ profile.photoStyle }}"></span>
+            </span>
+            <div style="flex:1;min-width:0">
+              <h2 style="margin:0;font-weight:700;font-size:32px;line-height:1.12;letter-spacing:-0.025em;color:var(--text)">{{ profile.name }}</h2>
+              <div style="display:flex;gap:8px;margin-top:12px">
+                <span style="padding:6px 11px;border-radius:9px;font-weight:700;font-size:13px;line-height:1.2;background:{{ profile.color }};color:{{ profile.textColor }}">{{ profile.short }}</span>
+                <span style="padding:6px 11px;border-radius:9px;font-weight:600;font-size:13px;line-height:1.2;background:var(--track);color:{{ profile.blocColor }}">{{ profile.bloc }}</span>
+                <span style="display:{{ profile.usaDisplay }};padding:6px 11px;border-radius:9px;font-weight:600;font-size:13px;line-height:1.2;background:var(--track);color:var(--muted)">Estonia–USA Friendship Group</span>
+              </div>
+            </div>
+            <a href="{{ profile.url }}" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;flex:0 0 auto;height:48px;padding:0 22px;border-radius:14px;background:var(--hero);color:#fff;font-weight:600;font-size:15px;line-height:1">Open riigikogu.ee profile</a>
+          </div>
+
+          <p style="display:{{ profile.warnDisplay }};margin:22px 0 0;padding:14px 16px;border:1px solid var(--warnLine);border-radius:14px;background:var(--warnBg);color:var(--warnText);font-weight:500;font-size:14px;line-height:1.45">{{ profile.warn }}</p>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px">
+            <sc-for list="{{ profileFacts }}" as="f" hint-placeholder-count="6">
+              <span style="display:flex;gap:14px;grid-column:{{ f.span }};padding:14px 16px;border:1px solid var(--line);border-radius:14px">
+                <span style="flex:0 0 104px;font-weight:600;font-size:12px;line-height:1.3;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">{{ f.label }}</span>
+                <span style="flex:1;min-width:0;font-weight:500;font-size:15px;line-height:1.4;color:var(--text)">{{ f.value }}</span>
+              </span>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:26px;margin-top:10px;padding:16px;border:1px solid var(--line);border-radius:14px">
+            <span style="display:grid;grid-template-columns:repeat(12,10px);gap:2px">
+              <sc-for list="{{ profileSeatCells }}" as="s" hint-placeholder-count="120">
+                <span style="{{ s.style }}"></span>
+              </sc-for>
+            </span>
+            <span style="min-width:0">
+              <span style="display:block;font-weight:600;font-size:12px;line-height:1.3;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Seat on the floor</span>
+              <span style="display:block;margin-top:5px;font-weight:500;font-size:15px;line-height:1.4;color:var(--text)">{{ profile.seatLabel }}</span>
+            </span>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+
+    <!-- ══════════ CALCULATOR ══════════ -->
+    <sc-if value="{{ isCalculator }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;min-height:0;display:flex;gap:20px">
+
+        <section style="flex:0 0 1108px;width:1108px;display:flex;flex-direction:column;padding:22px;border:1px solid var(--line);border-radius:20px;background:var(--card)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:16px">
+            <div>
+              <h2 style="margin:0;font-weight:600;font-size:18px;line-height:1.2;color:var(--text)">Session hall seating plan</h2>
+              <p style="margin:5px 0 0;font-weight:400;font-size:13px;line-height:1.3;color:var(--muted)">Click any seat to add that member to the count, or hold them out of it</p>
+            </div>
+            <span style="padding:7px 13px;border-radius:11px;background:var(--track);font-weight:600;font-size:13px;line-height:1.2;color:var(--text)">{{ selSeats }} of 101 selected</span>
+          </div>
+
+          <div style="position:relative">
+            <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:5px">
+              <sc-for list="{{ seatCells }}" as="c" hint-placeholder-count="120">
+                <div style="position:relative;height:54px">
+                  <button type="button" onClick="{{ c.click }}" onMouseEnter="{{ c.enter }}" onMouseLeave="{{ c.leave }}" style="{{ c.style }}"><span style="display:block;white-space:pre-line;font-weight:600;font-size:9px;line-height:1.2;letter-spacing:-0.01em">{{ c.label }}</span></button>
+                  <span style="{{ c.markStyle }}"></span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="{{ tipStyle }}">
+              <span style="display:block;font-weight:600;font-size:14px;line-height:1.2;color:#fff">{{ tipName }}</span>
+              <span style="display:block;margin-top:4px;font-weight:500;font-size:12px;line-height:1.25;color:rgba(255,255,255,.72)">{{ tipSub }}</span>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:26px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line)">
+            <span style="display:flex;align-items:center;gap:8px;font-weight:500;font-size:13px;line-height:1;color:var(--muted)"><span style="width:14px;height:14px;border-radius:4px;background:var(--track);box-shadow:0 0 0 2px var(--text)"></span>in the count</span>
+            <span style="display:flex;align-items:center;gap:8px;font-weight:500;font-size:13px;line-height:1;color:var(--muted)"><span style="width:14px;height:14px;border-radius:4px;background:var(--track);opacity:.35"></span>not counted</span>
+            <span style="display:flex;align-items:center;gap:8px;font-weight:500;font-size:13px;line-height:1;color:var(--muted)"><span style="width:14px;height:14px;border-radius:4px;background:var(--remBg);box-shadow:0 0 0 2px var(--remFg)"></span>held out of a selected party</span>
+          </div>
+        </section>
+
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px;overflow-y:auto">
+          <div style="padding:20px 20px 18px;border-radius:22px;background:var(--hero);color:#fff">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px">
+              <span style="font-weight:700;font-size:56px;line-height:.9;letter-spacing:-0.04em">{{ selSeats }}</span>
+              <span style="text-align:right;font-weight:600;font-size:16px;line-height:1.3;color:{{ verdictColor }}">{{ verdict }}</span>
+            </div>
+            <div style="position:relative;height:44px;margin-top:20px">
+              <div style="position:absolute;left:0;right:0;top:14px;height:14px;border-radius:999px;background:rgba(255,255,255,.14)"></div>
+              <div style="position:absolute;left:0;top:14px;height:14px;border-radius:999px;width:{{ selPct }};background:{{ fillColor }}"></div>
+              <sc-for list="{{ marks }}" as="k" hint-placeholder-count="4">
+                <span style="position:absolute;top:0;left:{{ k.left }};transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px">
+                  <span style="width:2px;height:28px;background:{{ k.tick }}"></span>
+                  <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600;font-size:11px;line-height:1;color:{{ k.color }}">{{ k.need }}</span>
+                </span>
+              </sc-for>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px">
+              <sc-for list="{{ marks }}" as="k" hint-placeholder-count="4">
+                <span style="display:flex;flex-direction:column;gap:5px;padding:10px 11px;border:1px solid {{ k.chipBorder }};border-radius:12px;background:{{ k.chipBg }}">
+                  <span style="font-weight:700;font-size:15px;line-height:1;color:{{ k.chipFg }}">{{ k.fraction }}</span>
+                  <span style="font-weight:500;font-size:11px;line-height:1.25;color:rgba(255,255,255,.66)">{{ k.chipNote }}</span>
+                </span>
+              </sc-for>
+            </div>
+            <p style="margin:14px 0 0;font-weight:500;font-size:15px;line-height:1.4;color:rgba(255,255,255,.72)">{{ hint }}</p>
+          </div>
+
+          <div style="display:flex;gap:8px">
+            <sc-for list="{{ presets }}" as="p" hint-placeholder-count="3">
+              <button type="button" onClick="{{ p.run }}" style="flex:1;height:46px;border:1px solid var(--line);border-radius:14px;background:var(--card);cursor:pointer;font-family:inherit;font-weight:600;font-size:15px;line-height:1;color:{{ p.color }}">{{ p.label }}</button>
+            </sc-for>
+          </div>
+
+          <div>
+            <h2 style="margin:4px 0 10px;font-weight:600;font-size:13px;line-height:1;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Tap a party in or out</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <sc-for list="{{ calcParties }}" as="p" hint-placeholder-count="7">
+                <button type="button" onClick="{{ p.toggle }}" style="display:flex;flex-direction:column;gap:6px;min-height:80px;padding:13px;border:2px solid {{ p.border }};border-radius:18px;background:{{ p.bg }};cursor:pointer;text-align:left">
+                  <span style="display:flex;align-items:center;gap:8px">
+                    <span style="width:12px;height:12px;border-radius:4px;background:{{ p.color }}"></span>
+                    <span style="font-weight:600;font-size:15px;line-height:1.2;color:var(--text)">{{ p.short }}</span>
+                  </span>
+                  <span style="display:flex;align-items:baseline;gap:6px">
+                    <span style="font-weight:700;font-size:28px;line-height:1;letter-spacing:-0.03em;color:{{ p.countColor }}">{{ p.count }}</span>
+                    <span style="font-weight:500;font-size:13px;line-height:1.2;color:var(--muted)">of {{ p.total }}</span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div>
+            <h2 style="margin:4px 0 10px;font-weight:600;font-size:13px;line-height:1;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Named adjustments</h2>
+            <p style="display:{{ noAdjDisplay }};margin:0;padding:14px 16px;border:1px dashed var(--line);border-radius:14px;font-weight:400;font-size:14px;line-height:1.4;color:var(--muted)">Click a seat on the floor plan to add a member from a non-selected party, or hold a selected party's member out of the count.</p>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ adjustments }}" as="a" hint-placeholder-count="1">
+                <span style="display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card)">
+                  <span style="display:flex;flex:0 0 30px;width:30px;height:30px;align-items:center;justify-content:center;border-radius:9px;font-weight:700;font-size:13px;line-height:1;background:{{ a.badgeBg }};color:{{ a.badgeFg }}">{{ a.badge }}</span>
+                  <span style="flex:1;min-width:0">
+                    <span style="display:block;font-weight:600;font-size:15px;line-height:1.25;color:var(--text)">{{ a.name }}</span>
+                    <span style="display:block;font-weight:400;font-size:13px;line-height:1.3;color:var(--muted)">{{ a.note }}</span>
+                  </span>
+                  <button type="button" onClick="{{ a.undo }}" style="height:40px;padding:0 14px;border:1px solid var(--line);border-radius:11px;background:transparent;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px;line-height:1;color:var(--muted)">Undo</button>
+                </span>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1920,&quot;height&quot;:1080},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;parliament&quot;,&quot;directory&quot;,&quot;calculator&quot;],&quot;default&quot;:&quot;parliament&quot;,&quot;tsType&quot;:&quot;'parliament' | 'directory' | 'calculator'&quot;},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light' | 'dark'&quot;},&quot;showSeatNames&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Seating plan&quot;},&quot;showDefectorMarks&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Seating plan&quot;}}">
+const NAV = [
+  { id: 'parliament', label: 'Parliament', d: 'M3 20h18M4 20a8 8 0 0 1 16 0M8 20v-3.4M12 20v-4.6M16 20v-3.4' },
+  { id: 'directory', label: 'Directory', d: 'M9.5 5.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6M3.5 19.5a6 6 0 0 1 12 0M15.5 6.2a2.6 2.6 0 0 1 0 5.2M17 19.5a5 5 0 0 0-2.4-4.3' },
+  { id: 'calculator', label: 'Calculator', d: 'M5 2.5h14v19H5zM8.5 6.5h7M9 12h.01M12 12h.01M15 12h.01M9 16.5h.01M12 16.5h.01M15 16.5h.01' }
+];
+const NOOP = () => {};
+const CLEAR_BTN = 'flex:0 0 auto;height:28px;padding:0 11px;border:1px solid var(--line);border-radius:9px;background:transparent;font-family:inherit;font-weight:600;font-size:12px;line-height:1;color:var(--muted);';
+const photoStyle = url => 'position:absolute;inset:0;background-size:cover;background-position:center top' + (url ? ';background-image:url(' + url + ')' : '');
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const FRACTIONS = [
+  { need: 51, fraction: '1/2+1', note: 'Ordinary legislation' },
+  { need: 61, fraction: '3/5', note: 'Constitution, 2nd route' },
+  { need: 68, fraction: '2/3', note: 'Constitutional amendment' },
+  { need: 81, fraction: '4/5', note: 'Urgent amendment' }
+];
+
+class Component extends DCLogic {
+  state = {
+    data: null, view: null, hover: null, popup: null,
+    query: '', filter: 'all', selected: '563f86fd-db45-4046-b8ed-b66e5a2aec45', highlight: [],
+    sel: { parties: ['reform', 'e200'], added: ['987e47c7-929b-4437-9385-fab4f4fd7824'], excluded: [] }
+  };
+
+  componentDidMount() {
+    if (this.props.data) return;
+    const blob = document.getElementById('rk-data');
+    if (blob) { try { this.setState({ data: JSON.parse(blob.textContent) }); return; } catch (e) { console.warn('inline data unreadable, fetching', e); } }
+    const files = ['parties', 'mps', 'alignment', 'board', 'meta', 'seating'];
+    Promise.all(files.map(f => fetch('./data/' + f + '.json').then(r => r.json())))
+      .then(([parties, mps, alignment, board, meta, seating]) =>
+        this.setState({ data: { parties, mps, alignment, board, meta, seating } }))
+      .catch(e => console.error('data load failed', e));
+  }
+
+  view() { return this.state.view || this.props.view || 'parliament'; }
+  set(k, v) { this.setState({ [k]: v }); }
+
+  toggleHighlight(id) {
+    this.setState(st => ({
+      highlight: st.highlight.includes(id) ? st.highlight.filter(x => x !== id) : st.highlight.concat(id),
+      popup: null
+    }));
+  }
+
+  model() {
+    const d = this.props.data || this.state.data;
+    if (!d) return null;
+    const roster = d.mps.filter(m => m.active !== false);
+    const party = {}; d.parties.forEach(p => { party[p.id] = p; });
+    const defectors = d.alignment.defectors || {};
+    const unaligned = new Set(d.alignment.unaligned || []);
+    const blocOf = id => d.alignment.blocs[id] || null;
+    const vb = m => (defectors[m.uuid] ? defectors[m.uuid].votesWith : m.registeredPartyId);
+    const byUuid = new Map(roster.map(m => [m.uuid, m]));
+    const counts = {};
+    roster.forEach(m => { const p = vb(m); counts[p] = (counts[p] || 0) + 1; });
+    const blocSeats = { coalition: 0, opposition: 0, unaligned: 0 };
+    roster.forEach(m => {
+      const b = unaligned.has(m.uuid) ? 'unaligned' : (blocOf(vb(m)) || 'unaligned');
+      blocSeats[b] += 1;
+    });
+    return { d, roster, party, defectors, unaligned, blocOf, vb, byUuid, counts, blocSeats };
+  }
+
+  initials(name) {
+    const parts = String(name || '').trim().split(/\s+/);
+    const a = parts[0] || '', b = parts.length > 1 ? parts[parts.length - 1] : '';
+    return ((a[0] || '') + (b[0] || '')).toUpperCase();
+  }
+  blocLabel(b) { return b === 'coalition' ? 'Coalition' : b === 'opposition' ? 'Opposition' : 'Unaligned'; }
+  blocTint(b) { return b === 'coalition' ? 'var(--coalition)' : b === 'opposition' ? 'var(--opposition)' : 'var(--unalignedText)'; }
+  shortOf(m, id) { const p = m.party[id]; return !p ? '—' : (id === 'independent' ? 'Unaligned' : p.short); }
+  monthYear(iso) { if (!iso) return ''; const dt = new Date(iso); return MONTHS[dt.getUTCMonth()] + ' ' + dt.getUTCFullYear(); }
+  factionShort(m, factionName) {
+    const hit = m.d.parties.find(p => p.factionName === factionName);
+    return hit ? hit.short : String(factionName || '').replace(' Parliamentary Group', '');
+  }
+  subLine(mp) {
+    if (mp.boardRole) return mp.boardRole.replace(' of the Riigikogu', '');
+    if (mp.factionRole) return mp.factionRole;
+    if (mp.committees && mp.committees.length) return mp.committees[0].name;
+    return mp.district || '';
+  }
+
+  selSet(m) {
+    const { roster, vb } = m, s = this.state.sel;
+    const out = new Set();
+    roster.forEach(mp => {
+      const inParty = s.parties.includes(vb(mp));
+      if (inParty && !s.excluded.includes(mp.uuid)) out.add(mp.uuid);
+      if (!inParty && s.added.includes(mp.uuid)) out.add(mp.uuid);
+    });
+    return out;
+  }
+
+  toggleSeat(m, uuid) {
+    const mp = m.byUuid.get(uuid); if (!mp) return;
+    const s = this.state.sel, p = m.vb(mp), inParty = s.parties.includes(p);
+    const next = { parties: s.parties.slice(), added: s.added.slice(), excluded: s.excluded.slice() };
+    if (inParty) {
+      next.excluded = s.excluded.includes(uuid) ? s.excluded.filter(u => u !== uuid) : s.excluded.concat(uuid);
+    } else {
+      next.added = s.added.includes(uuid) ? s.added.filter(u => u !== uuid) : s.added.concat(uuid);
+    }
+    this.setState({ sel: next });
+  }
+
+  togglePartyCalc(m, id) {
+    const s = this.state.sel, on = s.parties.includes(id);
+    const ids = new Set(m.roster.filter(mp => m.vb(mp) === id).map(mp => mp.uuid));
+    this.setState({ sel: {
+      parties: on ? s.parties.filter(p => p !== id) : s.parties.concat(id),
+      added: on ? s.added : s.added.filter(u => !ids.has(u)),
+      excluded: on ? s.excluded.filter(u => !ids.has(u)) : s.excluded
+    } });
+  }
+
+  renderVals() {
+    const view = this.view();
+    const theme = (this.state.themeOverride || this.props.theme) === 'dark' ? 'dark' : 'light';
+    const showNames = this.props.showSeatNames !== false;
+    const showMarks = this.props.showDefectorMarks !== false;
+    const base = {
+      theme, themeLabel: theme === 'dark' ? 'DARK' : 'LIGHT',
+      toggleTheme: () => this.setState(st => ({ themeOverride: (st.themeOverride || this.props.theme || 'light') === 'dark' ? 'light' : 'dark' })),
+      isParliament: view === 'parliament', isDirectory: view === 'directory', isCalculator: view === 'calculator',
+      showHeaderBar: view === 'parliament',
+      viewTitle: view === 'directory' ? 'Members of the Riigikogu' : view === 'calculator' ? 'Coalition calculator' : 'Parliament',
+      viewSub: view === 'directory' ? 'All 101 members — search, filter by voting bloc, read a profile'
+        : view === 'calculator' ? 'Build a voting group and see which constitutional thresholds it clears'
+        : 'Seating plan, voting-bloc composition and the Board',
+      navItems: NAV.map(n => ({ ...n, go: () => this.setState({ view: n.id, popup: null }),
+        bg: n.id === view ? 'var(--track)' : 'transparent', color: n.id === view ? 'var(--accent)' : 'var(--muted)' })),
+      updatedLabel: 'Updated —', coalitionSeats: 0, oppositionSeats: 0, unalignedSeats: 0,
+      thresholdPct: '50.5%', blocBars: [], partyRows: [], boardRows: [], seatCells: [],
+      legendParties: [], floorCaption: '', popupDisplay: 'none', popup: {},
+      clearHighlight: () => this.set('highlight', []), clearStyle: CLEAR_BTN + 'visibility:hidden;pointer-events:none', clearLabel: 'Clear',
+      tipStyle: 'display:none', tipName: '', tipSub: '',
+      closePopup: () => this.set('popup', null),
+      openInDirectory: () => this.setState(st => (st.popup
+        ? { view: 'directory', selected: st.popup, popup: null, query: '', filter: 'all', highlight: [] }
+        : null)),
+      query: this.state.query, onQuery: e => this.setState({ query: e.target.value }),
+      countLabel: '', emptyDisplay: 'none', emptyLabel: '', blocFilters: [], tagFilters: [],
+      memberRows: [], profile: {}, profileFacts: [], profileSeatCells: [],
+      selSeats: 0, selPct: '0%', verdict: '', verdictColor: '#fff', fillColor: 'var(--accent)',
+      marks: [], presets: [], calcParties: [], adjustments: [], noAdjDisplay: 'none', hint: ''
+    };
+    const m = this.model();
+    if (!m) return base;
+
+    const meta = m.d.meta, total = meta.totalSeats;
+    const pct = n => (n / total * 100).toFixed(3) + '%';
+    base.updatedLabel = 'Updated ' + (() => { const dt = new Date(meta.sourceDate); return dt.getUTCDate() + ' ' + MONTHS[dt.getUTCMonth()].toUpperCase() + ' ' + dt.getUTCFullYear(); })();
+    base.coalitionSeats = m.blocSeats.coalition;
+    base.oppositionSeats = m.blocSeats.opposition;
+    base.unalignedSeats = m.blocSeats.unaligned;
+    base.thresholdPct = pct(meta.simpleMajority);
+    base.blocBars = [
+      { label: 'Coalition ' + m.blocSeats.coalition, color: 'var(--coalition)', width: pct(m.blocSeats.coalition) },
+      { label: 'Unaligned ' + m.blocSeats.unaligned, color: 'var(--unaligned)', width: pct(m.blocSeats.unaligned) },
+      { label: 'Opposition ' + m.blocSeats.opposition, color: 'var(--opposition)', width: pct(m.blocSeats.opposition) }
+    ];
+
+    const partyIds = Object.keys(m.counts).sort((a, b) => m.counts[b] - m.counts[a]);
+    const hlSet = this.state.highlight;
+    base.partyRows = partyIds.map(id => {
+      const p = m.party[id], isUn = id === 'independent', on = hlSet.includes(id);
+      return {
+        color: p.color, seats: m.counts[id], width: pct(m.counts[id]),
+        name: isUn ? 'Unaligned members' : p.short,
+        sub: isUn ? 'No group, no whip' : this.blocLabel(m.blocOf(id)) + ' · ' + p.nameEn,
+        toggle: () => this.toggleHighlight(id),
+        style: 'display:flex;flex-direction:column;gap:7px;width:100%;padding:9px 13px;border:1px solid '
+          + (on ? p.color : 'var(--line)') + ';border-radius:14px;cursor:pointer;text-align:left;font-family:inherit;background:'
+          + (on ? 'var(--track)' : 'transparent') + (on ? ';box-shadow:inset 0 0 0 1px ' + p.color : '')
+      };
+    });
+
+    const BLOC_ORDER = { coalition: 0, unaligned: 1, opposition: 2 };
+    base.legendParties = partyIds.slice().sort((a, b) => {
+      const ba = a === 'independent' ? 1 : BLOC_ORDER[m.blocOf(a)] ?? 1;
+      const bb = b === 'independent' ? 1 : BLOC_ORDER[m.blocOf(b)] ?? 1;
+      return ba - bb || m.counts[b] - m.counts[a];
+    }).map(id => {
+      const p = m.party[id], on = hlSet.includes(id), dim = hlSet.length && !on;
+      return {
+        short: id === 'independent' ? 'Unaligned' : p.short, seats: m.counts[id],
+        toggle: () => this.toggleHighlight(id),
+        style: 'display:flex;align-items:center;gap:8px;height:32px;padding:0 12px;border:1px solid '
+          + (on ? p.color : 'var(--line)') + ';border-radius:10px;cursor:pointer;font-family:inherit;color:var(--text);background:'
+          + (on ? 'var(--track)' : 'transparent') + ';opacity:' + (dim ? '.45' : '1'),
+        swatch: 'width:11px;height:11px;border-radius:3px;flex:0 0 11px;background:' + p.color
+      };
+    });
+    base.floorCaption = hlSet.length
+      ? hlSet.map(id => (id === 'independent' ? 'Unaligned' : m.party[id].short)).join(' + ') + ' — '
+        + hlSet.reduce((n, id) => n + m.counts[id], 0) + ' of 101 seats highlighted'
+      : 'Click a party to highlight its members on the floor. Tiles are coloured by the party a member votes with.';
+    if (hlSet.length) base.clearStyle = CLEAR_BTN + 'cursor:pointer';
+
+    base.boardRows = m.d.board.map(b => ({
+      name: b.name, role: b.role, color: (m.party[b.partyId] || {}).color || '#808080',
+      open: () => this.setState({ view: 'directory', selected: b.uuid, query: '', filter: 'all' })
+    }));
+
+    // ── seating grid ──
+    const grid = m.d.seating, rows = grid.gridDimensions.rows, cols = grid.gridDimensions.cols;
+    const at = {};
+    Object.keys(grid.seats).forEach(u => { const s = grid.seats[u]; at[s.row + ':' + s.col] = u; });
+    const isCalc = view === 'calculator';
+    const inCount = isCalc ? this.selSet(m) : new Set();
+    const hl = isCalc ? [] : this.state.highlight;
+    const cells = [];
+    if (view !== 'directory') for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      const uuid = at[r + ':' + c], mp = uuid ? m.byUuid.get(uuid) : null;
+      if (!mp) { cells.push({ style: 'display:none', markStyle: 'display:none', label: '', click: NOOP, enter: NOOP, leave: NOOP }); continue; }
+      const pid = m.vb(mp), p = m.party[pid] || { color: '#808080', textColor: '#fff' };
+      const parts = mp.name.split(' ');
+      const def = m.defectors[mp.uuid];
+      const un = m.unaligned.has(mp.uuid);
+      const bloc = un ? 'unaligned' : (m.blocOf(pid) || 'unaligned');
+      const lit = hl.length ? hl.includes(pid) : true;
+      const held = this.state.sel.excluded.includes(mp.uuid);
+      const counted = inCount.has(mp.uuid);
+      let ring = 'none', opacity = 1, bg = p.color;
+      if (isCalc) {
+        if (held) { ring = '0 0 0 2px var(--remFg)'; opacity = 1; }
+        else if (counted) { ring = '0 0 0 2px var(--text)'; }
+        else { opacity = .32; }
+      } else if (hl.length) {
+        if (lit) ring = '0 0 0 2px var(--text)'; else opacity = .32;
+      }
+      cells.push({
+        style: 'display:flex;align-items:center;justify-content:center;width:100%;height:100%;padding:3px 2px;border:0;border-radius:7px;cursor:pointer;text-align:center;background:' + bg + ';color:' + p.textColor + ';opacity:' + opacity + ';box-shadow:' + ring,
+        markStyle: showMarks && def
+          ? 'position:absolute;top:3px;right:3px;width:9px;height:9px;border-radius:50%;background:' + ((m.party[mp.registeredPartyId] || {}).color || '#808080') + ';box-shadow:0 0 0 2px ' + bg
+          : 'display:none',
+        label: showNames ? parts[0] + '\n' + parts.slice(1).join(' ') : '',
+        enter: () => this.set('hover', mp.uuid),
+        leave: () => this.setState(st => (st.hover === mp.uuid ? { hover: null } : null)),
+        click: isCalc ? () => this.toggleSeat(m, mp.uuid) : () => this.set('popup', mp.uuid)
+      });
+      if (this.state.hover === mp.uuid) {
+        base.tipName = mp.name;
+        base.tipSub = (def ? 'Votes with ' + this.shortOf(m, pid) + ' · registered ' + this.shortOf(m, mp.registeredPartyId) : this.shortOf(m, pid))
+          + ' · ' + this.blocLabel(bloc)
+          + (mp.factionRole ? ' · ' + mp.factionRole : mp.boardRole ? ' · ' + mp.boardRole.replace(' of the Riigikogu', '') : '');
+        base.tipStyle = 'position:absolute;left:' + ((c + 0.5) / cols * 100).toFixed(3) + '%;top:' + (r * 59 - 8) + 'px;transform:translate(-50%,-100%);z-index:30;padding:10px 13px;border-radius:12px;background:var(--hero);box-shadow:var(--pop);white-space:nowrap;pointer-events:none';
+      }
+    }
+    base.seatCells = cells;
+
+    if (this.state.popup && m.byUuid.get(this.state.popup)) {
+      const mp = m.byUuid.get(this.state.popup), pid = m.vb(mp), p = m.party[pid] || {};
+      const bloc = m.unaligned.has(mp.uuid) ? 'unaligned' : (m.blocOf(pid) || 'unaligned');
+      base.popupDisplay = 'block';
+      base.popup = {
+        name: mp.name, initials: this.initials(mp.name), photoStyle: photoStyle(mp.photoUrl),
+        color: p.color || '#808080', textColor: p.textColor || '#fff',
+        short: bloc === 'unaligned' ? 'Non-affiliated' : this.shortOf(m, pid), bloc: this.blocLabel(bloc), blocColor: this.blocTint(bloc),
+        role: mp.boardRole || mp.factionRole || (m.defectors[mp.uuid] ? 'Registered ' + this.shortOf(m, mp.registeredPartyId) + ' · votes with ' + this.shortOf(m, pid) : 'Member'),
+        committees: (mp.committees || []).map(c => c.name + (c.role && c.role !== 'member' ? ' (' + c.role + ')' : '')).join(' · ') || '—',
+        district: mp.district
+      };
+    }
+
+    // ── directory ──
+    if (view === 'directory') {
+    const q = this.state.query.trim().toLowerCase(), f = this.state.filter;
+    const passes = mp => {
+      if (f === 'coalition' || f === 'opposition') return !m.unaligned.has(mp.uuid) && m.blocOf(m.vb(mp)) === f;
+      if (f === 'unaligned') return m.unaligned.has(mp.uuid);
+      if (f === 'chairs') return !!(mp.factionRole || mp.boardRole);
+      if (f === 'usa') return mp.usaFriendship === true;
+      return true;
+    };
+    const list = m.roster.filter(mp => passes(mp) && (!q || mp.name.toLowerCase().includes(q)));
+    base.countLabel = list.length + (list.length === 1 ? ' member' : ' members');
+    base.emptyDisplay = list.length ? 'none' : 'block';
+    base.emptyLabel = 'No member matches “' + this.state.query + '”.';
+    base.blocFilters = [['all', 'All'], ['coalition', 'Coalition'], ['opposition', 'Opposition'], ['unaligned', 'Unaligned']].map(([id, label]) => ({
+      label, pick: () => this.set('filter', id),
+      bg: f === id ? 'var(--card)' : 'transparent', color: f === id ? 'var(--text)' : 'var(--muted)',
+      shadow: f === id ? 'var(--shadow)' : 'none'
+    }));
+    base.tagFilters = [['chairs', 'Chairs & officers'], ['usa', 'USA friendship group']].map(([id, label]) => ({
+      label, pick: () => this.set('filter', f === id ? 'all' : id),
+      bg: f === id ? 'var(--hero)' : 'var(--card)', color: f === id ? '#fff' : 'var(--text)',
+      border: f === id ? 'var(--hero)' : 'var(--line)'
+    }));
+    base.memberRows = list.map(mp => {
+      const pid = m.vb(mp), p = m.party[pid] || {};
+      const on = this.state.selected === mp.uuid;
+      const col = p.color || '#808080', fgc = p.textColor || '#fff';
+      return {
+        name: mp.name, sub: this.subLine(mp), initials: this.initials(mp.name), badge: this.shortOf(m, pid),
+        style: 'display:flex;align-items:center;gap:14px;width:100%;min-height:68px;padding:10px 20px;border:0;border-top:1px solid var(--line);border-left:3px solid ' + (on ? 'var(--accent)' : 'transparent') + ';cursor:pointer;text-align:left;background:' + (on ? 'var(--track)' : 'transparent'),
+        avatar: 'display:flex;flex:0 0 44px;width:44px;height:44px;align-items:center;justify-content:center;border-radius:50%;font-weight:700;font-size:15px;line-height:1;background:' + col + ';color:' + fgc,
+        badgeStyle: 'padding:5px 10px;border-radius:8px;font-weight:700;font-size:12px;line-height:1.2;background:' + col + ';color:' + fgc,
+        pick: () => this.set('selected', mp.uuid)
+      };
+    });
+
+    const sel = m.byUuid.get(this.state.selected) || m.roster[0];
+    if (sel) {
+      const pid = m.vb(sel), p = m.party[pid] || {};
+      const un = m.unaligned.has(sel.uuid), bloc = un ? 'unaligned' : (m.blocOf(pid) || 'unaligned');
+      const def = m.defectors[sel.uuid];
+      let warn = '';
+      if (def) warn = def.note + ' — registered non-affiliated, counted with ' + this.shortOf(m, pid) + ' in bloc arithmetic.';
+      else if (un && sel.leftFaction) warn = 'Left ' + this.factionShort(m, sel.leftFaction) + ' in ' + this.monthYear(sel.leftFactionDate) + ' — no group, no whip. Counted in neither bloc.';
+      base.profile = {
+        name: sel.name, initials: this.initials(sel.name), photoStyle: photoStyle(sel.photoUrl), url: sel.profileUrl,
+        color: p.color || '#808080', textColor: p.textColor || '#fff',
+        short: bloc === 'unaligned' ? 'Non-affiliated' : this.shortOf(m, pid), bloc: this.blocLabel(bloc), blocColor: this.blocTint(bloc),
+        usaDisplay: sel.usaFriendship ? 'inline-flex' : 'none',
+        warn, warnDisplay: warn ? 'block' : 'none'
+      };
+      const facts = [];
+      const office = sel.boardRole || sel.factionRole;
+      if (office) facts.push({ label: 'Office', value: office, span: '1 / -1' });
+      facts.push({ label: 'District', value: sel.district || '—', span: 'auto' });
+      facts.push({ label: 'Registered', value: (m.party[sel.registeredPartyId] || {}).nameEn || '—', span: 'auto' });
+      facts.push({ label: 'Committees', value: (sel.committees || []).map(c => c.name + (c.role && c.role !== 'member' ? ' (' + c.role + ')' : '')).join(' · ') || '—', span: '1 / -1' });
+      facts.push({ label: 'Votes with', value: pid === sel.registeredPartyId ? 'Own group' : this.shortOf(m, pid) + ' (defected)', span: 'auto' });
+      facts.push({ label: 'Email', value: sel.email || '—', span: 'auto' });
+      base.profileFacts = facts;
+
+      const mySeat = grid.seats[sel.uuid];
+      base.profile.seatLabel = mySeat ? 'Row ' + (mySeat.row + 1) + ', column ' + (mySeat.col + 1) + ' of the 10 × 12 floor grid' : 'No seat recorded';
+      const mini = [];
+      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+        const u = at[r + ':' + c];
+        const isMe = u === sel.uuid;
+        mini.push({ style: 'height:8px;border-radius:2px;background:' + (!u ? 'transparent' : isMe ? (p.color || '#808080') : 'var(--track)') + (isMe ? ';box-shadow:0 0 0 2px var(--text)' : '') });
+      }
+      base.profileSeatCells = mini;
+    }
+    }
+
+    // ── calculator ──
+    if (view === 'calculator') {
+    const seats = inCount.size;
+    const next = FRACTIONS.find(t => seats < t.need);
+    base.selSeats = seats;
+    base.selPct = pct(seats);
+    base.verdict = seats >= meta.simpleMajority ? 'Passes ordinary legislation' : (meta.simpleMajority - seats) + ' short of 51';
+    base.verdictColor = seats >= meta.simpleMajority ? 'var(--pass)' : 'rgba(255,255,255,.72)';
+    base.fillColor = seats >= meta.simpleMajority ? 'var(--pass)' : 'var(--accent)';
+    base.hint = seats === 0 ? 'Pick parties below, or click seats on the floor plan.'
+      : next ? (next.need - seats) + (next.need - seats === 1 ? ' more seat reaches ' : ' more seats reach ') + next.fraction + ' (' + next.need + ').'
+      : 'Clears every constitutional threshold.';
+    base.marks = FRACTIONS.map(t => {
+      const hit = seats >= t.need;
+      return {
+        need: t.need, fraction: t.fraction, left: pct(t.need),
+        tick: hit ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.22)',
+        color: hit ? '#fff' : 'rgba(255,255,255,.5)',
+        chipBg: hit ? 'rgba(74,222,128,.16)' : 'rgba(255,255,255,.06)',
+        chipBorder: hit ? 'rgba(74,222,128,.5)' : 'rgba(255,255,255,.14)',
+        chipFg: hit ? 'var(--pass)' : 'rgba(255,255,255,.82)',
+        chipNote: (hit ? '✓ ' : '✕ ') + t.need + ' · ' + t.note
+      };
+    });
+    base.presets = [
+      { label: 'Coalition', color: 'var(--text)', run: () => this.setState({ sel: { parties: Object.keys(m.d.alignment.blocs).filter(k => m.d.alignment.blocs[k] === 'coalition'), added: [], excluded: [] } }) },
+      { label: 'Opposition', color: 'var(--text)', run: () => this.setState({ sel: { parties: Object.keys(m.d.alignment.blocs).filter(k => m.d.alignment.blocs[k] === 'opposition'), added: [], excluded: [] } }) },
+      { label: 'Clear', color: 'var(--muted)', run: () => this.setState({ sel: { parties: [], added: [], excluded: [] } }) }
+    ];
+    base.calcParties = partyIds.map(id => {
+      const p = m.party[id];
+      const count = m.roster.filter(mp => m.vb(mp) === id && inCount.has(mp.uuid)).length;
+      const on = count > 0;
+      return {
+        short: id === 'independent' ? 'Unaligned' : p.short, color: p.color,
+        count, total: m.counts[id], toggle: () => this.togglePartyCalc(m, id),
+        border: on ? p.color : 'var(--line)', bg: on ? 'var(--card)' : 'transparent',
+        countColor: on ? 'var(--text)' : 'var(--muted)'
+      };
+    });
+    const adj = [];
+    this.state.sel.excluded.forEach(u => {
+      const mp = m.byUuid.get(u); if (!mp) return;
+      adj.push({ name: mp.name, note: 'Held out of ' + this.shortOf(m, m.vb(mp)), badge: '−1', badgeBg: 'var(--remBg)', badgeFg: 'var(--remFg)',
+        undo: () => this.setState(s => ({ sel: { ...s.sel, excluded: s.sel.excluded.filter(x => x !== u) } })) });
+    });
+    this.state.sel.added.forEach(u => {
+      const mp = m.byUuid.get(u); if (!mp) return;
+      adj.push({ name: mp.name, note: 'Votes with the group · ' + this.shortOf(m, m.vb(mp)), badge: '+1', badgeBg: 'var(--addBg)', badgeFg: 'var(--addFg)',
+        undo: () => this.setState(s => ({ sel: { ...s.sel, added: s.sel.added.filter(x => x !== u) } })) });
+    });
+    base.adjustments = adj;
+    base.noAdjDisplay = adj.length ? 'none' : 'block';
+    }
+    return base;
+  }
+}
+
+</script>
+</body>
+</html>
