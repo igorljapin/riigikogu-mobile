@@ -527,3 +527,161 @@ the threshold marks carry a pill behind the label, because 4.7 and 4.8 compare a
 met badge against an unmet one; and the seat chart states
 `Majority threshold: 51 seats` below its legend, because 2.1 asks the screen to
 say it in words.
+
+---
+
+## 10. The 2026 desktop surface
+
+> **Contract first, same reason as §9.** A second view layer — a desktop
+> surface reading the same `data/*.json` this contract already governs — has an
+> approved Phase 1 design (Claude Design canvas, 1920×1080, light + dark) built
+> on the mobile redesign's tokens. This section fixes its promises and
+> `data-testid` table **before** Phase 3 writes a line of `src/views-desktop/`,
+> exactly as PR #30 fixed the mobile redesign's contract before implementation.
+>
+> Handoff: `docs/desktop-2026/` — the six approved mockups, a clickable
+> prototype (`prototype/riigikogu-desktop-standalone.html`, no server needed),
+> `DESIGN_NOTES.md`, `INTERACTIONS.md`, the retiring `riigikogu-desktop` app's
+> `BEHAVIOR_SNAPSHOT.md`, and `DESIGN_AND_MERGE_PLAN.md`, which governs all of
+> it. That directory is deleted once the desktop surface ships — git history
+> keeps it, same as the mobile handoff (§9's note).
+>
+> **Not yet implemented.** No `src/views-desktop/`, `desktop.css` or
+> `desktop/index.html` exist yet. Every "Enforced by" cell below names the
+> Phase-3 test file that will enforce it; until that file exists, the row is a
+> promise, not a protection. Nothing in §1–§9 changes: the desktop surface is a
+> new view over the unchanged DATA and LOGIC layers (10.5), and every existing
+> mobile promise stays exactly as it is.
+
+### 10.1 Global — left rail
+
+| # | Must always be true | Enforced by |
+|---|---|---|
+| D1.1 | Three destinations exist and are reachable: Parliament, Directory, Calculator | `tier1/desktop/shell.spec.js` |
+| D1.2 | The active destination is the only one shown; switching away closes any open seat popup | `tier1/desktop/shell.spec.js` |
+| D1.3 | Loading the app and visiting every destination raises no uncaught JavaScript error | `tier1/desktop/shell.spec.js` |
+
+| Area | `data-testid` | Notes |
+|---|---|---|
+| Rail | `nav-parliament`, `nav-directory`, `nav-calculator` | |
+
+### 10.2 Parliament view
+
+| # | Must always be true | Enforced by |
+|---|---|---|
+| D2.1 | The 101-seat floor renders `data/seating.json` joined to the roster; every occupied seat resolves to a real MP and no seat is invented or lost | `tier2/desktop/seating-data.spec.js` |
+| D2.2 | A seat is filled with the party the member **votes with**, never the party they are registered under (10.5) | `tier2/desktop/seating-data.spec.js` |
+| D2.3 | A member whose registration differs from their voting bloc carries a defector marker in their *registered* party's colour; members with no such difference carry none | `tier2/desktop/seating-data.spec.js` |
+| D2.4 | Hovering a seat shows that seat's tooltip only, from one shared tooltip node | `tier1/desktop/parliament.spec.js` |
+| D2.5 | Clicking a seat opens that member's profile popup; the popup's close control dismisses it and the overlay is removed from the DOM, not merely hidden (§3's overlay rule) | `tier1/desktop/parliament.spec.js` |
+| D2.6 | "Open full profile" navigates to the Directory with that member selected, and clears any active search, filter or party highlight | `tier1/desktop/parliament.spec.js` |
+| D2.7 | Toggling a party (row or legend chip) highlights that party's seats on the floor; toggling is additive across parties and the two controls share one highlight state | `tier1/desktop/parliament.spec.js` |
+| D2.8 | Clear removes every highlight, always occupies its space, and never reflows the party list when it appears or disappears | `tier1/desktop/parliament.spec.js` |
+| D2.9 | Highlight state and the calculator's selection state are independent — neither view's state carries into the other | `tier1/desktop/parliament.spec.js` |
+| D2.10 | The Board of the Riigikogu shows three officers, each navigating to that member's Directory profile | `tier1/desktop/parliament.spec.js` |
+
+| Area | `data-testid` | Notes |
+|---|---|---|
+| Parliament | `seat-<mpUuid>` | one per occupied cell |
+| | `seat-tooltip` | one shared node for the whole grid |
+| | `seat-popup-close`, `seat-popup-open-profile` | |
+| | `party-row-<partyId>`, `party-chip-<partyId>` | both toggle the same highlight state |
+| | `party-highlight-clear` | |
+| | `board-row-<mpUuid>` | ×3 |
+
+### 10.3 MP directory
+
+| # | Must always be true | Enforced by |
+|---|---|---|
+| D3.1 | All 101 MPs are listed and the result count agrees with the row count | `tier1/desktop/directory.spec.js` |
+| D3.2 | Search filters by name, case-insensitive, and composes with the active bloc filter | `tier1/desktop/directory.spec.js` |
+| D3.3 | A search with no matches shows the empty state quoting the query, without breaking the app | `tier1/desktop/directory.spec.js` |
+| D3.4 | The bloc segmented control (All / Coalition / Opposition / Unaligned) is mutually exclusive | `tier1/desktop/directory.spec.js` |
+| D3.5 | Chairs & officers and the USA friendship group filters each **replace** the bloc filter rather than composing with it | `tier1/desktop/directory.spec.js` |
+| D3.6 | Selecting a member fills the profile pane and marks the row selected | `tier1/desktop/directory.spec.js` |
+| D3.7 | "Open riigikogu.ee profile" is an external link, opens a new tab, and carries `rel="noopener"` | `tier1/desktop/directory.spec.js` |
+| D3.8 | A note card appears for defectors (from `alignment.json`'s note) and for unaligned members who left a faction (from `leftFaction` / `leftFactionDate`), and is absent otherwise | `tier2/desktop/roster-data.spec.js` |
+| D3.9 | An unaligned member's party chip reads **Non-affiliated**, never their former party; the bloc chip is coloured by bloc | `tier2/desktop/roster-data.spec.js` |
+| D3.10 | The seat locator marks the selected member's own cell on a mini floor grid | `tier1/desktop/directory.spec.js` |
+
+| Area | `data-testid` | Notes |
+|---|---|---|
+| Directory | `mp-search` | |
+| | `filter-bloc-all`, `-coalition`, `-opposition`, `-unaligned` | |
+| | `filter-chairs`, `filter-usa` | replace, not compose, with the bloc filter |
+| | `mp-result-count` | |
+| | `mp-row-<mpUuid>` | |
+| | `mp-empty` | |
+| | `mp-external-profile` | |
+| | `mp-note` | present only per D3.8 |
+| | `mp-seat-locator` | |
+
+### 10.4 Coalition calculator
+
+| # | Must always be true | Enforced by |
+|---|---|---|
+| D4.1 | Empty state totals 0 of 101 with no threshold met | `tier1/desktop/calculator.spec.js` |
+| D4.2 | Selecting a party card adds exactly that party's member count as the base; deselecting removes exactly what it added | `tier1/desktop/calculator.spec.js` |
+| D4.3 | Clicking a seat adds it to the count, or holds it out if its party is already selected | `tier1/desktop/calculator.spec.js` |
+| D4.4 | The selection model is parties plus named adjustments, not 101 independent booleans — deselecting a party clears **only its own** adjustments | `tier1/desktop/calculator.spec.js` |
+| D4.5 | The Coalition and Opposition presets each select every party in that bloc and reset all adjustments | `tier1/desktop/calculator.spec.js` |
+| D4.6 | Clear empties the selection and every adjustment | `tier1/desktop/calculator.spec.js` |
+| D4.7 | Each of the four threshold chips (51, 61, 68, 81) is inactive below its number and active at or above it | `tier1/desktop/calculator.spec.js` |
+| D4.8 | The verdict line and the hint line track the current total: which threshold is next unmet, and the gap to it | `tier1/desktop/calculator.spec.js` |
+| D4.9 | Every individual add or hold-out appears as a named adjustment row with a ±1 badge, and its Undo control reverses exactly that one adjustment | `tier1/desktop/calculator.spec.js` |
+| D4.10 | The calculator uses voting-bloc counts; no unaligned MP belongs to either preset (10.5) | `tier2/desktop/roster-data.spec.js` |
+| D4.11 | The four threshold values are read from `meta.json`, never hardcoded | `tier2/desktop/roster-data.spec.js` |
+
+| Area | `data-testid` | Notes |
+|---|---|---|
+| Calculator | `calc-seat-<mpUuid>` | |
+| | `calc-party-<partyId>` | |
+| | `calc-preset-coalition`, `calc-preset-opposition`, `calc-clear` | |
+| | `calc-total`, `calc-verdict`, `calc-hint` | |
+| | `calc-threshold-51`, `-61`, `-68`, `-81` | each carries `data-met="true\|false"` |
+| | `calc-adjustment-<mpUuid>`, `calc-adjustment-undo-<mpUuid>` | |
+| | `calc-adjustments-empty` | |
+
+### 10.5 Shared with the mobile contract, restated for clarity, not changed
+
+The desktop surface reads the same `data/*.json` and reuses `src/lib/calculator.js`
+and `src/lib/factions.js` untouched (Phase 3 scope, `DESIGN_AND_MERGE_PLAN.md`).
+No promise about seat arithmetic is introduced here; these already govern both
+surfaces and continue to:
+
+- Headline and calculator numbers are **voting-bloc** counts, never registered
+  counts (2.8, 4.13).
+- Unaligned MPs are a visible third bucket, never folded into a bloc (2.9, D4.10).
+- Party colours are the canonical ones in `data/parties.json`, and each party's
+  `textColor` is content, identical in both themes — never a theme token (2.7).
+- No seat count, threshold or date is hardcoded in a view; all of it comes from
+  `data/*.json` (2.10, 4.14, D4.11).
+
+### 10.6 New in the data layer
+
+`data/seating.json`, keyed by MP uuid, is the one dataset the desktop surface
+needs that mobile's `data/` does not already have — the 10×12 grid position of
+each of the 101 seats, harvested from the retiring `riigikogu-desktop` app
+(`BEHAVIOR_SNAPSHOT.md` §"Desktop-only features"). Phase 3 PR A adds it to
+`data/` with a validation rule in `scripts/validate_data.py` and a "who writes
+what" entry in `data/README.md`; it does not exist there yet — the copy in
+`docs/desktop-2026/data/` and `docs/desktop-2026/seating.json` is the Phase 0/1
+draft, not the live file.
+
+### 10.7 Explicitly declined or altered from the retiring desktop app
+
+Recorded so a later session reading `riigikogu-desktop`'s `BEHAVIOR_SNAPSHOT.md`
+does not "restore" behaviour the redesign deliberately dropped:
+
+| Retiring app had | Desktop surface | Why |
+|---|---|---|
+| Party filter dims non-matching seats and shows one active filter at a time | Multi-select, additive party highlight (D2.7) | The redesign's highlight model replaces the single-party filter; matches the calculator's own selection treatment |
+| No dark mode | Light and dark, sharing mobile's tokens | The desktop surface adopts the mobile redesign's theming (Phase 1 goal 1) |
+| Seating grid party colours from a stale, pre-2026-08-09 bundle constant | Seat fill from the live `data/parties.json`, joined by uuid | The stale bundle is the reason this merge exists (`DESIGN_AND_MERGE_PLAN.md`, "Why merge at all") |
+| Escape does not close the MP popup | Not specified by the mockups; Phase 3 should follow the mobile app's overlay convention unless a reviewer says otherwise | Raised here rather than invented, per the Phase 3 kickoff rule |
+
+### 10.8 Out of scope for Phase 2
+
+Unaffected by this amendment: `data/` (until Phase 3 PR A adds `seating.json`),
+`src/`, `styles.css`, `service-worker.js`, and every §1–§9 promise. This section
+records a design and a contract; it ships no code.
