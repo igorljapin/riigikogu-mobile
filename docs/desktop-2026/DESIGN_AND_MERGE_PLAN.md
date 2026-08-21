@@ -45,9 +45,9 @@ additional views.
 
 | Phase | What | Repo | Session model / effort | Status |
 |---|---|---|---|---|
-| 0 | Desktop baseline snapshot + data extraction | riigikogu-desktop | Sonnet 5 / high | ☐ |
-| 1 | Claude Design canvas for the desktop UI | (design canvas) | Opus 5 / high | ☐ |
-| 2 | Handoff + Usability Contract amendment | riigikogu-mobile | Sonnet 5 / medium | ☐ |
+| 0 | Desktop baseline snapshot + data extraction | riigikogu-desktop | Sonnet 5 / high | ☑ |
+| 1 | Claude Design canvas for the desktop UI | (design canvas) | Opus 5 / high | ☑ |
+| 2 | Handoff + Usability Contract amendment | riigikogu-mobile | Sonnet 5 / medium | ☑ |
 | 3 | Desktop view layer implementation (2–3 PRs) | riigikogu-mobile | Opus 5 / xhigh (or high) | ☐ |
 | 4 | Cutover: deploy, verify, redirect, retire | both | Sonnet 5 / medium | ☐ |
 
