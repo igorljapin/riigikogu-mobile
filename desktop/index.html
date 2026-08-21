@@ -7,7 +7,15 @@
   <meta name="description" content="Desktop dashboard for the XV Riigikogu — the session hall seating plan, the member directory and a coalition calculator.">
   <title>XV Riigikogu Desktop</title>
 
+  <!--
+    Its own manifest, and deliberately a second one rather than a shared one:
+    `scope` here is `/riigikogu-mobile/desktop/`, nested inside the mobile app's
+    `/riigikogu-mobile/`, so the two install as two apps with two start URLs.
+    The service worker is shared — see the note below (USABILITY.md §10.11).
+  -->
+  <link rel="manifest" href="./manifest.json">
   <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
   <link rel="stylesheet" href="../desktop.css">
 </head>
 <body>
@@ -21,9 +29,12 @@
     surface (USABILITY.md §10.5). `data/seating.json` is the one dataset only
     this surface reads.
 
-    No service worker is registered here yet — the desktop scope, the precache
-    additions and its manifest are Phase 3 PR C
-    (docs/desktop-2026/DESIGN_AND_MERGE_PLAN.md).
+    The service worker is the repository root's `service-worker.js`, registered
+    by src/views-desktop/app.js — one worker for both surfaces, because its
+    scope (`/riigikogu-mobile/`) already contains this directory and a second
+    worker nested inside it would only split the cache in two. The precache list
+    covers this shell, `desktop.css`, every `src/views-desktop/` module and
+    `data/seating.json` (USABILITY.md §10.11).
   -->
   <div id="app" role="application" aria-label="XV Riigikogu Desktop Dashboard">
     <p class="boot">Loading the Riigikogu…</p>

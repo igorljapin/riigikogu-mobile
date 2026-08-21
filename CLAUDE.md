@@ -46,7 +46,7 @@ repo has broken before:
 | `manifest.json`, `offline.html`, `icons/` | PWA assets. `start_url` and `scope` are `/riigikogu-mobile/`. |
 | `scripts/build_data.py`, `validate_data.py` | Rebuild `data/` from the live API, and gate it. |
 | `scripts/fetch_mp_data.py` | The monthly job's fetcher. Same resolvers as `build_data.py` (it imports them), stages + validates before publishing, and **never writes `data/alignment.json`**. |
-| `scripts/compare_mp_data.py`, `generate_pr_body.py` | Classify a fetch into the five change categories, and render the PR body — ACTION REQUIRED first. |
+| `scripts/compare_mp_data.py`, `generate_pr_body.py` | Classify a fetch into the six change categories, and render the PR body — ACTION REQUIRED first. |
 | `scripts/capture_screens.mjs` | Re-captures the Phase-0 states against the current app and builds the before/after strips. |
 | `tests/` | The Usability Contract's suite: `tier1/` behaviour core, `tier2/` data-driven, `pwa/`, `unit/`, `python/`. |
 | `tests/fixtures/` | Frozen API capture (2026-08-12) pinning the resolver regression suite. |
@@ -121,18 +121,21 @@ PR into `main` with the changes classified:
 | | Meaning | What you do |
 |---|---|---|
 | 🔴 **ACTION REQUIRED** | An MP became non-affiliated. The job cannot know which party they joined. | Add them to `alignment.json` — `unaligned` if they joined no party, `defectors` with a `votesWith` if they did. |
-| 🟠 Roster change | An MP joined or left parliament (substitutions when a member becomes a minister). | Read it. |
+| 🟠 Roster change | An MP joined or left parliament (substitutions when a member becomes a minister). | Read it — and see 🪑 below, which a roster change always brings with it. |
+| 🪑 **ACTION REQUIRED** | The roster moved and `data/seating.json` did not: someone has no seat, or a seat belongs to someone who has left. The API publishes no seat, so the job cannot fix it. | Give the arriving member a cell in `seating.json` — usually the one the departing member freed, which the PR body names. |
 | 🟡 Board change | President or a Vice-President changed. | Read it. |
 | 🟢 Routine | Committee moves, photos, contacts, districts. | Read it. |
 | ♻️ Stale alignment | A uuid in `alignment.json` is no longer non-affiliated. | Remove the entry. |
 
-Your job is: resolve every 🔴, remove every ♻️, confirm the suite is green,
-then merge. Pages deploys `main`.
+Your job is: resolve every 🔴, seat every 🪑, remove every ♻️, confirm the suite
+is green, then merge. Pages deploys `main`.
 
 While a 🔴 is unresolved the arithmetic in the PR is still correct and
 publishable — an unclassified MP counts toward **no bloc**. The worst case is
 understating a bloc by one seat; the pipeline can never manufacture a majority
-that does not exist.
+that does not exist. A 🪑 costs even less: the desktop floor plan is one member
+short and no count moves at all, because every count is read from `mps.json` and
+none of it from the seating plan.
 
 ### 2. Do it by hand
 
@@ -144,8 +147,9 @@ npm test                            # must be green before the PR
 
 Then commit `data/*.json` on a branch and open a PR.
 
-`data/alignment.json` is the **only** hand-maintained file, and only its
-`blocs` (change when a government changes) and `defectors` sections.
+`data/alignment.json` and `data/seating.json` are the hand-maintained files —
+`alignment.json` only in its `blocs` (change when a government changes) and
+`defectors` sections.
 `build_data.py`, run by hand, may append a newly non-affiliated MP to
 `unaligned`; **the monthly job may not write that file at all**. See
 `data/README.md`, "Who writes what".

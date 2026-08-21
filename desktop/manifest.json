@@ -1,0 +1,40 @@
+{
+  "name": "XV Riigikogu Desktop",
+  "short_name": "Riigikogu Desktop",
+  "description": "Desktop dashboard for the XV Riigikogu — the session hall seating plan, the member directory and a coalition calculator.",
+  "id": "/riigikogu-mobile/desktop/",
+  "start_url": "/riigikogu-mobile/desktop/",
+  "scope": "/riigikogu-mobile/desktop/",
+  "display": "standalone",
+  "theme_color": "#0f172a",
+  "background_color": "#f4f6f8",
+  "icons": [
+    {
+      "src": "../icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "../icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "../icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "../icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["government", "politics", "news"],
+  "lang": "et",
+  "dir": "ltr"
+}

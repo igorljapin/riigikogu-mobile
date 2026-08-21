@@ -131,6 +131,16 @@ job does not touch the curated overlay at all. A newly non-affiliated MP reaches
 you as a 🔴 **ACTION REQUIRED** block in the PR, naming them, the group they left
 and the date, and the PR opens as a **draft** until you classify them.
 
+Phase 3 PR C gave `seating.json` the same treatment. A roster change reaches you
+as a 🪑 **ACTION REQUIRED** block naming the arriving member, the cell the
+departing one has left free, and the line to paste; the PR is a draft until you
+paste it. The job runs `validate_data.py --allow-pending-seating` while that is
+open, which downgrades the two halves of the seat join — a member with no seat,
+a seat for someone who is no longer an MP — to warnings and leaves every other
+rule fatal. What it publishes meanwhile is a floor plan one member short; no
+count moves, because every count is read from `mps.json` and none of it from
+here.
+
 The seat arithmetic in that PR is still correct and publishable while you decide,
 because an unclassified MP is counted toward **no bloc**. That is the same
 asymmetry the safe-default rule was built on: the worst case is understating a
@@ -261,12 +271,15 @@ month. Locally, `data/seating.json` is always there and the rules always run.
 It is deliberately paranoid about the seat arithmetic, because that is the number
 readers act on.
 
-One rule bends, and only for the monthly job: `--allow-pending-alignment`
-downgrades "non-affiliated MP in neither list" to a warning, because that job may
-not write the overlay and a fresh defection legitimately arrives unclassified.
-Every other rule stays fatal, and the arithmetic still counts that MP toward no
-bloc. Run it without the flag — as you would locally — and the gap is an error
-again, which is what stops the draft PR merging unresolved.
+Two rules bend, and only for the monthly job, one per curated file:
+`--allow-pending-alignment` downgrades "non-affiliated MP in neither list" to a
+warning, and `--allow-pending-seating` does the same for the two halves of the
+seat join. Both exist because that job may not write the file in question, so a
+fresh defection legitimately arrives unclassified and a substitution
+legitimately arrives unseated. Every other rule stays fatal, the arithmetic still
+counts an unclassified MP toward no bloc, and neither flag covers the other's
+file. Run the validator without them — as you would locally — and both gaps are
+errors again, which is what stops the draft PR merging unresolved.
 
 ### Guards in `build_data.py` and `fetch_mp_data.py`
 

@@ -177,3 +177,25 @@ async function start() {
 }
 
 start();
+
+/**
+ * Register the service worker — the repository root's, the same one
+ * `src/app.js` registers, and deliberately not a second one of this surface's
+ * own (Phase 3 PR C, `USABILITY.md` §10.11).
+ *
+ * A worker's scope is capped by the directory its script is served from, so the
+ * root worker's scope is the whole deployment — `/riigikogu-mobile/` in
+ * production, `/` under the test server — and this directory is already inside
+ * it. A `desktop/service-worker.js` would take the narrower, nested scope back
+ * off it and give the two surfaces two caches of the same `data/*.json`, which
+ * is a way to be offline with two different rosters.
+ *
+ * Failure is swallowed for the same reason as on mobile: the browser may block
+ * workers (the suite does for every non-PWA spec), and an app that renders fine
+ * online must not break because its offline support could not install.
+ */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(new URL('../../service-worker.js', import.meta.url)).catch(() => {});
+  });
+}

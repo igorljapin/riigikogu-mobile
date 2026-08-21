@@ -14,9 +14,12 @@ name: Monthly Riigikogu MP Data Check
 # 2. Validation and the test suites run HERE, before the PR is opened. A PR
 #    created with GITHUB_TOKEN does not trigger other workflows, so the
 #    Usability Contract will not run on it — the gate has to be in-job.
-# 3. It never writes `data/alignment.json`. A newly non-affiliated MP counts
-#    toward no bloc and is raised as ACTION REQUIRED in the PR body; the
-#    reviewer classifies them before merging.
+# 3. It never writes `data/alignment.json` — nor `data/seating.json`, the
+#    desktop surface's floor plan (Phase 3 PR C). Both are curated by hand, and
+#    both are raised as ACTION REQUIRED in the PR body instead: a newly
+#    non-affiliated MP counts toward no bloc until the reviewer classifies them,
+#    and a member who joined parliament has no seat until the reviewer gives
+#    them one.
 
 on:
   schedule:
@@ -79,24 +82,56 @@ jobs:
 
       - name: No changes — restore and stop
         if: steps.compare.outputs.changes_detected == 'false' && inputs.force_pr != true
+        env:
+          SEATING: ${{ steps.compare.outputs.seating_required }}
         run: |
           echo "Only meta.updatedAt moved. Nothing to review."
           git checkout -- data
+          # A pending seat is never a reason to open a PR — the job may not write
+          # the floor plan, so it would have nothing to commit — but it is a
+          # reason to say so. This is the one path where a 🪑 raised in an
+          # earlier month, merged unresolved, would otherwise go quiet.
+          if [ "$SEATING" = "true" ]; then
+            {
+              echo "### 🪑 The floor plan is still short a seat"
+              echo
+              echo "Nothing in the API moved this month, but \`data/seating.json\` does"
+              echo "not match the roster: see the run log above for who has no seat."
+              echo "Fix it in a PR of your own — the desktop floor plan is missing a"
+              echo "member until you do. No count is affected."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning title=Seat assignment pending::data/seating.json does not match the roster; the desktop floor plan is short a member."
+          fi
 
       # ---- the merge gate, run here because the bot's PR will not trigger CI --
       - name: Validate the fetched data
         if: steps.compare.outputs.changes_detected == 'true' || inputs.force_pr == true
+        env:
+          # Each flag downgrades exactly the rules about a file the job is
+          # forbidden to write, and only when the compare step found work in it.
+          # A defection the job may not classify itself: the arithmetic already
+          # counts them toward no bloc. A roster change it may not seat: the
+          # floor plan is one member short. Both are named in the PR body; every
+          # other rule stays fatal, so a genuinely broken fetch still fails here.
+          ALIGNMENT: ${{ steps.compare.outputs.action_required }}
+          SEATING: ${{ steps.compare.outputs.seating_required }}
         run: |
-          if [ "${{ steps.compare.outputs.action_required }}" = "true" ]; then
-            # A defection the job may not classify itself. The arithmetic already
-            # counts them toward no bloc; the PR body says who needs classifying.
-            python3 scripts/validate_data.py --allow-pending-alignment
-          else
-            python3 scripts/validate_data.py
-          fi
+          FLAGS=""
+          if [ "$ALIGNMENT" = "true" ]; then FLAGS="$FLAGS --allow-pending-alignment"; fi
+          if [ "$SEATING" = "true" ]; then FLAGS="$FLAGS --allow-pending-seating"; fi
+          python3 scripts/validate_data.py $FLAGS
 
+      # `PENDING_SEATING` stands `tests/python/test_seating.py` down for this run
+      # and for nothing else. Every test in it reads the committed `data/` and
+      # assumes a complete floor plan; between this fetch and the reviewer's
+      # edit that assumption is false, and the module would fail here on exactly
+      # the state the flag above exists to let through — leaving no PR to fix it
+      # in. The flagged validator is this run's gate, and the reviewer's own push
+      # runs the module in full against the fixed data.
       - name: Resolver regression tests
         if: steps.compare.outputs.changes_detected == 'true' || inputs.force_pr == true
+        env:
+          PENDING_SEATING: ${{ steps.compare.outputs.seating_required }}
         run: npm run test:resolvers
 
       - name: Unit tests
@@ -108,6 +143,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ACTION_REQUIRED: ${{ steps.compare.outputs.action_required }}
+          SEATING_REQUIRED: ${{ steps.compare.outputs.seating_required }}
         run: |
           set -euo pipefail
           MONTH_YEAR=$(date +"%B %Y")
@@ -142,10 +178,13 @@ jobs:
             exit 0
           fi
 
-          # ACTION REQUIRED means the overlay is incomplete until a human edits
-          # it, so the PR opens as a draft — mergeable only after they do.
+          # ACTION REQUIRED means a curated file is incomplete until a human
+          # edits it — the bloc overlay, the floor plan, or both — so the PR
+          # opens as a draft, mergeable only after they do.
           DRAFT=""
-          if [ "$ACTION_REQUIRED" = "true" ]; then DRAFT="--draft"; fi
+          if [ "$ACTION_REQUIRED" = "true" ] || [ "$SEATING_REQUIRED" = "true" ]; then
+            DRAFT="--draft"
+          fi
           if gh pr create \
               --title "MP Data Update - ${MONTH_YEAR}" \
               --body-file "$RUNNER_TEMP/pr_body.md" \

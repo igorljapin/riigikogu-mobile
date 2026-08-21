@@ -377,6 +377,178 @@ class TestDefectionIsSurfaced(Fixture):
             self.assertLess(body.index("ACTION REQUIRED"), body.index("Seat arithmetic"))
 
 
+class TestRosterChangeNeedsASeat(Fixture):
+    """A substitution must reach the reviewer as a seat to assign.
+
+    `data/seating.json` is the second curated file (`USABILITY.md` §10.6): the
+    API publishes no seat, so nothing generates it and the monthly job may not
+    write it. A member who joins parliament therefore arrives with nowhere to
+    sit, and the chair they took is still recorded as the departing member's —
+    both halves of a join `validate_data.py` would otherwise fail the job on.
+
+    This is the seating twin of `TestDefectionIsSurfaced`, and it holds the same
+    three things: the change is classified, the PR body names the person and the
+    edit, and the job never writes the file.
+    """
+
+    ARRIVING = "Kaja Uustee"
+    ARRIVING_UUID = "11111111-2222-3333-4444-555555555555"
+
+    def substitute(self) -> tuple[list[dict], dict, str, str]:
+        """One member replaced by another, and the floor plan left as it was.
+
+        Returns the new roster, the *committed* seating plan, and the name of
+        the member who left. The departing member is picked from a party rather
+        than from the non-affiliated, so nothing about the bloc overlay changes
+        and the only finding is the seat.
+        """
+        mps = copy.deepcopy(self.mps)
+        leaving = next(
+            m for m in mps
+            if m["registeredPartyId"] != "independent" and not m.get("boardRole")
+        )
+        left_name, left_uuid = leaving["name"], leaving["uuid"]
+
+        leaving["uuid"] = self.ARRIVING_UUID
+        leaving["name"] = self.ARRIVING
+        leaving["profileUrl"] = f"https://www.riigikogu.ee/en/saadik/{self.ARRIVING_UUID}"
+
+        seating = {
+            "gridDimensions": {"rows": 10, "cols": 12},
+            # The committed plan seats the member who left, and nobody else has
+            # moved: exactly what a fetch finds on the 1st of the month.
+            "seats": {
+                m["uuid"]: {"name": m["name"], "row": i // 12, "col": i % 12}
+                for i, m in enumerate(self.mps)
+            },
+        }
+        return mps, seating, left_name, left_uuid
+
+    def dirs(self, tmp: Path, mps: list[dict], seating: dict | None) -> tuple[Path, Path]:
+        base, cur = tmp / "base", tmp / "cur"
+        for d, roster in ((base, self.mps), (cur, mps)):
+            d.mkdir()
+            (d / "mps.json").write_text(json.dumps(roster), encoding="utf-8")
+            (d / "board.json").write_text(json.dumps(B.build_board(roster)), encoding="utf-8")
+            (d / "meta.json").write_text(
+                json.dumps(B.build_meta(roster, self.alignment, unclassified="unaligned")),
+                encoding="utf-8",
+            )
+            (d / "alignment.json").write_bytes(
+                (REPO / "data" / "alignment.json").read_bytes()
+            )
+        if seating is not None:
+            (cur / "seating.json").write_text(json.dumps(seating), encoding="utf-8")
+        return base, cur
+
+    def test_both_halves_of_the_join_are_classified(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            mps, seating, left_name, left_uuid = self.substitute()
+            base, cur = self.dirs(Path(tmp), mps, seating)
+            report = C.classify(base, cur)
+
+        self.assertTrue(C.needs_seating(report))
+        self.assertTrue(report["seating"]["present"])
+
+        # The arriving member has nowhere to sit …
+        self.assertEqual([s["uuid"] for s in report["seating"]["needs_seat"]],
+                         [self.ARRIVING_UUID])
+        self.assertEqual(report["seating"]["needs_seat"][0]["name"], self.ARRIVING)
+
+        # … and the chair they took is still the departing member's.
+        self.assertEqual([s["uuid"] for s in report["seating"]["orphan_seat"]], [left_uuid])
+        self.assertEqual(report["seating"]["orphan_seat"][0]["name"], left_name)
+
+        # It is a seating finding and not a bloc one: nobody's alignment moved.
+        self.assertEqual(report["action_required"], [])
+        self.assertEqual(report["stale_alignment"], [])
+        self.assertEqual(len(report["roster"]["joined"]), 1)
+        self.assertEqual(len(report["roster"]["left"]), 1)
+
+    def test_the_pr_body_names_the_member_the_file_and_the_free_cell(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            mps, seating, left_name, left_uuid = self.substitute()
+            base, cur = self.dirs(Path(tmp), mps, seating)
+            report = C.classify(base, cur)
+
+        body = P.render(report, "September 2026")
+        self.assertIn("🪑 ACTION REQUIRED", body)
+        self.assertIn("[!CAUTION]", body)
+        self.assertIn(self.ARRIVING, body)
+        self.assertIn(self.ARRIVING_UUID, body)
+        self.assertIn(left_name, body)
+        self.assertIn("data/seating.json", body)
+        self.assertIn("--allow-pending-seating", body)
+
+        # The freed cell is offered to the arriving member — the Riigikogu seats
+        # by parliamentary group, so a substitute usually inherits the chair
+        # (data/README.md).
+        freed = seating["seats"][left_uuid]
+        self.assertIn(f'"row": {freed["row"]}, "col": {freed["col"]}', body)
+
+        # It leads, like the alignment block: a reviewer cannot scroll past it.
+        self.assertLess(body.index("🪑 ACTION REQUIRED"), body.index("Seat arithmetic"))
+        self.assertIn("- [ ] Give every 🪑 member a cell", body)
+
+    def test_the_job_never_writes_seating_json(self):
+        """The second curated file, held the way the first one is: the fetcher
+        publishes a fixed list of generated files and the floor plan is not on
+        it, so an unattended run cannot invent a seat for anybody."""
+        self.assertNotIn("seating.json", F.GENERATED)
+        self.assertNotIn("alignment.json", F.GENERATED)
+
+    def test_two_substitutions_are_not_paired_by_guesswork(self):
+        """One arrival and one vacancy is a chair changing hands. Two of each is
+        a question this report cannot answer — and a wrong seat is the one
+        mistake the validator cannot catch, because every rule still passes on
+        the wrong cell."""
+        two = {"seating": {
+            "present": True,
+            "needs_seat": [
+                {"uuid": "aaaa", "name": "First Arrival", "faction": "Isamaa Parliamentary Group"},
+                {"uuid": "bbbb", "name": "Second Arrival", "faction": "Estonian Reform Party Parliamentary Group"},
+            ],
+            "orphan_seat": [
+                {"uuid": "cccc", "name": "First Departure", "row": 2, "col": 3},
+                {"uuid": "dddd", "name": "Second Departure", "row": 7, "col": 8},
+            ],
+        }}
+
+        block = "\n".join(P.seating_block(two))
+        self.assertIn("First Arrival", block)
+        self.assertIn("Second Arrival", block)
+        self.assertIn("row 2 col 3", block)
+        self.assertIn("row 7 col 8", block)
+        # No paste line: it would put one of them in the other's chair.
+        self.assertNotIn('"row": 2, "col": 3', block)
+        self.assertIn("never that they sit in the right place", block)
+
+    def test_an_unchanged_roster_says_nothing_about_seats(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, seating, _, _ = self.substitute()
+            base, cur = self.dirs(Path(tmp), copy.deepcopy(self.mps), seating)
+            report = C.classify(base, cur)
+
+        self.assertFalse(C.needs_seating(report))
+        self.assertEqual(report["seating"]["needs_seat"], [])
+        self.assertEqual(report["seating"]["orphan_seat"], [])
+        self.assertEqual(P.seating_block(report), [])
+        self.assertNotIn("🪑", P.render(report, "September 2026"))
+
+    def test_a_directory_without_seating_is_not_a_finding(self):
+        """The monthly job's staging directory holds only generated files, and
+        `fetch_mp_data.py` may not generate this one. Absent is silence, the
+        same rule `validate_data.py` follows."""
+        with tempfile.TemporaryDirectory() as tmp:
+            mps, _, _, _ = self.substitute()
+            base, cur = self.dirs(Path(tmp), mps, None)
+            report = C.classify(base, cur)
+
+        self.assertFalse(report["seating"]["present"])
+        self.assertFalse(C.needs_seating(report))
+        self.assertEqual(P.seating_block(report), [])
+
+
 class TestStaleAlignment(Fixture):
     """♻️ — a uuid in the overlay that is no longer non-affiliated.
 

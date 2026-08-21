@@ -2,10 +2,15 @@
 """Render a change report as the monthly PR body.
 
 Phase 5 of ARCHITECTURE_PLAN.md §5.3. Prose lives here; classification lives in
-`compare_mp_data.py`. The ACTION REQUIRED block comes first and uses a GitHub
-alert so it cannot be scrolled past: it is the one thing in this pipeline that
-needs a human, and merging without it would publish a roster in which a
+`compare_mp_data.py`. The ACTION REQUIRED blocks come first and use GitHub
+alerts so they cannot be scrolled past: they are the things in this pipeline
+that need a human, and merging without them would publish a roster in which a
 defector counts toward no bloc — conservative, but incomplete.
+
+There are two of them, one per curated file, because the job may write neither:
+`alignment.json` says which bloc a defector votes with, and `seating.json`
+(Phase 3 PR C) says where a new member sits. Both are raised the same way —
+name the person, name the edit, say what the app does meanwhile.
 
 Usage:
     MONTH_YEAR="August 2026" python3 scripts/generate_pr_body.py --report r.json
@@ -92,6 +97,77 @@ def action_block(report: dict) -> list[str]:
     return out
 
 
+def seating_block(report: dict) -> list[str]:
+    """🪑 — a roster change the floor plan has not caught up with.
+
+    Raised as its own CAUTION block rather than folded into the one above,
+    because it is a different edit to a different file and the reviewer may well
+    have one and not the other. `validate_data.py` runs with
+    `--allow-pending-seating` while this is open, so its two join rules warn
+    instead of failing the job — the data is publishable, the floor plan is one
+    member short, and the seat arithmetic is untouched because it is read from
+    `mps.json` and never from here.
+    """
+    seating = report.get("seating") or {}
+    needs, orphans = seating.get("needs_seat") or [], seating.get("orphan_seat") or []
+    if not needs and not orphans:
+        return []
+
+    out = [
+        "> [!CAUTION]",
+        "> ## 🪑 ACTION REQUIRED — assign seats before merging",
+        ">",
+        "> The roster moved and `data/seating.json` did not. Nothing generates that "
+        "file — the API publishes no seat — so the job cannot fix this itself.",
+        ">",
+    ]
+    for it in needs:
+        out.append(f"> - **{it['name']}** ({it['faction']}) has **no seat**. Add "
+                   f"`{it['uuid']}` to `seats`.")
+    for it in orphans:
+        out.append(f"> - Row **{it['row']}**, col **{it['col']}** is still "
+                   f"**{it['name']}**'s, and they are no longer an MP. Remove or "
+                   "reassign that entry.")
+    out.append(">")
+
+    # The paste line is offered for **one** arrival and **one** vacancy, and not
+    # otherwise. A single substitution is one chair changing hands, so pairing
+    # them is a good guess; with two of each there is nothing in this report that
+    # says which arrival took which chair, and a wrong seat is a mistake no
+    # validator can catch — every rule would still pass, on the wrong cell.
+    if len(needs) == 1 and len(orphans) == 1:
+        arriving, freed = needs[0], orphans[0]
+        out += [
+            "> A substitution is usually one chair changing hands — the Riigikogu "
+            "seats by parliamentary group — so unless you know better, give the "
+            "freed cell to the arriving member:",
+            ">",
+            f'>   `"{arriving["uuid"]}": {{ "name": "{arriving["name"]}", '
+            f'"row": {freed["row"]}, "col": {freed["col"]} }}`',
+            ">",
+        ]
+    elif needs and orphans:
+        cells = ", ".join(f"row {o['row']} col {o['col']}" for o in orphans)
+        out += [
+            f"> {len(orphans)} cells are free — {cells} — and {len(needs)} members "
+            "need one. Which arrival took which chair is not in this report and "
+            "the validator cannot tell: it checks that everyone sits somewhere, "
+            "never that they sit in the right place. Check the seating plan on "
+            "`riigikogu.ee` before pairing them.",
+            ">",
+        ]
+
+    out += [
+        "> Until then the desktop floor plan is short a member and "
+        "`validate_data.py` is running with `--allow-pending-seating`, which "
+        "downgrades exactly these two rules to warnings. Every other seating rule "
+        "still fails the job, and the seat arithmetic is unaffected — it is read "
+        "from `mps.json`, never from the floor plan.",
+        "",
+    ]
+    return out
+
+
 def render(report: dict, month_year: str) -> str:
     before = report["seats"]["before"]
     after = report["seats"]["after"]
@@ -102,7 +178,9 @@ def render(report: dict, month_year: str) -> str:
         f"source date **{report.get('sourceDate', '?')}**.",
         "",
     ]
+    seating = seating_block(report)
     lines += action_block(report)
+    lines += seating
 
     # ---- seats ------------------------------------------------------------ #
     lines += ["### Seat arithmetic", ""]
@@ -223,11 +301,17 @@ def render(report: dict, month_year: str) -> str:
         "- The fetch stages its output and publishes only after validation passes; a "
         "non-200, a malformed payload or a member count outside 95–105 aborts the run "
         "with `data/` untouched.",
-        "- **`data/alignment.json` is never written by the job.**",
+        "- **`data/alignment.json` and `data/seating.json` are never written by "
+        "the job.** Both are curated by hand; it flags them and stops.",
         "",
         "### Before merging",
         "",
         "- [ ] Resolve every 🔴 ACTION REQUIRED item in `data/alignment.json`",
+    ]
+    if seating:
+        lines.append("- [ ] Give every 🪑 member a cell in `data/seating.json`, and free "
+                     "the cells nobody sits in")
+    lines += [
         "- [ ] Remove any ♻️ stale entry",
         "- [ ] `python3 scripts/validate_data.py` is green",
         "- [ ] Mark ready for review, and merge — Pages deploys `main` on merge",
