@@ -546,11 +546,13 @@ say it in words.
 > it. That directory is deleted once the desktop surface ships — git history
 > keeps it, same as the mobile handoff (§9's note).
 >
-> **Status: enforced since Phase 3 PR A.** `desktop/index.html`,
-> `src/views-desktop/` and `desktop.css` exist, and every "Enforced by" cell
-> below names a test file that runs in `npm test` — the rows are protections
-> now, not promises. What PR A ships is the *behaviour*: the design in those
-> mockups is PR B's, and `desktop.css` is a plain scaffold until it lands.
+> **Status: enforced, and the design has shipped.** Phase 3 PR A built the
+> *behaviour* and the tests that hold it, over a scaffold stylesheet nobody was
+> meant to mistake for a design; PR B replaced that scaffold with the approved
+> artboards. `desktop/index.html`, `src/views-desktop/` and `desktop.css` are
+> the surface, and every "Enforced by" cell below names a test file that runs in
+> `npm test` — the rows are protections now, not promises. §10.10 records what
+> the design changed and the one spec it moved.
 > Nothing in §1–§9 changed: the desktop surface is a new view over the unchanged
 > DATA and LOGIC layers (10.5), and every existing mobile promise stays exactly
 > as it is.
@@ -692,7 +694,7 @@ does not "restore" behaviour the redesign deliberately dropped:
 | Party filter dims non-matching seats and shows one active filter at a time | Multi-select, additive party highlight (D2.7) | The redesign's highlight model replaces the single-party filter; matches the calculator's own selection treatment |
 | No dark mode | Light and dark, sharing mobile's tokens | The desktop surface adopts the mobile redesign's theming (Phase 1 goal 1) |
 | Seating grid party colours from a stale, pre-2026-08-09 bundle constant | Seat fill from the live `data/parties.json`, joined by uuid | The stale bundle is the reason this merge exists (`DESIGN_AND_MERGE_PLAN.md`, "Why merge at all") |
-| Escape does not close the MP popup | Not specified by the mockups; Phase 3 should follow the mobile app's overlay convention unless a reviewer says otherwise | Raised here rather than invented, per the Phase 3 kickoff rule |
+| Escape does not close the MP popup | Still no Escape handler: PR B followed the instruction in this row, and the mobile app's overlay convention (`src/dom.js`) is a close control and a backdrop, not a key | Raised here rather than invented, per the Phase 3 kickoff rule. Re-open it in review if you would rather it closed on Escape |
 
 ### 10.8 Out of scope for Phase 2
 
@@ -737,3 +739,42 @@ the stylesheet's, and PR B rewrites the stylesheet.
 | `data-mp-uuid`, `data-party-id`, `data-bloc` | seats, rows, chips, popups | who and which party |
 | `data-view` | `#view` | which destination is rendered |
 | `data-overlay` | the seat popup | §3's overlay marker, so "closed" means *removed* |
+
+### 10.10 What PR B changed, and the one spec that moved
+
+PR B is the design: `desktop.css` rewritten from the scaffold to the six
+approved artboards, and `src/views-desktop/` reshaped to the markup they need.
+**No testid was renamed, no attribute in 10.9 changed meaning, and no promise in
+10.1–10.7 was altered.** The suite is the same 47 specs, and it stayed green
+through the rewrite — which is the whole reason PR A wrote it first.
+
+Three structural changes are worth knowing about, because a later session
+reading the diff will meet them:
+
+- **A seat is a cell containing a tile**, not a tile alone. The defector marker
+  is a *sibling* of the button rather than a child, because a dimmed seat
+  carries `opacity` and a child cannot escape it. `floor-grid` still has one
+  child per cell, all 120 of them (D2.1).
+- **Avatars carry the member's photo** over CSS-painted initials, the same
+  mechanism `src/views/mps.js` uses and for the same reasons: the letters are
+  decoration beside a name, and `api.riigikogu.ee` is unreachable offline, where
+  the fallback is all there is (§4).
+- **Party cards carry `data-counting` alongside `data-active`.** `data-active`
+  is 10.9's and unchanged — the party is *selected*. `data-counting` says some
+  of its members are *in the count*, which is a different sentence: an
+  individually added member puts their party into the count without selecting
+  it, which is the state the artboards' Unaligned card is drawn in. The card
+  lights on **either**, because the artboards never draw the other corner —
+  selected with every member held out — and lighting on `data-counting` alone
+  would leave that card looking untouched while a click on it discarded the
+  hold-outs. `data-counting` is presentational and **not** part of the
+  contract; nothing in the suite reads it.
+
+**The one spec that moved.** The artboards give `filter-chairs` and
+`filter-usa` a plain label; PR A's implementation printed a count beside each,
+and its D3.5 spec read the number it compares against out of that label. The
+promise is unchanged — a tag filter replaces the bloc filter rather than
+composing with it — so the spec now derives both counts from `data/mps.json`
+instead. That is the stronger source: a filter that agreed with its own caption
+and with nothing else used to pass, and now does not. Nothing in 10.3 or 10.9
+named the counts, which is why this is a spec edit and not a contract change.

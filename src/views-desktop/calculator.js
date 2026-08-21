@@ -28,6 +28,21 @@
  * they have no whip and no common position, and with the government at 50 of
  * 101 a preset that quietly counted them would manufacture a majority that does
  * not exist.
+ *
+ * ## Two states on a party card, and why they are not one
+ *
+ * `data-active` says the party is *selected* — it is the base of the selection,
+ * and it is what D4.2 and D4.6 are written about. `data-counting` says some of
+ * its members are *in the count*, which is a different sentence: a member added
+ * individually puts their party into the count without selecting it, and a
+ * party whose every member is held out is selected while contributing nothing.
+ *
+ * The artboards need the second: the Unaligned card is lit there with one
+ * member counted and the party unselected. They never draw the other corner —
+ * selected, nothing counted — so `desktop.css` lights the card on either, which
+ * reproduces every frame the artboards do draw and keeps that corner from
+ * looking like a card you have not touched. Only `data-active` is the
+ * contract's (`USABILITY.md` §10.9); `data-counting` is this file's own.
  */
 
 import {
@@ -62,6 +77,7 @@ export default function renderCalculator(ctx) {
   const { data, state } = ctx;
   const { meta } = data;
   const parties = partiesBySize(data);
+  const share = (seats) => `${((seats / meta.totalSeats) * 100).toFixed(3)}%`;
 
   const selection = () => state.calculator.selection;
   const set = (next) => { state.calculator.selection = next; paint(); };
@@ -108,6 +124,16 @@ export default function renderCalculator(ctx) {
   const hint = el('p', { className: 'dk-calc-hint', 'data-testid': 'calc-hint' });
   const selectedChip = el('span', { className: 'dk-calc-chip' });
 
+  // The mobile hero's threshold track at desktop width: the selection as a
+  // length, with the four constitutional marks standing on it.
+  const trackFill = el('span', { className: 'dk-track-fill' });
+  const trackMarks = el('div', { className: 'dk-track-marks' });
+  const track = el('div', { className: 'dk-track', 'aria-hidden': 'true' }, [
+    el('span', { className: 'dk-track-rail' }),
+    trackFill,
+    trackMarks,
+  ]);
+
   const thresholdChips = el('div', { className: 'dk-thresholds' });
 
   /* ---- presets ----------------------------------------------------- */
@@ -136,7 +162,9 @@ export default function renderCalculator(ctx) {
     'data-testid': `calc-party-${party.id}`,
     'data-party-id': party.id,
     'data-active': 'false',
+    'data-counting': 'false',
     'aria-pressed': 'false',
+    style: `--party:var(--party-${party.id})`,
     onclick: () => {
       const current = selection();
       const turningOn = !current.parties.includes(party.id);
@@ -154,12 +182,12 @@ export default function renderCalculator(ctx) {
     },
   }, [
     el('span', { className: 'dk-calc-party-head' }, [
-      el('span', { className: 'dk-party-swatch', 'aria-hidden': 'true', style: `background:var(--party-${party.id})` }),
+      el('span', { className: 'dk-party-swatch', 'aria-hidden': 'true' }),
       el('span', { className: 'dk-calc-party-name' }, [shortOf(data, party.id)]),
     ]),
     el('span', { className: 'dk-calc-party-count' }, [
       el('span', { className: 'dk-calc-party-selected', 'data-testid': `calc-party-count-${party.id}` }, ['0']),
-      el('span', { className: 'dk-calc-party-total' }, [` of ${votingBlocSeats(data, party.id)}`]),
+      el('span', { className: 'dk-calc-party-total' }, [`of ${votingBlocSeats(data, party.id)}`]),
     ]),
   ]));
 
@@ -170,7 +198,7 @@ export default function renderCalculator(ctx) {
   function adjustmentRow(mp, kind) {
     const added = kind === 'added';
     return el('div', {
-      className: `dk-adjustment dk-adjustment-${kind}`,
+      className: 'dk-adjustment',
       'data-testid': `calc-adjustment-${mp.uuid}`,
       'data-kind': kind,
     }, [
@@ -215,6 +243,19 @@ export default function renderCalculator(ctx) {
       : `${meta.simpleMajority - result.seats} short of ${meta.simpleMajority}`;
     verdict.setAttribute('data-met', String(result.hasMajority));
 
+    trackFill.style.width = share(result.seats);
+    trackFill.setAttribute('data-met', String(result.hasMajority));
+
+    replace(trackMarks, ...result.thresholds.map((t) => el('span', {
+      className: 'dk-track-mark',
+      'data-met': String(t.met),
+      'data-threshold': String(t.seats),
+      style: `left:${share(t.seats)}`,
+    }, [
+      el('span', { className: 'dk-track-tick' }),
+      el('span', { className: 'dk-track-figure' }, [String(t.seats)]),
+    ])));
+
     const next = result.thresholds.find((t) => !t.met);
     const gap = next ? next.seats - result.seats : 0;
     hint.textContent = result.seats === 0
@@ -240,8 +281,10 @@ export default function renderCalculator(ctx) {
     for (const card of partyCards) {
       const partyId = card.dataset.partyId;
       const inCount = membersOf(partyId).filter((mp) => counted.has(mp.uuid)).length;
-      card.setAttribute('data-active', String(current.parties.includes(partyId)));
-      card.setAttribute('aria-pressed', String(current.parties.includes(partyId)));
+      const selected = current.parties.includes(partyId);
+      card.setAttribute('data-active', String(selected));
+      card.setAttribute('data-counting', String(inCount > 0));
+      card.setAttribute('aria-pressed', String(selected));
       card.querySelector(`[data-testid="calc-party-count-${partyId}"]`).textContent = String(inCount);
     }
 
@@ -251,8 +294,10 @@ export default function renderCalculator(ctx) {
     ].filter(([mp]) => mp);
 
     replace(adjustments, rows.length === 0
-      ? el('p', { className: 'dk-adjustments-empty', 'data-testid': 'calc-adjustments-empty' },
-        ['No individual adjustments. Click a seat to add a member, or to hold one out of a selected party.'])
+      ? el('p', { className: 'dk-adjustments-empty', 'data-testid': 'calc-adjustments-empty' }, [
+        'Click a seat on the floor plan to add a member from a non-selected party, '
+        + "or hold a selected party's member out of the count.",
+      ])
       : rows.map(([mp, kind]) => adjustmentRow(mp, kind)));
   }
 
@@ -270,15 +315,25 @@ export default function renderCalculator(ctx) {
       ]),
       floor.node,
       el('div', { className: 'dk-seat-key' }, [
-        el('span', { className: 'dk-key dk-key-counted' }, ['in the count']),
-        el('span', { className: 'dk-key dk-key-dimmed' }, ['not counted']),
-        el('span', { className: 'dk-key dk-key-held' }, ['held out of a selected party']),
+        el('span', { className: 'dk-key' }, [
+          el('span', { className: 'dk-key-swatch', 'data-seat-state': 'counted', 'aria-hidden': 'true' }),
+          'in the count',
+        ]),
+        el('span', { className: 'dk-key' }, [
+          el('span', { className: 'dk-key-swatch', 'data-seat-state': 'dimmed', 'aria-hidden': 'true' }),
+          'not counted',
+        ]),
+        el('span', { className: 'dk-key' }, [
+          el('span', { className: 'dk-key-swatch', 'data-seat-state': 'held', 'aria-hidden': 'true' }),
+          'held out of a selected party',
+        ]),
       ]),
     ]),
 
     el('div', { className: 'dk-side' }, [
-      el('section', { className: 'dk-card dk-hero' }, [
+      el('section', { className: 'dk-hero' }, [
         el('div', { className: 'dk-hero-head' }, [total, verdict]),
+        track,
         thresholdChips,
         hint,
       ]),
@@ -289,13 +344,13 @@ export default function renderCalculator(ctx) {
         clearButton,
       ]),
 
-      el('section', { className: 'dk-card' }, [
-        el('h2', { className: 'dk-card-title dk-kicker' }, ['Tap a party in or out']),
+      el('section', { className: 'dk-block' }, [
+        el('h2', { className: 'dk-kicker dk-block-title' }, ['Tap a party in or out']),
         el('div', { className: 'dk-calc-parties' }, partyCards),
       ]),
 
-      el('section', { className: 'dk-card' }, [
-        el('h2', { className: 'dk-card-title dk-kicker' }, ['Named adjustments']),
+      el('section', { className: 'dk-block' }, [
+        el('h2', { className: 'dk-kicker dk-block-title' }, ['Named adjustments']),
         adjustments,
       ]),
     ]),
