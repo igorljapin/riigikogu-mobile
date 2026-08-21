@@ -39,6 +39,92 @@ def warn(msg: str) -> None:
     warnings.append(msg)
 
 
+def check_seating(data: Path, mps: list[dict], by_uuid: dict[str, dict]) -> None:
+    """`seating.json` — the desktop surface's floor plan, joined to the roster by uuid.
+
+    The join is the whole point: the desktop seating grid paints one tile per
+    entry here and colours it from the MP that uuid resolves to, so an orphan
+    entry paints a seat for nobody and a missing entry silently drops a member
+    off the floor. Both are caught here rather than in a view.
+
+    **Absent is not an error.** `fetch_mp_data.py` stages only the files it
+    generates and validates *that* directory before publishing; seating is
+    hand-maintained and never staged, so requiring it would fail the monthly job
+    on a file it is forbidden to write. When the file is missing every rule below
+    is skipped with a warning — which is correct for a staging directory and
+    loud enough locally, where `data/seating.json` is always present.
+    """
+    path = data / "seating.json"
+    if not path.is_file():
+        warn(f"{path.name} not found in {data} — seating checks skipped "
+             "(expected for the monthly job's staging directory)")
+        return
+
+    # Hand-maintained, so every shape below is checked before it is used: this
+    # validator's job is to print a FAIL report, and a traceback on a mistyped
+    # bracket is a worse answer to "what is wrong with my edit" than a sentence.
+    seating = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(seating, dict):
+        err("seating.json: expected an object at the top level")
+        return
+
+    dims = seating.get("gridDimensions")
+    if not isinstance(dims, dict):
+        err(f"seating.json: gridDimensions must be an object, got {type(dims).__name__}")
+        dims = {}
+    rows, cols = dims.get("rows"), dims.get("cols")
+    for name, value in (("rows", rows), ("cols", cols)):
+        if not isinstance(value, int) or value <= 0:
+            err(f"seating.json: gridDimensions.{name} is {value!r}, expected a positive integer")
+
+    seats = seating.get("seats")
+    if not isinstance(seats, dict):
+        err("seating.json: seats must be an object keyed by MP uuid")
+        return
+
+    if len(seats) != TOTAL_SEATS:
+        err(f"seating.json: {len(seats)} seats, expected {TOTAL_SEATS}")
+
+    # Both directions of the join. A seat for someone who left parliament is as
+    # wrong as a member with nowhere to sit, and only one of the two is visible
+    # on the floor — the other is a hole the reader cannot see.
+    active = {m["uuid"] for m in mps if m.get("active") is not False}
+    for uid in sorted(set(seats) - active):
+        entry = seats[uid]
+        name = (entry.get("name") if isinstance(entry, dict) else None) or uid
+        err(f"seating.json: seat for {name} ({uid}) — not an active MP")
+    for uid in sorted(active - set(seats)):
+        err(f"seating.json: {by_uuid[uid]['name']} has no seat — the floor would drop them")
+
+    occupied: dict[tuple[int, int], str] = {}
+    for uid, seat in sorted(seats.items()):
+        if not isinstance(seat, dict):
+            err(f"seating.json: {uid}: expected an object with name/row/col, "
+                f"got {type(seat).__name__}")
+            continue
+        who = seat.get("name") or uid
+        row, col = seat.get("row"), seat.get("col")
+        if not isinstance(row, int) or not isinstance(col, int):
+            err(f"seating.json: {who}: row/col must be integers, got {row!r}/{col!r}")
+            continue
+        if isinstance(rows, int) and not 0 <= row < rows:
+            err(f"seating.json: {who}: row {row} outside 0..{rows - 1}")
+        if isinstance(cols, int) and not 0 <= col < cols:
+            err(f"seating.json: {who}: col {col} outside 0..{cols - 1}")
+        if (row, col) in occupied:
+            err(f"seating.json: {who} and {occupied[(row, col)]} both sit at row {row}, col {col}")
+        else:
+            occupied[(row, col)] = who
+        # Advisory only: mps.json is the authority on names, and the API does
+        # respell them. A drift here means the file was last touched before that
+        # rename, which is worth saying and not worth failing a publish over.
+        if uid in by_uuid and seat.get("name") != by_uuid[uid]["name"]:
+            warn(f"seating.json: {who} is {by_uuid[uid]['name']!r} in mps.json")
+
+    print(f"  seating      {len(seats)} seats on a {rows}×{cols} grid, "
+          f"{(rows * cols - len(seats)) if isinstance(rows, int) and isinstance(cols, int) else '?'} empty")
+
+
 def check(data: Path, allow_pending: bool = False) -> None:
     parties = json.loads((data / "parties.json").read_text(encoding="utf-8"))
     mps = json.loads((data / "mps.json").read_text(encoding="utf-8"))
@@ -128,6 +214,9 @@ def check(data: Path, allow_pending: bool = False) -> None:
     for b in board:
         if b["uuid"] not in by_uuid:
             err(f"board.json: {b['name']} is not in the roster")
+
+    # ---- seating plan ----------------------------------------------------- #
+    check_seating(data, mps, by_uuid)
 
     # ---- alignment overlay ---------------------------------------------- #
     blocs = alignment.get("blocs", {})

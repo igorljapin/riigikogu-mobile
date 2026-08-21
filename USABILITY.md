@@ -546,12 +546,19 @@ say it in words.
 > it. That directory is deleted once the desktop surface ships — git history
 > keeps it, same as the mobile handoff (§9's note).
 >
-> **Not yet implemented.** No `src/views-desktop/`, `desktop.css` or
-> `desktop/index.html` exist yet. Every "Enforced by" cell below names the
-> Phase-3 test file that will enforce it; until that file exists, the row is a
-> promise, not a protection. Nothing in §1–§9 changes: the desktop surface is a
-> new view over the unchanged DATA and LOGIC layers (10.5), and every existing
-> mobile promise stays exactly as it is.
+> **Status: enforced since Phase 3 PR A.** `desktop/index.html`,
+> `src/views-desktop/` and `desktop.css` exist, and every "Enforced by" cell
+> below names a test file that runs in `npm test` — the rows are protections
+> now, not promises. What PR A ships is the *behaviour*: the design in those
+> mockups is PR B's, and `desktop.css` is a plain scaffold until it lands.
+> Nothing in §1–§9 changed: the desktop surface is a new view over the unchanged
+> DATA and LOGIC layers (10.5), and every existing mobile promise stays exactly
+> as it is.
+>
+> The suite also depends on hooks the tables below do not name — a promise like
+> D3.9 is about what two chips say and names neither of them. **§10.9 lists all
+> of them**, and they bind exactly as the tables do: a redesign may move them,
+> rename nothing.
 
 ### 10.1 Global — left rail
 
@@ -662,11 +669,18 @@ surfaces and continue to:
 `data/seating.json`, keyed by MP uuid, is the one dataset the desktop surface
 needs that mobile's `data/` does not already have — the 10×12 grid position of
 each of the 101 seats, harvested from the retiring `riigikogu-desktop` app
-(`BEHAVIOR_SNAPSHOT.md` §"Desktop-only features"). Phase 3 PR A adds it to
-`data/` with a validation rule in `scripts/validate_data.py` and a "who writes
-what" entry in `data/README.md`; it does not exist there yet — the copy in
-`docs/desktop-2026/data/` and `docs/desktop-2026/seating.json` is the Phase 0/1
-draft, not the live file.
+(`BEHAVIOR_SNAPSHOT.md` §"Desktop-only features"). Phase 3 PR A added it, with
+seat rules in `scripts/validate_data.py`, a "who writes what" entry in
+`data/README.md` and `tests/python/test_seating.py` holding those rules to the
+four ways the join can break. The copies under `docs/desktop-2026/` are the
+Phase 0/1 draft and are not read by anything.
+
+It is the second **curated** file, alongside `alignment.json`: no build script
+writes it, because the API publishes no seat. That has one consequence a later
+session will meet — a roster change needs a hand here, and the validator fails
+on both halves of the join until it gets one. The rules are skipped, with a
+warning, when the file is absent, so the monthly job keeps validating a staging
+directory that holds only the files it generates.
 
 ### 10.7 Explicitly declined or altered from the retiring desktop app
 
@@ -685,3 +699,41 @@ does not "restore" behaviour the redesign deliberately dropped:
 Unaffected by this amendment: `data/` (until Phase 3 PR A adds `seating.json`),
 `src/`, `styles.css`, `service-worker.js`, and every §1–§9 promise. This section
 records a design and a contract; it ships no code.
+
+### 10.9 Hooks beyond the tables, and the attributes that carry state
+
+The tables in 10.1–10.4 name the testids the *promises* are written in terms of.
+Implementing them needed more, because several promises are about something the
+table never names — D2.5 is about a popup opening and being gone, D3.9 is about
+what two chips say. Everything below is asserted on by
+`tests/tier1/desktop/` or `tests/tier2/desktop/` and is therefore as binding as
+the tables: PR B may restyle all of it and must rename none of it.
+
+| `data-testid` | Where | Why the suite needs it |
+|---|---|---|
+| `data-updated` | header | the provenance line is computed from `meta.updatedAt`, never typed (10.5) |
+| `coalition-total`, `bloc-bar`, `bloc-segment-<bloc>`, `bloc-total-<bloc>`, `majority-marker` | Parliament header | the composition figures, and the marker positioned from `meta.simpleMajority` |
+| `floor-grid` | both floor plans | the grid itself, so counting its children counts cells |
+| `floor-caption` | Parliament | the highlighted total (D2.7) |
+| `seat-defector-<mpUuid>` | both floor plans | the defector marker (D2.3) |
+| `seat-popup`, `seat-popup-name` | Parliament | the popup, and whose it is (D2.5, D2.6) |
+| `mp-name` | each Directory row | the member a row is for (D3.2, D3.6) |
+| `mp-profile-name` | Directory | the profile follows the selection (D3.6) |
+| `mp-profile-party`, `mp-profile-bloc` | Directory | what the two chips say (D3.9) |
+| `mp-fact-<label>` | Directory | the fact grid, `Votes with` in particular (D3.9) |
+| `calc-party-count-<partyId>` | Calculator | how many of a party are in the count (D4.10) |
+
+State is carried in **attributes, not classes**, for the same reason: a class is
+the stylesheet's, and PR B rewrites the stylesheet.
+
+| Attribute | On | Values |
+|---|---|---|
+| `data-seat-state` | every seat | `default`, `highlighted`, `dimmed`, `counted`, `held` |
+| `data-active` | rail items, party rows and chips, filters, party cards | `true` / `false` |
+| `data-selected` | Directory rows | `true` / `false` |
+| `data-visible` | `party-highlight-clear` | `true` / `false` — visibility only, so the list never reflows (D2.8) |
+| `data-met` | threshold chips, the verdict | `true` / `false` |
+| `data-seats`, `data-total`, `data-threshold` | the hero, the chips, the marker | the numbers, from `meta.json` |
+| `data-mp-uuid`, `data-party-id`, `data-bloc` | seats, rows, chips, popups | who and which party |
+| `data-view` | `#view` | which destination is rendered |
+| `data-overlay` | the seat popup | §3's overlay marker, so "closed" means *removed* |
