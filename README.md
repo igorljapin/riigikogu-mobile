@@ -153,7 +153,7 @@ stylesheet and still be provably safe.
 ```bash
 npm ci
 npm run serve        # http://localhost:8099
-npm test             # 64 unit + 23 resolver + 54 Playwright tests
+npm test             # 64 unit + 46 resolver + 118 Playwright tests
 ```
 
 ---

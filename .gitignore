@@ -1,5 +1,4 @@
 node_modules/
-prototype-ref/
 
 # The monthly job used to write data/mp_data_fetched.json here and then
 # `git add` it — an ignored path, so the step failed every time. Phase 5 removed
