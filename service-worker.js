@@ -37,7 +37,12 @@
 //
 // v5 adds the desktop surface: its shell and manifest, `desktop.css`, every
 // `src/views-desktop/` module and `data/seating.json`.
-const CACHE_NAME = 'riigikogu-mobile-v5';
+//
+// v6 is the housekeeping pass on `manifest.json` and `offline.html` (new
+// theme/background colours, dark-mode offline page): the list itself is
+// unchanged, but two precached files' contents are, so a bump is still
+// needed to evict the stale copies.
+const CACHE_NAME = 'riigikogu-mobile-v6';
 
 // Where this app is deployed. Not used to build URLs — the relative list above
 // does that — but checked at install time, because a silent mount-point mismatch

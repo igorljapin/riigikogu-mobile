@@ -3,9 +3,9 @@
  *
  * Plain CSS, no build step, no framework, and the desktop half of the layer a
  * redesign is allowed to rewrite (the other half is `src/views-desktop/`).
- * What is here is the Phase-1 design: the six approved 1920×1080 artboards in
- * `docs/desktop-2026/mockups/`, whose clickable specification is
- * `docs/desktop-2026/prototype/riigikogu-desktop-standalone.html`.
+ * What is here is the Phase-1 design: the six approved 1920×1080 artboards and
+ * their clickable specification, both in git history (`docs/desktop-2026/`,
+ * removed after the phase shipped).
  *
  * Three rules hold this file to the rest of the repository.
  *
@@ -27,9 +27,9 @@
  * The tokens are `styles.css`'s, at desktop density. They are copied rather
  * than imported because that file is the mobile app's entire stylesheet and
  * pulling it in would drag nine hundred lines of phone layout with it; the
- * values are the ones `docs/desktop-2026/DESIGN_NOTES.md` fixes for both
- * surfaces. Theme follows the OS: there is no toggle, and the prototype's
- * LIGHT/DARK button was a review affordance, not a promise.
+ * values are the ones the Phase-1 design notes fixed for both surfaces, also
+ * in git history. Theme follows the OS: there is no toggle, and the
+ * prototype's LIGHT/DARK button was a review affordance, not a promise.
  *
  * Layout target: 1920×1080, which is what the artboards were drawn at and what
  * `tests/helpers/desktop.js` runs the suite at. Below that width the page
