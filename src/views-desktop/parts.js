@@ -79,8 +79,9 @@ export function initials(name) {
  * has actually loaded, so the attribute always describes what is on screen.
  * That matters more here than anywhere: the photos are served cross-origin by
  * `api.riigikogu.ee` and are deliberately not cached, so offline every avatar
- * falls back to the letters (`USABILITY.md` §4, and `DESIGN_NOTES.md`, which
- * is why the artboards were captured showing the fallback).
+ * falls back to the letters (`USABILITY.md` §4, and `DESIGN_NOTES.md`
+ * — deleted after Phase 4; in git history — which is why the artboards were
+ * captured showing the fallback).
  *
  * `eager` is for the avatars already on screen when a list paints; the rest
  * stay lazy so a fresh list does not fetch a hundred portraits at once.

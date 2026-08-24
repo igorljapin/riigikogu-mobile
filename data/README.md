@@ -169,10 +169,11 @@ party its member **votes with** — the same rule as every other count in the ap
 
 **Nothing generates this file.** The Riigikogu API exposes no seat, so the
 positions were harvested once from the retiring `riigikogu-desktop` bundle
-(Phase 0 of `docs/desktop-2026/DESIGN_AND_MERGE_PLAN.md`) and are maintained by
-hand from there. Only the seat positions were carried over: that bundle's party
-data was stale — pre-2026-08-09, before two defections — which is the reason the
-two apps were merged in the first place.
+(Phase 0 of `docs/desktop-2026/DESIGN_AND_MERGE_PLAN.md` — deleted after
+Phase 4; in git history) and are maintained by hand from there. Only the seat
+positions were carried over: that bundle's party data was stale —
+pre-2026-08-09, before two defections — which is the reason the two apps were
+merged in the first place.
 
 `name` is a review aid, so a diff reads as people rather than uuids; `mps.json`
 is the authority and the validator only *warns* when the two disagree.

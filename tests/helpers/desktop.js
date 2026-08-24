@@ -5,7 +5,8 @@
  * deliberate.
  *
  * **It runs at 1920×1080**, the size the Phase-1 artboards were drawn at
- * (`docs/desktop-2026/DESIGN_NOTES.md`). The Playwright config's default
+ * (`docs/desktop-2026/DESIGN_NOTES.md` — deleted after Phase 4; in git
+ * history). The Playwright config's default
  * viewport is a phone, because the mobile app is what it was written for;
  * every desktop spec opts out with `test.use(DESKTOP)`.
  *
