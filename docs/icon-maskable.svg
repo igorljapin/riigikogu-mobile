@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="XV Riigikogu">
+  <rect width="1024" height="1024" fill="#0f172a"></rect>
+  <g transform="translate(512,1024) scale(0.8) translate(-512,-1024)">
+  <rect width="1024" height="1024" fill="#0f172a"></rect>
+  <rect x="500" y="54" width="14" height="250" fill="#94a3b8"></rect>
+  <circle cx="507" cy="46" r="16" fill="#f4f6f8"></circle>
+  <rect x="514" y="78" width="232" height="52" fill="#2563eb"></rect>
+  <rect x="514" y="130" width="232" height="52" fill="#233046"></rect>
+  <rect x="514" y="182" width="232" height="52" fill="#f4f6f8"></rect>
+  <rect x="514" y="78" width="232" height="156" fill="none" stroke="#94a3b8" stroke-width="4" opacity=".55"></rect>
+  <g fill="#f4f6f8">
+    <rect x="288" y="300" width="60" height="80"></rect>
+    <rect x="385" y="300" width="60" height="80"></rect>
+    <rect x="482" y="300" width="60" height="80"></rect>
+  </g>
+  <g fill="#94a3b8">
+    <rect x="579" y="300" width="60" height="80"></rect>
+    <rect x="676" y="300" width="60" height="80"></rect>
+  </g>
+  <rect x="288" y="378" width="448" height="52" fill="#f4f6f8"></rect>
+  <rect x="562" y="378" width="174" height="52" fill="#94a3b8"></rect>
+  <path d="M312 430 H712 L732 1024 H292 Z" fill="#f4f6f8"></path>
+  <path d="M562 430 H712 L732 1024 H572 Z" fill="#94a3b8"></path>
+  <g fill="#94a3b8" opacity=".5">
+    <rect x="320" y="430" width="22" height="26"></rect>
+    <rect x="368" y="430" width="22" height="26"></rect>
+    <rect x="416" y="430" width="22" height="26"></rect>
+    <rect x="464" y="430" width="22" height="26"></rect>
+    <rect x="512" y="430" width="22" height="26"></rect>
+    <rect x="560" y="430" width="22" height="26"></rect>
+    <rect x="608" y="430" width="22" height="26"></rect>
+    <rect x="656" y="430" width="22" height="26"></rect>
+  </g>
+  <g fill="#0f172a">
+    <rect x="498" y="520" width="28" height="70" rx="14"></rect>
+    <rect x="498" y="680" width="28" height="70" rx="14"></rect>
+    <rect x="498" y="840" width="28" height="70" rx="14"></rect>
+  </g>
+  </g>
+</svg>

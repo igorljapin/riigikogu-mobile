@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<sc-if value="{{ showAM }}" hint-placeholder-val="{{ false }}">
+  <svg viewBox="0 0 1024 1024" width="100%" height="100%" style="display:block">
+    <rect width="1024" height="1024" fill="{{ c1 }}"></rect>
+    <rect x="500" y="54" width="14" height="250" fill="{{ c3 }}"></rect>
+    <circle cx="507" cy="46" r="16" fill="{{ c2 }}"></circle>
+    <rect x="514" y="78" width="232" height="52" fill="{{ c5 }}"></rect>
+    <rect x="514" y="130" width="232" height="52" fill="{{ c6 }}"></rect>
+    <rect x="514" y="182" width="232" height="52" fill="{{ c7 }}"></rect>
+    <rect x="514" y="78" width="232" height="156" fill="none" stroke="{{ c3 }}" stroke-width="4" opacity=".55"></rect>
+    <g fill="{{ c2 }}">
+      <rect x="288" y="300" width="60" height="80"></rect>
+      <rect x="385" y="300" width="60" height="80"></rect>
+      <rect x="482" y="300" width="60" height="80"></rect>
+    </g>
+    <g fill="{{ c3 }}">
+      <rect x="579" y="300" width="60" height="80"></rect>
+      <rect x="676" y="300" width="60" height="80"></rect>
+    </g>
+    <rect x="288" y="378" width="448" height="52" fill="{{ c2 }}"></rect>
+    <rect x="562" y="378" width="174" height="52" fill="{{ c3 }}"></rect>
+    <path d="M312 430 H712 L732 1024 H292 Z" fill="{{ c2 }}"></path>
+    <path d="M562 430 H712 L732 1024 H572 Z" fill="{{ c3 }}"></path>
+    <g fill="{{ c3 }}" opacity=".5">
+      <rect x="320" y="430" width="22" height="26"></rect>
+      <rect x="368" y="430" width="22" height="26"></rect>
+      <rect x="416" y="430" width="22" height="26"></rect>
+      <rect x="464" y="430" width="22" height="26"></rect>
+      <rect x="512" y="430" width="22" height="26"></rect>
+      <rect x="560" y="430" width="22" height="26"></rect>
+      <rect x="608" y="430" width="22" height="26"></rect>
+      <rect x="656" y="430" width="22" height="26"></rect>
+    </g>
+    <g fill="{{ c8 }}">
+      <rect x="498" y="520" width="28" height="70" rx="14"></rect>
+      <rect x="498" y="680" width="28" height="70" rx="14"></rect>
+      <rect x="498" y="840" width="28" height="70" rx="14"></rect>
+    </g>
+  </svg>
+</sc-if>
+<sc-if value="{{ showAD }}" hint-placeholder-val="{{ false }}">
+  <svg viewBox="0 0 1024 1024" width="100%" height="100%" style="display:block">
+    <rect width="1024" height="1024" fill="{{ c1 }}"></rect>
+    <rect x="592" y="712" width="432" height="312" fill="{{ c2 }}"></rect>
+    <path d="M568 712 L628 648 L1024 648 L1024 712 Z" fill="{{ c3 }}"></path>
+    <g fill="{{ c8 }}">
+      <rect x="636" y="760" width="34" height="54" rx="4"></rect>
+      <rect x="716" y="760" width="34" height="54" rx="4"></rect>
+      <rect x="796" y="760" width="34" height="54" rx="4"></rect>
+      <rect x="876" y="760" width="34" height="54" rx="4"></rect>
+      <rect x="636" y="866" width="34" height="54" rx="4"></rect>
+      <rect x="716" y="866" width="34" height="54" rx="4"></rect>
+      <rect x="796" y="866" width="34" height="54" rx="4"></rect>
+      <rect x="876" y="866" width="34" height="54" rx="4"></rect>
+    </g>
+    <rect x="364" y="36" width="12" height="176" fill="{{ c3 }}"></rect>
+    <circle cx="370" cy="30" r="13" fill="{{ c2 }}"></circle>
+    <rect x="376" y="56" width="186" height="42" fill="{{ c5 }}"></rect>
+    <rect x="376" y="98" width="186" height="42" fill="{{ c6 }}"></rect>
+    <rect x="376" y="140" width="186" height="42" fill="{{ c7 }}"></rect>
+    <rect x="376" y="56" width="186" height="126" fill="none" stroke="{{ c3 }}" stroke-width="4" opacity=".55"></rect>
+    <g fill="{{ c2 }}">
+      <rect x="228" y="200" width="40" height="72"></rect>
+      <rect x="290" y="200" width="40" height="72"></rect>
+      <rect x="352" y="200" width="40" height="72"></rect>
+    </g>
+    <g fill="{{ c3 }}">
+      <rect x="414" y="200" width="40" height="72"></rect>
+      <rect x="476" y="200" width="40" height="72"></rect>
+    </g>
+    <rect x="224" y="270" width="296" height="40" fill="{{ c2 }}"></rect>
+    <rect x="384" y="270" width="136" height="40" fill="{{ c3 }}"></rect>
+    <path d="M248 310 H496 L512 1024 H236 Z" fill="{{ c2 }}"></path>
+    <path d="M384 310 H496 L512 1024 H392 Z" fill="{{ c3 }}"></path>
+    <g fill="{{ c3 }}" opacity=".5">
+      <rect x="246" y="310" width="18" height="22"></rect>
+      <rect x="290" y="310" width="18" height="22"></rect>
+      <rect x="334" y="310" width="18" height="22"></rect>
+      <rect x="378" y="310" width="18" height="22"></rect>
+      <rect x="422" y="310" width="18" height="22"></rect>
+      <rect x="466" y="310" width="18" height="22"></rect>
+    </g>
+    <g fill="{{ c8 }}">
+      <rect x="360" y="400" width="24" height="60" rx="12"></rect>
+      <rect x="360" y="540" width="24" height="60" rx="12"></rect>
+      <rect x="360" y="680" width="24" height="60" rx="12"></rect>
+    </g>
+  </svg>
+</sc-if>
+<sc-if value="{{ showBM }}" hint-placeholder-val="{{ false }}">
+  <svg viewBox="0 0 1024 1024" width="100%" height="100%" style="display:block">
+    <rect width="1024" height="1024" fill="{{ c1 }}"></rect>
+    <path d="M232 1024 V620 A280 280 0 0 1 792 620 V1024 Z" fill="{{ c2 }}"></path>
+    <rect x="232" y="790" width="560" height="234" fill="{{ c4 }}"></rect>
+    <path d="M556 810 V712 H648 V680 H700 V712 H772 V810 Z" fill="{{ c3 }}"></path>
+    <rect x="420" y="380" width="8" height="66" fill="{{ c3 }}"></rect>
+    <rect x="428" y="392" width="62" height="15" fill="{{ c5 }}"></rect>
+    <rect x="428" y="407" width="62" height="15" fill="{{ c6 }}"></rect>
+    <rect x="428" y="422" width="62" height="15" fill="{{ c7 }}"></rect>
+    <rect x="428" y="392" width="62" height="45" fill="none" stroke="{{ c3 }}" stroke-width="3" opacity=".4"></rect>
+    <g fill="{{ c3 }}">
+      <rect x="380" y="442" width="26" height="38"></rect>
+      <rect x="412" y="442" width="26" height="38"></rect>
+      <rect x="444" y="442" width="26" height="38"></rect>
+    </g>
+    <rect x="380" y="480" width="90" height="340" fill="{{ c3 }}"></rect>
+  </svg>
+</sc-if>
+<sc-if value="{{ showBD }}" hint-placeholder-val="{{ false }}">
+  <svg viewBox="0 0 1024 1024" width="100%" height="100%" style="display:block">
+    <rect width="1024" height="1024" fill="{{ c1 }}"></rect>
+    <path d="M148 1024 V680 A90 90 0 0 1 328 680 V1024 Z" fill="{{ c2 }}"></path>
+    <path d="M696 1024 V680 A90 90 0 0 1 876 680 V1024 Z" fill="{{ c2 }}"></path>
+    <path d="M412 1024 V620 A100 100 0 0 1 612 620 V1024 Z" fill="{{ c2 }}"></path>
+    <rect x="148" y="840" width="180" height="184" fill="{{ c4 }}"></rect>
+    <rect x="696" y="840" width="180" height="184" fill="{{ c4 }}"></rect>
+    <rect x="412" y="840" width="200" height="184" fill="{{ c4 }}"></rect>
+    <path d="M176 870 V794 H236 V766 H272 V794 H300 V870 Z" fill="{{ c3 }}"></path>
+    <rect x="724" y="806" width="124" height="64" fill="{{ c3 }}"></rect>
+    <rect x="470" y="556" width="8" height="52" fill="{{ c3 }}"></rect>
+    <rect x="478" y="566" width="54" height="13" fill="{{ c5 }}"></rect>
+    <rect x="478" y="579" width="54" height="13" fill="{{ c6 }}"></rect>
+    <rect x="478" y="592" width="54" height="13" fill="{{ c7 }}"></rect>
+    <rect x="478" y="566" width="54" height="39" fill="none" stroke="{{ c3 }}" stroke-width="3" opacity=".4"></rect>
+    <g fill="{{ c3 }}">
+      <rect x="444" y="604" width="22" height="32"></rect>
+      <rect x="473" y="604" width="22" height="32"></rect>
+      <rect x="502" y="604" width="22" height="32"></rect>
+    </g>
+    <rect x="444" y="636" width="80" height="234" fill="{{ c3 }}"></rect>
+  </svg>
+</sc-if>
+<sc-if value="{{ showCM }}" hint-placeholder-val="{{ false }}">
+  <svg viewBox="0 0 1024 1024" width="100%" height="100%" style="display:block">
+    <rect width="1024" height="1024" fill="{{ c1 }}"></rect>
+    <rect x="305" y="210" width="12" height="130" fill="{{ c2 }}"></rect>
+    <rect x="317" y="224" width="132" height="30" fill="{{ c5 }}"></rect>
+    <rect x="317" y="254" width="132" height="30" fill="{{ c6 }}"></rect>
+    <rect x="317" y="284" width="132" height="30" fill="{{ c7 }}"></rect>
+    <rect x="317" y="224" width="132" height="90" fill="none" stroke="{{ c2 }}" stroke-width="3" opacity=".4"></rect>
+    <path d="M430 780 V560 H600 V500 H720 V560 H890 V780 Z" fill="{{ c2 }}"></path>
+    <g fill="{{ c2 }}">
+      <rect x="245" y="336" width="38" height="44"></rect>
+      <rect x="291" y="336" width="38" height="44"></rect>
+      <rect x="337" y="336" width="38" height="44"></rect>
+    </g>
+    <path d="M250 380 H370 L378 760 H242 Z" fill="{{ c2 }}"></path>
+    <path d="M0 660 C 240 640, 500 664, 740 700 C 870 720, 960 730, 1024 736 L1024 1024 H0 Z" fill="{{ c2 }}"></path>
+    <path d="M0 660 C 240 640, 500 664, 740 700 C 870 720, 960 730, 1024 736" fill="none" stroke="{{ c4 }}" stroke-width="16" stroke-linecap="round"></path>
+  </svg>
+</sc-if>
+<sc-if value="{{ showCD }}" hint-placeholder-val="{{ false }}">
+  <svg viewBox="0 0 1024 1024" width="100%" height="100%" style="display:block">
+    <rect width="1024" height="1024" fill="{{ c1 }}"></rect>
+    <rect x="694" y="194" width="12" height="130" fill="{{ c2 }}"></rect>
+    <rect x="706" y="208" width="128" height="29" fill="{{ c5 }}"></rect>
+    <rect x="706" y="237" width="128" height="29" fill="{{ c6 }}"></rect>
+    <rect x="706" y="266" width="128" height="29" fill="{{ c7 }}"></rect>
+    <rect x="706" y="208" width="128" height="87" fill="none" stroke="{{ c2 }}" stroke-width="3" opacity=".4"></rect>
+    <path d="M96 800 V576 H280 V520 H420 V576 H600 V800 Z" fill="{{ c2 }}"></path>
+    <g fill="{{ c2 }}">
+      <rect x="635" y="320" width="38" height="44"></rect>
+      <rect x="681" y="320" width="38" height="44"></rect>
+      <rect x="727" y="320" width="38" height="44"></rect>
+    </g>
+    <path d="M640 364 H760 L768 800 H632 Z" fill="{{ c2 }}"></path>
+    <path d="M0 656 C 280 636, 560 668, 800 714 C 900 733, 970 742, 1024 748 L1024 1024 H0 Z" fill="{{ c2 }}"></path>
+    <path d="M0 656 C 280 636, 560 668, 800 714 C 900 733, 970 742, 1024 748" fill="none" stroke="{{ c4 }}" stroke-width="16" stroke-linecap="round"></path>
+  </svg>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:220,&quot;height&quot;:220},&quot;mark&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;],&quot;default&quot;:&quot;a&quot;,&quot;tsType&quot;:&quot;'a'|'b'|'c'&quot;},&quot;surface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mobile&quot;,&quot;desktop&quot;],&quot;default&quot;:&quot;mobile&quot;,&quot;tsType&quot;:&quot;'mobile'|'desktop'&quot;},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;,&quot;tinted&quot;,&quot;clear&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'|'tinted'|'clear'&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;options&quot;:[&quot;#9333ea&quot;,&quot;#2563eb&quot;,&quot;#e11d48&quot;,&quot;#0f172a&quot;],&quot;default&quot;:&quot;#9333ea&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const PAL = {
+  a: {
+    light:  { c1:'#0f172a', c2:'#f4f6f8', c3:'#94a3b8', c4:'#9333ea', c5:'#2563eb', c6:'#233046', c7:'#f4f6f8', c8:'#0f172a' },
+    dark:   { c1:'#080d16', c2:'#f6f8fb', c3:'#64748b', c4:'#9333ea', c5:'#2563eb', c6:'#233046', c7:'#f6f8fb', c8:'#080d16' },
+    tinted: { c1:'#16181d', c2:'#e6e8ec', c3:'#82868d', c4:'#82868d', c5:'#b9bdc4', c6:'#23262b', c7:'#e6e8ec', c8:'#16181d' },
+    clear:  { c1:'none', c2:'rgba(255,255,255,.94)', c3:'rgba(255,255,255,.5)', c4:'rgba(255,255,255,.5)', c5:'rgba(255,255,255,.8)', c6:'rgba(255,255,255,.26)', c7:'rgba(255,255,255,.94)', c8:'rgba(70,90,120,.5)' }
+  },
+  b: {
+    light:  { c1:'#0f172a', c2:'#f4f6f8', c3:'#0f172a', c4:'#9333ea', c5:'#2563eb', c6:'#0f172a', c7:'#f4f6f8', c8:'#0f172a' },
+    dark:   { c1:'#080d16', c2:'#f6f8fb', c3:'#080d16', c4:'#9333ea', c5:'#2563eb', c6:'#080d16', c7:'#f6f8fb', c8:'#080d16' },
+    tinted: { c1:'#16181d', c2:'#e6e8ec', c3:'#16181d', c4:'#82868d', c5:'#b9bdc4', c6:'#16181d', c7:'#e6e8ec', c8:'#16181d' },
+    clear:  { c1:'none', c2:'rgba(255,255,255,.9)', c3:'rgba(28,38,58,.5)', c4:'rgba(255,255,255,.45)', c5:'rgba(28,38,58,.4)', c6:'rgba(28,38,58,.55)', c7:'rgba(255,255,255,.7)', c8:'rgba(28,38,58,.5)' }
+  },
+  c: {
+    light:  { c1:'#f4f6f8', c2:'#0f172a', c3:'#94a3b8', c4:'#9333ea', c5:'#2563eb', c6:'#0f172a', c7:'#f4f6f8', c8:'#0f172a' },
+    dark:   { c1:'#131b29', c2:'#f6f8fb', c3:'#64748b', c4:'#9333ea', c5:'#2563eb', c6:'#131b29', c7:'#f6f8fb', c8:'#131b29' },
+    tinted: { c1:'#16181d', c2:'#e6e8ec', c3:'#82868d', c4:'#82868d', c5:'#b9bdc4', c6:'#16181d', c7:'#e6e8ec', c8:'#16181d' },
+    clear:  { c1:'none', c2:'rgba(255,255,255,.9)', c3:'rgba(255,255,255,.5)', c4:'rgba(255,255,255,.5)', c5:'rgba(255,255,255,.75)', c6:'rgba(28,38,58,.3)', c7:'rgba(255,255,255,.9)', c8:'rgba(28,38,58,.4)' }
+  }
+};
+
+class Component extends DCLogic {
+  renderVals() {
+    const mark = this.props.mark || 'a';
+    const surface = this.props.surface || 'mobile';
+    const mode = this.props.mode || 'light';
+    const p = { ...(PAL[mark] || PAL.a)[mode] };
+    const accent = this.props.accent;
+    if (accent && mode === 'light') p.c4 = accent;
+    return {
+      ...p,
+      showAM: mark === 'a' && surface === 'mobile',
+      showAD: mark === 'a' && surface === 'desktop',
+      showBM: mark === 'b' && surface === 'mobile',
+      showBD: mark === 'b' && surface === 'desktop',
+      showCM: mark === 'c' && surface === 'mobile',
+      showCD: mark === 'c' && surface === 'desktop'
+    };
+  }
+}
+</script>
+</body>
+</html>
