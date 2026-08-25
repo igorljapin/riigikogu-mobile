@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    doc-page:not(:defined) { visibility: hidden; }
+    a { color: #7e22ca; }
+    a:hover { color: #0f172a; }
+  </style>
+  <script src="./doc-page.js"></script>
+</helmet>
+
+<doc-page margin="0.8in">
+
+  <h1 style="margin:0 0 8px;font-size:31px;font-weight:700;line-height:1.1;letter-spacing:-.025em;color:#0f172a">Shipping the Crown icon</h1>
+  <p style="margin:0 0 4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#64748b">igorljapin/riigikogu-mobile · both surfaces · 2026-08-24</p>
+  <p style="margin:0 0 26px;font-size:15px;line-height:1.62;color:#475569">Replacing the illustrated Toompea icon with the Crown mark on both installed apps. Everything you need is already generated in <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">export/</code>; the work is copying files in, running one script, and editing four files. No new dependencies, no build step added.</p>
+
+  <sc-if value="{{ showChecklist }}" hint-placeholder-val="{{ true }}">
+    <div style="margin:0 0 30px;padding:18px 22px;border:1px solid #e4e9ef;border-radius:12px;background:#f8fafc;break-inside:avoid">
+      <p style="margin:0 0 10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#64748b">The whole job, in order</p>
+      <ol style="margin:0;padding-left:20px;font-size:14.5px;line-height:1.75;color:#0f172a">
+        <li>Copy 7 SVG masters into <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">icons/</code> and 1 script into <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">scripts/</code></li>
+        <li>Run <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">node scripts/generate_icons.mjs</code> — writes 10 PNGs</li>
+        <li>Replace the <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">icons</code> array in <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">manifest.json</code></li>
+        <li>Replace the <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">icons</code> array in <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">desktop/manifest.json</code></li>
+        <li>Point two <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">&lt;link&gt;</code> tags in <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">desktop/index.html</code> at the new files</li>
+        <li>Bump <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">CACHE_NAME</code> to v7 and update the precache list</li>
+        <li><code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">npm test</code>, then install both apps and look at them</li>
+      </ol>
+    </div>
+  </sc-if>
+
+  <h2 style="margin:0 0 10px;font-size:20px;font-weight:700;letter-spacing:-.015em;color:#0f172a">Before you start</h2>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">You need Node and the repo's dev dependencies. <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">sharp</code> is already in <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">package.json</code> — it is what renders the PNGs, and nothing new gets added.</p>
+  <pre style="margin:0 0 24px;padding:14px 16px;border:1px solid #e4e9ef;border-radius:8px;background:#f8fafc;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;overflow-x:auto;white-space:pre;break-inside:avoid;color:#0f172a">git checkout -b icon/crown
+npm ci</pre>
+
+  <h2 style="margin:0 0 10px;font-size:20px;font-weight:700;letter-spacing:-.015em;color:#0f172a">Step 1 — Copy the files in</h2>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">Seven SVG masters go into <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">icons/</code>, alongside the PNGs they will produce. The old <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">icon.svg</code> is overwritten; keep it in git history rather than renaming it.</p>
+  <pre style="margin:0 0 12px;padding:14px 16px;border:1px solid #e4e9ef;border-radius:8px;background:#f8fafc;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;overflow-x:auto;white-space:pre;break-inside:avoid;color:#0f172a">icons/icon.svg                     mobile, light, rounded corners
+icons/icon-dark.svg                mobile, dark theme
+icons/icon-mono.svg                mobile, white on transparent
+icons/icon-maskable.svg            mobile, square, 80% safe zone
+icons/desktop-icon.svg             desktop, light, rounded corners
+icons/desktop-icon-dark.svg        desktop, dark theme
+icons/desktop-icon-maskable.svg    desktop, square, 80% safe zone
+scripts/generate_icons.mjs         the PNG renderer</pre>
+  <p style="margin:0 0 24px;font-size:14px;line-height:1.6;color:#64748b">Why four masters per surface rather than one: the rounded file is what a browser shows as a favicon and what Windows puts on the taskbar, so it carries its own corner radius. The maskable file is square and full-bleed because Android and iOS apply their own mask on top, and a pre-rounded icon inside a mask gets rounded twice. Dark and mono are not loaded by the apps today — see the last section.</p>
+
+  <h2 style="margin:0 0 10px;font-size:20px;font-weight:700;letter-spacing:-.015em;color:#0f172a">Step 2 — Generate the PNGs</h2>
+  <pre style="margin:0 0 12px;padding:14px 16px;border:1px solid #e4e9ef;border-radius:8px;background:#f8fafc;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;overflow-x:auto;white-space:pre;break-inside:avoid;color:#0f172a">node scripts/generate_icons.mjs</pre>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">Ten files land in <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">icons/</code>. Treat them as build output: never hand-edit a PNG, change the SVG and re-run.</p>
+  <table style="width:100%;margin:0 0 12px;border-collapse:collapse;font-size:13.5px;color:#0f172a">
+    <thead>
+      <tr>
+        <th style="padding:8px 10px 8px 0;border-bottom:1px solid #0f172a;text-align:left;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#64748b">File</th>
+        <th style="padding:8px 10px;border-bottom:1px solid #0f172a;text-align:left;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#64748b">Size</th>
+        <th style="padding:8px 0 8px 10px;border-bottom:1px solid #0f172a;text-align:left;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#64748b">Used by</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:7px 10px 7px 0;border-bottom:1px solid #e4e9ef;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px">icon-192x192.png</td><td style="padding:7px 10px;border-bottom:1px solid #e4e9ef">192</td><td style="padding:7px 0 7px 10px;border-bottom:1px solid #e4e9ef;color:#475569">manifest, Android</td></tr>
+      <tr><td style="padding:7px 10px 7px 0;border-bottom:1px solid #e4e9ef;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px">icon-512x512.png</td><td style="padding:7px 10px;border-bottom:1px solid #e4e9ef">512</td><td style="padding:7px 0 7px 10px;border-bottom:1px solid #e4e9ef;color:#475569">manifest, splash</td></tr>
+      <tr><td style="padding:7px 10px 7px 0;border-bottom:1px solid #e4e9ef;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px">icon-maskable-512.png</td><td style="padding:7px 10px;border-bottom:1px solid #e4e9ef">512</td><td style="padding:7px 0 7px 10px;border-bottom:1px solid #e4e9ef;color:#475569">manifest, maskable</td></tr>
+      <tr><td style="padding:7px 10px 7px 0;border-bottom:1px solid #e4e9ef;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px">apple-touch-icon.png</td><td style="padding:7px 10px;border-bottom:1px solid #e4e9ef">180</td><td style="padding:7px 0 7px 10px;border-bottom:1px solid #e4e9ef;color:#475569">iOS home screen</td></tr>
+      <tr><td style="padding:7px 10px 7px 0;border-bottom:1px solid #e4e9ef;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px">desktop-icon-192.png</td><td style="padding:7px 10px;border-bottom:1px solid #e4e9ef">192</td><td style="padding:7px 0 7px 10px;border-bottom:1px solid #e4e9ef;color:#475569">desktop manifest</td></tr>
+      <tr><td style="padding:7px 10px 7px 0;border-bottom:1px solid #e4e9ef;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px">desktop-icon-512.png</td><td style="padding:7px 10px;border-bottom:1px solid #e4e9ef">512</td><td style="padding:7px 0 7px 10px;border-bottom:1px solid #e4e9ef;color:#475569">desktop manifest</td></tr>
+      <tr><td style="padding:7px 10px 7px 0;border-bottom:1px solid #e4e9ef;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px">desktop-icon-maskable-512.png</td><td style="padding:7px 10px;border-bottom:1px solid #e4e9ef">512</td><td style="padding:7px 0 7px 10px;border-bottom:1px solid #e4e9ef;color:#475569">desktop, maskable</td></tr>
+      <tr><td style="padding:7px 10px 7px 0;border-bottom:1px solid #e4e9ef;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px">desktop-icon-256.png</td><td style="padding:7px 10px;border-bottom:1px solid #e4e9ef">256</td><td style="padding:7px 0 7px 10px;border-bottom:1px solid #e4e9ef;color:#475569">Windows Start</td></tr>
+      <tr><td style="padding:7px 10px 7px 0;border-bottom:1px solid #e4e9ef;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px">desktop-icon-44.png</td><td style="padding:7px 10px;border-bottom:1px solid #e4e9ef">44</td><td style="padding:7px 0 7px 10px;border-bottom:1px solid #e4e9ef;color:#475569">Windows taskbar</td></tr>
+      <tr><td style="padding:7px 10px 7px 0;border-bottom:1px solid #e4e9ef;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px">desktop-apple-touch-icon.png</td><td style="padding:7px 10px;border-bottom:1px solid #e4e9ef">180</td><td style="padding:7px 0 7px 10px;border-bottom:1px solid #e4e9ef;color:#475569">iPad, desktop app</td></tr>
+    </tbody>
+  </table>
+  <p style="margin:0 0 24px;font-size:14px;line-height:1.6;color:#64748b">The two apple-touch files and the two maskable PNGs are flattened onto <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">#0f172a</code> with no alpha channel. iOS paints transparent pixels black, so an opaque source is the only way to be sure of the result.</p>
+
+  <h2 style="margin:0 0 10px;font-size:20px;font-weight:700;letter-spacing:-.015em;color:#0f172a">Step 3 — <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:17px">manifest.json</code></h2>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">Replace the whole <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">"icons"</code> array. Everything else in the file stays as it is — the theme and background colours already match the mark.</p>
+  <pre style="margin:0 0 24px;padding:14px 16px;border:1px solid #e4e9ef;border-radius:8px;background:#f8fafc;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;overflow-x:auto;white-space:pre;break-inside:avoid;color:#0f172a">"icons": [
+  {
+    "src": "icons/icon.svg",
+    "sizes": "any",
+    "type": "image/svg+xml",
+    "purpose": "any"
+  },
+  {
+    "src": "icons/icon-192x192.png",
+    "sizes": "192x192",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "icons/icon-512x512.png",
+    "sizes": "512x512",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "icons/icon-maskable-512.png",
+    "sizes": "512x512",
+    "type": "image/png",
+    "purpose": "maskable"
+  },
+  {
+    "src": "icons/icon-mono.svg",
+    "sizes": "any",
+    "type": "image/svg+xml",
+    "purpose": "monochrome"
+  }
+],</pre>
+
+  <h2 style="margin:0 0 10px;font-size:20px;font-weight:700;letter-spacing:-.015em;color:#0f172a">Step 4 — <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:17px">desktop/manifest.json</code></h2>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">Same edit, pointing at the desktop mark. Paths keep the <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">../</code> prefix — the desktop app has its own scope but shares the one <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">icons/</code> directory.</p>
+  <pre style="margin:0 0 24px;padding:14px 16px;border:1px solid #e4e9ef;border-radius:8px;background:#f8fafc;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;overflow-x:auto;white-space:pre;break-inside:avoid;color:#0f172a">"icons": [
+  {
+    "src": "../icons/desktop-icon.svg",
+    "sizes": "any",
+    "type": "image/svg+xml",
+    "purpose": "any"
+  },
+  {
+    "src": "../icons/desktop-icon-44.png",
+    "sizes": "44x44",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "../icons/desktop-icon-192.png",
+    "sizes": "192x192",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "../icons/desktop-icon-256.png",
+    "sizes": "256x256",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "../icons/desktop-icon-512.png",
+    "sizes": "512x512",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "../icons/desktop-icon-maskable-512.png",
+    "sizes": "512x512",
+    "type": "image/png",
+    "purpose": "maskable"
+  }
+],</pre>
+  <p style="margin:0 0 24px;font-size:14px;line-height:1.6;color:#64748b"><code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">tests/pwa/desktop-offline.spec.js</code> asserts that both sizes Chrome and Edge ask for are present and that every <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">src</code> is relative and fetchable. Both arrays above satisfy that; the extra entries are additive.</p>
+
+  <h2 style="margin:0 0 10px;font-size:20px;font-weight:700;letter-spacing:-.015em;color:#0f172a">Step 5 — the two shells</h2>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">The mobile <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">index.html</code> needs <strong style="font-weight:600">no change</strong>: it already points at <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">./icons/icon.svg</code> and <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">./icons/apple-touch-icon.png</code>, and both filenames are reused.</p>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">In <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">desktop/index.html</code>, change the two icon links so the desktop app stops borrowing the mobile mark:</p>
+  <pre style="margin:0 0 24px;padding:14px 16px;border:1px solid #e4e9ef;border-radius:8px;background:#f8fafc;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;overflow-x:auto;white-space:pre;break-inside:avoid;color:#0f172a">- &lt;link rel="icon" href="../icons/icon.svg" type="image/svg+xml"&gt;
+- &lt;link rel="apple-touch-icon" href="../icons/apple-touch-icon.png"&gt;
++ &lt;link rel="icon" href="../icons/desktop-icon.svg" type="image/svg+xml"&gt;
++ &lt;link rel="apple-touch-icon" href="../icons/desktop-apple-touch-icon.png"&gt;</pre>
+
+  <h2 style="margin:0 0 10px;font-size:20px;font-weight:700;letter-spacing:-.015em;color:#0f172a">Step 6 — the service worker</h2>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">Two edits in <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">service-worker.js</code>. The cache name bump is what evicts the old icon from everyone who already installed the app; without it a returning visitor keeps the castle until their second visit.</p>
+  <pre style="margin:0 0 12px;padding:14px 16px;border:1px solid #e4e9ef;border-radius:8px;background:#f8fafc;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;overflow-x:auto;white-space:pre;break-inside:avoid;color:#0f172a">- const CACHE_NAME = 'riigikogu-mobile-v6';
++ const CACHE_NAME = 'riigikogu-mobile-v7';</pre>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">Then replace the four icon lines at the end of <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">PRECACHE_ASSETS</code> with the list below.</p>
+  <pre style="margin:0 0 12px;padding:14px 16px;border:1px solid #e4e9ef;border-radius:8px;background:#f8fafc;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;overflow-x:auto;white-space:pre;break-inside:avoid;color:#0f172a">  './icons/icon.svg',
+  './icons/icon-mono.svg',
+  './icons/icon-192x192.png',
+  './icons/icon-512x512.png',
+  './icons/icon-maskable-512.png',
+  './icons/apple-touch-icon.png',
+
+  './icons/desktop-icon.svg',
+  './icons/desktop-icon-44.png',
+  './icons/desktop-icon-192.png',
+  './icons/desktop-icon-256.png',
+  './icons/desktop-icon-512.png',
+  './icons/desktop-icon-maskable-512.png',
+  './icons/desktop-apple-touch-icon.png',</pre>
+  <p style="margin:0 0 24px;font-size:14px;line-height:1.6;color:#64748b">List only files that actually exist. Install is deliberately allowed to fail loudly in this worker, so one missing entry rejects <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">addAll()</code> and kills registration for everyone. The four masters that nothing loads at runtime — <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">icon-dark.svg</code>, <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px">icon-maskable.svg</code> and their desktop pairs — stay out of the list on purpose.</p>
+
+  <h2 style="margin:0 0 10px;font-size:20px;font-weight:700;letter-spacing:-.015em;color:#0f172a">Step 7 — Check it</h2>
+  <pre style="margin:0 0 12px;padding:14px 16px;border:1px solid #e4e9ef;border-radius:8px;background:#f8fafc;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;overflow-x:auto;white-space:pre;break-inside:avoid;color:#0f172a">npm test          # 64 unit + 46 resolver + 118 Playwright
+npm run serve     # http://localhost:8099</pre>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">Then look at it on real hardware, because this is the one change no test can grade:</p>
+  <ul style="margin:0 0 12px;padding-left:20px;font-size:15px;line-height:1.7;color:#0f172a">
+    <li><strong style="font-weight:600">iPhone.</strong> Safari → Share → Add to Home Screen. Check the crown is not clipped by the corner mask and that the flag still reads at arm's length.</li>
+    <li><strong style="font-weight:600">Windows 11.</strong> Edge → install the desktop app. Check the taskbar, the Start tile, and Alt-Tab — the 44px render is the one that fails first.</li>
+    <li><strong style="font-weight:600">Android.</strong> Chrome → Install app. The maskable file is what you are checking here; the circle mask crops hard.</li>
+    <li><strong style="font-weight:600">Browser tab.</strong> The favicon at 16px is the smallest the mark is ever asked to be.</li>
+  </ul>
+  <p style="margin:0 0 24px;font-size:14px;line-height:1.6;color:#64748b">An installed PWA caches its icon aggressively. To see a change on a device that already has the app, uninstall it, hard-reload the page, then re-install.</p>
+
+  <h2 style="margin:0 0 10px;font-size:20px;font-weight:700;letter-spacing:-.015em;color:#0f172a">What iOS will and will not use</h2>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">Worth knowing before you go looking for the dark and tinted versions on your phone. A home-screen web app on iOS reads <strong style="font-weight:600">only</strong> <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">apple-touch-icon.png</code>. It ignores the manifest's icon array, ignores <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">purpose: maskable</code> and <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">monochrome</code>, and has no mechanism for the dark, tinted or clear appearances at all — those belong to native apps, which declare them in an icon asset compiled by Xcode.</p>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">So the light mark is what ships to iPhone today. <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">icon-dark.svg</code> and <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">icon-mono.svg</code> are in the repo because they cost nothing to keep and they are the starting artwork the day you wrap either surface as a native app. <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">icon-mono.svg</code> does earn its keep now: Windows and Android both read <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">purpose: monochrome</code> for notification badges and themed icons.</p>
+  <p style="margin:0 0 24px;font-size:15px;line-height:1.62;color:#0f172a">Windows applies no corner rounding of its own to an installed PWA's icon, which is why <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">desktop-icon.svg</code> carries a 230/1024 radius baked in and the maskable file does not.</p>
+
+  <h2 style="margin:0 0 10px;font-size:20px;font-weight:700;letter-spacing:-.015em;color:#0f172a">Changing the artwork later</h2>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">Every colour in the masters is a token from <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">styles.css</code>: ground <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">#0f172a</code>, stone <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">#f4f6f8</code>, shadow face <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">#94a3b8</code>, flag blue <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">#2563eb</code>, flag dark <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">#233046</code>. The dark master swaps to <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">#080d16</code> / <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">#f6f8fb</code> / <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">#64748b</code>. If a future redesign moves those tokens, the icons move with them by search and replace.</p>
+  <p style="margin:0 0 12px;font-size:15px;line-height:1.62;color:#0f172a">Two constraints to hold on to if you edit the geometry. The shaft must keep running off the bottom edge — the crop is what stops the mark reading as a generic tower. And the maskable master scales the whole drawing to 80% about the <em>bottom centre</em>, not the centre, so the crown moves inside the safe circle while the shaft stays flush; scale about the centre instead and a light band appears under the tower on Android.</p>
+  <p style="margin:0;font-size:15px;line-height:1.62;color:#0f172a">Re-run <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">node scripts/generate_icons.mjs</code> and bump <code style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px">CACHE_NAME</code> after any edit. Those two steps are the whole maintenance story.</p>
+
+</doc-page>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showChecklist&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return { showChecklist: this.props.showChecklist ?? true };
+  }
+}
+</script>
+</body>
+</html>
