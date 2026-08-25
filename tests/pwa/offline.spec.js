@@ -101,6 +101,30 @@ test.describe('PWA — install and offline', () => {
     });
   });
 
+  test('MP portraits are drawn offline, from the cache', async ({ page }) => {
+    // New in Aug 2026, and the reason §4's "photos are the one thing that does
+    // not work offline" is gone. They were `api.riigikogu.ee`'s until then —
+    // cross-origin, so this worker never saw them, and two thirds of the URLs
+    // were dead anyway. They are `assets/mps/<uuid>.webp` now, precached with
+    // the rest of the app.
+    await withServerDown(async (origin, unplug) => {
+      await page.goto(`${origin}/index.html`);
+      await workerReady(page);
+
+      await unplug();
+      await page.reload();
+
+      await page.getByRole('button', { name: 'Members', exact: true }).click();
+      const avatar = page.getByTestId('mp-row-avatar').first();
+      await expect(avatar).toHaveAttribute('data-avatar', 'photo');
+
+      // The attribute says the image fired `load`; this says the browser has
+      // actual pixels, which is the half a broken cache entry would fail.
+      const drawn = await avatar.locator('img').evaluate((img) => img.naturalWidth);
+      expect(drawn).toBeGreaterThan(0);
+    });
+  });
+
   test('the calculator works offline, from cached data', async ({ page }) => {
     // Phase 4 moved the roster into data/*.json fetched at runtime, so offline
     // support has to cover the data as well as the shell.

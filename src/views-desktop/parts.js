@@ -14,7 +14,7 @@
  * answers (`USABILITY.md` §10.3, D3.9).
  */
 
-import { blocLabel, partyShort, votingBlocSeats } from '../data.js';
+import { blocLabel, partyShort, photoSrc, votingBlocSeats } from '../data.js';
 import { el } from '../dom.js';
 import { INDEPENDENT_PARTY_ID } from '../lib/factions.js';
 
@@ -77,11 +77,13 @@ export function initials(name) {
  *
  * `data-avatar` starts at `initials` and flips to `photo` only once the image
  * has actually loaded, so the attribute always describes what is on screen.
- * That matters more here than anywhere: the photos are served cross-origin by
- * `api.riigikogu.ee` and are deliberately not cached, so offline every avatar
- * falls back to the letters (`USABILITY.md` §4, and `DESIGN_NOTES.md`
- * — deleted after Phase 4; in git history — which is why the artboards were
- * captured showing the fallback).
+ * The portrait is `assets/mps/<uuid>.webp`, resolved by `photoSrc` — the app's
+ * own file, precached, and therefore drawn offline too (`USABILITY.md` §4).
+ * Until August 2026 it was an `api.riigikogu.ee` URL and the letters were what
+ * most of the directory showed: those URLs rotate, and a hundred of them at once
+ * draw `429`s from the origin. The letters remain the fallback for a member with
+ * no portrait — which is also why the Phase-4 artboards were captured showing
+ * them (`DESIGN_NOTES.md`, deleted after Phase 4; in git history).
  *
  * `eager` is for the avatars already on screen when a list paints; the rest
  * stay lazy so a fresh list does not fetch a hundred portraits at once.
@@ -98,10 +100,11 @@ export function avatar(mp, { size = 'md', eager = false } = {}) {
       + `color:var(--party-${mp.votingBlocPartyId}-text)`,
   });
 
-  if (mp.photoUrl) {
+  const src = photoSrc(mp);
+  if (src) {
     node.append(el('img', {
       className: 'dk-avatar-photo',
-      src: mp.photoUrl,
+      src,
       alt: '',
       loading: eager ? 'eager' : 'lazy',
       fetchpriority: eager ? 'high' : 'auto',

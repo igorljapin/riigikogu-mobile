@@ -1,0 +1,816 @@
+{
+  "source": "https://api.riigikogu.ee/api/plenary-members?lang=EN",
+  "fetchedAt": "2026-08-25",
+  "edge": 270,
+  "quality": 80,
+  "portraits": [
+    {
+      "uuid": "001dd80c-38c3-4557-b3ee-408d3ffd5cd7",
+      "name": "Katrin Kuusemäe",
+      "file": "assets/mps/001dd80c-38c3-4557-b3ee-408d3ffd5cd7.webp",
+      "bytes": 7702,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/1764ac72-ee3e-4d46-ab6b-fe84f405f0d5/download",
+      "sourceSha256": "8cdb6f1f3efb8394c3ccb5ecd48d3bb8e5f9f134601f3f5299634b9785a2ca11"
+    },
+    {
+      "uuid": "04510d7c-b12a-48aa-8402-80b0efb114a6",
+      "name": "Anastassia Kovalenko-Kõlvart",
+      "file": "assets/mps/04510d7c-b12a-48aa-8402-80b0efb114a6.webp",
+      "bytes": 4300,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/094d764f-eea6-4a53-84f6-28ee97ae5aba/download",
+      "sourceSha256": "141a40ea72a6950630250a8df0d1cdbd5b01d74a75705ecb130b6f9ade2a6977"
+    },
+    {
+      "uuid": "07003549-aa42-4764-8bdd-cab06cb94a92",
+      "name": "Anti Haugas",
+      "file": "assets/mps/07003549-aa42-4764-8bdd-cab06cb94a92.webp",
+      "bytes": 6232,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/6c5e24e1-e727-469d-90a1-39ae0bb8dc4a/download",
+      "sourceSha256": "03ccd58d8b5ba98fb2cd8a4b2f98831c3335ce85b4c5eb7bc33123b08e8e6c0c"
+    },
+    {
+      "uuid": "07132cc4-5afc-4edb-9537-7c721ec39b2d",
+      "name": "Enn Eesmaa",
+      "file": "assets/mps/07132cc4-5afc-4edb-9537-7c721ec39b2d.webp",
+      "bytes": 6946,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/491a39b2-f53a-43b1-8703-f40bad1b7164/download",
+      "sourceSha256": "ce3b256207574bac51aa184d5dcc086fc7b8262bdf8d082cec8f999c2d6f8535"
+    },
+    {
+      "uuid": "09500870-255e-416d-8eda-f80e9929adda",
+      "name": "Jüri Jaanson",
+      "file": "assets/mps/09500870-255e-416d-8eda-f80e9929adda.webp",
+      "bytes": 7108,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/e9aa2b7b-6bad-4c18-a77d-03501e8c880d/download",
+      "sourceSha256": "0fd8f797a0b4deb41cef3c97be2da049fec5ed37b453a8a4d62f8b5868d7cb83"
+    },
+    {
+      "uuid": "0c571754-914d-406a-baba-6734212353de",
+      "name": "Urve Tiidus",
+      "file": "assets/mps/0c571754-914d-406a-baba-6734212353de.webp",
+      "bytes": 5498,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/62404e46-6ebb-4926-93b6-aa3c35491dac/download",
+      "sourceSha256": "95099eaa4cff3cec20c3c3856baf15881bc95f97eac24602557378b4f93c4e66"
+    },
+    {
+      "uuid": "0e66e826-df65-4fdd-a098-66a7e9a7c911",
+      "name": "Signe Riisalo",
+      "file": "assets/mps/0e66e826-df65-4fdd-a098-66a7e9a7c911.webp",
+      "bytes": 4346,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/7176eb4b-00e5-43f6-b89b-a498c1bb0f47/download",
+      "sourceSha256": "501359ca384d3a313a10f37fe742239a980d75e7d7ed41ab8ff0a15ed1784652"
+    },
+    {
+      "uuid": "0ef9e676-8ee6-481a-ae29-e1ce75af5aaa",
+      "name": "Aleksei Jevgrafov",
+      "file": "assets/mps/0ef9e676-8ee6-481a-ae29-e1ce75af5aaa.webp",
+      "bytes": 8146,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/79efd353-d2aa-43a3-83cd-e9c71b4f2849/download",
+      "sourceSha256": "3c14b5f99d00d9d87171e8465b02de3b67e417f4a93effe69bd706c6bee40c04"
+    },
+    {
+      "uuid": "0f9372ee-f108-47f9-9192-82ff84cf3efb",
+      "name": "Timo Suslov",
+      "file": "assets/mps/0f9372ee-f108-47f9-9192-82ff84cf3efb.webp",
+      "bytes": 4540,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/13dca007-7adf-4ce1-b61d-c98050bdba12/download",
+      "sourceSha256": "d5f89656e81dff368ddd05cf577ffdda93930decd872723de01cf0f58894418c"
+    },
+    {
+      "uuid": "122e850b-5e6b-41f6-8b91-830ca8de8450",
+      "name": "Mait Klaassen",
+      "file": "assets/mps/122e850b-5e6b-41f6-8b91-830ca8de8450.webp",
+      "bytes": 9770,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/9ba9421f-d22b-4da4-a4a5-17a928662ef9/download",
+      "sourceSha256": "7eb00f0ad91a36a08abd03300414350c6066565dca776146bc92b968e49348a1"
+    },
+    {
+      "uuid": "1600fe77-4b45-44ab-972a-181a5ef71767",
+      "name": "Kristo Enn Vaga",
+      "file": "assets/mps/1600fe77-4b45-44ab-972a-181a5ef71767.webp",
+      "bytes": 4744,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/0fe76c5b-e2ba-427b-93bf-05c6f8567d41/download",
+      "sourceSha256": "5ff305e763433104a9f11706532eb6b1680884aa16e5290e7c6ea522cb26f697"
+    },
+    {
+      "uuid": "17d27ea5-b5e6-43e0-86db-ebc15bdd5788",
+      "name": "Luisa Rõivas",
+      "file": "assets/mps/17d27ea5-b5e6-43e0-86db-ebc15bdd5788.webp",
+      "bytes": 10018,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/3f92d0b8-9e23-4af8-b135-31155ee6d7b5/download",
+      "sourceSha256": "b978e2438659ee5beaba6ed9de87b642cb31c8e0760c88f25af7b8e3d84da75b"
+    },
+    {
+      "uuid": "1839253a-aec0-4019-995a-1c031db8fd10",
+      "name": "Lauri Laats",
+      "file": "assets/mps/1839253a-aec0-4019-995a-1c031db8fd10.webp",
+      "bytes": 7242,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/8f92de80-735f-4262-9ad9-36890a0ce26c/download",
+      "sourceSha256": "1e62e421ebab4dfef4fecf195d380e90ada9d2d1e2ccc9f915682b1256ef860a"
+    },
+    {
+      "uuid": "1c173f0d-6c5e-445a-934f-32e7edf903db",
+      "name": "Mihkel Lees",
+      "file": "assets/mps/1c173f0d-6c5e-445a-934f-32e7edf903db.webp",
+      "bytes": 6376,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/4ec16e33-2fe0-4ba1-a9c4-fc6703535b7f/download",
+      "sourceSha256": "b2557fd19580a8d2cc948ae5fc1cf71414f49f7b380969421bd77a73291d7b25"
+    },
+    {
+      "uuid": "1d0b281d-b769-4e94-8c67-faa1cb1b1395",
+      "name": "Helmen Kütt",
+      "file": "assets/mps/1d0b281d-b769-4e94-8c67-faa1cb1b1395.webp",
+      "bytes": 6372,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/14573cae-7701-4cb9-8402-0041291b19fa/download",
+      "sourceSha256": "0f9eafa6e1d7cdb035dbf11ba4a20edc904e55593895fefc266711efd34690fb"
+    },
+    {
+      "uuid": "23161df7-bc1b-442e-b4cd-2d1f37627658",
+      "name": "Helir-Valdor Seeder",
+      "file": "assets/mps/23161df7-bc1b-442e-b4cd-2d1f37627658.webp",
+      "bytes": 4566,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/69f558e5-af54-4c81-90b2-cc302ffde6a0/download",
+      "sourceSha256": "9b2ffca0688739722523cab9fcc9922abce258ff45c14c58192e99a436bcd902"
+    },
+    {
+      "uuid": "236e49d6-eecb-4562-8ad4-bedd586bb149",
+      "name": "Tarmo Tamm",
+      "file": "assets/mps/236e49d6-eecb-4562-8ad4-bedd586bb149.webp",
+      "bytes": 4160,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/e62f4263-876d-4be3-bcd3-68dcb4ebfb39/download",
+      "sourceSha256": "7f56579e90befda7d1fe497bd8f90831dc5b885e9cefa5673cd7bf1b1e719c8c"
+    },
+    {
+      "uuid": "28e48bd7-9f1f-4d6a-b40c-9c6ff6d445e5",
+      "name": "Kristina Šmigun-Vähi",
+      "file": "assets/mps/28e48bd7-9f1f-4d6a-b40c-9c6ff6d445e5.webp",
+      "bytes": 4184,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/f3d582bc-afe8-4a36-89d2-569a760f4e5f/download",
+      "sourceSha256": "6561b630e07b29af41885593c3f6b88f31f02daf57ba7d7ef3a274c660c862e3"
+    },
+    {
+      "uuid": "29068268-672d-451a-a08a-5727ec4300f4",
+      "name": "Mart Maastik",
+      "file": "assets/mps/29068268-672d-451a-a08a-5727ec4300f4.webp",
+      "bytes": 8670,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/d817f26d-492a-4283-bc83-7b20ba54e3d0/download",
+      "sourceSha256": "474673896624f16dc3cf1d54cc7d37c3b6973c88dbb43b2b7b9372877d2ee9b7"
+    },
+    {
+      "uuid": "2bc608c1-1c67-4db8-968b-94bc3947dfac",
+      "name": "Kadri Tali",
+      "file": "assets/mps/2bc608c1-1c67-4db8-968b-94bc3947dfac.webp",
+      "bytes": 5550,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/e274e4cf-6155-4a3f-bccf-d494761e01cc/download",
+      "sourceSha256": "1abab30eb619b85d2dacc2c2a4320f04ee66a8d11d652831e16645663e3f8b75"
+    },
+    {
+      "uuid": "2dcb35ed-acbc-4bcf-9e9d-9da681842d6d",
+      "name": "Aivar Kokk",
+      "file": "assets/mps/2dcb35ed-acbc-4bcf-9e9d-9da681842d6d.webp",
+      "bytes": 6226,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/ef7e9a8d-f27a-401f-9b5d-6dc700107b3d/download",
+      "sourceSha256": "b600e0afdfe00dc65c9b013ffd87e38e1b35f512fc4fd495771ba38c97d9ffe1"
+    },
+    {
+      "uuid": "315ea785-8f59-40e5-a158-3de8b908572f",
+      "name": "Maris Lauri",
+      "file": "assets/mps/315ea785-8f59-40e5-a158-3de8b908572f.webp",
+      "bytes": 5948,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/3e39f392-2709-4c6b-be90-269703da1265/download",
+      "sourceSha256": "6c8bec8f80dff85590caf021118d6edf7344da01a706e6b1529e5033f03606de"
+    },
+    {
+      "uuid": "31eee189-0019-469f-8469-7da564bf1af9",
+      "name": "Kalle Laanet",
+      "file": "assets/mps/31eee189-0019-469f-8469-7da564bf1af9.webp",
+      "bytes": 6212,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/fb6164ab-f7bb-4b07-8553-e52e98f43986/download",
+      "sourceSha256": "3ab2236b111d8378d25e638d8bbaf2d561dbad3a1cbba71905ab179b563ae209"
+    },
+    {
+      "uuid": "3febb869-f443-4aba-908e-7c0c30f8c4dd",
+      "name": "Irja Lutsar",
+      "file": "assets/mps/3febb869-f443-4aba-908e-7c0c30f8c4dd.webp",
+      "bytes": 5850,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/6fabb82e-721f-4642-81b1-c9aec60dad70/download",
+      "sourceSha256": "4528d302e2cb150e844c9e4e50e92bb2a2446638d215ccf55b9d8e0d94b902e6"
+    },
+    {
+      "uuid": "410c0030-7bcd-4977-85c2-27af3439770f",
+      "name": "Mati Raidma",
+      "file": "assets/mps/410c0030-7bcd-4977-85c2-27af3439770f.webp",
+      "bytes": 7904,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/83408bca-7ffa-4ca3-9a0c-626d17d46c5a/download",
+      "sourceSha256": "1213cf95e45421cfefaab0f291766b315a02e02341140d9690b59668e3f81c57"
+    },
+    {
+      "uuid": "429e71ce-d5ba-4617-8db4-d546482d43bc",
+      "name": "Madis Timpson",
+      "file": "assets/mps/429e71ce-d5ba-4617-8db4-d546482d43bc.webp",
+      "bytes": 4582,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/288e87ce-87a1-4423-9ed2-ba32c16c71bd/download",
+      "sourceSha256": "35619c0e0abf6614523ea0c959e49c843fab89095d3f275fd21921fab2d88408"
+    },
+    {
+      "uuid": "4a332fbb-be05-4cb2-b6a0-5916eb40fe89",
+      "name": "Urmas Kruuse",
+      "file": "assets/mps/4a332fbb-be05-4cb2-b6a0-5916eb40fe89.webp",
+      "bytes": 6358,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/4952466a-1819-4437-b193-6d8ffe84ef44/download",
+      "sourceSha256": "7a9413c39cce2ca1dee6c201fb21f51b13625ae27d63cd3ae9ded0592238aba3"
+    },
+    {
+      "uuid": "4b96f3e5-af5e-41ce-86c9-3fdee3ce51da",
+      "name": "Mart Helme",
+      "file": "assets/mps/4b96f3e5-af5e-41ce-86c9-3fdee3ce51da.webp",
+      "bytes": 5958,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/9a4dfa89-e5b3-427c-9f1e-8c54af2ba833/download",
+      "sourceSha256": "9dae717e34a0d94273eb67da9bb34fc4efd46ec1c0f2a869daf04d9abcb7e4e9"
+    },
+    {
+      "uuid": "4e2e1744-16b5-4d88-a08a-cf250c776956",
+      "name": "Ando Kiviberg",
+      "file": "assets/mps/4e2e1744-16b5-4d88-a08a-cf250c776956.webp",
+      "bytes": 9462,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/b383dc41-085f-4327-b112-a73fdb182ed6/download",
+      "sourceSha256": "e593719da2a14b99a6b97d810b28dd8b2daf7e869cb792e404c573e48928a23d"
+    },
+    {
+      "uuid": "4f816f8e-1501-4940-b87a-af029fcd98c0",
+      "name": "Tanel Tein",
+      "file": "assets/mps/4f816f8e-1501-4940-b87a-af029fcd98c0.webp",
+      "bytes": 4274,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/626ff531-fe8b-4361-9346-56668775ce09/download",
+      "sourceSha256": "e8f6870052aba106b05586fd9d89da5082678088d1465af2a2b6bf71157dec47"
+    },
+    {
+      "uuid": "53141769-f7bb-4995-8d12-5ff0d9c1eca1",
+      "name": "Mario Kadastik",
+      "file": "assets/mps/53141769-f7bb-4995-8d12-5ff0d9c1eca1.webp",
+      "bytes": 6842,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/07bae8c9-209d-4551-a9db-7ae4362807e5/download",
+      "sourceSha256": "e9a32d9c54f79d5b1379e5d01e262f2bedee24b011b60d254cf5d5c696f43c47"
+    },
+    {
+      "uuid": "54bc0d5b-7c98-4245-8682-4a3a0b6e0275",
+      "name": "Jaak Valge",
+      "file": "assets/mps/54bc0d5b-7c98-4245-8682-4a3a0b6e0275.webp",
+      "bytes": 3880,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/74f1e233-9dae-4221-8d9a-e0d60f7fbaca/download",
+      "sourceSha256": "b89aabe9bd75568777280aa1d64c06ad414f9a62dfb6ded123ad0b683ea13c33"
+    },
+    {
+      "uuid": "561abe91-76eb-45f3-90b0-efa94c663689",
+      "name": "Tanel Kiik",
+      "file": "assets/mps/561abe91-76eb-45f3-90b0-efa94c663689.webp",
+      "bytes": 7360,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/e1b454e1-ce57-47a3-9cb2-d8e2e4d15258/download",
+      "sourceSha256": "1973b113f8ebdd483fb1ef132fe88c6d86843da7c909df35427f40d8e5254ff4"
+    },
+    {
+      "uuid": "563f86fd-db45-4046-b8ed-b66e5a2aec45",
+      "name": "Alar Laneman",
+      "file": "assets/mps/563f86fd-db45-4046-b8ed-b66e5a2aec45.webp",
+      "bytes": 5802,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/300d1529-32d5-4b66-85da-1d6e5b389e08/download",
+      "sourceSha256": "6391692b246f2db31416f62db1ed8e45e77273dbe0e97711f85708a76f8a5701"
+    },
+    {
+      "uuid": "5650dddf-f2ca-4b94-8888-e7482808f81b",
+      "name": "Aivar Sõerd",
+      "file": "assets/mps/5650dddf-f2ca-4b94-8888-e7482808f81b.webp",
+      "bytes": 3592,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/fa935faf-5725-4505-a7ee-5d47242feec6/download",
+      "sourceSha256": "adf4eeb7ea5126b4ece8903e7e063a1466ccec9478c407afb1e6b252a662f512"
+    },
+    {
+      "uuid": "586335bd-0e3f-4cee-a325-7af602224ca7",
+      "name": "Vladimir Arhipov",
+      "file": "assets/mps/586335bd-0e3f-4cee-a325-7af602224ca7.webp",
+      "bytes": 6390,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/00bc9b2f-4f05-477c-84f6-ded9f036274f/download",
+      "sourceSha256": "538433449ae7bc10e54f86ce166f081cf2880baf89f6780c7d1fa7aea23425a8"
+    },
+    {
+      "uuid": "58be6531-1f4b-4b0b-9c21-92566a40ae8b",
+      "name": "Marko Mihkelson",
+      "file": "assets/mps/58be6531-1f4b-4b0b-9c21-92566a40ae8b.webp",
+      "bytes": 7080,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/dd79bc49-c051-4df3-a24c-6b87f8c37afc/download",
+      "sourceSha256": "22c8d4317100f30318add10884bf67457b2221dd682c84c83c1b22877509ac11"
+    },
+    {
+      "uuid": "6434e7ab-6aba-4945-9812-e7a2e7c8bf3f",
+      "name": "Stig Rästa",
+      "file": "assets/mps/6434e7ab-6aba-4945-9812-e7a2e7c8bf3f.webp",
+      "bytes": 4776,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/9a34e48c-12ec-4ac9-b839-2315dc93a39f/download",
+      "sourceSha256": "0ca92940134184d34d9255c0038c96445978919d725ba357e7a7fddb7eb29f74"
+    },
+    {
+      "uuid": "64c0141f-371b-4520-8a50-09e65231f775",
+      "name": "Lauri Hussar",
+      "file": "assets/mps/64c0141f-371b-4520-8a50-09e65231f775.webp",
+      "bytes": 7086,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/7d0c867b-34af-4b55-b6c0-ec21dbcc4971/download",
+      "sourceSha256": "71b5f65dcf8349f28892615bb310a74beb9cca4a36c7c1b414b27a0df7b3dbec"
+    },
+    {
+      "uuid": "658c9d00-82c9-4161-8314-48ff1d67e3b7",
+      "name": "Züleyxa Izmailova",
+      "file": "assets/mps/658c9d00-82c9-4161-8314-48ff1d67e3b7.webp",
+      "bytes": 6016,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/0e0fc1d7-4edb-4c46-8fac-1a171538b8e6/download",
+      "sourceSha256": "7412bee553897a362ed3c16893858a14916d71ae740a9ac523eede96d250a6b3"
+    },
+    {
+      "uuid": "65b1d8bb-7f45-48f5-b4aa-7ba4ca459824",
+      "name": "Henn Põlluaas",
+      "file": "assets/mps/65b1d8bb-7f45-48f5-b4aa-7ba4ca459824.webp",
+      "bytes": 6400,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/5330c4bf-0d7d-4366-9a0f-4dd015a320aa/download",
+      "sourceSha256": "b412ffc4077b7e7b62f55c40574fb535cc527bf559a6278cf1db33a9d7fefa1d"
+    },
+    {
+      "uuid": "694b084f-e151-4f7e-8a5c-2664a40cee7a",
+      "name": "Rene Kokk",
+      "file": "assets/mps/694b084f-e151-4f7e-8a5c-2664a40cee7a.webp",
+      "bytes": 7416,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/4e7e702c-5c2e-4287-b333-45c702f41b6e/download",
+      "sourceSha256": "a8d2e43aa1089a6d9ebe74d479d3782161eb740286b6d043685b1b4d33430fa8"
+    },
+    {
+      "uuid": "6b45cfb5-8a17-481c-b674-80fc00c6cf5d",
+      "name": "Jaak Aab",
+      "file": "assets/mps/6b45cfb5-8a17-481c-b674-80fc00c6cf5d.webp",
+      "bytes": 7568,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/628a5440-1825-4a60-9017-4c13069052b8/download",
+      "sourceSha256": "242e7e22347ebd6cec21aa07216753b1de9a0fcfb7afc644999357323d96a0ea"
+    },
+    {
+      "uuid": "71bdc9b2-841d-408f-8ace-909e8c11d7d5",
+      "name": "Signe Kivi",
+      "file": "assets/mps/71bdc9b2-841d-408f-8ace-909e8c11d7d5.webp",
+      "bytes": 6514,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/834ff6bd-51e7-4b92-83f6-ef6abc0fa06e/download",
+      "sourceSha256": "ac6606b62c0cdc34636af7ce0a73efdb9519975f23b43294ad0494fe4e160cd3"
+    },
+    {
+      "uuid": "7251e077-1964-4f2b-9dba-349dc127b56e",
+      "name": "Meelis Kiili",
+      "file": "assets/mps/7251e077-1964-4f2b-9dba-349dc127b56e.webp",
+      "bytes": 7536,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/27eb1b7d-c945-4f0a-a634-74a1f481ee13/download",
+      "sourceSha256": "ff48657f32fd9f43d9e83fca1a4ad6c7d2811930a2613876e9a41fee641b33a9"
+    },
+    {
+      "uuid": "7655e8d3-b658-49f0-8e09-f6cbc4a2c714",
+      "name": "Annely Akkermann",
+      "file": "assets/mps/7655e8d3-b658-49f0-8e09-f6cbc4a2c714.webp",
+      "bytes": 6798,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/98f053d5-3567-4bb1-b7ad-afad23278792/download",
+      "sourceSha256": "3592cc33be3dc1e45117b55780b1007c066a89f4268aed91bab4c8af2ca14afd"
+    },
+    {
+      "uuid": "76c477e6-4b49-4d49-ad7b-a4853182a1da",
+      "name": "Riina Sikkut",
+      "file": "assets/mps/76c477e6-4b49-4d49-ad7b-a4853182a1da.webp",
+      "bytes": 4476,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/ea3c5d25-325d-4433-a35f-a3b30e68dc9c/download",
+      "sourceSha256": "e038c87f227ba462ae970845ff1d9c83faacd20340a120aa40ac63354f96c1d1"
+    },
+    {
+      "uuid": "798de8ee-0587-4543-aa2e-89c3f6c8f914",
+      "name": "Marek Reinaas",
+      "file": "assets/mps/798de8ee-0587-4543-aa2e-89c3f6c8f914.webp",
+      "bytes": 6056,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/545f78eb-93ab-48f4-9e85-d96cd392237e/download",
+      "sourceSha256": "e2c09587c528a366495f266e9da426e06bb5334cedc62d6b343d936d9636f5fe"
+    },
+    {
+      "uuid": "7b6823ed-96f9-462b-b931-3dd4faceb09e",
+      "name": "Vilja Toomast",
+      "file": "assets/mps/7b6823ed-96f9-462b-b931-3dd4faceb09e.webp",
+      "bytes": 4168,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/b0d807a5-9956-4c37-bead-c04b7fcd167d/download",
+      "sourceSha256": "1171af8f3754eb49e0677bcb417b0167521151e5e14c885376482a3a44395eb5"
+    },
+    {
+      "uuid": "7d6b0605-e425-41c8-9a53-3b92b81f21b1",
+      "name": "Eero Merilind",
+      "file": "assets/mps/7d6b0605-e425-41c8-9a53-3b92b81f21b1.webp",
+      "bytes": 6698,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/61f90606-f5f1-4ad3-819a-5ccfccbb69c3/download",
+      "sourceSha256": "fece7cb070b7fd0a99ba2c101ece7567470c10fe7511b7e535cd142638cb0946"
+    },
+    {
+      "uuid": "7f83e40c-4854-4632-9372-448b3a5dc93a",
+      "name": "Lea Danilson-Järg",
+      "file": "assets/mps/7f83e40c-4854-4632-9372-448b3a5dc93a.webp",
+      "bytes": 7414,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/ccedbba4-e01b-409e-a3ec-cb4b430b7eff/download",
+      "sourceSha256": "f4e2f3072d1dc98cb62068716b04d3446a3ee785855be4fcc9371d2d64795fdb"
+    },
+    {
+      "uuid": "80eac2f1-bb1e-4996-ac5a-4c3dba91bade",
+      "name": "Vadim Belobrovtsev",
+      "file": "assets/mps/80eac2f1-bb1e-4996-ac5a-4c3dba91bade.webp",
+      "bytes": 6874,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/833504fa-34d6-473c-9075-1d652dce13ae/download",
+      "sourceSha256": "a9882cef581b4cb15b05c979a0b26a57488c1968766cdb13dd307c68db0d044c"
+    },
+    {
+      "uuid": "80f542c1-393a-46e2-9fca-99948e59850d",
+      "name": "Andre Hanimägi",
+      "file": "assets/mps/80f542c1-393a-46e2-9fca-99948e59850d.webp",
+      "bytes": 6998,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/8a683438-5351-4f9d-b413-63c387dc4632/download",
+      "sourceSha256": "af58eee4bd593e444770bb7a1e90a4759a863da450f6ce2820fd61f44031ace5"
+    },
+    {
+      "uuid": "8600af41-4dcc-424d-9d05-7c851e5270b5",
+      "name": "Mart Võrklaev",
+      "file": "assets/mps/8600af41-4dcc-424d-9d05-7c851e5270b5.webp",
+      "bytes": 3998,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/88902571-09c1-41fb-af6d-a215e4796008/download",
+      "sourceSha256": "5a55e6a69086b86c4163b0df9d774d77239a6edad845424dd55742b9622f0e59"
+    },
+    {
+      "uuid": "8940964b-6bfd-482d-a4f5-53f2cccb149d",
+      "name": "Priit Sibul",
+      "file": "assets/mps/8940964b-6bfd-482d-a4f5-53f2cccb149d.webp",
+      "bytes": 5650,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/228dabc3-1a5b-418a-8595-c80267845d14/download",
+      "sourceSha256": "d20f9c7b20cc2370dc445207aaa9756a7cddc6205defdd608999f421ac8f5962"
+    },
+    {
+      "uuid": "8946b072-80c5-436e-95b2-41f928a7c636",
+      "name": "Diana Ingerainen",
+      "file": "assets/mps/8946b072-80c5-436e-95b2-41f928a7c636.webp",
+      "bytes": 6304,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/67261523-41ba-49f8-8060-9d2b6ac91bb6/download",
+      "sourceSha256": "c69474a2746ed42f0807b06b10771fb15738e7556af3321b44a059e9780e8c43"
+    },
+    {
+      "uuid": "8d9daaeb-dbaf-4887-8311-881b29bedfa9",
+      "name": "Õnne Pillak",
+      "file": "assets/mps/8d9daaeb-dbaf-4887-8311-881b29bedfa9.webp",
+      "bytes": 4832,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/d0823172-f9fe-424f-92cd-fa234ceb96d0/download",
+      "sourceSha256": "3d6878cd2644cb57b550391507e21c67e07d89b1f1bd11730631770724b41c5b"
+    },
+    {
+      "uuid": "90074aa2-4938-41a9-8275-3a6efa1cee31",
+      "name": "Yoko Alender",
+      "file": "assets/mps/90074aa2-4938-41a9-8275-3a6efa1cee31.webp",
+      "bytes": 8580,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/c6b13f27-e50e-4ed5-9ec5-3f76170e8167/download",
+      "sourceSha256": "930c1c65d4b2aa37193a318904bd8e5dc859f07273905809e8c7e8b7143e1b00"
+    },
+    {
+      "uuid": "9035e217-d990-40ca-87ed-54c77653c6d7",
+      "name": "Pipi-Liis Siemann",
+      "file": "assets/mps/9035e217-d990-40ca-87ed-54c77653c6d7.webp",
+      "bytes": 4518,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/1fe933b5-c0f1-426f-a3dd-993aadbb7291/download",
+      "sourceSha256": "a938831d6ce18d43dbddf3904c186fcb0a3bda75f6577fc82be78aa31057715a"
+    },
+    {
+      "uuid": "906f1a0a-0000-4a96-866c-b30f2b6adc49",
+      "name": "Toomas Kivimägi",
+      "file": "assets/mps/906f1a0a-0000-4a96-866c-b30f2b6adc49.webp",
+      "bytes": 3920,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/20403af2-1d89-4385-8859-c7a9930e18b4/download",
+      "sourceSha256": "ab1211e266f6b17cd9820479583a858d4036ce6528cf78c99539ada85d88cc52"
+    },
+    {
+      "uuid": "94351dfe-449e-48db-9396-06cf204ce22e",
+      "name": "Jaanus Karilaid",
+      "file": "assets/mps/94351dfe-449e-48db-9396-06cf204ce22e.webp",
+      "bytes": 7308,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/2edf62fe-65bb-45a5-bad2-09f27059ba07/download",
+      "sourceSha256": "10dcaa3489e61ecca56be238dc02ea2c5a3f1c9f7d771be28cc57e8cf23653e6"
+    },
+    {
+      "uuid": "94ffc777-09a5-4472-bf5d-ce16e78a2341",
+      "name": "Rain Epler",
+      "file": "assets/mps/94ffc777-09a5-4472-bf5d-ce16e78a2341.webp",
+      "bytes": 6778,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/95be245c-9630-432b-8cb0-f32a15994e8f/download",
+      "sourceSha256": "8a3b01b501fc4ac5ceb78d0fa02433686dc5bd2e15f619770f41f6991eb16c24"
+    },
+    {
+      "uuid": "966e7ccd-b097-4e49-923c-c8d39dae2d62",
+      "name": "Valdo Randpere",
+      "file": "assets/mps/966e7ccd-b097-4e49-923c-c8d39dae2d62.webp",
+      "bytes": 6010,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/ca54fc23-ba19-4b5f-ac51-1f296bb99f88/download",
+      "sourceSha256": "fba8daf51b5f983c8587d875f68883fe6bf8b56f3d4b9044fa7e2097a325236d"
+    },
+    {
+      "uuid": "98008392-64a2-4429-8a41-fb051823e402",
+      "name": "Martin Helme",
+      "file": "assets/mps/98008392-64a2-4429-8a41-fb051823e402.webp",
+      "bytes": 6506,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/e2711908-a729-4402-9243-f7069e3ced0a/download",
+      "sourceSha256": "b6064e18f14b7b1c8e362a1f6007fdecb507e2277efe28c8c136c35dc32f5964"
+    },
+    {
+      "uuid": "987e47c7-929b-4437-9385-fab4f4fd7824",
+      "name": "Grigore-Kalev Stoicescu",
+      "file": "assets/mps/987e47c7-929b-4437-9385-fab4f4fd7824.webp",
+      "bytes": 4936,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/b92df041-5a40-4d9b-aa80-5ba06a0f9d24/download",
+      "sourceSha256": "7abad2ea6d32fc4e9ae69407f2633be448b18843bf437aef47b334ca888e3d5e"
+    },
+    {
+      "uuid": "988995d4-3cbe-4ea7-acdd-6222d0b658b1",
+      "name": "Reili Rand",
+      "file": "assets/mps/988995d4-3cbe-4ea7-acdd-6222d0b658b1.webp",
+      "bytes": 5760,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/fb7f6143-a794-4569-bcf1-3df3020385cf/download",
+      "sourceSha256": "8bc8253ffa55f696eb957d71baaec09ae5b68610498c94758d56f10375fd7db9"
+    },
+    {
+      "uuid": "989194b6-b6cc-4c8f-9e6a-8eb8913d103e",
+      "name": "Raimond Kaljulaid",
+      "file": "assets/mps/989194b6-b6cc-4c8f-9e6a-8eb8913d103e.webp",
+      "bytes": 6528,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/1da94e0b-e3ff-41d9-8d75-5b882b53e939/download",
+      "sourceSha256": "69eb1ac5959485ac3f66069a6ef50415479ecf4ea82a21cf422756d263b450bf"
+    },
+    {
+      "uuid": "9a8a55b8-c946-47a2-9e17-9978c3fd23f8",
+      "name": "Tõnis Lukas",
+      "file": "assets/mps/9a8a55b8-c946-47a2-9e17-9978c3fd23f8.webp",
+      "bytes": 7700,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/ab085821-c4dd-4608-adde-daae5d4752b5/download",
+      "sourceSha256": "192f83120a1735c87292f7afeb1e2ae7e66e5eaf85718b1eda034cd75e9ed798"
+    },
+    {
+      "uuid": "9d863d49-8bfb-4314-bd3c-cfa143f518c8",
+      "name": "Tiit Maran",
+      "file": "assets/mps/9d863d49-8bfb-4314-bd3c-cfa143f518c8.webp",
+      "bytes": 9826,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/95ab8c5c-5408-44bb-94eb-cdd52e98ee05/download",
+      "sourceSha256": "791b4cd533d74fd48470a3ed85b180d627ad69aa01a8de1d033d12c0f1fcd56e"
+    },
+    {
+      "uuid": "a12ffc5c-0809-46cb-abc4-cc99a7fa3f60",
+      "name": "Liina Kersna",
+      "file": "assets/mps/a12ffc5c-0809-46cb-abc4-cc99a7fa3f60.webp",
+      "bytes": 11966,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/5c1cf0b1-547b-4029-bf19-b7f69d22bd8b/download",
+      "sourceSha256": "b79dc0e871e955a2a36657e7ad02f3ca4613e52d5d043bbb498e5ff060f917bb"
+    },
+    {
+      "uuid": "a39c4392-bbc8-4036-b923-0f5f2b3d9766",
+      "name": "Arvo Aller",
+      "file": "assets/mps/a39c4392-bbc8-4036-b923-0f5f2b3d9766.webp",
+      "bytes": 6264,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/b3cd8ebc-7920-4eb8-ba94-3e73165372df/download",
+      "sourceSha256": "8a5f022ad162106b126ee010231dd4a19a8ace27e57537651e1f4cdc20d08d25"
+    },
+    {
+      "uuid": "a5af5ad0-6e31-443a-9b12-15769d43e784",
+      "name": "Maria Jufereva-Skuratovski",
+      "file": "assets/mps/a5af5ad0-6e31-443a-9b12-15769d43e784.webp",
+      "bytes": 5064,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/8159c88d-add5-4aea-b4e5-7e1fc3ce6d01/download",
+      "sourceSha256": "18ac0e4cc11471630146a046146d8dfe58a77a07eef9e965a417a25f48a8b0ec"
+    },
+    {
+      "uuid": "a5d17c31-61e5-4e45-87b0-5834b6728fe6",
+      "name": "Juku-Kalle Raid",
+      "file": "assets/mps/a5d17c31-61e5-4e45-87b0-5834b6728fe6.webp",
+      "bytes": 6308,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/9c072e2d-0ab7-44b7-8527-5d2d11d9d5ec/download",
+      "sourceSha256": "00d89637222f525c769a558ffd820046f5510b60228d29989a28096dfd230bd4"
+    },
+    {
+      "uuid": "a62b7530-a1fb-4c0b-b041-f10c2cfaa31a",
+      "name": "Andrei Korobeinik",
+      "file": "assets/mps/a62b7530-a1fb-4c0b-b041-f10c2cfaa31a.webp",
+      "bytes": 5520,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/55c7691c-b9af-43a1-a6a1-28f1713ec636/download",
+      "sourceSha256": "94f38c16c4430935c97cc14fcf0fd44e1010e8d65e4be0b1ef6b87166268850c"
+    },
+    {
+      "uuid": "a78027e5-2480-49f2-a340-ee88daf92d53",
+      "name": "Urmas Reinsalu",
+      "file": "assets/mps/a78027e5-2480-49f2-a340-ee88daf92d53.webp",
+      "bytes": 4266,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/ba3cd57c-bc45-4b76-9984-fe38e82592a7/download",
+      "sourceSha256": "1bb92c01b9f4553d53d6eba009d39330b5e4c4b20031db00360713852f3f17b6"
+    },
+    {
+      "uuid": "afc264da-dc7d-4885-a971-0e645995e6de",
+      "name": "Evelin Poolamets",
+      "file": "assets/mps/afc264da-dc7d-4885-a971-0e645995e6de.webp",
+      "bytes": 6900,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/dbba5fb6-9df9-496d-8a63-df5e9a547afa/download",
+      "sourceSha256": "f8832b6aeb0233d896966f5f39c90ba12074b911384bdf1ab7413890f916ab1e"
+    },
+    {
+      "uuid": "b2226516-4cd4-4471-b93b-696c40b7a9e2",
+      "name": "Eerik-Niiles Kross",
+      "file": "assets/mps/b2226516-4cd4-4471-b93b-696c40b7a9e2.webp",
+      "bytes": 6146,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/08603862-b182-4571-a482-f463c4968676/download",
+      "sourceSha256": "827b40af48a766f756288c2d0101c32e5c86eaf8e473f440a90d8b0186efc22d"
+    },
+    {
+      "uuid": "b5922bb2-56bb-4de6-a7e1-754553191c27",
+      "name": "Heljo Pikhof",
+      "file": "assets/mps/b5922bb2-56bb-4de6-a7e1-754553191c27.webp",
+      "bytes": 10710,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/151add8e-0299-42c7-b675-a510ad274c3b/download",
+      "sourceSha256": "7f8e3f3495197e114ae2e196f736eb645773a1d45fce11a2b7b66b4c819ca4c0"
+    },
+    {
+      "uuid": "b5e0d7fe-b784-4057-bf7e-cc3f1873887d",
+      "name": "Varro Vooglaid",
+      "file": "assets/mps/b5e0d7fe-b784-4057-bf7e-cc3f1873887d.webp",
+      "bytes": 4126,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/1c6fdeeb-8c8d-44bc-b7d3-54d8698fc953/download",
+      "sourceSha256": "c3e339858875c5e4e3656218ce0b10a656c80f8422cccbf4d67e76840791e205"
+    },
+    {
+      "uuid": "b6f8dff5-7c69-4d4c-b978-be0a2ad6e161",
+      "name": "Peeter Tali",
+      "file": "assets/mps/b6f8dff5-7c69-4d4c-b978-be0a2ad6e161.webp",
+      "bytes": 4982,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/e4036098-c2cd-4444-a601-b678f5d15047/download",
+      "sourceSha256": "41e7a57b3cf1c971e547b87c14b33973726c244dd099d6fe713f47aa37371df3"
+    },
+    {
+      "uuid": "bc9c1725-2fd8-4f54-a0e3-58b87e9dfe1f",
+      "name": "Anti Poolamets",
+      "file": "assets/mps/bc9c1725-2fd8-4f54-a0e3-58b87e9dfe1f.webp",
+      "bytes": 7282,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/567be6d2-7429-4ab2-972d-0a8dd07e695c/download",
+      "sourceSha256": "942c83512c50bd3114ef4970b5a1f4dd247fe3c7ce94f90c0b1024bc14013517"
+    },
+    {
+      "uuid": "c4e3fc0f-80fb-4a3e-b49e-80045c5253d9",
+      "name": "Ants Frosch",
+      "file": "assets/mps/c4e3fc0f-80fb-4a3e-b49e-80045c5253d9.webp",
+      "bytes": 6276,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/a513e4dd-a59c-4219-aad1-af1cacef7afc/download",
+      "sourceSha256": "e7dfdc70aed35e26a3d7d78f72d9696c6334aaf9f14bda730d8b4fb028cdb60c"
+    },
+    {
+      "uuid": "c7f4f213-58a3-4b6f-a236-153644653d17",
+      "name": "Madis Kallas",
+      "file": "assets/mps/c7f4f213-58a3-4b6f-a236-153644653d17.webp",
+      "bytes": 4564,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/978911ea-1639-4254-83fc-c3876c2186c0/download",
+      "sourceSha256": "d2d9b400ad743da44bef8c3665ac06a5e293b8445c4cec49f7cee0644252042a"
+    },
+    {
+      "uuid": "caea357b-12c0-4069-b53e-89f69f517212",
+      "name": "Kersti Sarapuu",
+      "file": "assets/mps/caea357b-12c0-4069-b53e-89f69f517212.webp",
+      "bytes": 4510,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/05c63cf5-a57f-414d-b372-8a565de404af/download",
+      "sourceSha256": "058fb6d8113f8e1f0527e7ebeb4cccd4baf2572bfeb91bd49fce2e71c262ab44"
+    },
+    {
+      "uuid": "d0d7a6a5-25de-40d0-b5df-09575a7c9bfc",
+      "name": "Toomas Uibo",
+      "file": "assets/mps/d0d7a6a5-25de-40d0-b5df-09575a7c9bfc.webp",
+      "bytes": 4404,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/8d027b31-8456-4ed0-ae0e-e8145410ec5c/download",
+      "sourceSha256": "2b8602ee0fabdd9382752c9d0138503e608178f1b6f1d4c89c41154362bbafba"
+    },
+    {
+      "uuid": "d18cee4c-7b30-405f-96f2-4ab6f81efaf2",
+      "name": "Hanah Lahe",
+      "file": "assets/mps/d18cee4c-7b30-405f-96f2-4ab6f81efaf2.webp",
+      "bytes": 7906,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/a119608f-4669-4e98-9a43-d839ad0f92e8/download",
+      "sourceSha256": "d9c190260aab73643ec632c86d4d259c44f84727b474565543278999cd3a8b07"
+    },
+    {
+      "uuid": "d4effc9d-0aee-4450-9926-5246efcda08c",
+      "name": "Maido Ruusmann",
+      "file": "assets/mps/d4effc9d-0aee-4450-9926-5246efcda08c.webp",
+      "bytes": 4108,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/22ae5e6d-2aef-47d6-a9e4-b1ce45ba1674/download",
+      "sourceSha256": "b3849c9034f9654b1b1dc4a75e4bfb18724924ea4a2c726d126f23715b4be9b1"
+    },
+    {
+      "uuid": "d557812c-971d-415b-827d-aa6a382ec6ef",
+      "name": "Lauri Läänemets",
+      "file": "assets/mps/d557812c-971d-415b-827d-aa6a382ec6ef.webp",
+      "bytes": 7446,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/0bc3760c-5c01-47bd-8a41-9c8a2826bd43/download",
+      "sourceSha256": "da3d83cdab7e400dce498bb12a77c3e151f50a97674776302e8fc4156e4c1ef1"
+    },
+    {
+      "uuid": "d5c54f88-dff3-486b-aac6-2cd124577d38",
+      "name": "Ester Karuse",
+      "file": "assets/mps/d5c54f88-dff3-486b-aac6-2cd124577d38.webp",
+      "bytes": 6510,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/651427c9-570a-4c76-96e6-84a38047e6c4/download",
+      "sourceSha256": "061dfd2ba97f2b57b8f588adfc3dcc448491be05afe08e1cefb567bb22f6f66c"
+    },
+    {
+      "uuid": "d5f3dddb-d809-448a-a94f-adbf208e408a",
+      "name": "Andres Metsoja",
+      "file": "assets/mps/d5f3dddb-d809-448a-a94f-adbf208e408a.webp",
+      "bytes": 6554,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/bc385d76-906f-4616-b32b-5dfe2706206d/download",
+      "sourceSha256": "c7157ee3be2d3ad216c785b662b872b3f8bbf0aaefc60408720fba9a08d38d0b"
+    },
+    {
+      "uuid": "d7d9e4d7-699e-4038-83c3-d13369f644c9",
+      "name": "Tõnis Mölder",
+      "file": "assets/mps/d7d9e4d7-699e-4038-83c3-d13369f644c9.webp",
+      "bytes": 5290,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/15475d84-7ded-4796-9aa1-fdacce7baeea/download",
+      "sourceSha256": "70450591de9064763dd025b85e93b280335c57fde2f378cca40a8def112394ba"
+    },
+    {
+      "uuid": "d8b9f165-31aa-46a4-8dbd-964cbe89cfb8",
+      "name": "Siim Pohlak",
+      "file": "assets/mps/d8b9f165-31aa-46a4-8dbd-964cbe89cfb8.webp",
+      "bytes": 7074,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/7b167bee-5656-434f-bcb9-3ee196725e99/download",
+      "sourceSha256": "61177ba3c87479292c8951e4411ef5e2d97481fd821d39a954c2474662fdb486"
+    },
+    {
+      "uuid": "db46f14c-3bdf-47a0-bed4-0172f7d942db",
+      "name": "Toomas Järveoja",
+      "file": "assets/mps/db46f14c-3bdf-47a0-bed4-0172f7d942db.webp",
+      "bytes": 7494,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/68c8591f-fc32-4888-be38-f68f79cb5926/download",
+      "sourceSha256": "0d86223b472e8a0e22634b96b652217b70ab07eef23305bd13b7d8d13511fe61"
+    },
+    {
+      "uuid": "db532de2-5abd-4b6d-a82c-2d9a75fd9d18",
+      "name": "Kalle Grünthal",
+      "file": "assets/mps/db532de2-5abd-4b6d-a82c-2d9a75fd9d18.webp",
+      "bytes": 4362,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/c6392028-0068-46b7-a787-445bf206ce5c/download",
+      "sourceSha256": "20656df06c38153995500c7678849b73371bfa45e1ca39107ee9cfdf67ce0c0b"
+    },
+    {
+      "uuid": "ee639cdf-b86c-48b7-9b34-fbba9b83826d",
+      "name": "Margit Sutrop",
+      "file": "assets/mps/ee639cdf-b86c-48b7-9b34-fbba9b83826d.webp",
+      "bytes": 4286,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/239f1b9a-073f-4509-a18f-d446e69055e7/download",
+      "sourceSha256": "933c486a2b890c266580b51db31e72f73c5c603e5ed14e87e01d3f42e94bc70c"
+    },
+    {
+      "uuid": "f4e5d00e-19d1-428a-ba5e-5ce9ae4ef2c2",
+      "name": "Helle-Moonika Helme",
+      "file": "assets/mps/f4e5d00e-19d1-428a-ba5e-5ce9ae4ef2c2.webp",
+      "bytes": 7142,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/8dcf1f00-db65-4b1f-ab30-7d1b15b2090a/download",
+      "sourceSha256": "4293a055c94cf80e816c33b2572ff381d42be81c8073c05979a6779565b96c7c"
+    },
+    {
+      "uuid": "f6353ede-a0a5-4918-ab8b-790a1957c5cd",
+      "name": "Anti Allas",
+      "file": "assets/mps/f6353ede-a0a5-4918-ab8b-790a1957c5cd.webp",
+      "bytes": 5982,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/a5d4330e-1120-4279-adc3-c02650e83239/download",
+      "sourceSha256": "2c4bd3be97c5f8e3307b33262f1324732f032e7da8b8dffd5b98f2332f4a4c96"
+    },
+    {
+      "uuid": "f8a770b2-916c-4172-84b3-005ba9906a18",
+      "name": "Peeter Ernits",
+      "file": "assets/mps/f8a770b2-916c-4172-84b3-005ba9906a18.webp",
+      "bytes": 7892,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/589711d3-8e4b-4b24-9a7f-fac35a5d5b6b/download",
+      "sourceSha256": "cdd77c84b38f7bc970d81bced116b2a9fa3da804d4d6e5f8ed681559890ca6ad"
+    },
+    {
+      "uuid": "fd2d1dd5-ff19-445e-b190-28aabb07763a",
+      "name": "Leo Kunnas",
+      "file": "assets/mps/fd2d1dd5-ff19-445e-b190-28aabb07763a.webp",
+      "bytes": 5436,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/5b5c22f4-8116-4fef-afaa-9fb89e595c10/download",
+      "sourceSha256": "4fe029c5c54d02f94ce899bd8625b85994e5697d5911d099dbe748160f0d8a76"
+    },
+    {
+      "uuid": "fd57045c-5dde-4c26-bf60-e5c294da0e4c",
+      "name": "Andrus Seeme",
+      "file": "assets/mps/fd57045c-5dde-4c26-bf60-e5c294da0e4c.webp",
+      "bytes": 4756,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/665fa9a8-f31f-4795-b387-46e5d121caef/download",
+      "sourceSha256": "3e3f53774c1edc2ce36a40a4ae2aef93b54612e0c20a4a3d315830666b901381"
+    },
+    {
+      "uuid": "fe6fcd51-6911-4dc6-9232-ddeac5ec1155",
+      "name": "Aleksandr Tšaplõgin",
+      "file": "assets/mps/fe6fcd51-6911-4dc6-9232-ddeac5ec1155.webp",
+      "bytes": 5002,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/43c65805-01bb-4b66-9ca1-97fcdaafee3d/download",
+      "sourceSha256": "8fec5afb03e634e7986300e82aae5e358e0a535680b2393efa3b1f710e508935"
+    }
+  ]
+}

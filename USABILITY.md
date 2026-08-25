@@ -94,9 +94,9 @@ one is part of the work that introduces it.
 | 3.4 | A search with no matches empties the list without breaking the app | `tier1/members.spec.js` |
 | 3.5 | Every filter yields exactly the number of rows its own label promises — **now including the Coalition, Opposition and Unaligned segments** (§9) | `tier1/members.spec.js` |
 | 3.6 | Tapping an MP opens a popup containing an external `riigikogu.ee` profile link | `tier1/members.spec.js` |
-| 3.7 | Profile URLs, photo URLs and committee lists match `data/mps.json` | `tier2/roster-data.spec.js` |
+| 3.7 | Profile URLs, portraits and committee lists match `data/mps.json` — the portrait being the `photo` file, not the upstream `photoUrl` | `tier2/roster-data.spec.js` |
 | 3.8 | Defectors show the party they vote with plus their party history; unaligned MPs are labelled unaligned | `tier2/roster-data.spec.js` |
-| 3.9 | **New.** Every row carries an avatar: the MP's photo where `photoUrl` resolves, and their initials on the party colour where it does not — so the list stays legible offline (§9) | `tier1/members.spec.js`, `tier2/roster-data.spec.js` |
+| 3.9 | **New.** Every row carries an avatar: the MP's portrait — `assets/mps/<uuid>.webp`, the file `mps.json` names in `photo` — and their initials on the party colour behind it, which is what shows for a member with no portrait. The rows on the first screen must reach the portrait, offline included (§4, §9) | `tier1/members.spec.js`, `tier2/roster-data.spec.js` |
 | 3.10 | **New.** Filtering is single-select: choosing one filter clears the others, and there is always exactly one active | `tier1/members.spec.js` |
 
 ### Calculator
@@ -134,6 +134,8 @@ pass?* — so it gets the most coverage.
 | 5.4 | The app renders after going offline | `pwa/offline.spec.js` |
 | 5.5 | The calculator works offline, from cached data | `pwa/offline.spec.js` |
 | 5.6 | **New.** Every icon either manifest declares exists at the size it claims, the maskable icon is its own asset rather than the rounded one reused, the iOS tiles carry no alpha channel, and the precache list and the manifests name the same files | `unit/icons.test.mjs` |
+| 5.7 | **New (Aug 2026).** MP portraits are drawn offline, from the cache | `pwa/offline.spec.js` |
+| 5.8 | **New (Aug 2026).** Every MP names a portrait keyed by their own uuid; every named portrait is a WebP on disk of a plausible size; `assets/mps/`, `data/mps.json` and the precache list name exactly the same set | `unit/photos.test.mjs` |
 
 ---
 
@@ -240,7 +242,7 @@ Introduced in Phase 4 and shipping now. `<id>` is always a party id from
 | | `mp-row` | one per MP, each carrying `data-mp-uuid` and `data-party-id` |
 | | `mp-row-avatar` **(new)** | one per row; carries `data-avatar="photo\|initials"` so 3.9 is checkable either way |
 | | `mp-count` **(new)** | the "101 members" line |
-| | `mp-popup`, `mp-photo`, `mp-profile-link`, `mp-popup-close` | |
+| | `mp-popup`, `mp-photo`, `mp-profile-link`, `mp-popup-close` | `mp-photo`'s `src` is the portrait `mps.json` names in `photo`, resolved against the app's base path — not the API's `photoUrl`, which nothing renders (§4) |
 | | `mp-popup-back` **(new)** | present **only** when the profile was opened from the party sheet — it returns there (2.14). Icon-only, like `picker-back` |
 | | `mp-party` (with `data-party-id`), `mp-bloc`, `mp-committee`, `mp-party-history` | `mp-committee` is one pill per committee |
 | Calculator | `calc-total`, `calc-verdict` | |
@@ -293,9 +295,20 @@ The specs were proven to have teeth the way Phase 2's were: reinstating the
 `/riigikogu-dashboard/` paths turns 4 of the 5 red, including registration and
 both offline tests.
 
-MP photos are the one thing that does not work offline — they are served by
-`api.riigikogu.ee`, and the worker leaves cross-origin requests alone. The
-roster falls back to its placeholders.
+**MP portraits work offline as of Aug 2026**, and are no longer the exception
+this section used to record. They were `api.riigikogu.ee`'s — cross-origin,
+which the worker leaves alone — until the hotlinking turned out not to work
+online either: those URLs are keyed by a file record the CMS re-mints on every
+re-publish, and on 2026-08-25, 66 of the 101 committed thirteen days earlier
+answered `404`. The origin also rate-limits, answering `429` to the burst a
+hundred-avatar roster paints, and sends no `Cache-Control` on the ones that
+succeed.
+
+So the portraits are the app's own files now: `scripts/fetch_mp_photos.mjs`
+fetches each member's photo once, writes `assets/mps/<uuid>.webp` — keyed by the
+member, whose uuid does not rotate — and adds it to the precache list. Same
+origin, cached with everything else, ~600 KB for all 101. The initials remain
+the fallback, for a member the API publishes no portrait for.
 
 **Phase 3 PR C changed how 5.4 and 5.5 are enforced, and not what they say.**
 They went offline with `context.setOffline(true)`, which a restarted service
@@ -441,6 +454,18 @@ parliament now has three buckets, not two.**
 | 2.2 | coalition + opposition == 101 | *every* bloc section sums to 101 | The nine MPs who left a group and joined no party have their own section. The promise — no seat invented or lost — is unchanged; only the assumption that there are exactly two blocs is gone. |
 | 4.6 | Coalition preset + Opposition preset == 101 | == 101 − unaligned | No preset may claim an MP who has no whip. The bundle's Opposition preset did, silently crediting the opposition with nine votes (`BEHAVIOR_SNAPSHOT.md` §8.4). |
 
+**Aug 2026 changed two more, both because the MP portraits stopped being someone
+else's files.** They were hotlinked from `api.riigikogu.ee` at a URL keyed by a
+file record the CMS re-mints on every re-publish: on 2026-08-25, 66 of the 101
+committed on the 12th answered `404`, and the origin rate-limited the rest.
+`scripts/fetch_mp_photos.mjs` now commits them as `assets/mps/<uuid>.webp` and
+the app loads its own copies (§4).
+
+| # | Was | Is | Why |
+|---|---|---|---|
+| 3.7 | the popup's photo `src` is `mps.json`'s `photoUrl` | it is the `photo` file, resolved against the app's base path | The promise is unchanged — a row shows *that MP's* portrait from the data, not a placeholder or the neighbour's. What changed is which field the data answers with; `photoUrl` stays as the record of where the file came from. |
+| 3.9 | photo *or* initials, either legal for any row | the first screen's rows must reach the portrait; further down, either | The fallback existed because the photo often could not arrive. Now it can, and a first screen full of initials is a regression rather than a slow network. |
+
 Both tests still read their numbers off the app rather than hardcoding today's
 roster, so neither needs revisiting when the next defection lands. Nothing else
 in §1 changed: every other promise the bundle kept, the rebuild keeps.
@@ -482,7 +507,7 @@ New surface, so new coverage. None of these relaxes anything.
 | 2.11 | The seat chart's segments are proportional and sum to 101 |
 | 2.12 | Its majority marker is positioned from `meta.simpleMajority` |
 | 2.13 | Its legend agrees with the bloc headings |
-| 3.9 | Every member row has an avatar — photo, or initials when the photo is unavailable |
+| 3.9 | Every member row has an avatar — the member's portrait, or initials when they have none |
 | 3.10 | Filtering is single-select, always exactly one active |
 | 4.15 | Every individual adjustment is named and individually undoable |
 | 4.16 | The picker offers only eligible MPs, and an adjusted MP leaves the pool |
@@ -496,7 +521,7 @@ towards it:
 | Design proposed | Decision | Consequence |
 |---|---|---|
 | Parliament tab renamed **Standing**; calculator tab id `majority` | **Declined** | 1.2 unchanged; `tab-parliament` / `tab-members` / `tab-calculator` keep their ids |
-| **Initials only** in member rows, photos on the profile | **Altered** — photo first, initials as fallback | 3.9 as written; the fallback also covers the known offline gap (photos are cross-origin and uncached) |
+| **Initials only** in member rows, photos on the profile | **Altered** — photo first, initials as fallback | 3.9 as written. The fallback covered a gap that has since closed: portraits are the app's own files and work offline (§4), so what falls back is a member with no portrait |
 | Header kicker `UPDATED 12 AUG 2026` | **Declined as a literal** | 2.10 already forbids it; the label renders from `meta.updatedAt` |
 | The bundle's `data/*.json` copies (a 12 Aug snapshot) | **Not used** | The repo's live `data/` is authoritative; the monthly job has since moved it |
 
@@ -768,10 +793,12 @@ reading the diff will meet them:
   is a *sibling* of the button rather than a child, because a dimmed seat
   carries `opacity` and a child cannot escape it. `floor-grid` still has one
   child per cell, all 120 of them (D2.1).
-- **Avatars carry the member's photo** over CSS-painted initials, the same
+- **Avatars carry the member's portrait** over CSS-painted initials, the same
   mechanism `src/views/mps.js` uses and for the same reasons: the letters are
-  decoration beside a name, and `api.riigikogu.ee` is unreachable offline, where
-  the fallback is all there is (§4).
+  decoration beside a name, and they are what a member with no portrait shows.
+  Both surfaces read `photo` from `mps.json` through one resolver, `photoSrc` in
+  `src/data.js`, which is what makes the same relative path correct at
+  `/riigikogu-mobile/` and at `/riigikogu-mobile/desktop/` (§4).
 - **Party cards carry `data-counting` alongside `data-active`.** `data-active`
   is 10.9's and unchanged — the party is *selected*. `data-counting` says some
   of its members are *in the count*, which is a different sentence: an
@@ -804,7 +831,7 @@ named the counts, which is why this is a spec edit and not a contract change.
 | D5.1 | The desktop shell registers the service worker without a console error, and the worker's scope contains the desktop path | `pwa/desktop-offline.spec.js` |
 | D5.2 | Both surfaces share **one** registration and **one** cache: visiting them in turn creates no second worker and no second copy of `data/*.json` | `pwa/desktop-offline.spec.js` |
 | D5.3 | The precache list names every file the desktop surface ships — its shell, its manifest, `desktop.css`, every `src/views-desktop/` module and `data/seating.json` | `pwa/desktop-offline.spec.js` |
-| D5.4 | Every same-origin URL the desktop surface requests is in that list. MP photos are the documented exception: they are `api.riigikogu.ee`'s, and the worker leaves cross-origin requests alone (§4) | `pwa/desktop-offline.spec.js` |
+| D5.4 | Every same-origin URL the desktop surface requests is in that list — the 101 MP portraits included, since Aug 2026 (§4). There is no documented exception left; the worker still leaves other origins alone, and the app no longer asks any | `pwa/desktop-offline.spec.js` |
 | D5.5 | `desktop/manifest.json` is a second app — `scope` and `start_url` are `/riigikogu-mobile/desktop/`, nested inside the mobile scope and not equal to it, icons relative and in both installable sizes | `pwa/desktop-offline.spec.js` |
 | D5.6 | With the server gone, the desktop app opens for a visitor who has only ever loaded the mobile one, renders all 101 seats and still counts a coalition | `pwa/desktop-offline.spec.js` |
 

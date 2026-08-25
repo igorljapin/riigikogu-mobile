@@ -21,7 +21,7 @@
  * - The search placeholder stays `Search MPs...` (1.3, 3.3).
  */
 
-import { blocLabel, party, partyShort } from '../data.js';
+import { blocLabel, party, partyShort, photoSrc } from '../data.js';
 import { closeButton, el, icon, ICONS, openOverlay, replace } from '../dom.js';
 
 /** Glyphs only this screen draws; `dom.js` owns the shared set. */
@@ -65,10 +65,18 @@ export function initials(name) {
  * the Usability Contract identifies a row.
  *
  * `data-avatar` starts at `initials` and flips to `photo` only when the image
- * actually loads, so it always describes what is on screen: photos are served
- * cross-origin by `api.riigikogu.ee` and are deliberately not cached, so offline
- * every row falls back (USABILITY.md §4). The stylesheet cross-fades that flip,
- * so a row settles rather than snapping.
+ * actually loads, so it always describes what is on screen. The stylesheet
+ * cross-fades that flip, so a row settles rather than snapping.
+ *
+ * The portrait is `assets/mps/<uuid>.webp` — the app's own file, precached with
+ * everything else, so the flip now happens offline too (USABILITY.md §4). It
+ * used to be an `api.riigikogu.ee` URL, and the initials were what two thirds of
+ * the roster showed: those URLs are keyed by a file record the CMS re-mints on
+ * every re-publish, so the committed roster's copies rotted within a fortnight,
+ * and the survivors were rate-limited into `429`s by the hundred-image burst
+ * this list paints. `scripts/fetch_mp_photos.mjs` has the full account. The
+ * initials stay as the fallback, for a member with no portrait and for a file
+ * that fails to decode.
  *
  * `eager` is for the avatars that are on screen the moment the list paints. A
  * lazy image is fetched at low priority after layout, which is what makes a
@@ -86,10 +94,11 @@ export function avatar(mp, { size = 'md', testid = null, eager = false } = {}) {
     style: `--initials:"${letters}";background:var(--party-${mp.votingBlocPartyId});color:var(--party-${mp.votingBlocPartyId}-text)`,
   });
 
-  if (mp.photoUrl) {
+  const src = photoSrc(mp);
+  if (src) {
     node.append(el('img', {
       className: 'avatar-photo',
-      src: mp.photoUrl,
+      src,
       alt: '',
       loading: eager ? 'eager' : 'lazy',
       fetchpriority: eager ? 'high' : 'auto',

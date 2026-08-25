@@ -269,6 +269,11 @@ class SeatingPendingFlag(SeatingCase):
         leaving["uuid"] = self.NEW_UUID
         leaving["name"] = "Kaja Uustee"
         leaving["profileUrl"] = f"https://www.riigikogu.ee/en/saadik/{self.NEW_UUID}"
+        # The portrait is keyed by uuid, and the validator says so: a member
+        # carrying the record of the one they replaced is a wrong face on a row,
+        # which is a rule that must stay fatal here rather than becoming the
+        # seating failure this class is about.
+        leaving["photo"] = f"assets/mps/{self.NEW_UUID}.webp"
 
     def test_an_unseated_substitution_fails_by_default(self):
         with TemporaryDirectory() as tmp:

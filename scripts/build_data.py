@@ -321,6 +321,13 @@ def build_mps(members: list, usa: set[str]) -> list[dict]:
             "name": m["fullName"],
             "uuid": m["uuid"],
             "photoUrl": photo.get("href"),
+            # The file the app actually loads. `photoUrl` is where it came from
+            # — an identifier the CMS re-mints on every re-publish, which is why
+            # nothing renders it any more — and `scripts/fetch_mp_photos.mjs`
+            # is what turns one into the other. Naming it here rather than
+            # deriving it in a view keeps `validate_data.py` able to check that
+            # the file is on disk before any of this publishes.
+            "photo": f"assets/mps/{m['uuid']}.webp" if photo.get("href") else None,
             "profileUrl": f"{WEB_BASE}/{m['uuid']}/{slug(m['fullName'])}",
             "faction": faction,
             "registeredPartyId": BY_FACTION[faction],
