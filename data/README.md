@@ -184,22 +184,39 @@ Change `blocs` when a government changes.
 
 ```jsonc
 { "gridDimensions": { "rows": 10, "cols": 12 },
-  "seats": { "<uuid>": { "name": "Evelin Poolamets", "row": 0, "col": 0 } } }
+  "seats": { "<uuid>": { "name": "Evelin Poolamets", "place": 1, "row": 0, "col": 0 } } }
 ```
 
 101 seats on a 10 × 12 grid; `row` and `col` are 0-based, so 19 of the 120 cells
-are empty and render as invisible placeholders that keep the grid rigid. The
+are empty and render as invisible placeholders that keep the grid rigid.
+
+`place` is the Riigikogu's own seat number, 1–120, exactly as the official plan
+prints it. The grid coordinates are derived from it — `row = (place - 1) % 10`,
+`col = (place - 1) // 10`, because the hall is numbered down each column of ten
+— and only `row`/`col` are read by the app. `place` is what makes the file
+checkable against the source: it is the field you compare when re-syncing. The
 desktop surface joins this to `mps.json` by uuid and colours each tile with the
 party its member **votes with** — the same rule as every other count in the app
 (`USABILITY.md` §10.2). The mobile app never reads it.
 
-**Nothing generates this file.** The Riigikogu API exposes no seat, so the
-positions were harvested once from the retiring `riigikogu-desktop` bundle
-(Phase 0 of `docs/desktop-2026/DESIGN_AND_MERGE_PLAN.md` — deleted after
-Phase 4; in git history) and are maintained by hand from there. Only the seat
-positions were carried over: that bundle's party data was stale —
-pre-2026-08-09, before two defections — which is the reason the two apps were
-merged in the first place.
+**Nothing generates this file.** The Riigikogu *API* exposes no seat. The
+Riigikogu *website* does, as a rendered page rather than a feed:
+
+<https://www.riigikogu.ee/riigikogu/koosseis/saali-plaan/>
+
+That page is the authority, and this file is a hand-made transcription of it —
+each `li.item` carries a `data-place` and, when the seat is taken, a link whose
+path contains the member's uuid, which is the same uuid `mps.json` uses. Re-sync
+by reading the page and comparing `place` per uuid; the positions were last
+brought into line with it on **2026-08-25**, which moved 23 seats.
+
+Before that the file held the positions harvested once in Phase 0 from the
+retiring `riigikogu-desktop` bundle (`docs/desktop-2026/DESIGN_AND_MERGE_PLAN.md`
+— deleted after Phase 4; in git history). Only the seat positions were ever
+carried over from it: that bundle's party data was stale — pre-2026-08-09,
+before two defections — which is the reason the two apps were merged in the
+first place. Its seat data has now aged out the same way, which is why the
+official page, and not the bundle, is the source named above.
 
 `name` is a review aid, so a diff reads as people rather than uuids; `mps.json`
 is the authority and the validator only *warns* when the two disagree.
