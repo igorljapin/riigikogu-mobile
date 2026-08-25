@@ -47,7 +47,10 @@ repo has broken before:
 | `data/*.json` | The single source of truth, **read by the app at runtime**. See `data/README.md`. |
 | `data/seating.json` | The one dataset only the desktop surface reads: each MP's session-hall seat position, keyed by uuid. Hand-maintained — see "Updating MP data" below. |
 | `service-worker.js` | Precaches the whole layout for **both** surfaces — mobile shell, desktop shell, ES modules, `data/*.json` including `seating.json` — with **relative** entries, so one list is correct both at `/riigikogu-mobile/` and at `/` under the test server. One registration, one cache, shared by both apps (`USABILITY.md` §10.11). Bump `CACHE_NAME` whenever the list changes. |
-| `manifest.json`, `offline.html`, `icons/` | Mobile PWA assets. `start_url` and `scope` are `/riigikogu-mobile/`. |
+| `manifest.json`, `offline.html` | Mobile PWA assets. `start_url` and `scope` are `/riigikogu-mobile/`. |
+| `icons/` | Both apps' marks. The `*.svg` files are the **masters**, hand-drawn; every `*.png` is **build output** — never hand-edit one, change the master and re-run the generator. `icon*` is the mobile app, `desktop-icon*` the desktop one. |
+| `scripts/generate_icons.mjs` | Renders the ten PNGs both manifests reference, from the four masters they derive from. Uses `sharp`, already a devDependency. Run it after any artwork edit, then bump `CACHE_NAME`. |
+| `reference/` | The Crown icon handoff: `ICON_HANDOFF.md` is the maintenance document (geometry, colours, the device checklist); the `.dc.html` files and their two scripts are design references. **Nothing here ships** — no app file loads any of it. |
 | `scripts/build_data.py`, `validate_data.py` | Rebuild `data/` from the live API, and gate it. |
 | `scripts/fetch_mp_data.py` | The monthly job's fetcher. Same resolvers as `build_data.py` (it imports them), stages + validates before publishing, and **never writes `data/alignment.json`**. |
 | `scripts/compare_mp_data.py`, `generate_pr_body.py` | Classify a fetch into the six change categories, and render the PR body — ACTION REQUIRED first. |
@@ -80,9 +83,12 @@ report is a workflow artifact, not a committed file.
 4. **A design change touches `styles.css` + `src/views/*` only**, keeps every
    `data-testid` in `USABILITY.md` §3, and ships green. Mobile layout is
    optimised for small screens — do not alter spacing casually.
-5. **`service-worker.js` and `manifest.json` are PWA configuration.** Touching
-   them means bumping `CACHE_NAME` and keeping `tests/pwa/offline.spec.js`
-   green.
+5. **`service-worker.js`, both `manifest.json`s and `icons/` are PWA
+   configuration.** Touching them means bumping `CACHE_NAME` and keeping
+   `tests/pwa/offline.spec.js` green. An icon change is an edit to an SVG
+   master plus `node scripts/generate_icons.mjs` — never a hand-edited PNG —
+   and the manifests, the shells and the precache list must keep naming the
+   same files, which `tests/unit/icons.test.mjs` asserts.
 6. **Never state Riigikogu seat arithmetic or coalition strength from memory.**
    Read it out of `data/meta.json`, or verify against the live API and cite the
    date.
