@@ -2,6 +2,30 @@
 
 Repo: `igorljapin/riigikogu-mobile` · branch `main` · both surfaces (mobile PWA + desktop PWA)
 
+## As landed
+
+This bundle shipped in Aug 2026. Three things differ from the steps below, which
+are otherwise accurate; the repository is the authority where they disagree.
+
+1. **Layout.** The bundle's `icons/`, `scripts/` and `reference/` are now those
+   directories in the repository. This file is `reference/ICON_HANDOFF.md`.
+2. **The iOS tiles are rendered from the rounded masters, not the maskable
+   ones**, at 0.9× on the same bottom-centre pivot. iOS applies a squircle
+   within a hair of the masters' own 230/1024 radius, so the rounded file
+   flattened onto its own ground colour is already the right shape; 0.8 is a
+   mask allowance rather than a margin and left the mark visibly small against
+   neighbouring apps. Checked by eye at 180px against both alternatives.
+3. **The opaque PNGs have their alpha channel removed, not merely flattened.**
+   `flatten()` alone leaves a fully-opaque alpha channel behind.
+
+`desktop-icon-44.png` keeps every detail, against the instinct to simplify it:
+a variant with the palace windows and the corbels dropped was rendered at true
+size and read *worse* — the window grid is what stops the palace being a white
+blob at 44px.
+
+`tests/unit/icons.test.mjs` now enforces the agreement between the masters, the
+PNGs, both manifests, both shells and the precache list (`USABILITY.md` 5.6).
+
 ## Overview
 
 Replace the illustrated Toompea castle icon with **Crown** — a cropped silhouette of
@@ -63,9 +87,10 @@ npm ci
    | `desktop-icon-44.png` | 44 | Windows taskbar |
    | `desktop-apple-touch-icon.png` | 180 | iPad, desktop app |
 
-   The two apple-touch files and the two maskable PNGs are flattened onto `#0f172a` with
-   no alpha channel. iOS paints transparent pixels black, so an opaque source is the only
-   way to be sure of the result.
+   The two apple-touch files and the two maskable PNGs are opaque, with the alpha channel
+   removed rather than merely flattened onto `#0f172a`. iOS paints transparent pixels
+   black, so an opaque source is the only way to be sure of the result. The apple-touch
+   pair is rendered from `icon.svg` / `desktop-icon.svg` at 0.9× — see "As landed" above.
 
 3. **`manifest.json`** — replace the whole `"icons"` array. Everything else in the file
    stays; `theme_color` and `background_color` already match the mark.

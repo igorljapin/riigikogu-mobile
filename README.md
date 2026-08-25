@@ -128,8 +128,10 @@ src/
   views-desktop/      desktop: app.js · parliament.js · directory.js · calculator.js · …
 data/                  parties · mps · alignment · board · meta · catalogues · seating
 service-worker.js     precache + offline, shared by both surfaces
-manifest.json  offline.html  icons/
-scripts/              build_data.py · validate_data.py · fetch_mp_data.py · …
+manifest.json  offline.html
+icons/                 SVG masters (hand-drawn) + PNGs (build output, never hand-edited)
+reference/             the Crown icon handoff — ICON_HANDOFF.md and design references; ships nothing
+scripts/              build_data.py · validate_data.py · fetch_mp_data.py · generate_icons.mjs · …
 tests/                unit · tier1 · tier2 · pwa · python
 ```
 

@@ -1,113 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="XV Riigikogu">
   <defs>
-    <linearGradient id="rkBg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0"    stop-color="#2A5F94"/>
-      <stop offset=".55"  stop-color="#3E5F86"/>
-      <stop offset=".78"  stop-color="#C8886B"/>
-      <stop offset="1"    stop-color="#D4A079"/>
-    </linearGradient>
-    <linearGradient id="rkSheen" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0"   stop-color="#ffffff" stop-opacity=".14"/>
-      <stop offset=".4"  stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="rkStone" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0"    stop-color="#8A6A3E"/>
-      <stop offset=".15"  stop-color="#C49C63"/>
-      <stop offset=".45"  stop-color="#E8CC94"/>
-      <stop offset=".75"  stop-color="#BE9155"/>
-      <stop offset="1"    stop-color="#7A5A30"/>
-    </linearGradient>
-    <linearGradient id="rkPalace" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0"   stop-color="#F6D4C2"/>
-      <stop offset="1"   stop-color="#E6A487"/>
-    </linearGradient>
-    <linearGradient id="rkRoof" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0"   stop-color="#C14B2E"/>
-      <stop offset="1"   stop-color="#8A2E1A"/>
-    </linearGradient>
+    <clipPath id="squircle"><rect x="0" y="0" width="1024" height="1024" rx="230" ry="230"></rect></clipPath>
   </defs>
-
-  <!-- Squircle background -->
-  <rect x="0" y="0" width="1024" height="1024" rx="230" ry="230" fill="url(#rkBg)"/>
-  <rect x="0" y="0" width="1024" height="1024" rx="230" ry="230" fill="url(#rkSheen)"/>
-
-  <!-- Toompea cliff dark band -->
-  <path d="M 0 870 Q 300 830 512 848 T 1024 860 L 1024 1024 L 0 1024 Z" fill="#0B2340" opacity=".55"/>
-
-  <!-- RIIGIKOGU PALACE -->
-  <rect x="260" y="700" width="640" height="170" fill="url(#rkPalace)"/>
-  <rect x="460" y="660" width="240" height="210" fill="url(#rkPalace)"/>
-  <path d="M 460 660 Q 580 600 700 660 L 700 680 L 460 680 Z" fill="url(#rkPalace)"/>
-  <path d="M 260 700 L 300 660 L 860 660 L 900 700 Z" fill="url(#rkRoof)"/>
-  <path d="M 460 660 L 500 620 L 660 620 L 700 660 Z" fill="url(#rkRoof)"/>
-  <!-- Central doorway -->
-  <path d="M 552 870 L 552 790 Q 552 762 580 762 Q 608 762 608 790 L 608 870 Z" fill="#5B3420"/>
-  <!-- Windows -->
-  <g fill="#F9D98E">
-    <rect x="300" y="720" width="22" height="34" rx="2"/>
-    <rect x="340" y="720" width="22" height="34" rx="2"/>
-    <rect x="380" y="720" width="22" height="34" rx="2"/>
-    <rect x="420" y="720" width="22" height="34" rx="2"/>
-    <rect x="720" y="720" width="22" height="34" rx="2"/>
-    <rect x="760" y="720" width="22" height="34" rx="2"/>
-    <rect x="800" y="720" width="22" height="34" rx="2"/>
-    <rect x="840" y="720" width="22" height="34" rx="2"/>
-    <rect x="300" y="790" width="22" height="34" rx="2"/>
-    <rect x="340" y="790" width="22" height="34" rx="2"/>
-    <rect x="380" y="790" width="22" height="34" rx="2"/>
-    <rect x="420" y="790" width="22" height="34" rx="2"/>
-    <rect x="720" y="790" width="22" height="34" rx="2"/>
-    <rect x="760" y="790" width="22" height="34" rx="2"/>
-    <rect x="800" y="790" width="22" height="34" rx="2"/>
-    <rect x="840" y="790" width="22" height="34" rx="2"/>
-    <rect x="488" y="700" width="22" height="34" rx="2"/>
-    <rect x="528" y="700" width="22" height="34" rx="2"/>
-    <rect x="628" y="700" width="22" height="34" rx="2"/>
-    <rect x="668" y="700" width="22" height="34" rx="2"/>
+  <g clip-path="url(#squircle)">
+  <rect width="1024" height="1024" fill="#0f172a"></rect>
+  <rect x="500" y="54" width="14" height="250" fill="#94a3b8"></rect>
+  <circle cx="507" cy="46" r="16" fill="#f4f6f8"></circle>
+  <rect x="514" y="78" width="232" height="52" fill="#2563eb"></rect>
+  <rect x="514" y="130" width="232" height="52" fill="#233046"></rect>
+  <rect x="514" y="182" width="232" height="52" fill="#f4f6f8"></rect>
+  <rect x="514" y="78" width="232" height="156" fill="none" stroke="#94a3b8" stroke-width="4" opacity=".55"></rect>
+  <g fill="#f4f6f8">
+    <rect x="288" y="300" width="60" height="80"></rect>
+    <rect x="385" y="300" width="60" height="80"></rect>
+    <rect x="482" y="300" width="60" height="80"></rect>
   </g>
-
-  <!-- PIKK HERMANN tower -->
-  <rect x="152" y="300" width="180" height="570" fill="url(#rkStone)"/>
-  <!-- Crenellations -->
-  <g fill="#B48A52">
-    <rect x="152" y="260" width="28" height="48"/>
-    <rect x="186" y="254" width="28" height="54"/>
-    <rect x="220" y="250" width="28" height="58"/>
-    <rect x="254" y="250" width="28" height="58"/>
-    <rect x="286" y="254" width="28" height="54"/>
-    <rect x="318" y="260" width="12" height="48"/>
+  <g fill="#94a3b8">
+    <rect x="579" y="300" width="60" height="80"></rect>
+    <rect x="676" y="300" width="60" height="80"></rect>
   </g>
-  <!-- Corbel band -->
-  <rect x="142" y="308" width="200" height="18" fill="#6E4E20"/>
-  <!-- Flagpole -->
-  <rect x="240" y="40" width="6" height="220" fill="#EEF3F9"/>
-  <circle cx="243" cy="36" r="8" fill="#F4D15C"/>
-  <!-- Estonian flag: blue / black / white -->
-  <rect x="246" y="60"  width="130" height="22" fill="#0072CE"/>
-  <rect x="246" y="82"  width="130" height="22" fill="#0B1220"/>
-  <rect x="246" y="104" width="130" height="22" fill="#F4F4F2"/>
-  <!-- Arrow-slit windows -->
-  <g fill="#3A2614">
-    <rect x="236" y="380" width="10" height="44" rx="3"/>
-    <rect x="236" y="500" width="10" height="44" rx="3"/>
-    <rect x="236" y="620" width="10" height="44" rx="3"/>
+  <rect x="288" y="378" width="448" height="52" fill="#f4f6f8"></rect>
+  <rect x="562" y="378" width="174" height="52" fill="#94a3b8"></rect>
+  <path d="M312 430 H712 L732 1024 H292 Z" fill="#f4f6f8"></path>
+  <path d="M562 430 H712 L732 1024 H572 Z" fill="#94a3b8"></path>
+  <g fill="#94a3b8" opacity=".5">
+    <rect x="320" y="430" width="22" height="26"></rect>
+    <rect x="368" y="430" width="22" height="26"></rect>
+    <rect x="416" y="430" width="22" height="26"></rect>
+    <rect x="464" y="430" width="22" height="26"></rect>
+    <rect x="512" y="430" width="22" height="26"></rect>
+    <rect x="560" y="430" width="22" height="26"></rect>
+    <rect x="608" y="430" width="22" height="26"></rect>
+    <rect x="656" y="430" width="22" height="26"></rect>
   </g>
-  <!-- Cylinder highlight and shadow -->
-  <rect x="290" y="310" width="14" height="560" fill="#fff" opacity=".18"/>
-  <rect x="158" y="310" width="16" height="560" fill="#000" opacity=".22"/>
-  <!-- Stone courses -->
-  <g stroke="#6E4E20" stroke-width="2" opacity=".32">
-    <line x1="152" y1="440" x2="332" y2="440"/>
-    <line x1="152" y1="560" x2="332" y2="560"/>
-    <line x1="152" y1="680" x2="332" y2="680"/>
+  <g fill="#0f172a">
+    <rect x="498" y="520" width="28" height="70" rx="14"></rect>
+    <rect x="498" y="680" width="28" height="70" rx="14"></rect>
+    <rect x="498" y="840" width="28" height="70" rx="14"></rect>
   </g>
-
-  <!-- Wordmark -->
-  <text x="720" y="230" text-anchor="middle"
-        fill="#F6E4B7"
-        font-family="Inter, sans-serif"
-        font-weight="700"
-        font-size="78"
-        letter-spacing="6"
-        style="paint-order:stroke;stroke:rgba(11,35,64,.35);stroke-width:2">RIIGIKOGU</text>
+  </g>
 </svg>

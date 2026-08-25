@@ -42,7 +42,14 @@
 // theme/background colours, dark-mode offline page): the list itself is
 // unchanged, but two precached files' contents are, so a bump is still
 // needed to evict the stale copies.
-const CACHE_NAME = 'riigikogu-mobile-v6';
+//
+// v7 is the Crown icon. Both surfaces get their own mark for the first time —
+// the mobile app the cropped Pikk Hermann silhouette, the desktop app the same
+// crown with the palace beside it — so the list grows from four icons to
+// thirteen. The bump matters more here than usual: without it a returning
+// visitor is served the old castle out of the v6 cache and only sees the new
+// mark on the visit after.
+const CACHE_NAME = 'riigikogu-mobile-v7';
 
 // Where this app is deployed. Not used to build URLs — the relative list above
 // does that — but checked at install time, because a silent mount-point mismatch
@@ -112,10 +119,27 @@ const PRECACHE_ASSETS = [
   './data/meta.json',
   './data/seating.json',
 
+  // Every icon either manifest names, and nothing else. The masters the apps
+  // never load — `icon-dark.svg`, `icon-maskable.svg` and their desktop pairs —
+  // are deliberately absent: they are sources for `scripts/generate_icons.mjs`,
+  // not assets a browser requests. Install is allowed to fail loudly in this
+  // worker, so one entry naming a file that does not exist rejects `addAll()`
+  // and kills registration for everyone; `tests/unit/icons.test.mjs` asserts
+  // this list and the two manifests still agree.
   './icons/icon.svg',
+  './icons/icon-mono.svg',
   './icons/icon-192x192.png',
   './icons/icon-512x512.png',
+  './icons/icon-maskable-512.png',
   './icons/apple-touch-icon.png',
+
+  './icons/desktop-icon.svg',
+  './icons/desktop-icon-44.png',
+  './icons/desktop-icon-192.png',
+  './icons/desktop-icon-256.png',
+  './icons/desktop-icon-512.png',
+  './icons/desktop-icon-maskable-512.png',
+  './icons/desktop-apple-touch-icon.png',
 ];
 
 self.addEventListener('install', (event) => {

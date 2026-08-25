@@ -133,6 +133,7 @@ pass?* — so it gets the most coverage.
 | 5.3 | `manifest.json` `start_url` and `scope` match the deployment path | `pwa/offline.spec.js` |
 | 5.4 | The app renders after going offline | `pwa/offline.spec.js` |
 | 5.5 | The calculator works offline, from cached data | `pwa/offline.spec.js` |
+| 5.6 | **New.** Every icon either manifest declares exists at the size it claims, the maskable icon is its own asset rather than the rounded one reused, the iOS tiles carry no alpha channel, and the precache list and the manifests name the same files | `unit/icons.test.mjs` |
 
 ---
 
@@ -827,6 +828,14 @@ and the desktop one takes `/riigikogu-mobile/desktop/`, so the two install as
 two apps with two start URLs and two icons' worth of identity. The desktop
 manifest is the only one that changed hands: mobile's is byte-identical, because
 its `start_url` **is** its identity and every installed copy is keyed on it.
+
+> **Two icons, since the Crown icon (Aug 2026).** For the surfaces' first year
+> that sentence was half true — both manifests pointed at the same `icons/`
+> files, so the two installed apps were indistinguishable in a dock. They now
+> carry separate marks from separate masters: the mobile app the cropped Pikk
+> Hermann silhouette, the desktop app the same crown with the Riigikogu palace
+> beside it. `start_url` is still what makes them two apps; the icons are what
+> makes them two apps a person can tell apart.
 
 > **A question for review, raised rather than invented** (the Phase 3 kickoff
 > rule). The desktop scope is *nested inside* the mobile one, which is what the
