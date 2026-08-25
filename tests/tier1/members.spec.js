@@ -90,10 +90,15 @@ test.describe('Tier 1 — Members directory', () => {
    *
    * The design bundle put initials in the rows and photos only on the profile;
    * the owner altered that to photo-first with the initials as the fallback
-   * (§9.3), because MP photos are cross-origin and deliberately uncached, so
-   * offline there is no photo to show. Either state is legal — what is not
-   * legal is a row with no avatar at all, or one whose initials are somebody
-   * else's.
+   * (§9.3). Either state is legal for a row further down the list — a lazy
+   * image has not necessarily loaded — and what is not legal is a row with no
+   * avatar at all, or one whose initials are somebody else's.
+   *
+   * The rows on the first screen are held to more than that, and only can be
+   * since Aug 2026: the portraits are `assets/mps/*.webp`, served by the app
+   * itself. While they were hotlinked from `api.riigikogu.ee` this assertion
+   * would have been a coin toss — two thirds of those URLs answered 404 and the
+   * rest were rate-limited — which is precisely why it is worth asserting now.
    */
   test('every row carries an avatar: the MP photo, or their initials as the fallback', async ({ page }) => {
     const avatars = page.getByTestId('mp-row-avatar');
@@ -118,6 +123,18 @@ test.describe('Tier 1 — Members directory', () => {
       const expected = (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
       expect(row.letters).toBe(expected);
     }
+
+    // The eager ones — the avatars a reader sees the moment the tab paints —
+    // have to arrive at the photo, not settle for the letters.
+    const firstScreen = avatars.first();
+    await expect(firstScreen).toHaveAttribute('data-avatar', 'photo');
+    await expect
+      .poll(async () =>
+        avatars.evaluateAll((els) =>
+          els.slice(0, 12).filter((el) => el.getAttribute('data-avatar') === 'photo').length,
+        ),
+      )
+      .toBe(12);
   });
 
   /**

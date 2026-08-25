@@ -27,6 +27,26 @@ function dataUrl(name) {
   return new URL(`../data/${name}.json`, import.meta.url);
 }
 
+/**
+ * The `<img src>` for an MP's portrait, or `null` for a member who has none.
+ *
+ * `mps.json` records the portrait as a repo-relative path (`assets/mps/<uuid>.webp`),
+ * which is the one form that says nothing about where the app is mounted;
+ * resolving it here — against this module, exactly as `dataUrl` resolves the
+ * JSON — is what makes the same string correct at `/riigikogu-mobile/` for the
+ * mobile shell, at `/riigikogu-mobile/desktop/` for the desktop one, and at `/`
+ * under the test server.
+ *
+ * The portraits are the app's own files. Until August 2026 they were hotlinked
+ * from `api.riigikogu.ee`, whose file URLs rotate — two thirds of them were
+ * dead within a fortnight of the last data build — and which rate-limits the
+ * hundred-image burst a roster paints. `scripts/fetch_mp_photos.mjs` has the
+ * full account.
+ */
+export function photoSrc(mp) {
+  return mp.photo ? new URL(`../${mp.photo}`, import.meta.url).href : null;
+}
+
 async function fetchJson(name) {
   const response = await fetch(dataUrl(name), { cache: 'no-cache' });
   if (!response.ok) {

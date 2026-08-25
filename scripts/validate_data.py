@@ -179,6 +179,15 @@ def check(data: Path, allow_pending: bool = False, allow_pending_seating: bool =
         for field in ("photoUrl", "profileUrl"):
             if not URL.match(m.get(field) or ""):
                 err(f"mps.json: {m['name']}: {field} is not a https URL")
+        # `photo` is the file the app loads; `photoUrl` is only where it came
+        # from. The shape is checked here — the file being on disk is checked by
+        # `tests/unit/photos.test.mjs` and `fetch_mp_photos.mjs --check`, which
+        # are the same division of labour the icons use: this validator reads
+        # `data/`, and a build output living somewhere else is the suite's.
+        expected_photo = f"assets/mps/{m.get('uuid')}.webp"
+        if m.get("photo") != expected_photo:
+            err(f"mps.json: {m['name']}: photo is {m.get('photo')!r}, expected {expected_photo!r} "
+                "— run scripts/fetch_mp_photos.mjs")
         if m.get("boardRole") is not None and m["boardRole"] not in BOARD_ROLES:
             err(f"mps.json: {m['name']}: unknown boardRole {m['boardRole']!r}")
         if m.get("factionRole") is not None and m["factionRole"] not in FACTION_ROLES:

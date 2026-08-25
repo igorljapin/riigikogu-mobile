@@ -57,7 +57,8 @@ API string and is how `mps.json` joins to a party.
 ### `mps.json` — roster, 101 entries, 100% API-derived
 
 ```jsonc
-{ "name": "Aivar Kokk", "uuid": "…", "photoUrl": "…", "profileUrl": "…",
+{ "name": "Aivar Kokk", "uuid": "…", "photoUrl": "…",
+  "photo": "assets/mps/2dcb35ed-….webp", "profileUrl": "…",
   "faction": "Isamaa Parliamentary Group", "registeredPartyId": "isamaa",
   "factionRole": null,
   "committees": [{ "name": "Finance Committee", "role": "member", "type": "ALALINE_KOMISJON" }],
@@ -69,8 +70,20 @@ API string and is how `mps.json` joins to a party.
 - `faction` uses the **corrected resolver**: the `FRAKTSIOON` entry whose
   `membership.endDate` is `null`. The pre-Phase-1 bug took `factions[0]`, an
   arbitrary and often expired membership.
-- `photoUrl` is the API's durable `files/{uuid}/download` link, not the fragile
-  `wpcms/temp/` thumbnail the old bundle used.
+- `photo` is **the file the app loads**: `assets/mps/<uuid>.webp`, committed in
+  this repository, keyed by the member's uuid, written by
+  `scripts/fetch_mp_photos.mjs`. Relative to the repository root, because that
+  is the one form that is correct for both surfaces — `src/data.js`'s
+  `photoSrc` resolves it against wherever the app is mounted.
+- `photoUrl` is where that file came from, and **nothing renders it**. It was
+  the `<img src>` until Aug 2026, on the belief that `files/{uuid}/download` was
+  durable — it is not. The uuid is the *file record's*, and the CMS mints a new
+  one whenever a portrait is re-published: on 2026-08-25, 66 of the 101 URLs
+  committed on the 12th answered `404`, so two thirds of the roster showed
+  initials on both surfaces. (The `wpcms/temp/` thumbnail the old bundle used is
+  worse still — the parliament's own site treats it as a cache.) The field stays
+  because the fetcher needs somewhere to record provenance, and
+  `compare_mp_data.py` reads it to notice a re-shot portrait.
 - `leftFaction` / `leftFactionDate` record the most recent group an MP left —
   this is what makes defections detectable with no human input.
 - `committees` covers standing (`ALALINE_KOMISJON`) and select (`ERIKOMISJON`)
@@ -125,6 +138,19 @@ unattended job to touch.
 | You, by hand | yes — it is your file | yes — it is your file |
 | `scripts/build_data.py` (hand-run) | appends a new uuid to `unaligned`, nothing else | **never** |
 | `scripts/fetch_mp_data.py` (the monthly job) | **never** | **never** |
+
+There is one more writer, and it touches exactly two fields of one file.
+`scripts/fetch_mp_photos.mjs` refreshes `photoUrl` and `photo` in `mps.json` for
+members that are already there — it never adds one, never removes one, and never
+looks at another file. A uuid the API returns and the roster does not have is
+reported and skipped, because a roster change is `build_data.py`'s to make. Run
+it after either of the two above, or on its own when portraits are all that has
+moved:
+
+```bash
+node scripts/fetch_mp_photos.mjs          # fetch, encode, prune, update
+node scripts/fetch_mp_photos.mjs --check  # verify, download nothing
+```
 
 Phase 5 tightened `ARCHITECTURE_PLAN.md` §5.2 on the last row: the *unattended*
 job does not touch the curated overlay at all. A newly non-affiliated MP reaches

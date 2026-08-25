@@ -34,6 +34,11 @@ test.describe('Tier 2 — Members directory against data/*.json (Phase 4)', () =
     }
   });
 
+  /** The `src` an MP's portrait must end in, whatever base path the app is on. */
+  function photoPattern(mp) {
+    return new RegExp(`/${mp.photo.replace(/[.]/g, '\\.')}$`);
+  }
+
   test('each MP popup links to the canonical profile URL and photo', async ({ page }) => {
     // A representative sample — one per registered party — keeps the run fast
     // while still covering every code path that builds a URL.
@@ -50,7 +55,13 @@ test.describe('Tier 2 — Members directory against data/*.json (Phase 4)', () =
       await expect(popup).toBeVisible();
       await expect(popup.getByTestId('mp-profile-link')).toHaveAttribute('href', mp.profileUrl);
       await expect(popup.getByTestId('mp-profile-link')).toHaveAttribute('target', '_blank');
-      await expect(popup.getByTestId('mp-photo')).toHaveAttribute('src', mp.photoUrl);
+      // The portrait is the app's own file now, so the src is `mp.photo`
+      // resolved against wherever the app is mounted — `/` here, and
+      // `/riigikogu-mobile/` in production. `photoUrl` stays in the data as the
+      // upstream record `scripts/fetch_mp_photos.mjs` fetched it from; nothing
+      // renders it, because those URLs rotate and two thirds of them were dead
+      // within a fortnight (§4).
+      await expect(popup.getByTestId('mp-photo')).toHaveAttribute('src', photoPattern(mp));
       await page.getByTestId('mp-popup-close').click();
       await expect(popup).toBeHidden();
     }
@@ -72,15 +83,15 @@ test.describe('Tier 2 — Members directory against data/*.json (Phase 4)', () =
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
 
-  test('row avatars carry the photo URL from mps.json, or that MP initials', async ({ page }) => {
+  test('row avatars carry the portrait named in mps.json, or that MP initials', async ({ page }) => {
     // 3.9, the data half: whichever state a row is in, it has to be that MP's
     // photo and that MP's initials — not a placeholder, and not the neighbour's.
     for (const mp of activeMps) {
       const avatar = page.locator(`[data-testid="mp-row"][data-mp-uuid="${mp.uuid}"] [data-testid="mp-row-avatar"]`);
       await expect(avatar).toHaveCount(1);
       await expect(avatar).toHaveAttribute('data-initials', expectedInitials(mp.name));
-      if (mp.photoUrl) {
-        await expect(avatar.locator('img')).toHaveAttribute('src', mp.photoUrl);
+      if (mp.photo) {
+        await expect(avatar.locator('img')).toHaveAttribute('src', photoPattern(mp));
       }
     }
   });

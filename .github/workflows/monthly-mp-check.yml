@@ -72,6 +72,32 @@ jobs:
       - name: Fetch current data from the API
         run: python3 scripts/fetch_mp_data.py
 
+      # The portraits, from the same API and committed beside the data they
+      # belong to. This has to run before the classifier, so the change report
+      # describes what will actually be committed, and it has to run at all:
+      # `mps.json` names `assets/mps/<uuid>.webp` for every member, and a
+      # substitution arrives with a member nobody has a portrait for.
+      #
+      # It hotlinked those portraits until Aug 2026, which is why this step is
+      # here — the API's file URLs are keyed by a record the CMS re-mints on
+      # every re-publish, so two thirds of a month-old snapshot answers 404.
+      # Fetching them here is what keeps that from being anyone's problem again.
+      - name: Fetch the MP portraits
+        run: node scripts/fetch_mp_photos.mjs
+
+      # A roster change moves the precache list, and a returning visitor holds
+      # the old cache until CACHE_NAME moves too. The job does not guess at that
+      # edit — it is one line in a file full of prose about why each bump
+      # happened — so it says so where the reviewer will see it.
+      - name: Say so if the precache list moved
+        run: |
+          if ! git diff --quiet service-worker.js; then
+            echo "::warning title=Bump CACHE_NAME::The portrait precache list changed. Bump CACHE_NAME in service-worker.js in this PR, or returning visitors keep the old cache."
+            echo "### 🗂️ Bump \`CACHE_NAME\`" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "The roster moved, so the portrait precache list did too. Bump \`CACHE_NAME\` in \`service-worker.js\` before merging." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Classify the changes
         id: compare
         run: |
@@ -86,7 +112,10 @@ jobs:
           SEATING: ${{ steps.compare.outputs.seating_required }}
         run: |
           echo "Only meta.updatedAt moved. Nothing to review."
-          git checkout -- data
+          # Portraits and the precache list come back with the data: nothing is
+          # published on this path, and a re-encoded portrait is not a reason to
+          # open a PR on its own.
+          git checkout -- data assets service-worker.js
           # A pending seat is never a reason to open a PR — the job may not write
           # the floor plan, so it would have nothing to commit — but it is a
           # reason to say so. This is the one path where a 🪑 raised in an
@@ -158,9 +187,11 @@ jobs:
           git fetch origin "$BRANCH" || true
           git checkout -B "$BRANCH"
 
-          # Only the app's data. The change report stays in the runner's temp
-          # dir — committing it is what made the old job fail against .gitignore.
-          git add data
+          # The app's data, the portraits it names, and the precache list that
+          # has to name the same files. The change report stays in the runner's
+          # temp dir — committing it is what made the old job fail against
+          # .gitignore.
+          git add data assets/mps service-worker.js
           if git diff --cached --quiet; then
             echo "Nothing staged; skipping."
             exit 0

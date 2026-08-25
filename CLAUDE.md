@@ -25,7 +25,8 @@ repo has broken before:
 
 - **A data change is a change to `data/*.json` and nothing else.** The app reads
   those files at runtime. Never edit `src/views/*` or `styles.css` to change a
-  number.
+  number. (The one companion: the MP portraits under `assets/mps/`, which are
+  named by `data/mps.json` and written by a script — never by hand.)
 - **A design change is a change to `styles.css` and `src/views/*` and nothing
   else.** It may rewrite either freely, but it must keep every `data-testid` in
   `USABILITY.md` §3 and ship with a green suite. A redesign already failed once
@@ -45,11 +46,13 @@ repo has broken before:
 | `desktop.css` | The desktop stylesheet, built on the same design tokens as `styles.css` at desktop density. Party colours are data-driven here too, never hardcoded. |
 | `src/views-desktop/*.js` | `app.js` (shell + router), `parts.js`, `floor.js`, `seating.js`, `parliament.js`, `directory.js`, `calculator.js`. **The desktop redesign layer**, together with `desktop.css`. Reuses `src/data.js` and `src/lib/*.js` untouched — see `USABILITY.md` §10. |
 | `data/*.json` | The single source of truth, **read by the app at runtime**. See `data/README.md`. |
+| `assets/mps/*.webp` | The 101 MP portraits, keyed by the member's uuid — **build output**, like the icons. `scripts/fetch_mp_photos.mjs` writes them, `data/mps.json` names them in `photo`, the service worker precaches them, and `tests/unit/photos.test.mjs` holds those three to the same list. Never hand-edit one; see `assets/README.md`. |
 | `data/seating.json` | The one dataset only the desktop surface reads: each MP's session-hall seat position, keyed by uuid. Hand-maintained — see "Updating MP data" below. |
 | `service-worker.js` | Precaches the whole layout for **both** surfaces — mobile shell, desktop shell, ES modules, `data/*.json` including `seating.json` — with **relative** entries, so one list is correct both at `/riigikogu-mobile/` and at `/` under the test server. One registration, one cache, shared by both apps (`USABILITY.md` §10.11). Bump `CACHE_NAME` whenever the list changes. |
 | `manifest.json`, `offline.html` | Mobile PWA assets. `start_url` and `scope` are `/riigikogu-mobile/`. |
 | `icons/` | Both apps' marks. The `*.svg` files are the **masters**, hand-drawn; every `*.png` is **build output** — never hand-edit one, change the master and re-run the generator. `icon*` is the mobile app, `desktop-icon*` the desktop one. |
 | `scripts/generate_icons.mjs` | Renders the ten PNGs both manifests reference, from the four masters they derive from. Uses `sharp`, already a devDependency. Run it after any artwork edit, then bump `CACHE_NAME`. |
+| `scripts/fetch_mp_photos.mjs` | Fetches every member's portrait from the API, encodes it to `assets/mps/<uuid>.webp`, and keeps `data/mps.json`'s `photo`/`photoUrl` fields and the worker's precache list in step. `--check` verifies without downloading. The monthly job runs it. |
 | `reference/` | The Crown icon handoff: `ICON_HANDOFF.md` is the maintenance document (geometry, colours, the device checklist); the `.dc.html` files and their two scripts are design references. **Nothing here ships** — no app file loads any of it. |
 | `scripts/build_data.py`, `validate_data.py` | Rebuild `data/` from the live API, and gate it. |
 | `scripts/fetch_mp_data.py` | The monthly job's fetcher. Same resolvers as `build_data.py` (it imports them), stages + validates before publishing, and **never writes `data/alignment.json`**. |
@@ -79,7 +82,9 @@ report is a workflow artifact, not a committed file.
    it's unrelated". That single rule is what prevents a repeat of `4dae72b`.
    If the suite is red, fix the app; changing a test is legitimate only when
    the *contract* changed, and then `USABILITY.md` §1 changes in the same PR.
-3. **A data change touches `data/*.json` only** (see below).
+3. **A data change touches `data/*.json` only** (see below) — plus
+   `assets/mps/` and the worker's generated portrait list when the roster moves,
+   which `scripts/fetch_mp_photos.mjs` writes and nobody edits by hand.
 4. **A design change touches `styles.css` + `src/views/*` only**, keeps every
    `data-testid` in `USABILITY.md` §3, and ships green. Mobile layout is
    optimised for small screens — do not alter spacing casually.
@@ -131,7 +136,7 @@ PR into `main` with the changes classified:
 | | Meaning | What you do |
 |---|---|---|
 | 🔴 **ACTION REQUIRED** | An MP became non-affiliated. The job cannot know which party they joined. | Add them to `alignment.json` — `unaligned` if they joined no party, `defectors` with a `votesWith` if they did. |
-| 🟠 Roster change | An MP joined or left parliament (substitutions when a member becomes a minister). | Read it — and see 🪑 below, which a roster change always brings with it. |
+| 🟠 Roster change | An MP joined or left parliament (substitutions when a member becomes a minister). | Read it — and see 🪑 below, which a roster change always brings with it. A roster change also moves the portrait precache list, so bump `CACHE_NAME` in `service-worker.js`; the job's step summary says when. |
 | 🪑 **ACTION REQUIRED** | The roster moved and `data/seating.json` did not: someone has no seat, or a seat belongs to someone who has left. The API publishes no seat, so the job cannot fix it. | Give the arriving member a cell in `seating.json` — usually the one the departing member freed, which the PR body names. |
 | 🟡 Board change | President or a Vice-President changed. | Read it. |
 | 🟢 Routine | Committee moves, photos, contacts, districts. | Read it. |
@@ -150,10 +155,17 @@ none of it from the seating plan.
 ### 2. Do it by hand
 
 ```bash
-python3 scripts/build_data.py       # regenerate everything API-derived
-python3 scripts/validate_data.py    # exit 0 = safe to publish
-npm test                            # must be green before the PR
+python3 scripts/build_data.py        # regenerate everything API-derived
+node scripts/fetch_mp_photos.mjs     # the portraits the roster names
+python3 scripts/validate_data.py     # exit 0 = safe to publish
+npm test                             # must be green before the PR
 ```
+
+The portrait step is not optional and does not belong to the data change in
+spirit only: `mps.json` names `assets/mps/<uuid>.webp` for every member, and the
+service worker precaches every one of those files. A member with no portrait on
+disk is a rejected `addAll()`, which is a failed service worker registration for
+every visitor — `tests/unit/photos.test.mjs` is what stops that reaching `main`.
 
 Then commit `data/*.json` on a branch and open a PR.
 
@@ -187,10 +199,19 @@ not run `playwright install` here. CI installs its own.
    validated branch and the run's error message links the compare page. Nothing
    in the repository can fix this.
 
-2. **MP photos do not work offline.** They are served by `api.riigikogu.ee` and
-   the service worker leaves cross-origin requests alone; the roster falls back
-   to placeholders. Caching ~100 opaque responses of unknown size alongside the
-   app was a deliberate no.
+2. ~~**MP photos do not work offline.**~~ **Fixed, Aug 2026** — and the online
+   half was broken too, which is what forced it. The portraits were hotlinked
+   from `api.riigikogu.ee/api/files/<file-uuid>/download`, a URL keyed by a file
+   record the CMS re-mints on every re-publish: on 2026-08-25, 66 of the 101
+   URLs committed on the 12th answered `404`, so two thirds of the roster showed
+   initials on both surfaces. The origin also rate-limits (`429` from four
+   parallel requests, against the hundred a roster paints) and sends no
+   `Cache-Control`. They are the app's own files now — `assets/mps/<uuid>.webp`,
+   ~600 KB for all 101, precached — so they are correct, fast and offline. The
+   old "~100 opaque responses of unknown size" reasoning was also mistaken: the
+   API sends `Access-Control-Allow-Origin: *`, so the responses were never
+   opaque. **A portrait is never a design or data edit**: run
+   `node scripts/fetch_mp_photos.mjs`.
 
 Everything else that older sessions were warned about is fixed: the service
 worker's precache paths (Phase 6 — offline works, all five PWA specs run for
