@@ -1,6 +1,6 @@
 {
   "_comment": "Session-hall seat positions, keyed by MP uuid — the one dataset the desktop surface needs that the API cannot provide, so no build script writes this file (data/README.md, \"Who writes what\"). Seat positions only: no party data is carried here, because mps.json plus alignment.json are the authority on which bloc paints a tile. `place` is the Riigikogu's own seat number (1–120) as printed on the official plan; `row` and `col` are the 0-based grid coordinates the desktop floor renders, derived from it as row = (place - 1) % 10, col = (place - 1) // 10. The grid is 10 rows × 12 columns and 19 of its 120 cells are empty. `name` is a review aid — mps.json is the authority on names, and the validator only warns when the two drift.",
-  "source": "https://www.riigikogu.ee/riigikogu/koosseis/saali-plaan/ — the official hall plan, re-synced 2026-08-25. Supersedes the seat positions harvested in Phase 0 from the retiring riigikogu-desktop bundle, which had drifted from the room by 23 seats.",
+  "source": "https://www.riigikogu.ee/riigikogu/koosseis/saali-plaan/ — the official hall plan, re-synced 2026-09-17 after the Sept 16 cabinet reshuffle: Pevkur took place 28 and Sutt place 41 from the substitutes they displaced, and three seats moved on their own (Stoicescu 77→88, Laneman 88→39, Kiili 39→89). Supersedes the seat positions harvested in Phase 0 from the retiring riigikogu-desktop bundle, which had drifted from the room by 23 seats.",
   "gridDimensions": {
     "rows": 10,
     "cols": 12
@@ -120,12 +120,6 @@
       "row": 6,
       "col": 2
     },
-    "001dd80c-38c3-4557-b3ee-408d3ffd5cd7": {
-      "name": "Katrin Kuusemäe",
-      "place": 28,
-      "row": 7,
-      "col": 2
-    },
     "31eee189-0019-469f-8469-7da564bf1af9": {
       "name": "Kalle Laanet",
       "place": 29,
@@ -188,21 +182,15 @@
     },
     "7251e077-1964-4f2b-9dba-349dc127b56e": {
       "name": "Meelis Kiili",
-      "place": 39,
+      "place": 89,
       "row": 8,
-      "col": 3
+      "col": 8
     },
     "0f9372ee-f108-47f9-9192-82ff84cf3efb": {
       "name": "Timo Suslov",
       "place": 40,
       "row": 9,
       "col": 3
-    },
-    "db46f14c-3bdf-47a0-bed4-0172f7d942db": {
-      "name": "Toomas Järveoja",
-      "place": 41,
-      "row": 0,
-      "col": 4
     },
     "1600fe77-4b45-44ab-972a-181a5ef71767": {
       "name": "Kristo Enn Vaga",
@@ -410,9 +398,9 @@
     },
     "987e47c7-929b-4437-9385-fab4f4fd7824": {
       "name": "Grigore-Kalev Stoicescu",
-      "place": 77,
-      "row": 6,
-      "col": 7
+      "place": 88,
+      "row": 7,
+      "col": 8
     },
     "3febb869-f443-4aba-908e-7c0c30f8c4dd": {
       "name": "Irja Lutsar",
@@ -476,9 +464,9 @@
     },
     "563f86fd-db45-4046-b8ed-b66e5a2aec45": {
       "name": "Alar Laneman",
-      "place": 88,
-      "row": 7,
-      "col": 8
+      "place": 39,
+      "row": 8,
+      "col": 3
     },
     "04510d7c-b12a-48aa-8402-80b0efb114a6": {
       "name": "Anastassia Kovalenko-Kõlvart",
@@ -611,6 +599,18 @@
       "place": 118,
       "row": 7,
       "col": 11
+    },
+    "cf42a56a-b91a-4a51-913b-a489305326a2": {
+      "name": "Hanno Pevkur",
+      "place": 28,
+      "row": 7,
+      "col": 2
+    },
+    "8e9879fd-2967-45ca-892b-42e927b22d75": {
+      "name": "Andres Sutt",
+      "place": 41,
+      "row": 0,
+      "col": 4
     }
   }
 }

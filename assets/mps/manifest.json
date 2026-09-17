@@ -1,17 +1,9 @@
 {
   "source": "https://api.riigikogu.ee/api/plenary-members?lang=EN",
-  "fetchedAt": "2026-09-01",
+  "fetchedAt": "2026-09-17",
   "edge": 270,
   "quality": 80,
   "portraits": [
-    {
-      "uuid": "001dd80c-38c3-4557-b3ee-408d3ffd5cd7",
-      "name": "Katrin Kuusemäe",
-      "file": "assets/mps/001dd80c-38c3-4557-b3ee-408d3ffd5cd7.webp",
-      "bytes": 7702,
-      "sourceUrl": "https://api.riigikogu.ee/api/files/1764ac72-ee3e-4d46-ab6b-fe84f405f0d5/download",
-      "sourceSha256": "8cdb6f1f3efb8394c3ccb5ecd48d3bb8e5f9f134601f3f5299634b9785a2ca11"
-    },
     {
       "uuid": "04510d7c-b12a-48aa-8402-80b0efb114a6",
       "name": "Anastassia Kovalenko-Kõlvart",
@@ -461,6 +453,14 @@
       "sourceSha256": "23146c49a98b9a7ffa12313283bdaf7482541e0609c8b7a0bf808c19db218912"
     },
     {
+      "uuid": "8e9879fd-2967-45ca-892b-42e927b22d75",
+      "name": "Andres Sutt",
+      "file": "assets/mps/8e9879fd-2967-45ca-892b-42e927b22d75.webp",
+      "bytes": 4764,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/5ec1332c-fcca-440c-96da-0abae972b610/download",
+      "sourceSha256": "7a44a7bc5503240e7413a744ac406813e9cbbfd071871db58bde3aa82f51c60b"
+    },
+    {
       "uuid": "90074aa2-4938-41a9-8275-3a6efa1cee31",
       "name": "Yoko Alender",
       "file": "assets/mps/90074aa2-4938-41a9-8275-3a6efa1cee31.webp",
@@ -677,6 +677,14 @@
       "sourceSha256": "176dcd8e407cb7c70fcdc9c7bd0978c543e2f9ec5a4b986a683a2c4819568c2e"
     },
     {
+      "uuid": "cf42a56a-b91a-4a51-913b-a489305326a2",
+      "name": "Hanno Pevkur",
+      "file": "assets/mps/cf42a56a-b91a-4a51-913b-a489305326a2.webp",
+      "bytes": 4680,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/35e43ea0-3903-4737-9e4e-689e1bfb266d/download",
+      "sourceSha256": "4ecc6aca2b29c278c40aa548eadc635be6e52c27334ef7d52f7e26b9acb7d478"
+    },
+    {
       "uuid": "d0d7a6a5-25de-40d0-b5df-09575a7c9bfc",
       "name": "Toomas Uibo",
       "file": "assets/mps/d0d7a6a5-25de-40d0-b5df-09575a7c9bfc.webp",
@@ -739,14 +747,6 @@
       "bytes": 7074,
       "sourceUrl": "https://api.riigikogu.ee/api/files/7b167bee-5656-434f-bcb9-3ee196725e99/download",
       "sourceSha256": "61177ba3c87479292c8951e4411ef5e2d97481fd821d39a954c2474662fdb486"
-    },
-    {
-      "uuid": "db46f14c-3bdf-47a0-bed4-0172f7d942db",
-      "name": "Toomas Järveoja",
-      "file": "assets/mps/db46f14c-3bdf-47a0-bed4-0172f7d942db.webp",
-      "bytes": 7494,
-      "sourceUrl": "https://api.riigikogu.ee/api/files/68c8591f-fc32-4888-be38-f68f79cb5926/download",
-      "sourceSha256": "0d86223b472e8a0e22634b96b652217b70ab07eef23305bd13b7d8d13511fe61"
     },
     {
       "uuid": "db532de2-5abd-4b6d-a82c-2d9a75fd9d18",

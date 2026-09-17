@@ -260,6 +260,24 @@
     "active": true
   },
   {
+    "name": "Andres Sutt",
+    "uuid": "8e9879fd-2967-45ca-892b-42e927b22d75",
+    "photoUrl": "https://api.riigikogu.ee/api/files/5ec1332c-fcca-440c-96da-0abae972b610/download",
+    "photo": "assets/mps/8e9879fd-2967-45ca-892b-42e927b22d75.webp",
+    "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/8e9879fd-2967-45ca-892b-42e927b22d75/Andres-Sutt",
+    "faction": "Non-affiliated members",
+    "registeredPartyId": "independent",
+    "factionRole": null,
+    "committees": [],
+    "boardRole": null,
+    "district": "Kesklinn, Lasnamäe and Pirita districts of Tallinn",
+    "email": "andres.sutt@riigikogu.ee",
+    "usaFriendship": false,
+    "leftFaction": "Estonian Reform Party Parliamentary Group",
+    "leftFactionDate": "2025-03-25",
+    "active": true
+  },
+  {
     "name": "Andrus Seeme",
     "uuid": "fd57045c-5dde-4c26-bf60-e5c294da0e4c",
     "photoUrl": "https://api.riigikogu.ee/api/files/e99415fa-030f-41b9-9f36-0f3c6b30727a/download",
@@ -660,6 +678,24 @@
     "active": true
   },
   {
+    "name": "Hanno Pevkur",
+    "uuid": "cf42a56a-b91a-4a51-913b-a489305326a2",
+    "photoUrl": "https://api.riigikogu.ee/api/files/35e43ea0-3903-4737-9e4e-689e1bfb266d/download",
+    "photo": "assets/mps/cf42a56a-b91a-4a51-913b-a489305326a2.webp",
+    "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/cf42a56a-b91a-4a51-913b-a489305326a2/Hanno-Pevkur",
+    "faction": "Non-affiliated members",
+    "registeredPartyId": "independent",
+    "factionRole": null,
+    "committees": [],
+    "boardRole": null,
+    "district": "Lääne-Virumaa",
+    "email": "hanno.pevkur@riigikogu.ee",
+    "usaFriendship": false,
+    "leftFaction": "Estonian Reform Party Parliamentary Group",
+    "leftFactionDate": "2023-04-18",
+    "active": true
+  },
+  {
     "name": "Helir-Valdor Seeder",
     "uuid": "23161df7-bc1b-442e-b4cd-2d1f37627658",
     "photoUrl": "https://api.riigikogu.ee/api/files/a5fd286d-0055-4902-8692-a16343cf7496/download",
@@ -1013,35 +1049,6 @@
     "usaFriendship": false,
     "leftFaction": "Estonian Reform Party Parliamentary Group",
     "leftFactionDate": "2023-04-18",
-    "active": true
-  },
-  {
-    "name": "Katrin Kuusemäe",
-    "uuid": "001dd80c-38c3-4557-b3ee-408d3ffd5cd7",
-    "photoUrl": "https://api.riigikogu.ee/api/files/1764ac72-ee3e-4d46-ab6b-fe84f405f0d5/download",
-    "photo": "assets/mps/001dd80c-38c3-4557-b3ee-408d3ffd5cd7.webp",
-    "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/001dd80c-38c3-4557-b3ee-408d3ffd5cd7/Katrin-Kuusemäe",
-    "faction": "Estonian Reform Party Parliamentary Group",
-    "registeredPartyId": "reform",
-    "factionRole": null,
-    "committees": [
-      {
-        "name": "Constitutional Committee",
-        "role": "member",
-        "type": "ALALINE_KOMISJON"
-      },
-      {
-        "name": "European Union Affairs Committee",
-        "role": "member",
-        "type": "ALALINE_KOMISJON"
-      }
-    ],
-    "boardRole": null,
-    "district": "Lääne-Virumaa",
-    "email": "katrin.kuusemae@riigikogu.ee",
-    "usaFriendship": false,
-    "leftFaction": null,
-    "leftFactionDate": null,
     "active": true
   },
   {
@@ -1782,7 +1789,7 @@
       },
       {
         "name": "National Defence Committee",
-        "role": "member",
+        "role": "Chairman",
         "type": "ALALINE_KOMISJON"
       }
     ],
@@ -2234,35 +2241,6 @@
     "active": true
   },
   {
-    "name": "Toomas Järveoja",
-    "uuid": "db46f14c-3bdf-47a0-bed4-0172f7d942db",
-    "photoUrl": "https://api.riigikogu.ee/api/files/68c8591f-fc32-4888-be38-f68f79cb5926/download",
-    "photo": "assets/mps/db46f14c-3bdf-47a0-bed4-0172f7d942db.webp",
-    "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/db46f14c-3bdf-47a0-bed4-0172f7d942db/Toomas-Järveoja",
-    "faction": "Estonian Reform Party Parliamentary Group",
-    "registeredPartyId": "reform",
-    "factionRole": null,
-    "committees": [
-      {
-        "name": "Social Affairs Committee",
-        "role": "member",
-        "type": "ALALINE_KOMISJON"
-      },
-      {
-        "name": "State Budget Control Select Committee",
-        "role": "member",
-        "type": "ERIKOMISJON"
-      }
-    ],
-    "boardRole": null,
-    "district": "Jõgevamaa and Tartumaa",
-    "email": "toomas.jarveoja@riigikogu.ee",
-    "usaFriendship": false,
-    "leftFaction": null,
-    "leftFactionDate": null,
-    "active": true
-  },
-  {
     "name": "Toomas Kivimägi",
     "uuid": "906f1a0a-0000-4a96-866c-b30f2b6adc49",
     "photoUrl": "https://api.riigikogu.ee/api/files/5d11f442-fcef-477a-8f0b-1fd0fe5cc253/download",
@@ -2633,7 +2611,7 @@
     "factionRole": "Faction Chairman",
     "committees": [
       {
-        "name": "Economic Affairs Committee",
+        "name": "National Defence Committee",
         "role": "member",
         "type": "ALALINE_KOMISJON"
       }
