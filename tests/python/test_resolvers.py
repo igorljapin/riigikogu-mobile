@@ -71,9 +71,35 @@ class Fixture(unittest.TestCase):
         cls.usa = B.usa_friendship_uuids(offline=cls.usa_group)
         cls.mps = B.build_mps(cls.raw, cls.usa)
         cls.catalogues = B.build_catalogues(cls.groups)
-        cls.alignment = json.loads(
-            (REPO / "data" / "alignment.json").read_text(encoding="utf-8")
+        # The curated overlay is deliberately the live file: these tests lock how
+        # the resolvers read real curation, not a mock of it. But an entry for an
+        # MP outside the 2026-08-12 capture can only ever read as stale here, so
+        # classifying a newly non-affiliated member — routine maintenance — would
+        # otherwise turn this offline suite red. Scoping it to the frozen roster
+        # keeps the suite deterministic, as this module's docstring promises.
+        cls.alignment = cls.scope_alignment(
+            json.loads((REPO / "data" / "alignment.json").read_text(encoding="utf-8")),
+            {m["uuid"] for m in cls.mps},
         )
+        cls.alignment_bytes = (
+            json.dumps(cls.alignment, ensure_ascii=False, indent=2) + "\n"
+        ).encode("utf-8")
+
+    @staticmethod
+    def scope_alignment(alignment: dict, roster: set[str]) -> dict:
+        """The overlay as it applies to `roster` — entries for absent MPs dropped."""
+        scoped = copy.deepcopy(alignment)
+        scoped["defectors"] = {
+            u: v for u, v in (scoped.get("defectors") or {}).items() if u in roster
+        }
+        scoped["unaligned"] = [
+            u for u in (scoped.get("unaligned") or []) if u in roster
+        ]
+        if isinstance(scoped.get("unalignedNames"), dict):
+            scoped["unalignedNames"] = {
+                u: n for u, n in scoped["unalignedNames"].items() if u in roster
+            }
+        return scoped
 
     def standing(self, role: str) -> list[str]:
         return [
@@ -310,8 +336,7 @@ class TestDefectionIsSurfaced(Fixture):
             data.mkdir()
             raw_path = tmp / "raw.json"
             raw_path.write_text(json.dumps(self.simulate()), encoding="utf-8")
-            for name in ("alignment.json",):
-                (data / name).write_bytes((REPO / "data" / name).read_bytes())
+            (data / "alignment.json").write_bytes(self.alignment_bytes)
             before = (data / "alignment.json").read_bytes()
 
             rc = subprocess.run(
@@ -349,9 +374,7 @@ class TestDefectionIsSurfaced(Fixture):
                     json.dumps(B.build_meta(mps, self.alignment, unclassified="unaligned")),
                     encoding="utf-8",
                 )
-                (d / "alignment.json").write_bytes(
-                    (REPO / "data" / "alignment.json").read_bytes()
-                )
+                (d / "alignment.json").write_bytes(self.alignment_bytes)
 
             report = C.classify(base, cur)
             self.assertTrue(C.has_changes(report))
@@ -434,9 +457,7 @@ class TestRosterChangeNeedsASeat(Fixture):
                 json.dumps(B.build_meta(roster, self.alignment, unclassified="unaligned")),
                 encoding="utf-8",
             )
-            (d / "alignment.json").write_bytes(
-                (REPO / "data" / "alignment.json").read_bytes()
-            )
+            (d / "alignment.json").write_bytes(self.alignment_bytes)
         if seating is not None:
             (cur / "seating.json").write_text(json.dumps(seating), encoding="utf-8")
         return base, cur
@@ -565,9 +586,7 @@ class TestStaleAlignment(Fixture):
             json.dumps(B.build_meta(mps, self.alignment, unclassified="unaligned")),
             encoding="utf-8",
         )
-        (d / "alignment.json").write_bytes(
-            (REPO / "data" / "alignment.json").read_bytes()
-        )
+        (d / "alignment.json").write_bytes(self.alignment_bytes)
 
     def test_defector_who_left_parliament(self):
         gone = next(
@@ -634,9 +653,7 @@ class TestNoChangeIsNoPr(Fixture):
             (d / "meta.json").write_text(
                 json.dumps(B.build_meta(self.mps, self.alignment)), encoding="utf-8"
             )
-            (d / "alignment.json").write_bytes(
-                (REPO / "data" / "alignment.json").read_bytes()
-            )
+            (d / "alignment.json").write_bytes(self.alignment_bytes)
             report = C.classify(d, d)
             self.assertFalse(C.has_changes(report))
             self.assertIn("No substantive changes", P.render(report, "August 2026"))
