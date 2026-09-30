@@ -140,7 +140,7 @@ PR into `main` with the changes classified:
 | 🪑 **ACTION REQUIRED** | The roster moved and `data/seating.json` did not: someone has no seat, or a seat belongs to someone who has left. The API publishes no seat, so the job cannot fix it. | Give the arriving member a cell in `seating.json` — usually the one the departing member freed, which the PR body names. Confirm against the parliament's plan: <https://www.riigikogu.ee/riigikogu/koosseis/saali-plaan/>. Seats also move without the roster moving, and only that page will say so. |
 | 🟡 Board change | President or a Vice-President changed. | Read it. |
 | 🟢 Routine | Committee moves, photos, contacts, districts. | Read it. |
-| ♻️ Stale alignment | A uuid in `alignment.json` is no longer non-affiliated. | Remove the entry. |
+| ♻️ Stale alignment | A uuid in `alignment.json` is no longer non-affiliated — typically a minister resuming their mandate *in their group*. The entry moves no seat (the overlay is read for non-affiliated MPs only), so the PR is publishable, but it opens as a draft and the suite on it stays red until you act. | Remove the entry. |
 
 Your job is: resolve every 🔴, seat every 🪑, remove every ♻️, confirm the suite
 is green, then merge. Pages deploys `main`.

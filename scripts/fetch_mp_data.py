@@ -164,6 +164,14 @@ def main() -> int:
             # publishable and correct; what it is not is *complete*, and the
             # ACTION REQUIRED block in the PR says so.
             cmd.append("--allow-pending-alignment")
+        if stale:
+            # The other overlay condition the job must hand over rather than die
+            # on: an entry for an MP who is back in a group (a minister resuming
+            # their mandate) or gone. Every reader consults the overlay for
+            # non-affiliated MPs only, so the entry moves no seat; the ♻️ block
+            # in the PR asks the reviewer to delete it. The 30 Sep 2026 run died
+            # here, with data/ untouched and no PR, on Pevkur and Sutt.
+            cmd.append("--allow-stale-alignment")
         if subprocess.run(cmd, check=False).returncode != 0:
             raise RuntimeError("validation failed — data/ left untouched")
 

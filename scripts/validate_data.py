@@ -142,7 +142,12 @@ def check_seating(
           f"{(rows * cols - len(seats)) if isinstance(rows, int) and isinstance(cols, int) else '?'} empty")
 
 
-def check(data: Path, allow_pending: bool = False, allow_pending_seating: bool = False) -> None:
+def check(
+    data: Path,
+    allow_pending: bool = False,
+    allow_pending_seating: bool = False,
+    allow_stale: bool = False,
+) -> None:
     parties = json.loads((data / "parties.json").read_text(encoding="utf-8"))
     mps = json.loads((data / "mps.json").read_text(encoding="utf-8"))
     alignment = json.loads((data / "alignment.json").read_text(encoding="utf-8"))
@@ -255,11 +260,21 @@ def check(data: Path, allow_pending: bool = False, allow_pending_seating: bool =
             err(f"alignment.json: blocs references unknown party {pid!r}")
         if bloc not in ("coalition", "opposition"):
             err(f"alignment.json: {pid} has invalid bloc {bloc!r}")
+    # A stale entry — someone the overlay lists who has rejoined a group or left
+    # parliament — is inert: every reader (build_meta, the recount below, and
+    # src/lib/factions.js) consults the overlay for registered non-affiliated MPs
+    # only, so no seat moves. --allow-stale-alignment downgrades exactly the
+    # rules that say so, for the monthly job alone: it may not write the
+    # overlay, and a minister resuming their mandate *in their group* is a
+    # routine event it must be able to hand to the reviewer as ♻️ rather than
+    # die on. A malformed entry (bad votesWith, overlap, duplicate) stays fatal.
+    stale = warn if allow_stale else err
+    stale_suffix = " — STALE, remove before merge" if allow_stale else ""
     for uid, d in defectors.items():
         if uid not in by_uuid:
-            err(f"alignment.json: defector {uid} is not in the roster")
+            stale(f"alignment.json: defector {uid} is not in the roster{stale_suffix}")
         elif by_uuid[uid]["registeredPartyId"] != "independent":
-            err(f"alignment.json: defector {by_uuid[uid]['name']} is not non-affiliated")
+            stale(f"alignment.json: defector {by_uuid[uid]['name']} is not non-affiliated{stale_suffix}")
         if d.get("votesWith") not in party_ids or d.get("votesWith") == "independent":
             err(f"alignment.json: defector {uid} votesWith {d.get('votesWith')!r} is invalid")
 
@@ -281,7 +296,7 @@ def check(data: Path, allow_pending: bool = False, allow_pending_seating: bool =
         )
     for uid in sorted((set(defectors) | set(unaligned)) - nonaff):
         name = by_uuid[uid]["name"] if uid in by_uuid else uid
-        err(f"alignment.json: stale entry — {name} is no longer non-affiliated")
+        stale(f"alignment.json: stale entry — {name} is no longer non-affiliated{stale_suffix}")
 
     # ---- seat arithmetic ------------------------------------------------- #
     registered = meta.get("registered", {})
@@ -342,6 +357,12 @@ def main() -> int:
         help="downgrade the seating join ('no seat' / 'not an active MP') to a "
              "warning (the monthly job only — it may not write seating.json)",
     )
+    ap.add_argument(
+        "--allow-stale-alignment",
+        action="store_true",
+        help="downgrade 'overlay entry is no longer non-affiliated' to a warning "
+             "(the monthly job only — it may not write alignment.json)",
+    )
     args = ap.parse_args()
 
     print(f"Validating {args.data} …")
@@ -350,6 +371,7 @@ def main() -> int:
             Path(args.data),
             allow_pending=args.allow_pending_alignment,
             allow_pending_seating=args.allow_pending_seating,
+            allow_stale=args.allow_stale_alignment,
         )
     except FileNotFoundError as exc:
         print(f"FAIL: missing file: {exc}", file=sys.stderr)

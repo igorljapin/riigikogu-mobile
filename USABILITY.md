@@ -933,3 +933,28 @@ A month with no API change at all is the one path where a 🪑 could go quiet �
 there is nothing to commit, so there is no PR to carry it. The job writes it to
 the run summary instead, so a seat merged unresolved is still said out loud
 every month until someone fixes it.
+
+### 10.13 The monthly job and an overlay that is out of date
+
+> Sep 2026. Two runs of the monthly job died with no PR, both on
+> `alignment.json`, the file the job may not write. On **16 Sep** a cabinet
+> reshuffle returned two ministers registered as non-affiliated: the validator
+> let the pending 🔴 through, as §10.12 promises, and then five unit tests that
+> assume a fully classified overlay failed in-job. On **30 Sep** the API put the
+> same two back in Reform's group, so their `defectors` entries went stale (♻️),
+> and the stale rule — fatal even in the job — aborted the fetch before the
+> change report existed.
+
+| # | Must always be true | Enforced by |
+|---|---|---|
+| D7.1 | The overlay applies to registered non-affiliated MPs only. A stale entry moves no seat, in the app exactly as in `meta.json` | `unit/factions.test.mjs` |
+| D7.2 | `--allow-stale-alignment` downgrades the stale-entry rules to warnings and **nothing else**; a malformed entry stays fatal, and `--allow-pending-alignment` does not cover it | `python/test_seating.py` |
+
+The fix is §10.12's bargain applied to the other curated file, in both halves.
+The job passes `--allow-stale-alignment` when its compare step finds ♻️ work,
+and sets `PENDING_ALIGNMENT=true` for its two test steps when it finds 🔴 or ♻️
+work. Under that variable the unit tests that assume a complete, current overlay
+— and the calculator scenarios pinned to today's blocs — stand down with a
+reason; the arithmetic tests stay on, and `test_seating.py` validates with the
+job's own alignment flags so every seating rule is still exercised. Nothing sets
+the variable outside that job, and the reviewer's push runs everything in full.
