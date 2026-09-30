@@ -34,6 +34,27 @@ export function loadData() {
 export { repoRoot };
 
 /**
+ * Set by `.github/workflows/monthly-mp-check.yml`, and by nothing else, when its
+ * compare step found `alignment.json` out of step with the roster it just
+ * fetched: a non-affiliated MP the overlay does not name yet (🔴), or an entry
+ * for someone back in a group or gone (♻️). The job may not write that file, so
+ * `data/` is mid-flight until the reviewer edits it — and the tests that assume
+ * a complete, current overlay would fail on exactly the state the validator's
+ * `--allow-pending-alignment` / `--allow-stale-alignment` exist to let through,
+ * leaving no PR to fix it in. They pass `pendingAlignmentSkip` and stand down
+ * for that one run; the reviewer's push runs them in full against the fixed
+ * overlay. The arithmetic tests stay on: they hold in the mid-flight state too.
+ * The same bargain `PENDING_SEATING` strikes in `tests/python/test_seating.py`.
+ */
+export const PENDING_ALIGNMENT = process.env.PENDING_ALIGNMENT === 'true';
+
+export const pendingAlignmentSkip = {
+  skip: PENDING_ALIGNMENT
+    ? 'PENDING_ALIGNMENT=true: alignment.json awaits the reviewer (monthly job only)'
+    : false,
+};
+
+/**
  * A hand-checkable roster: parties a=4, b=3, c=2, plus 1 independent.
  * Total 10 seats.
  */

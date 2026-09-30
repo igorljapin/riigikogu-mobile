@@ -55,6 +55,16 @@ VALIDATOR = REPO / "scripts" / "validate_data.py"
 #: locally or in the Usability Contract workflow.
 PENDING_SEATING = os.environ.get("PENDING_SEATING") == "true"
 
+#: Set by the same job when `alignment.json` is out of step with the roster it
+#: fetched (🔴 unclassified, ♻️ stale). Every test here validates a copy of the
+#: committed `data/`, so the overlay's rules would fail them for a reason that
+#: has nothing to do with seats. The validator is run with the two alignment
+#: flags the job's own gate uses, and every seating rule stays under test.
+PENDING_ALIGNMENT = os.environ.get("PENDING_ALIGNMENT") == "true"
+ALIGNMENT_FLAGS = (
+    ("--allow-pending-alignment", "--allow-stale-alignment") if PENDING_ALIGNMENT else ()
+)
+
 
 def setUpModule() -> None:
     if PENDING_SEATING:
@@ -83,7 +93,7 @@ class SeatingCase(unittest.TestCase):
 
     def run_validator(self, data: Path, *flags: str) -> subprocess.CompletedProcess:
         return subprocess.run(
-            [sys.executable, str(VALIDATOR), "--data", str(data), *flags],
+            [sys.executable, str(VALIDATOR), "--data", str(data), *ALIGNMENT_FLAGS, *flags],
             capture_output=True,
             text=True,
         )
@@ -340,6 +350,70 @@ class SeatingPendingFlag(SeatingCase):
         self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
         self.assertIn("has no seat", result.stdout + result.stderr)
 
+
+
+class StaleAlignmentFlag(SeatingCase):
+    """`--allow-stale-alignment` — the escape hatch the 30 Sep 2026 run lacked.
+
+    Hanno Pevkur and Andres Sutt resumed their mandates and the API put them
+    back in Reform's group, so their `defectors` entries went stale. The job may
+    not edit the overlay, and the stale rule was fatal, so it died in
+    `fetch_mp_data.py` with nothing published and no PR to remove them in. The
+    entries are inert — every reader consults the overlay for non-affiliated MPs
+    only — so the flag downgrades the stale rules, and nothing else.
+    """
+
+    def make_stale(self, tmp: str, *, bad_votes_with: bool = False) -> Path:
+        data = self.stage(tmp)
+        mps = json.loads((data / "mps.json").read_text(encoding="utf-8"))
+        alignment = json.loads((data / "alignment.json").read_text(encoding="utf-8"))
+        grouped = next(m for m in mps if m["registeredPartyId"] == "reform")
+        alignment["defectors"][grouped["uuid"]] = {
+            "name": grouped["name"],
+            "votesWith": "nope" if bad_votes_with else "reform",
+        }
+        (data / "alignment.json").write_text(
+            json.dumps(alignment, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        return data
+
+    def validate(self, data: Path, *flags: str) -> subprocess.CompletedProcess:
+        # Deliberately not run_validator: this class tests the alignment flags
+        # themselves, so PENDING_ALIGNMENT must not add them behind its back.
+        return subprocess.run(
+            [sys.executable, str(VALIDATOR), "--data", str(data), *flags],
+            capture_output=True,
+            text=True,
+        )
+
+    def test_a_stale_entry_fails_by_default(self):
+        with TemporaryDirectory() as tmp:
+            result = self.validate(self.make_stale(tmp))
+        out = result.stdout + result.stderr
+        self.assertEqual(result.returncode, 1, out)
+        self.assertIn("is no longer non-affiliated", out)
+
+    def test_the_flag_downgrades_it_to_a_warning(self):
+        with TemporaryDirectory() as tmp:
+            result = self.validate(self.make_stale(tmp), "--allow-stale-alignment")
+        out = result.stdout + result.stderr
+        self.assertEqual(result.returncode, 0, out)
+        self.assertIn("STALE, remove before merge", out)
+        self.assertIn("warn:", out)
+
+    def test_the_flag_does_not_forgive_a_malformed_entry(self):
+        with TemporaryDirectory() as tmp:
+            result = self.validate(
+                self.make_stale(tmp, bad_votes_with=True), "--allow-stale-alignment"
+            )
+        out = result.stdout + result.stderr
+        self.assertEqual(result.returncode, 1, out)
+        self.assertIn("votesWith 'nope' is invalid", out)
+
+    def test_the_pending_flag_does_not_cover_stale_entries(self):
+        with TemporaryDirectory() as tmp:
+            result = self.validate(self.make_stale(tmp), "--allow-pending-alignment")
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
 
 if __name__ == "__main__":
     unittest.main()

@@ -5,13 +5,13 @@
   "constitutionalMajority": 68,
   "fourFifths": 81,
   "registered": {
-    "reform": 34,
+    "reform": 36,
     "e200": 12,
     "sde": 9,
     "ekre": 9,
     "isamaa": 8,
     "center": 7,
-    "independent": 22
+    "independent": 20
   },
   "votingBloc": {
     "reform": 38,
@@ -26,6 +26,6 @@
   "oppositionSeats": 42,
   "unalignedSeats": 9,
   "coalitionHasMajority": false,
-  "updatedAt": "2026-09-17T12:17:45Z",
-  "sourceDate": "2026-09-17"
+  "updatedAt": "2026-09-30T13:13:47Z",
+  "sourceDate": "2026-09-30"
 }

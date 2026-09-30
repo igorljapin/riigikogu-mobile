@@ -315,10 +315,12 @@ month. Locally, `data/seating.json` is always there and the rules always run.
 It is deliberately paranoid about the seat arithmetic, because that is the number
 readers act on.
 
-Two rules bend, and only for the monthly job, one per curated file:
+Three rules bend, and only for the monthly job:
 `--allow-pending-alignment` downgrades "non-affiliated MP in neither list" to a
-warning, and `--allow-pending-seating` does the same for the two halves of the
-seat join. Both exist because that job may not write the file in question, so a
+warning, `--allow-stale-alignment` does the same for an overlay entry whose MP is
+back in a group or gone (inert: the overlay is read for non-affiliated MPs only,
+by `build_meta()` and by `src/lib/factions.js` alike), and
+`--allow-pending-seating` does the same for the two halves of the seat join. Both exist because that job may not write the file in question, so a
 fresh defection legitimately arrives unclassified and a substitution
 legitimately arrives unseated. Every other rule stays fatal, the arithmetic still
 counts an unclassified MP toward no bloc, and neither flag covers the other's

@@ -139,14 +139,18 @@ jobs:
           # Each flag downgrades exactly the rules about a file the job is
           # forbidden to write, and only when the compare step found work in it.
           # A defection the job may not classify itself: the arithmetic already
-          # counts them toward no bloc. A roster change it may not seat: the
-          # floor plan is one member short. Both are named in the PR body; every
-          # other rule stays fatal, so a genuinely broken fetch still fails here.
+          # counts them toward no bloc. An overlay entry for someone back in a
+          # group or gone: inert, since the overlay is read for non-affiliated
+          # MPs only. A roster change it may not seat: the floor plan is one
+          # member short. All three are named in the PR body; every other rule
+          # stays fatal, so a genuinely broken fetch still fails here.
           ALIGNMENT: ${{ steps.compare.outputs.action_required }}
+          STALE: ${{ steps.compare.outputs.stale_alignment }}
           SEATING: ${{ steps.compare.outputs.seating_required }}
         run: |
           FLAGS=""
           if [ "$ALIGNMENT" = "true" ]; then FLAGS="$FLAGS --allow-pending-alignment"; fi
+          if [ "$STALE" = "true" ]; then FLAGS="$FLAGS --allow-stale-alignment"; fi
           if [ "$SEATING" = "true" ]; then FLAGS="$FLAGS --allow-pending-seating"; fi
           python3 scripts/validate_data.py $FLAGS
 
@@ -161,10 +165,20 @@ jobs:
         if: steps.compare.outputs.changes_detected == 'true' || inputs.force_pr == true
         env:
           PENDING_SEATING: ${{ steps.compare.outputs.seating_required }}
+          PENDING_ALIGNMENT: ${{ steps.compare.outputs.action_required == 'true' || steps.compare.outputs.stale_alignment == 'true' }}
         run: npm run test:resolvers
 
+      # `PENDING_ALIGNMENT` is the same bargain for `alignment.json`: the tests
+      # that assume a complete, current overlay (every non-affiliated MP
+      # classified, no entry for anyone back in a group, and the calculator
+      # scenarios pinned to today's blocs) stand down for this run only. The
+      # seat-arithmetic tests stay on — they hold mid-flight too. Without it the
+      # 16 Sep 2026 run validated a pending 🔴 and then died here, five tests
+      # red, with no PR opened for the reviewer to classify it in.
       - name: Unit tests
         if: steps.compare.outputs.changes_detected == 'true' || inputs.force_pr == true
+        env:
+          PENDING_ALIGNMENT: ${{ steps.compare.outputs.action_required == 'true' || steps.compare.outputs.stale_alignment == 'true' }}
         run: npm run test:unit
 
       - name: Commit and open the PR
@@ -172,6 +186,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ACTION_REQUIRED: ${{ steps.compare.outputs.action_required }}
+          STALE_ALIGNMENT: ${{ steps.compare.outputs.stale_alignment }}
           SEATING_REQUIRED: ${{ steps.compare.outputs.seating_required }}
         run: |
           set -euo pipefail
@@ -209,11 +224,11 @@ jobs:
             exit 0
           fi
 
-          # ACTION REQUIRED means a curated file is incomplete until a human
-          # edits it — the bloc overlay, the floor plan, or both — so the PR
+          # ACTION REQUIRED means a curated file is incomplete or out of date
+          # until a human edits it — the bloc overlay, the floor plan, or both — so the PR
           # opens as a draft, mergeable only after they do.
           DRAFT=""
-          if [ "$ACTION_REQUIRED" = "true" ] || [ "$SEATING_REQUIRED" = "true" ]; then
+          if [ "$ACTION_REQUIRED" = "true" ] || [ "$STALE_ALIGNMENT" = "true" ] || [ "$SEATING_REQUIRED" = "true" ]; then
             DRAFT="--draft"
           fi
           if gh pr create \

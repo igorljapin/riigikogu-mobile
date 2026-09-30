@@ -262,13 +262,19 @@
   {
     "name": "Andres Sutt",
     "uuid": "8e9879fd-2967-45ca-892b-42e927b22d75",
-    "photoUrl": "https://api.riigikogu.ee/api/files/5ec1332c-fcca-440c-96da-0abae972b610/download",
+    "photoUrl": "https://api.riigikogu.ee/api/files/2da43756-e5d0-4f6c-8f5e-8c4a5375ee78/download",
     "photo": "assets/mps/8e9879fd-2967-45ca-892b-42e927b22d75.webp",
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/8e9879fd-2967-45ca-892b-42e927b22d75/Andres-Sutt",
-    "faction": "Non-affiliated members",
-    "registeredPartyId": "independent",
+    "faction": "Estonian Reform Party Parliamentary Group",
+    "registeredPartyId": "reform",
     "factionRole": null,
-    "committees": [],
+    "committees": [
+      {
+        "name": "National Defence Committee",
+        "role": "member",
+        "type": "ALALINE_KOMISJON"
+      }
+    ],
     "boardRole": null,
     "district": "Kesklinn, Lasnamäe and Pirita districts of Tallinn",
     "email": "andres.sutt@riigikogu.ee",
@@ -368,6 +374,11 @@
         "name": "Legal Affairs Committee",
         "role": "member",
         "type": "ALALINE_KOMISJON"
+      },
+      {
+        "name": "State Budget Control Select Committee",
+        "role": "member",
+        "type": "ERIKOMISJON"
       }
     ],
     "boardRole": null,
@@ -683,10 +694,16 @@
     "photoUrl": "https://api.riigikogu.ee/api/files/35e43ea0-3903-4737-9e4e-689e1bfb266d/download",
     "photo": "assets/mps/cf42a56a-b91a-4a51-913b-a489305326a2.webp",
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/composition/members-riigikogu/saadik/cf42a56a-b91a-4a51-913b-a489305326a2/Hanno-Pevkur",
-    "faction": "Non-affiliated members",
-    "registeredPartyId": "independent",
+    "faction": "Estonian Reform Party Parliamentary Group",
+    "registeredPartyId": "reform",
     "factionRole": null,
-    "committees": [],
+    "committees": [
+      {
+        "name": "Constitutional Committee",
+        "role": "member",
+        "type": "ALALINE_KOMISJON"
+      }
+    ],
     "boardRole": null,
     "district": "Lääne-Virumaa",
     "email": "hanno.pevkur@riigikogu.ee",
@@ -2611,7 +2628,7 @@
     "factionRole": "Faction Chairman",
     "committees": [
       {
-        "name": "National Defence Committee",
+        "name": "Social Affairs Committee",
         "role": "member",
         "type": "ALALINE_KOMISJON"
       }

@@ -66,14 +66,27 @@ export function partyTextColor(parties, partyId) {
   return partyById(parties, partyId)?.textColor ?? '#FFFFFF';
 }
 
+/**
+ * The overlay describes non-affiliated MPs and nobody else. An entry for an MP
+ * the API now registers with a group is *stale* — they rejoined, the way a
+ * minister resuming their mandate does — and the registry outranks it, exactly
+ * as `build_meta()` in `scripts/build_data.py` reads it. Without this guard the
+ * app and `meta.json` disagree for as long as the entry survives, and a stale
+ * `votesWith` or `unaligned` would move a seat the Riigikogu itself has moved
+ * back.
+ */
+function overlayApplies(mp) {
+  return mp.registeredPartyId === INDEPENDENT_PARTY_ID;
+}
+
 /** True when this MP belongs to no parliamentary group. */
 export function isUnaligned(mp, alignment) {
-  return alignment.unaligned.includes(mp.uuid);
+  return overlayApplies(mp) && alignment.unaligned.includes(mp.uuid);
 }
 
 /** The defector record for this MP, or null. */
 export function defectorRecord(mp, alignment) {
-  return alignment.defectors[mp.uuid] ?? null;
+  return overlayApplies(mp) ? alignment.defectors[mp.uuid] ?? null : null;
 }
 
 /**

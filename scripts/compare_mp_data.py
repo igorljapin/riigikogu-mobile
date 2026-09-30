@@ -307,10 +307,12 @@ def main() -> int:
     changes = has_changes(report)
     action = bool(report["action_required"])
     seating = needs_seating(report)
+    stale = bool(report["stale_alignment"])
     emit_output(
         changes_detected="true" if changes else "false",
         action_required="true" if action else "false",
         seating_required="true" if seating else "false",
+        stale_alignment="true" if stale else "false",
     )
 
     print(f"Report written to {args.report}")

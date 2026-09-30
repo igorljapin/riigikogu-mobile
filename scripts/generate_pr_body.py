@@ -245,8 +245,10 @@ def render(report: dict, month_year: str) -> str:
         lines += [
             "",
             "These uuids are in `defectors` or `unaligned` but are no longer "
-            "non-affiliated. `validate_data.py` fails on them, so they must be "
-            "removed in this PR.",
+            "non-affiliated. They move no seat — the overlay is read for "
+            "non-affiliated MPs only — but `validate_data.py` fails on them "
+            "everywhere except this job, so the suite on this PR stays red "
+            "until they are removed in it.",
             "",
         ]
 
