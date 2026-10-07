@@ -19,13 +19,13 @@
     "sde": 14,
     "ekre": 9,
     "isamaa": 11,
-    "center": 8,
-    "unaligned": 9
+    "center": 10,
+    "unaligned": 7
   },
   "coalitionSeats": 50,
-  "oppositionSeats": 42,
-  "unalignedSeats": 9,
+  "oppositionSeats": 44,
+  "unalignedSeats": 7,
   "coalitionHasMajority": false,
-  "updatedAt": "2026-09-30T13:13:47Z",
+  "updatedAt": "2026-10-07T13:36:42Z",
   "sourceDate": "2026-09-30"
 }

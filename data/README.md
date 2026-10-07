@@ -269,7 +269,7 @@ hand-typed `Jan 2026` baked into the current bundle.
 
 ---
 
-## Current state (2026-08-11)
+## Current state (2026-09-30)
 
 | Party | Registered | Voting bloc | Bloc |
 |---|---|---|---|
@@ -278,13 +278,17 @@ hand-typed `Jan 2026` baked into the current bundle.
 | SDE | 9 | 14 | opposition |
 | Isamaa | 8 | 11 | opposition |
 | EKRE | 9 | 9 | opposition |
-| Center | 7 | 8 | opposition |
-| Non-affiliated / unaligned | 20 | 9 | **neither** |
+| Center | 7 | 10 | opposition |
+| Non-affiliated / unaligned | 20 | 7 | **neither** |
 | **Total** | **101** | **101** | |
 
-**Coalition 50 · Opposition 42 · unaligned 9.** Reform + Eesti 200 have been a
+**Coalition 50 · Opposition 44 · unaligned 7.** Reform + Eesti 200 have been a
 **minority government since 2026-08-10**, after Grigore-Kalev Stoicescu left
 Eesti 200 (Aug 9) and Meelis Kiili left Reform (Aug 10).
+On 2026-09-30 Kiili and Leo Kunnas announced they will cooperate with the
+Centre group and run on its 2027 list without joining the party; the overlay
+counts them in Centre's voting bloc (8 → 10), so the opposition reads 44 and
+the unaligned 7.
 
 ---
 
