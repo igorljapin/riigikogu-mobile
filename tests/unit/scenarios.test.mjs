@@ -65,9 +65,10 @@ test('S2 — the Opposition preset', pendingAlignmentSkip, () => {
   assert.equal(result.hasMajority, false);
 
   // Snapshot recorded 49, which folded 6 party-less MPs into the opposition.
-  // The preset now selects only parties with a declared bloc, so it reads 42
-  // and the 9 unaligned MPs are counted by nobody. See §8.4 of the snapshot.
-  assert.equal(result.seats, 42);
+  // The preset now selects only parties with a declared bloc, so it reads 44
+  // and the 7 unaligned MPs are counted by nobody. See §8.4 of the snapshot.
+  // (42 until 2026-09-30, when Kiili and Kunnas aligned with Centre.)
+  assert.equal(result.seats, 44);
   assert.equal(result.breakdown.independent.selected, 0);
 });
 
@@ -76,9 +77,9 @@ test('S1 + S2 leave the unaligned MPs to nobody', pendingAlignmentSkip, () => {
   const opposition = seatsForSelection(presetSelection('opposition', parties, alignment), roster);
 
   // The shipped app's two presets summed to 101 because every independent was
-  // pushed into the opposition. They now sum to 92, and the 9 missing seats are
+  // pushed into the opposition. They now sum to 94, and the 7 missing seats are
   // the point: they have no whip and must be added one at a time, deliberately.
-  assert.equal(coalition + opposition, 92);
+  assert.equal(coalition + opposition, 94);
   assert.equal(meta.totalSeats - (coalition + opposition), meta.unalignedSeats);
 });
 

@@ -51,11 +51,23 @@
       "since": "2023-09-18",
       "note": "Left Centre Sep 2023, joined Isamaa"
     },
+    "fd2d1dd5-ff19-445e-b190-28aabb07763a": {
+      "name": "Leo Kunnas",
+      "votesWith": "center",
+      "since": "2026-09-30",
+      "note": "Left EKRE Jun 2024; cooperates with the Centre group and runs on its 2027 list from Sep 30 2026, without joining the party"
+    },
     "a5af5ad0-6e31-443a-9b12-15769d43e784": {
       "name": "Maria Jufereva-Skuratovski",
       "votesWith": "reform",
       "since": "2023-11-16",
       "note": "Left Centre Nov 2023, joined Reform"
+    },
+    "7251e077-1964-4f2b-9dba-349dc127b56e": {
+      "name": "Meelis Kiili",
+      "votesWith": "center",
+      "since": "2026-09-30",
+      "note": "Left Reform Aug 2026; cooperates with the Centre group and runs on its 2027 list from Sep 30 2026, without joining the party"
     },
     "f8a770b2-916c-4172-84b3-005ba9906a18": {
       "name": "Peeter Ernits",
@@ -82,8 +94,6 @@
     "54bc0d5b-7c98-4245-8682-4a3a0b6e0275",
     "db532de2-5abd-4b6d-a82c-2d9a75fd9d18",
     "caea357b-12c0-4069-b53e-89f69f517212",
-    "fd2d1dd5-ff19-445e-b190-28aabb07763a",
-    "7251e077-1964-4f2b-9dba-349dc127b56e",
     "d7d9e4d7-699e-4038-83c3-d13369f644c9",
     "b5e0d7fe-b784-4057-bf7e-cc3f1873887d"
   ],
@@ -93,8 +103,6 @@
     "54bc0d5b-7c98-4245-8682-4a3a0b6e0275": "Jaak Valge",
     "db532de2-5abd-4b6d-a82c-2d9a75fd9d18": "Kalle Grünthal",
     "caea357b-12c0-4069-b53e-89f69f517212": "Kersti Sarapuu",
-    "fd2d1dd5-ff19-445e-b190-28aabb07763a": "Leo Kunnas",
-    "7251e077-1964-4f2b-9dba-349dc127b56e": "Meelis Kiili",
     "d7d9e4d7-699e-4038-83c3-d13369f644c9": "Tõnis Mölder",
     "b5e0d7fe-b784-4057-bf7e-cc3f1873887d": "Varro Vooglaid"
   }
