@@ -27,6 +27,12 @@
       "since": "2024-06-13",
       "note": "Left EKRE Jun 2024, joined Isamaa Jan 2025"
     },
+    "07132cc4-5afc-4edb-9537-7c721ec39b2d": {
+      "name": "Enn Eesmaa",
+      "votesWith": "isamaa",
+      "since": "2026-10-26",
+      "note": "Announced Isamaa accession and planned March 2027 candidacy on Oct 26 2026; counted with Isamaa from the announcement, formal party membership effective date unconfirmed"
+    },
     "d5c54f88-dff3-486b-aac6-2cd124577d38": {
       "name": "Ester Karuse",
       "votesWith": "sde",
@@ -89,7 +95,6 @@
     }
   },
   "unaligned": [
-    "07132cc4-5afc-4edb-9537-7c721ec39b2d",
     "987e47c7-929b-4437-9385-fab4f4fd7824",
     "54bc0d5b-7c98-4245-8682-4a3a0b6e0275",
     "db532de2-5abd-4b6d-a82c-2d9a75fd9d18",
@@ -98,7 +103,6 @@
     "b5e0d7fe-b784-4057-bf7e-cc3f1873887d"
   ],
   "unalignedNames": {
-    "07132cc4-5afc-4edb-9537-7c721ec39b2d": "Enn Eesmaa",
     "987e47c7-929b-4437-9385-fab4f4fd7824": "Grigore-Kalev Stoicescu",
     "54bc0d5b-7c98-4245-8682-4a3a0b6e0275": "Jaak Valge",
     "db532de2-5abd-4b6d-a82c-2d9a75fd9d18": "Kalle Grünthal",
