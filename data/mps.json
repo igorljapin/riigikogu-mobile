@@ -496,8 +496,8 @@
     "district": "Haabersti, Põhja-Tallinn and Kristiine districts of Tallinn",
     "email": "diana.ingerainen@riigikogu.ee",
     "usaFriendship": false,
-    "leftFaction": "Estonia 200 Parliamentary Group",
-    "leftFactionDate": "2026-10-19",
+    "leftFaction": null,
+    "leftFactionDate": null,
     "active": true
   },
   {
@@ -1016,8 +1016,8 @@
     "district": "Pärnumaa",
     "email": "kadri.tali@riigikogu.ee",
     "usaFriendship": true,
-    "leftFaction": "Estonia 200 Parliamentary Group",
-    "leftFactionDate": "2026-10-19",
+    "leftFaction": null,
+    "leftFactionDate": null,
     "active": true
   },
   {
@@ -1798,6 +1798,11 @@
         "name": "Committee of Investigation into Russian Federation Influencing Activities, Means of Financing These, and Associated Risks",
         "role": "member",
         "type": "ERIKOMISJON"
+      },
+      {
+        "name": "European Union Affairs Committee",
+        "role": "member",
+        "type": "ALALINE_KOMISJON"
       },
       {
         "name": "National Defence Committee",

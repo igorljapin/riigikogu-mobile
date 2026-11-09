@@ -140,13 +140,19 @@ def faction_role(m: dict) -> str | None:
 
 
 def left_faction(m: dict) -> tuple[str | None, str | None]:
-    """(name, endDate) of the most recent group this MP left, if any."""
+    """Most recent departure, excluding role changes in the current group.
+
+    The API closes a membership record when a member becomes (or stops being)
+    deputy chair. An ended record for the still-current group is not a defection.
+    """
+    current = current_faction(m)
     ended = [
         ((f.get("membership") or {}).get("endDate"), f.get("name"))
         for f in m.get("factions") or []
         if (f.get("type") or {}).get("code") == FRAKTSIOON
         and (f.get("membership") or {}).get("endDate")
         and f.get("name") != NON_AFFILIATED
+        and f.get("name") != current
     ]
     if not ended:
         return None, None
