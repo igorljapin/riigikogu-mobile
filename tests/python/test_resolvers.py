@@ -110,6 +110,33 @@ class Fixture(unittest.TestCase):
         ]
 
 
+class TestProfileLinks(Fixture):
+    def test_redesigned_official_profile_urls(self):
+        # Verified against the redesigned English member pages. Cover accents,
+        # hyphenated surnames and a three-part name, not just ASCII names.
+        expected = {
+            "Aivar Kokk": "2dcb35ed-acbc-4bcf-9e9d-9da681842d6d/aivar-kokk/",
+            "Aivar Sõerd": "5650dddf-f2ca-4b94-8888-e7482808f81b/aivar-soerd/",
+            "Kristina Šmigun-Vähi": "28e48bd7-9f1f-4d6a-b40c-9c6ff6d445e5/kristina-smigun-vahi/",
+            "Kristo Enn Vaga": "1600fe77-4b45-44ab-972a-181a5ef71767/kristo-enn-vaga/",
+            "Züleyxa Izmailova": "658c9d00-82c9-4161-8314-48ff1d67e3b7/zuleyxa-izmailova/",
+            "Õnne Pillak": "8d9daaeb-dbaf-4887-8311-881b29bedfa9/onne-pillak/",
+        }
+        base = "https://www.riigikogu.ee/en/parliament-of-estonia/members-of-the-riigikogu/"
+        published = json.loads((REPO / "data" / "mps.json").read_text(encoding="utf-8"))
+        for label, roster in (("generated", self.mps), ("published", published)):
+            by_name = {mp["name"]: mp for mp in roster}
+            for name, suffix in expected.items():
+                with self.subTest(roster=label, name=name):
+                    self.assertEqual(by_name[name]["profileUrl"], base + suffix)
+            for mp in roster:
+                with self.subTest(roster=label, name=mp["name"]):
+                    self.assertRegex(
+                        mp["profileUrl"],
+                        rf"^{base}{mp['uuid']}/[a-z]+(?:-[a-z]+)*/$",
+                    )
+
+
 class TestFactionResolver(Fixture):
     def test_roster_is_complete(self):
         self.assertEqual(len(self.raw), 101)

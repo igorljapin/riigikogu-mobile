@@ -17,6 +17,7 @@ import argparse
 import json
 import sys
 import time
+import unicodedata
 import urllib.request
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -34,10 +35,7 @@ COMMITTEE_TYPES = ("ALALINE_KOMISJON", "ERIKOMISJON", "UURIMISKOMISJON")
 # answered with something we should not publish.
 FACTION_COUNT_RANGE = (5, 12)
 STANDING_COMMITTEE_RANGE = (8, 15)
-WEB_BASE = (
-    "https://www.riigikogu.ee/en/parliament-of-estonia/composition/"
-    "members-riigikogu/saadik"
-)
+WEB_BASE = "https://www.riigikogu.ee/en/parliament-of-estonia/members-of-the-riigikogu"
 CONVOCATION = 15
 TOTAL_SEATS = 101
 REPO = Path(__file__).resolve().parent.parent
@@ -192,7 +190,9 @@ def board_role(m: dict) -> str | None:
 
 
 def slug(name: str) -> str:
-    return name.replace(" ", "-")
+    # The redesigned member directory uses lowercase, accent-free name slugs.
+    name = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode("ascii")
+    return "-".join(name.lower().split())
 
 
 def usa_friendship_uuids(groups: list | None = None, offline: dict | None = None) -> set[str]:
@@ -328,7 +328,7 @@ def build_mps(members: list, usa: set[str]) -> list[dict]:
             # deriving it in a view keeps `validate_data.py` able to check that
             # the file is on disk before any of this publishes.
             "photo": f"assets/mps/{m['uuid']}.webp" if photo.get("href") else None,
-            "profileUrl": f"{WEB_BASE}/{m['uuid']}/{slug(m['fullName'])}",
+            "profileUrl": f"{WEB_BASE}/{m['uuid']}/{slug(m['fullName'])}/",
             "faction": faction,
             "registeredPartyId": BY_FACTION[faction],
             "factionRole": faction_role(m),
