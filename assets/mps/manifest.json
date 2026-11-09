@@ -1,6 +1,6 @@
 {
   "source": "https://api.riigikogu.ee/api/plenary-members?lang=EN",
-  "fetchedAt": "2026-09-17",
+  "fetchedAt": "2026-11-01",
   "edge": 270,
   "quality": 80,
   "portraits": [
@@ -456,9 +456,9 @@
       "uuid": "8e9879fd-2967-45ca-892b-42e927b22d75",
       "name": "Andres Sutt",
       "file": "assets/mps/8e9879fd-2967-45ca-892b-42e927b22d75.webp",
-      "bytes": 4764,
-      "sourceUrl": "https://api.riigikogu.ee/api/files/5ec1332c-fcca-440c-96da-0abae972b610/download",
-      "sourceSha256": "7a44a7bc5503240e7413a744ac406813e9cbbfd071871db58bde3aa82f51c60b"
+      "bytes": 7572,
+      "sourceUrl": "https://api.riigikogu.ee/api/files/2da43756-e5d0-4f6c-8f5e-8c4a5375ee78/download",
+      "sourceSha256": "edd5229411283074c636fffd70e2c5c3101700f84873a7843f323b6a4e04fa5f"
     },
     {
       "uuid": "90074aa2-4938-41a9-8275-3a6efa1cee31",
