@@ -197,8 +197,57 @@ class TestFactionResolver(Fixture):
         ]
         self.assertEqual(missing, ["Peeter Ernits"])
 
+    def test_role_changes_do_not_report_departure_from_current_group(self):
+        for name, new_role in (("Diana Ingerainen", "Deputy Chairman"),
+                               ("Kadri Tali", "member")):
+            with self.subTest(name=name):
+                member = copy.deepcopy(next(m for m in self.raw if m["fullName"] == name))
+                current = next(f for f in member["factions"]
+                               if f["name"] == B.current_faction(member)
+                               and f["membership"]["endDate"] is None)
+                replacement = copy.deepcopy(current)
+                current["membership"]["endDate"] = "2026-10-19"
+                replacement["membership"]["startDate"] = "2026-10-19"
+                replacement["membership"]["role"]["value"] = new_role
+                member["factions"].append(replacement)
+                resolved = B.build_mps([member], set())[0]
+                self.assertEqual(resolved["registeredPartyId"], "e200")
+                self.assertEqual(resolved["factionRole"],
+                                 "Faction Deputy Chairman" if new_role != "member" else None)
+                self.assertIsNone(resolved["leftFaction"])
+                self.assertIsNone(resolved["leftFactionDate"])
+
+    def test_role_change_preserves_departure_from_a_different_group(self):
+        member = copy.deepcopy(next(m for m in self.raw if m["fullName"] == "Diana Ingerainen"))
+        previous = copy.deepcopy(next(f for f in member["factions"]
+                                     if f["name"] == B.current_faction(member)))
+        previous["name"] = "Estonian Reform Party Parliamentary Group"
+        previous["membership"]["endDate"] = "2023-04-10"
+        member["factions"].append(previous)
+        role_change = copy.deepcopy(previous)
+        role_change["name"] = B.current_faction(member)
+        role_change["membership"]["endDate"] = "2026-10-19"
+        member["factions"].append(role_change)
+        self.assertEqual(B.left_faction(member), (previous["name"], "2023-04-10"))
+
 
 class TestBoardAndCommittees(Fixture):
+    def test_published_october_leadership_changes_preserve_membership(self):
+        # Official English profiles checked 2026-11-09. Peeter ceased chairing
+        # EU Affairs but remains a member; the November API snapshot omitted it.
+        published = {m["name"]: m for m in json.loads((REPO / "data/mps.json").read_text())}
+        eu = "European Union Affairs Committee"
+        self.assertIn({"name": eu, "role": "member", "type": "ALALINE_KOMISJON"},
+                      published["Peeter Tali"]["committees"])
+        self.assertIn({"name": eu, "role": "Chairman", "type": "ALALINE_KOMISJON"},
+                      published["Kadri Tali"]["committees"])
+        for name, role in (("Diana Ingerainen", "Faction Deputy Chairman"), ("Kadri Tali", None)):
+            with self.subTest(name=name):
+                self.assertEqual(published[name]["factionRole"], role)
+                self.assertEqual(published[name]["registeredPartyId"], "e200")
+                self.assertIsNone(published[name]["leftFaction"])
+                self.assertIsNone(published[name]["leftFactionDate"])
+
     def test_board_from_plenary_membership_job_title(self):
         board = B.build_board(self.mps)
         self.assertEqual([(b["role"], b["name"]) for b in board], BOARD)

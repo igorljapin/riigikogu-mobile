@@ -58,7 +58,8 @@
 // same origin, precached below, and the first thing in this app that works
 // offline having previously not.
 // v10 refreshes all MP profile links after the Riigikogu website redesign.
-const CACHE_NAME = 'riigikogu-mobile-v10';
+// v11 delivers November committee/group-role updates and Andres Sutt's portrait.
+const CACHE_NAME = 'riigikogu-mobile-v11';
 
 // Where this app is deployed. Not used to build URLs — the relative list above
 // does that — but checked at install time, because a silent mount-point mismatch

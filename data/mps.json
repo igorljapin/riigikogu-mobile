@@ -479,7 +479,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/members-of-the-riigikogu/8946b072-80c5-436e-95b2-41f928a7c636/diana-ingerainen/",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
-    "factionRole": null,
+    "factionRole": "Faction Deputy Chairman",
     "committees": [
       {
         "name": "Finance Committee",
@@ -999,7 +999,7 @@
     "profileUrl": "https://www.riigikogu.ee/en/parliament-of-estonia/members-of-the-riigikogu/2bc608c1-1c67-4db8-968b-94bc3947dfac/kadri-tali/",
     "faction": "Estonia 200 Parliamentary Group",
     "registeredPartyId": "e200",
-    "factionRole": "Faction Deputy Chairman",
+    "factionRole": null,
     "committees": [
       {
         "name": "Cultural Affairs Committee",
@@ -1008,7 +1008,7 @@
       },
       {
         "name": "European Union Affairs Committee",
-        "role": "member",
+        "role": "Chairman",
         "type": "ALALINE_KOMISJON"
       }
     ],
@@ -1801,7 +1801,7 @@
       },
       {
         "name": "European Union Affairs Committee",
-        "role": "Chairman",
+        "role": "member",
         "type": "ALALINE_KOMISJON"
       },
       {
