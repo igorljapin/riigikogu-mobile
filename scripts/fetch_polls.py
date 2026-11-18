@@ -84,7 +84,7 @@ def wave_dates(rows, series, weekly):
                 f"{series}: malformed or duplicate wave ID {wave_id!r}")
         end = compact_date(row[-1])
         explicit_start = row[1] if len(row) == 3 else ""
-        inferred = explicit_start == ""
+        inferred = explicit_start in ("", None)
         if series == "fourWeek":
             first, last = wave_id.split("-")
             require(first in weekly and last in weekly and

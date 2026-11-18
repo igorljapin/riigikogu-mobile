@@ -56,7 +56,7 @@ class PollsAdapterTests(unittest.TestCase):
     def test_resolves_refs_aliases_missing_and_legacy_dates(self):
         self.raw["p"][1] = "  Reformierakond "
         self.raw["b"][0][2][1][0] = None
-        self.raw["a"][0][1][-2].pop(1)
+        self.raw["a"][0][1][-2][1] = None
         self.raw["a"][1][1][-1].pop(1)
         self.raw["r"].reverse()
         self.raw["b"].reverse()
