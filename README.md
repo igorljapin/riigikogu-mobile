@@ -1,6 +1,6 @@
 # XV Riigikogu Mobile Dashboard
 
-📱 **Mobile dashboard for the Estonian Parliament (XV Riigikogu) — composition, members, and a vote calculator.**
+📱 **Mobile dashboard for the Estonian Parliament (XV Riigikogu) — composition, members, a vote calculator, and party polling.**
 
 ![XV Riigikogu 2023–2027](https://img.shields.io/badge/XV_Riigikogu-2023--2027-blue)
 ![No build step](https://img.shields.io/badge/Build-none-green)
@@ -24,6 +24,9 @@ filters (All · 🇺🇸 USA friendship group · Chairs).
 **Calculator** — build a hypothetical majority: tap parties in or out, add or
 exclude individual MPs, use the Coalition/Opposition presets, and watch the four
 constitutional thresholds light up as the total crosses them.
+
+**Polls** — view Norstat party rankings and trends in the published four-week
+aggregate or weekly series. See the [polling data and update guide](docs/polls.md).
 
 **PWA** — installs to the home screen and works offline from a cached copy of
 the app and its data. (MP photos are served by `api.riigikogu.ee` and are the

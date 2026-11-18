@@ -1,0 +1,182 @@
+[
+  {
+    "id": "sde",
+    "name": "SDE",
+    "sourceName": "Sotsiaaldemokraatlik Erakond",
+    "aliases": [
+      "Sotsiaaldemokraadid"
+    ],
+    "color": "#E4002B",
+    "other": false
+  },
+  {
+    "id": "reform",
+    "name": "Reform",
+    "sourceName": "Eesti Reformierakond",
+    "aliases": [
+      "Reformierakond"
+    ],
+    "color": "#FFD700",
+    "other": false
+  },
+  {
+    "id": "greens",
+    "name": "Greens",
+    "sourceName": "Erakond Eestimaa Rohelised",
+    "aliases": [
+      "Eestimaa Rohelised"
+    ],
+    "color": "#62A312",
+    "other": false
+  },
+  {
+    "id": "free-party-farmers",
+    "name": "Eesti Vabaduspartei – Põllumeeste kogu",
+    "sourceName": "Eesti Vabaduspartei - Põllumeeste kogu",
+    "aliases": [],
+    "color": "#64748B",
+    "other": true
+  },
+  {
+    "id": "united-left",
+    "name": "Eestimaa Ühendatud Vasakpartei",
+    "sourceName": "Eestimaa Ühendatud Vasakpartei",
+    "aliases": [],
+    "color": "#64748B",
+    "other": true
+  },
+  {
+    "id": "ekre",
+    "name": "EKRE",
+    "sourceName": "Eesti Konservatiivne Rahvaerakond",
+    "aliases": [
+      "EKRE"
+    ],
+    "color": "#8B4513",
+    "other": false
+  },
+  {
+    "id": "center",
+    "name": "Centre",
+    "sourceName": "Eesti Keskerakond",
+    "aliases": [
+      "Keskerakond"
+    ],
+    "color": "#007438",
+    "other": false
+  },
+  {
+    "id": "isamaa",
+    "name": "Isamaa",
+    "sourceName": "Isamaa",
+    "aliases": [
+      "Erakond Isamaa"
+    ],
+    "color": "#0072BC",
+    "other": false
+  },
+  {
+    "id": "other-party",
+    "name": "Other party (source category)",
+    "sourceName": "Muu erakond",
+    "aliases": [],
+    "color": "#64748B",
+    "other": true
+  },
+  {
+    "id": "biodiversity",
+    "name": "Elurikkuse erakond",
+    "sourceName": "Elurikkuse erakond",
+    "aliases": [],
+    "color": "#64748B",
+    "other": true
+  },
+  {
+    "id": "e200",
+    "name": "Eesti 200",
+    "sourceName": "Eesti 200",
+    "aliases": [
+      "Erakond Eesti 200"
+    ],
+    "color": "#00AEEF",
+    "other": false
+  },
+  {
+    "id": "free-party",
+    "name": "Eesti Vabaerakond",
+    "sourceName": "Eesti Vabaerakond",
+    "aliases": [],
+    "color": "#64748B",
+    "other": true
+  },
+  {
+    "id": "independence",
+    "name": "Eesti Iseseisvuspartei",
+    "sourceName": "Eesti Iseseisvuspartei",
+    "aliases": [],
+    "color": "#64748B",
+    "other": true
+  },
+  {
+    "id": "parempoolsed",
+    "name": "Parempoolsed",
+    "sourceName": "Erakond Parempoolsed",
+    "aliases": [
+      "Parempoolsed"
+    ],
+    "color": "#A855F7",
+    "other": false
+  },
+  {
+    "id": "independent-candidate",
+    "name": "Independent candidate",
+    "sourceName": "Üksikkandidaadi poolt",
+    "aliases": [],
+    "color": "#64748B",
+    "other": true
+  },
+  {
+    "id": "stalnuhhin",
+    "name": "Mihhail Stalnuhhin",
+    "sourceName": "Mihhail Stalnuhhin",
+    "aliases": [],
+    "color": "#64748B",
+    "other": true
+  },
+  {
+    "id": "erk",
+    "name": "Eesti Rahvuslased ja Konservatiivid (ERK)",
+    "sourceName": "Eesti Rahvuslased ja Konservatiivid (ERK)",
+    "aliases": [
+      "ERK"
+    ],
+    "color": "#64748B",
+    "other": true
+  },
+  {
+    "id": "koos",
+    "name": "Erakond KOOS",
+    "sourceName": "Erakond KOOS",
+    "aliases": [
+      "KOOS"
+    ],
+    "color": "#64748B",
+    "other": true
+  },
+  {
+    "id": "aru-pahe",
+    "name": "Vabaerakond Aru Pähe",
+    "sourceName": "Vabaerakond Aru Pähe",
+    "aliases": [],
+    "color": "#64748B",
+    "other": true
+  },
+  {
+    "id": "national-liberals",
+    "name": "Eesti Rahvusliberaalid – Vabaerakond",
+    "sourceName": "Eesti Rahvusliberaalid - Vabaerakond",
+    "aliases": [],
+    "color": "#64748B",
+    "other": true
+  }
+]

@@ -34,7 +34,7 @@ const DESKTOP = {
   isMobile: false,
 };
 
-const VIEWS = ['parliament', 'directory', 'calculator'];
+const VIEWS = ['parliament', 'directory', 'calculator', 'polls'];
 
 async function gotoDesktop(page, view = 'parliament') {
   await page.goto('/desktop/index.html');

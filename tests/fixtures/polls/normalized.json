@@ -1,0 +1,150 @@
+{
+  "schema": 1,
+  "scale": 10,
+  "basis": "voters",
+  "nonvoterLabel": "Mittevalija",
+  "source": {
+    "url": "https://kiir.kusitlus.com/_datasets_public/rk-ratings/ratings-compact.json",
+    "schema": 3,
+    "importerVersion": 1,
+    "retrievedAt": "2026-11-18T13:44:46.834615Z",
+    "sha256": "e27dd973d36bfb08e1d555360673d0a4c5edf7e746e73a34e972cb1632a24005",
+    "etag": null,
+    "lastModified": null
+  },
+  "parties": [
+    {
+      "id": "sde",
+      "name": "SDE",
+      "color": "#E4002B",
+      "other": false
+    },
+    {
+      "id": "reform",
+      "name": "Reform",
+      "color": "#FFD700",
+      "other": false
+    },
+    {
+      "id": "greens",
+      "name": "Greens",
+      "color": "#62A312",
+      "other": false
+    },
+    {
+      "id": "free-party-farmers",
+      "name": "Eesti Vabaduspartei – Põllumeeste kogu",
+      "color": "#64748B",
+      "other": true
+    },
+    {
+      "id": "united-left",
+      "name": "Eestimaa Ühendatud Vasakpartei",
+      "color": "#64748B",
+      "other": true
+    },
+    {
+      "id": "ekre",
+      "name": "EKRE",
+      "color": "#8B4513",
+      "other": false
+    },
+    {
+      "id": "center",
+      "name": "Centre",
+      "color": "#007438",
+      "other": false
+    },
+    {
+      "id": "isamaa",
+      "name": "Isamaa",
+      "color": "#0072BC",
+      "other": false
+    },
+    {
+      "id": "other-party",
+      "name": "Other party (source category)",
+      "color": "#64748B",
+      "other": true
+    },
+    {
+      "id": "biodiversity",
+      "name": "Elurikkuse erakond",
+      "color": "#64748B",
+      "other": true
+    },
+    {
+      "id": "e200",
+      "name": "Eesti 200",
+      "color": "#00AEEF",
+      "other": false
+    },
+    {
+      "id": "free-party",
+      "name": "Eesti Vabaerakond",
+      "color": "#64748B",
+      "other": true
+    },
+    {
+      "id": "independence",
+      "name": "Eesti Iseseisvuspartei",
+      "color": "#64748B",
+      "other": true
+    },
+    {
+      "id": "parempoolsed",
+      "name": "Parempoolsed",
+      "color": "#A855F7",
+      "other": false
+    },
+    {
+      "id": "independent-candidate",
+      "name": "Independent candidate",
+      "color": "#64748B",
+      "other": true
+    },
+    {
+      "id": "stalnuhhin",
+      "name": "Mihhail Stalnuhhin",
+      "color": "#64748B",
+      "other": true
+    },
+    {
+      "id": "erk",
+      "name": "Eesti Rahvuslased ja Konservatiivid (ERK)",
+      "color": "#64748B",
+      "other": true
+    },
+    {
+      "id": "koos",
+      "name": "Erakond KOOS",
+      "color": "#64748B",
+      "other": true
+    },
+    {
+      "id": "aru-pahe",
+      "name": "Vabaerakond Aru Pähe",
+      "color": "#64748B",
+      "other": true
+    },
+    {
+      "id": "national-liberals",
+      "name": "Eesti Rahvusliberaalid – Vabaerakond",
+      "color": "#64748B",
+      "other": true
+    }
+  ],
+  "series": {
+    "weekly": [
+      {"id": "391", "start": "2026-10-12", "end": "2026-10-18", "startInferred": false, "published": null, "sample": {"total": 1000, "voters": 685, "effectiveTotal": 972, "effectiveVoters": 667}, "nonvoter": 319, "values": {"sde": 176, "reform": 118, "greens": 3, "free-party-farmers": 0, "united-left": 0, "ekre": 145, "center": 230, "isamaa": 223, "other-party": 1, "biodiversity": 0, "e200": 14, "free-party": 0, "independence": 0, "parempoolsed": 69, "independent-candidate": 15, "stalnuhhin": 0, "erk": 2, "koos": 4, "aru-pahe": 0, "national-liberals": 0}},
+      {"id": "392", "start": "2026-10-19", "end": "2026-10-25", "startInferred": false, "published": null, "sample": {"total": 1000, "voters": 678, "effectiveTotal": 968, "effectiveVoters": 657}, "nonvoter": 323, "values": {"sde": 163, "reform": 112, "greens": 7, "free-party-farmers": 0, "united-left": 0, "ekre": 132, "center": 254, "isamaa": 224, "other-party": 2, "biodiversity": 0, "e200": 19, "free-party": 0, "independence": 0, "parempoolsed": 54, "independent-candidate": 21, "stalnuhhin": 0, "erk": 6, "koos": 6, "aru-pahe": 0, "national-liberals": 1}},
+      {"id": "393", "start": "2026-10-26", "end": "2026-11-01", "startInferred": false, "published": null, "sample": {"total": 1000, "voters": 675, "effectiveTotal": 966, "effectiveVoters": 656}, "nonvoter": 332, "values": {"sde": 185, "reform": 122, "greens": 10, "free-party-farmers": 0, "united-left": 0, "ekre": 110, "center": 264, "isamaa": 226, "other-party": 2, "biodiversity": 0, "e200": 6, "free-party": 0, "independence": 0, "parempoolsed": 57, "independent-candidate": 8, "stalnuhhin": 0, "erk": 1, "koos": 4, "aru-pahe": 0, "national-liberals": 3}},
+      {"id": "394", "start": "2026-11-02", "end": "2026-11-08", "startInferred": false, "published": null, "sample": {"total": 1000, "voters": 711, "effectiveTotal": 968, "effectiveVoters": 690}, "nonvoter": 293, "values": {"sde": 187, "reform": 112, "greens": 6, "free-party-farmers": 0, "united-left": 0, "ekre": 131, "center": 251, "isamaa": 209, "other-party": 2, "biodiversity": 0, "e200": 6, "free-party": 0, "independence": 0, "parempoolsed": 68, "independent-candidate": 18, "stalnuhhin": 0, "erk": 3, "koos": 8, "aru-pahe": 0, "national-liberals": 0}},
+      {"id": "395", "start": "2026-11-09", "end": "2026-11-15", "startInferred": false, "published": null, "sample": {"total": 1000, "voters": 696, "effectiveTotal": 966, "effectiveVoters": 674}, "nonvoter": 308, "values": {"sde": 163, "reform": 147, "greens": 10, "free-party-farmers": 0, "united-left": 0, "ekre": 128, "center": 247, "isamaa": 215, "other-party": 4, "biodiversity": 0, "e200": 9, "free-party": 0, "independence": 0, "parempoolsed": 54, "independent-candidate": 11, "stalnuhhin": 0, "erk": 3, "koos": 9, "aru-pahe": 0, "national-liberals": 0}}
+    ],
+    "fourWeek": [
+      {"id": "391-394", "start": "2026-10-12", "end": "2026-11-08", "startInferred": false, "published": null, "sample": {"total": 4000, "voters": 2749, "effectiveTotal": 3902, "effectiveVoters": 2688}, "nonvoter": 317, "values": {"sde": 178, "reform": 116, "greens": 7, "free-party-farmers": 0, "united-left": 0, "ekre": 130, "center": 249, "isamaa": 220, "other-party": 2, "biodiversity": 0, "e200": 11, "free-party": 0, "independence": 0, "parempoolsed": 62, "independent-candidate": 15, "stalnuhhin": 0, "erk": 3, "koos": 6, "aru-pahe": 0, "national-liberals": 1}},
+      {"id": "392-395", "start": "2026-10-19", "end": "2026-11-15", "startInferred": false, "published": "2026-11-18", "sample": {"total": 4000, "voters": 2760, "effectiveTotal": 3896, "effectiveVoters": 2695}, "nonvoter": 314, "values": {"sde": 175, "reform": 123, "greens": 8, "free-party-farmers": 0, "united-left": 0, "ekre": 126, "center": 253, "isamaa": 219, "other-party": 3, "biodiversity": 0, "e200": 10, "free-party": 0, "independence": 0, "parempoolsed": 58, "independent-candidate": 14, "stalnuhhin": 0, "erk": 3, "koos": 7, "aru-pahe": 0, "national-liberals": 1}}
+    ]
+  }
+}

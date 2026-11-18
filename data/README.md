@@ -351,3 +351,12 @@ REQUIRED path. Run it with `npm run test:resolvers`.
 **The registry lags reality.** Stoicescu announced his departure on Aug 9; the
 API recorded it on Aug 10 and only exposed it partway through Aug 11 — observed
 directly, between two fetches hours apart. Do not assume same-day accuracy.
+
+
+## National polling snapshots
+
+`polls.json` serves the two published national series with polling-only party
+metadata, fieldwork periods, samples and source provenance in one file.
+`poll-parties.json` defines the stable source mapping and the components of
+Other. See the [polling data and update guide](../docs/polls.md) for validation,
+source attribution, review and rollback.

@@ -34,7 +34,7 @@ const FORBIDDEN = [
 ];
 
 test('the lib directory is not empty', () => {
-  assert.deepEqual(libFiles.sort(), ['calculator.js', 'factions.js']);
+  assert.deepEqual(libFiles.sort(), ['calculator.js', 'factions.js', 'polls.js']);
 });
 
 for (const name of libFiles) {
@@ -65,12 +65,14 @@ test('the modules load in a bare Node process with no globals available', async 
   // browser global — there is no DOM here.
   const calculator = await import('../../src/lib/calculator.js');
   const factions = await import('../../src/lib/factions.js');
+  const polls = await import('../../src/lib/polls.js');
 
   assert.equal(typeof calculator.seatsForSelection, 'function');
   assert.equal(typeof calculator.hasSimpleMajority, 'function');
   assert.equal(typeof calculator.hasConstitutionalMajority, 'function');
   assert.equal(typeof factions.buildRoster, 'function');
   assert.equal(typeof factions.votingBlocPartyId, 'function');
+  assert.equal(typeof polls.pollRankings, 'function');
 });
 
 test('repeated calls with the same arguments return the same answer', () => {

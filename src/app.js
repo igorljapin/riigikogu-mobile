@@ -1,6 +1,6 @@
 /**
  * App entry point — loads the data, paints the party palette, renders the
- * shell, and switches between the three tabs.
+ * shell, and switches between the four tabs.
  *
  * It owns no arithmetic and no markup beyond the shell: every number comes from
  * `src/lib/`, every screen from `src/views/`. That separation is the whole
@@ -12,11 +12,13 @@ import { closeAllOverlays, el, icon, ICONS, replace } from './dom.js';
 import renderParliament from './views/parliament.js';
 import renderMembers from './views/mps.js';
 import renderCalculator from './views/calculator.js';
+import renderPolls from './views/polls.js';
 
 const TABS = [
   { id: 'parliament', label: 'Parliament', glyph: ICONS.building, render: renderParliament },
   { id: 'members', label: 'Members', glyph: ICONS.users, render: renderMembers },
   { id: 'calculator', label: 'Calculator', glyph: ICONS.calculator, render: renderCalculator },
+  { id: 'polls', label: 'Polls', glyph: ICONS.polls, render: renderPolls },
 ];
 
 /**
@@ -48,9 +50,9 @@ function header(data) {
   return el('header', { className: 'app-header' }, [
     el('h1', { className: 'app-title' }, ['XV Riigikogu']),
     el('p', { className: 'app-subtitle' }, [
-      `Estonian Parliament • ${data.meta.totalSeats} MPs • `,
+      `Estonian Parliament • ${data.meta.totalSeats} MPs`,
       // The bundle hand-typed "Jan 2026" here and nothing ever recomputed it.
-      el('span', { 'data-testid': 'data-updated' }, [`Updated ${formatUpdated(data.meta.updatedAt)}`]),
+      el('span', { 'data-testid': 'data-updated' }, [` • Updated ${formatUpdated(data.meta.updatedAt)}`]),
     ]),
   ]);
 }
@@ -95,6 +97,7 @@ async function start() {
   function show(id) {
     // Overlays belong to the tab that opened them.
     closeAllOverlays();
+    app.classList.toggle('polls-tab-active', id === 'polls');
     replace(view, TABS.find((t) => t.id === id).render(data));
     replace(tabBar, nav(id, show));
     window.scrollTo(0, 0);
