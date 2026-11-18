@@ -124,6 +124,24 @@ export function pollHistory(waves, months) {
   return waves.filter((wave) => wave.end >= start);
 }
 
+/** Align grid lines to calendar boundaries in UTC. */
+export function pollCalendarTicks(first, last) {
+  const start = new Date(first);
+  const end = new Date(last);
+  const months = (end.getUTCFullYear() - start.getUTCFullYear()) * 12 +
+    end.getUTCMonth() - start.getUTCMonth();
+  const interval = months > 24 ? 12 : months > 8 ? 3 : 1;
+  const month = Math.ceil(start.getUTCMonth() / interval) * interval;
+  const cursor = new Date(Date.UTC(start.getUTCFullYear(), month, 1));
+  if (cursor < start) cursor.setUTCMonth(cursor.getUTCMonth() + interval);
+  const ticks = [];
+  while (cursor <= end) {
+    ticks.push(cursor.getTime());
+    cursor.setUTCMonth(cursor.getUTCMonth() + interval);
+  }
+  return ticks;
+}
+
 export function isPollOverdue(wave, now, days = OVERDUE_DAYS) {
   return now >= Date.parse(wave.end) + (days + 1) * DAY_MS;
 }

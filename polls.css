@@ -3,6 +3,10 @@
   color-scheme: light dark;
   --polls-gap: 16px;
   --polls-padding: clamp(12px, 3vw, 22px);
+  --polls-heading-size: 21px;
+  --polls-heading-weight: 700;
+  --polls-label-weight: 650;
+  --polls-detail-size: 0.875rem;
 }
 
 .polls-tab-active .app-header [data-testid="data-updated"] { display: none; }
@@ -22,7 +26,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 14px;
-  font-weight: 650;
+  font-weight: var(--polls-label-weight);
 }
 
 .polls-page select, .polls-retry {
@@ -48,11 +52,11 @@
   background: var(--card);
 }
 
-.polls-card h2 { margin: 0 0 8px; font-size: 21px; line-height: 1.2; }
+.polls-card h2 { margin: 0 0 8px; font-size: var(--polls-heading-size); font-weight: var(--polls-heading-weight); line-height: 1.2; }
 .polls-card p { margin: 6px 0; }
-.polls-fieldwork { font-weight: 650; }
+.polls-fieldwork { font-weight: var(--polls-label-weight); }
 .polls-fieldwork time { white-space: nowrap; }
-.polls-muted { color: var(--muted); font-size: 0.875rem; }
+.polls-muted { color: var(--muted); font-size: var(--polls-detail-size); }
 .polls-muted a { color: inherit; text-decoration: underline; }
 
 .polls-notice {
@@ -75,7 +79,7 @@
 }
 .polls-party-name { font-weight: 600; overflow-wrap: anywhere; }
 .polls-value, .polls-change, .polls-observation { font-variant-numeric: tabular-nums; }
-.polls-value, .polls-change { font-size: 0.875rem; }
+.polls-value, .polls-change { font-size: var(--polls-detail-size); }
 .polls-change { min-width: 6ch; text-align: right; color: var(--muted); }
 .polls-bar { grid-column: 1 / -1; height: 6px; border-radius: 8px; background: var(--track); }
 .polls-bar span { display: block; height: 100%; border-radius: inherit; }
@@ -85,14 +89,14 @@
   min-height: 44px;
   padding-block: 11px;
   cursor: pointer;
-  font-weight: 650;
+  font-weight: var(--polls-label-weight);
 }
 
 .polls-card.polls-disclosure { padding-block: 2px; }
 .polls-card.polls-disclosure[open] { padding-bottom: var(--polls-padding); }
 .polls-parts li, .polls-sample { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; }
 .polls-parts li + li { margin-top: 5px; }
-.polls-sample dd { margin: 0; text-align: right; font-weight: 650; }
+.polls-sample dd { margin: 0; text-align: right; font-weight: var(--polls-label-weight); }
 
 .polls-chart-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
 .polls-party-options fieldset {
@@ -109,28 +113,51 @@
   align-items: center;
   min-height: 44px;
   gap: 6px;
-  font-size: 0.875rem;
+  font-size: var(--polls-detail-size);
   cursor: pointer;
 }
 .polls-swatch { flex: 0 0 10px; height: 10px; border-radius: 50%; }
-.polls-chart {
-  display: block;
+.polls-plot {
   width: 100%;
-  max-height: 460px;
-  cursor: crosshair;
+  max-width: 920px;
+  margin-inline: auto;
+  container-type: inline-size;
 }
-.polls-chart text { fill: var(--muted); font: 15px var(--sans); }
+
+.polls-chart { position: relative; }
+.polls-chart svg { display: block; width: 100%; cursor: crosshair; }
+
+.polls-axis {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: var(--muted);
+  font: 400 11px/1 var(--sans);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.polls-axis-left { transform: translateY(-50%); }
+.polls-axis-right { transform: translate(-100%, -50%); }
 .polls-gridline { stroke: var(--line); }
+.polls-date-gridline {
+  stroke: color-mix(in srgb, var(--line) 75%, var(--muted));
+  stroke-dasharray: 2 3;
+}
 .polls-cursor { stroke: var(--muted); stroke-dasharray: 3 4; }
-.polls-marker { stroke: var(--card); stroke-width: 1.5; }
-.polls-slider { display: grid; margin-top: 8px; font-size: 0.875rem; font-weight: 650; }
+.polls-series-line { stroke-width: 1.75px; }
+.polls-marker { stroke: var(--card); stroke-width: 1; }
+
+@container (width < 480px) {
+  .polls-axis-date-alternate { display: none; }
+}
+.polls-slider { display: grid; margin-top: 8px; font-size: var(--polls-detail-size); font-weight: var(--polls-label-weight); }
 .polls-slider input { width: 100%; height: 44px; margin: 0; }
-.polls-observation { display: flex; flex-wrap: wrap; gap: 3px 12px; font-size: 0.875rem; }
+.polls-observation { display: flex; flex-wrap: wrap; gap: 3px 12px; font-size: var(--polls-detail-size); }
 
 .polls-reading { display: inline-flex; align-items: center; gap: 5px; }
 
 .polls-table-scroll { max-height: 22rem; overflow: auto; }
-.polls-table-scroll table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.polls-table-scroll table { width: 100%; border-collapse: collapse; font-size: var(--polls-detail-size); }
 .polls-table-scroll :is(th, td, caption) { padding: 6px 8px; }
 .polls-table-scroll caption { text-align: left; color: var(--muted); }
 .polls-table-scroll :is(th, td) { border-bottom: 1px solid var(--line); }
@@ -139,7 +166,23 @@
 
 #app.dk-polls-active { min-height: 100vh; height: auto; }
 .dk-polls-active .dk-page { min-width: 0; }
-.polls-desktop { flex: 1; }
+.polls-desktop {
+  flex: 1;
+  --polls-heading-size: 18px;
+  --polls-heading-weight: 600;
+  --polls-label-weight: 600;
+  --polls-detail-size: 13px;
+}
+
+.polls-desktop :is(.polls-series, .polls-chart-controls) { font-size: var(--polls-detail-size); }
+.polls-desktop .polls-party-name { font-size: 16px; line-height: 1.25; }
+.polls-desktop .polls-axis { font-size: 12px; }
+.polls-desktop .polls-axis-title { font-size: 13px; font-weight: 500; }
+.polls-desktop .polls-marker { r: 2.5px; }
+
+@media (max-width: 550px) {
+  .polls-desktop .polls-axis { font-size: 11px; }
+}
 .polls-columns { align-items: start; }
 .dk-polls-active .dk-rail { position: sticky; top: 0; align-self: start; min-height: 100vh; }
 

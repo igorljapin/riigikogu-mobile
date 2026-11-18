@@ -24,7 +24,7 @@ the first component's resolved weekly start. The normalized output records
 whether a start was inferred.
 
 `data/poll-parties.json` is the curated contract for IDs, display names, aliases,
-colors and grouping. The ranked named categories are Centre, Isamaa, SDE, EKRE,
+colors and grouping. The ranked named categories are Center, Isamaa, SDE, EKRE,
 Reform, Eesti 200, Parempoolsed and Greens. Other sums each of these source
 categories once:
 
@@ -67,7 +67,7 @@ date when known, otherwise the source snapshot retrieval date.
 
 The November 18 handoff supplied 395 weekly and 392 four-week waves. Both archive
 hashes, gzip round-trip and both independently decoded latest observations
-matched. For the 19 October–15 November aggregate the decoded table reads Centre
+matched. For the 19 October–15 November aggregate the decoded table reads Center
 25.3%, Isamaa 21.9%, SDE 17.5%, EKRE 12.6%, Reform 12.3%, Parempoolsed 5.8%,
 Eesti 200 1.0%, Greens 0.8% and Other 2.8%. Weekly wave 395 covers 9–15 November.
 

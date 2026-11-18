@@ -1,9 +1,10 @@
 import { el, replace } from '../dom.js';
-import { pollGap, pollHistory, pollValue } from '../lib/polls.js';
+import { pollCalendarTicks, pollGap, pollHistory, pollValue } from '../lib/polls.js';
 import { formatDate, percentage } from './rankings.js';
 
 const RANGES = [[3, 'Three months'], [6, 'Six months'], [12, 'One year'], [0, 'All history']];
 const shortDate = new Intl.DateTimeFormat('en-GB', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+const yearOnly = new Intl.DateTimeFormat('en-GB', { year: 'numeric', timeZone: 'UTC' });
 
 function svgElement(tag, attributes = {}, label = '') {
   const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -17,37 +18,47 @@ function chart(data, waves, parties) {
   const height = 208;
   const plot = { left: 42, right: 382, top: 30, bottom: 168 };
   const times = waves.map((wave) => Date.parse(wave.end));
-  const extent = times.at(-1) - times[0];
-  const x = times.map((time) => extent ?
-    plot.left + (time - times[0]) / extent * (plot.right - plot.left) :
-    (plot.left + plot.right) / 2);
+  const first = times[0];
+  const last = times.at(-1);
+  const extent = last - first;
+  const chartX = (time) => extent
+    ? plot.left + (time - first) / extent * (plot.right - plot.left)
+    : (plot.left + plot.right) / 2;
+  const x = times.map(chartX);
   const values = parties.map(({ id }) => waves.map((wave) => pollValue(data, wave, id)));
   const peak = values.reduce((max, row) => row.reduce((best, value) => Math.max(best, value ?? 0), max), 0) / data.scale;
   const top = Math.max(10, Math.ceil(peak / 10) * 10);
   const y = (value) => plot.bottom - value / top * (plot.bottom - plot.top);
-  const svg = svgElement('svg', {
-    viewBox: `0 0 ${width} ${height}`, 'aria-hidden': 'true',
-    'data-testid': 'polls-chart', class: 'polls-chart',
-  });
+  const svg = svgElement('svg', { viewBox: `0 0 ${width} ${height}` });
+  const frame = el('div', { 'data-testid': 'polls-chart', className: 'polls-chart', 'aria-hidden': 'true' }, [svg]);
+  const labelAt = (text, x, y, placement) => frame.append(el('span', {
+    className: `polls-axis ${placement}`,
+    style: `left:${x / width * 100}%;top:${y / height * 100}%`,
+  }, [text]));
 
-  svg.append(svgElement('text', { x: 3, y: 12 }, 'Support (%)'));
+  labelAt('Support (%)', plot.left, 14, 'polls-axis-title polls-axis-left');
   for (const value of [0, top / 2, top]) {
-    svg.append(
-      svgElement('line', { x1: plot.left, x2: plot.right, y1: y(value), y2: y(value), class: 'polls-gridline' }),
-      svgElement('text', { x: plot.left - 8, y: y(value) + 4, 'text-anchor': 'end' }, value.toString()),
-    );
+    svg.append(svgElement('line', {
+      x1: plot.left, x2: plot.right, y1: y(value), y2: y(value),
+      class: 'polls-gridline', 'vector-effect': 'non-scaling-stroke',
+    }));
+    labelAt(value.toString(), plot.left - 7, y(value), 'polls-axis-right');
   }
-  const dateTicks = extent ? [0, 0.5, 1] : [0];
-  for (const fraction of dateTicks) {
-    svg.append(svgElement('text', {
-      x: extent ? plot.left + fraction * (plot.right - plot.left) : x[0],
-      y: plot.bottom + 17,
-      'text-anchor': !extent || fraction === 0.5 ? 'middle' : fraction === 0 ? 'start' : 'end',
-    }, shortDate.format(times[0] + fraction * extent)));
-  }
-  svg.append(svgElement('text', {
-    x: (plot.left + plot.right) / 2, y: height - 4, 'text-anchor': 'middle',
-  }, 'Fieldwork end date'));
+
+  const dates = pollCalendarTicks(first, last);
+  const useYears = new Set(dates.map((date) => new Date(date).getUTCMonth())).size === 1 && dates.length > 1;
+  const dateFormat = useYears ? yearOnly : shortDate;
+  if (!dates.length) labelAt(shortDate.format(last), (plot.left + plot.right) / 2, 181, 'polls-axis-date');
+  dates.forEach((date, index) => {
+    const position = chartX(date);
+    svg.append(svgElement('line', {
+      x1: position, x2: position, y1: plot.top, y2: plot.bottom,
+      class: 'polls-gridline polls-date-gridline', 'vector-effect': 'non-scaling-stroke',
+    }));
+    const alternate = index % 2 === 0 ? '' : ' polls-axis-date-alternate';
+    labelAt(dateFormat.format(date), position, 181, `polls-axis-date${alternate}`);
+  });
+  labelAt('Fieldwork end date', (plot.left + plot.right) / 2, 199, 'polls-axis-title');
 
   values.forEach((observations, partyIndex) => {
     const color = parties[partyIndex].color;
@@ -59,12 +70,12 @@ function chart(data, waves, parties) {
       if (joinsPrevious(index)) return `L${point}`;
       if (index + 1 === observations.length || observations[index + 1] === null ||
         !joinsPrevious(index + 1)) {
-        svg.append(svgElement('circle', { cx: x[index], cy: y(value / data.scale), r: 2.5, fill: color }));
+        svg.append(svgElement('circle', { cx: x[index], cy: y(value / data.scale), r: 2, fill: color }));
       }
       return `M${point}`;
     });
     svg.append(svgElement('path', {
-      d: paths.join(' '), fill: 'none', stroke: color, 'stroke-width': 2.5,
+      d: paths.join(' '), fill: 'none', stroke: color, class: 'polls-series-line', 'vector-effect': 'non-scaling-stroke',
       'stroke-linecap': 'round', 'stroke-linejoin': 'round',
     }));
   });
@@ -78,7 +89,7 @@ function chart(data, waves, parties) {
   function select(index) {
     const wave = waves[index];
     const markers = [
-      svgElement('line', { x1: x[index], x2: x[index], y1: plot.top, y2: plot.bottom, class: 'polls-cursor' }),
+      svgElement('line', { x1: x[index], x2: x[index], y1: plot.top, y2: plot.bottom, class: 'polls-cursor', 'vector-effect': 'non-scaling-stroke' }),
     ];
     const label = formatDate(wave.end);
     slider.value = index;
@@ -86,7 +97,7 @@ function chart(data, waves, parties) {
     const readings = parties.map(({ name, color }, partyIndex) => {
       const value = values[partyIndex][index];
       if (value !== null) {
-        markers.push(svgElement('circle', { cx: x[index], cy: y(value / data.scale), r: 4, fill: color, class: 'polls-marker' }));
+        markers.push(svgElement('circle', { cx: x[index], cy: y(value / data.scale), r: 4, fill: color, class: 'polls-marker', 'vector-effect': 'non-scaling-stroke' }));
       }
       return el('span', { className: 'polls-reading' }, [
         el('span', { className: 'polls-swatch', style: `background:${color}`, 'aria-hidden': 'true' }),
@@ -112,7 +123,7 @@ function chart(data, waves, parties) {
   });
   svg.append(selection);
   select(waves.length - 1);
-  return [svg, el('label', { className: 'polls-slider' }, ['Choose an observation', slider]), date];
+  return [frame, el('label', { className: 'polls-slider' }, ['Choose an observation', slider]), date];
 }
 
 function historyTable(data, waves, parties) {
@@ -135,7 +146,7 @@ export function pollTrendsPanel(data, series, rankings) {
   let months = 6;
   const selected = new Set(rankings.filter(({ id, value }) => id !== 'other' && value !== null)
     .slice(0, 3).map(({ id }) => id));
-  const plot = el('div');
+  const plot = el('div', { className: 'polls-plot' });
   const table = el('details', { className: 'polls-disclosure' }, [el('summary', {}, ['View results as a table'])]);
 
   function redraw() {

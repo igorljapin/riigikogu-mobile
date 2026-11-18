@@ -28,8 +28,10 @@ test('Polls loads on demand and offers series, exact observations, table and met
   const exact = page.getByTestId('polls-observation');
   await expect(series).toHaveValue('fourWeek');
   await expect(page.getByText('Published 18 Nov 2026')).toBeVisible();
-  await expect(page.getByTestId('polls-rankings').locator('li').first()).toContainText('Centre25.3%+0.4 pp');
+  await expect(page.getByTestId('polls-rankings').locator('li').first()).toContainText('Center25.3%+0.4 pp');
   await expect(page.getByTestId('polls-rankings').locator('li').last()).toContainText('Other2.8%+0.1 pp');
+  await expect(page.locator('[data-party="parempoolsed"] .polls-bar span'))
+    .toHaveCSS('background-color', 'rgb(255, 96, 0)');
   await page.getByText('What’s included in Other').click();
   await expect(page.getByText('Independent candidate')).toBeVisible();
 
@@ -37,13 +39,13 @@ test('Polls loads on demand and offers series, exact observations, table and met
   await page.getByLabel('Date range').selectOption({ label: 'All history' });
   await expect(chart).toContainText('Support (%)');
   await expect(chart).toContainText('Fieldwork end date');
-  await expect(exact).toContainText('Centre 25.3%');
+  await expect(exact).toContainText('Center 25.3%');
   const slider = page.getByRole('slider', { name: 'Fieldwork observation' });
   await slider.press('ArrowLeft');
-  await expect(exact).toContainText('Centre 24.9%');
+  await expect(exact).toContainText('Center 24.9%');
   const rect = await chart.boundingBox();
   await page.touchscreen.tap(rect.x + rect.width * 0.94, rect.y + rect.height * 0.5);
-  await expect(exact).toContainText('Centre 25.3%');
+  await expect(exact).toContainText('Center 25.3%');
 
   await page.getByText('Compare parties').click();
   await page.getByRole('checkbox', { name: 'Reform' }).check();
@@ -59,7 +61,7 @@ test('Polls loads on demand and offers series, exact observations, table and met
 
   await series.selectOption({ label: 'Weekly results' });
   await expect(page.getByText('Source snapshot retrieved 18 Nov 2026')).toBeVisible();
-  await expect(page.getByTestId('polls-rankings').locator('li').first()).toContainText('Centre24.7%−0.4 pp');
+  await expect(page.getByTestId('polls-rankings').locator('li').first()).toContainText('Center24.7%−0.4 pp');
   await page.getByText('Methodology', { exact: true }).click();
   await expect(page.getByText('696', { exact: true })).toBeVisible();
 });

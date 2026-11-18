@@ -51,7 +51,7 @@
     },
     {
       "id": "center",
-      "name": "Centre",
+      "name": "Center",
       "color": "#007438",
       "other": false
     },
@@ -94,7 +94,7 @@
     {
       "id": "parempoolsed",
       "name": "Parempoolsed",
-      "color": "#A855F7",
+      "color": "#FF6000",
       "other": false
     },
     {
