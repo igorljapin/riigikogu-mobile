@@ -57,7 +57,7 @@
   },
   {
     "id": "center",
-    "name": "Centre",
+    "name": "Center",
     "sourceName": "Eesti Keskerakond",
     "aliases": [
       "Keskerakond"
@@ -124,7 +124,7 @@
     "aliases": [
       "Parempoolsed"
     ],
-    "color": "#A855F7",
+    "color": "#FF6000",
     "other": false
   },
   {

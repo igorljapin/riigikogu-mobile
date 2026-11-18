@@ -50,3 +50,64 @@ test('the desktop Polls layout fits narrow screens and restores the other destin
   await expect(page.getByTestId('mp-search')).toBeVisible();
   await expect(page.locator('meta[name="viewport"]')).toHaveAttribute('content', 'width=1920');
 });
+
+
+test('wide desktop comparison keeps seven series legible with aligned calendar guides', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.clock.setFixedTime(new Date(seed.source.retrievedAt));
+  await page.goto('/desktop/');
+  const cardTitle = page.locator('.dk-card-title').first();
+  await expect(cardTitle).toBeVisible();
+  const titleFont = await cardTitle.evaluate((title) => {
+    const { fontFamily, fontSize, fontWeight } = getComputedStyle(title);
+    return { fontFamily, fontSize, fontWeight };
+  });
+  await page.getByTestId('nav-polls').click();
+  const trends = page.getByRole('heading', { name: 'Support over time' });
+  await expect(trends).toBeVisible();
+  expect(await trends.evaluate((title) => {
+    const { fontFamily, fontSize, fontWeight } = getComputedStyle(title);
+    return { fontFamily, fontSize, fontWeight };
+  })).toEqual(titleFont);
+  await page.getByText('Compare parties').click();
+  for (const name of ['Center', 'Isamaa', 'SDE', 'EKRE', 'Reform', 'Parempoolsed', 'Eesti 200']) {
+    await page.getByRole('checkbox', { name, exact: true }).check();
+  }
+  for (const name of ['Greens', 'Other']) {
+    await page.getByRole('checkbox', { name, exact: true }).uncheck();
+  }
+
+  const chart = page.getByTestId('polls-chart');
+  const lines = chart.locator('.polls-series-line');
+  await expect(lines).toHaveCount(7);
+  await expect(lines.first()).toHaveAttribute('vector-effect', 'non-scaling-stroke');
+  await expect(lines.first()).toHaveCSS('stroke-width', '1.75px');
+  await expect(chart.locator('.polls-series-line[stroke="#FF6000"]')).toHaveCount(1);
+  const dates = chart.locator('.polls-axis-date');
+  await expect(dates.first()).toHaveCSS('font-size', '12px');
+  const guides = chart.locator('.polls-date-gridline');
+  expect(await guides.count()).toBeGreaterThan(3);
+  expect(await dates.count()).toBe(await guides.count());
+  expect(await chart.evaluate((node) => {
+    const dates = [...node.querySelectorAll('.polls-axis-date')];
+    const guides = [...node.querySelectorAll('.polls-date-gridline')];
+    return dates.every((date, index) => {
+      const label = date.getBoundingClientRect();
+      const guide = guides[index].getBoundingClientRect();
+      return Math.abs(label.left + label.width / 2 - guide.left) < 1;
+    });
+  })).toBe(true);
+
+  if (testInfo.config.reporter.some(([name]) => name === 'html') || process.env.POLLS_SCREENSHOTS_DIR) {
+    for (const colorScheme of ['light', 'dark']) {
+      await page.emulateMedia({ colorScheme });
+      const name = `polls-desktop-seven-parties-${colorScheme}.png`;
+      const image = await page.screenshot({ fullPage: true, scale: 'css' });
+      await testInfo.attach(name, { body: image, contentType: 'image/png' });
+      if (process.env.POLLS_SCREENSHOTS_DIR) {
+        await fs.writeFile(path.join(process.env.POLLS_SCREENSHOTS_DIR, name), image);
+      }
+    }
+  }
+});

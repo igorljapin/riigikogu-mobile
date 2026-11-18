@@ -60,7 +60,8 @@
 // v10 refreshes all MP profile links after the Riigikogu website redesign.
 // v11 delivers November committee/group-role updates and Andres Sutt's portrait.
 // v12 precaches the Polls interface on both surfaces.
-const CACHE_NAME = 'riigikogu-mobile-v12';
+// v13 refreshes Polls typography and chart assets.
+const CACHE_NAME = 'riigikogu-mobile-v13';
 const POLLS_CACHE = 'riigikogu-polls-data-v1';
 const POLLS_URL = new URL('./data/polls.json', self.location.href).href;
 
