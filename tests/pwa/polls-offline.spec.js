@@ -27,10 +27,17 @@ test('a malformed refresh cannot displace the shared validated snapshot', async 
   await expect(page.getByText(/Showing saved results/)).toBeVisible();
 
   await context.unroute(path);
-  await context.setOffline(true);
   const desktop = await context.newPage();
   await desktop.setViewportSize({ width: 1440, height: 1000 });
   await desktop.goto('/desktop/');
+  await ready(desktop);
+  // Set offline after both targets exist. Chromium can apply the context's
+  // emulated network state to a new target after its initial requests.
+  await context.setOffline(true);
+  // Some Chromium versions report an interface as online even when this
+  // request fails. Exercise the transport-based fallback on that path.
+  await desktop.addInitScript(() => Object.defineProperty(navigator, 'onLine', { get: () => true }));
+  await desktop.reload();
   await desktop.getByTestId('nav-polls').click();
   await expect(desktop.getByText('Offline results from this device.')).toBeVisible();
   await expect(desktop.getByTestId('polls-rankings')).toContainText('25.3%');

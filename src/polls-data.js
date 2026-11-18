@@ -35,10 +35,16 @@ async function readStored(cache) {
 
 async function refresh() {
   const cache = await globalThis.caches?.open(CACHE).catch(() => null);
+  let networkUnavailable = false;
   try {
     const response = await fetch(URL_POLLS, {
       cache: 'no-store',
       signal: AbortSignal.timeout(5000),
+    }).catch((error) => {
+      // The browser can report a network interface as online while the origin
+      // is unreachable. Keep transport failures distinct from bad responses.
+      networkUnavailable = error instanceof TypeError;
+      throw error;
     });
     if (response.status === 204 && !await readStored(cache)) {
       return { data: null, cached: false, offline: false };
@@ -56,8 +62,9 @@ async function refresh() {
     return { data: snapshot, cached: false, offline: false };
   } catch (error) {
     const data = await readStored(cache);
-    if (data) return { data, cached: true, offline: !navigator.onLine };
-    if (!navigator.onLine) return { data: null, cached: false, offline: true };
+    const offline = networkUnavailable || !navigator.onLine;
+    if (data) return { data, cached: true, offline };
+    if (offline) return { data: null, cached: false, offline: true };
     throw error;
   }
 }
