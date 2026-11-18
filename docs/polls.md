@@ -71,14 +71,12 @@ matched. For the 19 October–15 November aggregate the decoded table reads Cent
 25.3%, Isamaa 21.9%, SDE 17.5%, EKRE 12.6%, Reform 12.3%, Parempoolsed 5.8%,
 Eesti 200 1.0%, Greens 0.8% and Other 2.8%. Weekly wave 395 covers 9–15 November.
 
-The publisher's [November 11 release](https://reitingud.ee/uudised/keskerakond-kasvatas-edu-isamaa-ees/)
-matches the previous aggregate (12 October–8 November) in all nine rows. Its
-Other is 2.7%, compared with 0.2% for the single `Muu erakond` category.
-[November 18 ERR coverage](https://www.err.ee/1610198938/norstati-kusitlus-naitab-keskerakonna-edu-kasvu)
-identifies the corresponding fieldwork and Wednesday publication. Coverage of
-the release also confirms the [three leading results](https://s3.tasku.delfi.ee/channels/077cde60-2055-11ec-9724-0242c0a88502).
-The matching November 18 table on Reitingud.ee was unavailable during
-verification. Review that full table when accessible.
+The [November 18 Reitingud.ee release](https://reitingud.ee/uudised/keskerakond-juhib-reitingutabelit-isamaa-edestab-kindlalt-sotsiaaldemokraate/)
+matches all nine displayed rows in both the latest and previous columns. Its
+fieldwork and total sample of 4,000 match the aggregate. The release's Other
+values are 2.8% and 2.7% respectively, compared with 0.3% and 0.2% for the single
+`Muu erakond` category. The [November 11 Reitingud.ee release](https://reitingud.ee/uudised/keskerakond-kasvatas-edu-isamaa-ees/)
+also matches all nine rows in the previous aggregate (12 October–8 November).
 
 ## Refresh and offline behavior
 

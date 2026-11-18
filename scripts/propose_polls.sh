@@ -17,7 +17,7 @@ test "$(git rev-parse origin/main)" = "$base" || {
 }
 git diff --quiet HEAD
 pr=$(gh pr list --base main --head "$branch" --state open --limit 3 \
-  --json url,author,isCrossRepository,headRefOid)
+  --json number,url,author,isCrossRepository,headRefOid)
 remote=$(git ls-remote --heads origin "refs/heads/$branch")
 if [[ -n $remote ]]; then
   git fetch --no-tags origin "refs/heads/$branch:$ref"
@@ -70,9 +70,9 @@ test "$(git diff --name-only "$base" HEAD)" = "$data_file"
 git -c credential.helper= -c 'credential.helper=!gh auth git-credential' \
   push origin "HEAD:refs/heads/$branch" >&2
 if [[ $(jq 'length' <<< "$pr") == 1 ]]; then
-  url=$(jq -r '.[0].url' <<< "$pr")
-  gh pr edit "$url" --body-file "$body" >&2
-  echo "$url"
+  number=$(jq -r '.[0].number' <<< "$pr")
+  jq -Rs '{body: .}' "$body" |
+    gh api --method PATCH "repos/$GITHUB_REPOSITORY/pulls/$number" --input - --jq .html_url
 else
   gh pr create --base main --head "$branch" --title 'Update national polling data' --body-file "$body"
 fi
