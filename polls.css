@@ -1,0 +1,162 @@
+.polls-page {
+  min-width: 0;
+  color-scheme: light dark;
+  --polls-gap: 16px;
+  --polls-padding: clamp(12px, 3vw, 22px);
+}
+
+.polls-tab-active .app-header [data-testid="data-updated"] { display: none; }
+
+.polls-mobile .polls-content {
+  padding: 0 var(--gutter);
+}
+
+.polls-content, .polls-results, .polls-stack, .polls-columns {
+  display: grid;
+  min-width: 0;
+  gap: var(--polls-gap);
+}
+
+.polls-series {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  font-weight: 650;
+}
+
+.polls-page select, .polls-retry {
+  max-width: 100%;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+}
+
+.polls-retry { justify-self: start; padding-inline: 16px; }
+.polls-page :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.polls-page input { accent-color: var(--accent); }
+
+.polls-card {
+  min-width: 0;
+  padding: var(--polls-padding);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+}
+
+.polls-card h2 { margin: 0 0 8px; font-size: 21px; line-height: 1.2; }
+.polls-card p { margin: 6px 0; }
+.polls-fieldwork { font-weight: 650; }
+.polls-fieldwork time { white-space: nowrap; }
+.polls-muted { color: var(--muted); font-size: 0.875rem; }
+.polls-muted a { color: inherit; text-decoration: underline; }
+
+.polls-notice {
+  border: 1px solid var(--line);
+  margin: 0;
+  border-radius: 10px;
+  padding: 12px;
+  background: var(--card);
+}
+
+.polls-warning { color: var(--warn-text); background: var(--warn-bg); border-color: var(--warn-line); }
+
+.polls-rankings, .polls-parts { list-style: none; padding: 0; margin-block: 14px; }
+.polls-rankings { display: grid; gap: 10px; }
+.polls-rankings li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 3px 8px;
+  align-items: baseline;
+}
+.polls-party-name { font-weight: 600; overflow-wrap: anywhere; }
+.polls-value, .polls-change, .polls-observation { font-variant-numeric: tabular-nums; }
+.polls-value, .polls-change { font-size: 0.875rem; }
+.polls-change { min-width: 6ch; text-align: right; color: var(--muted); }
+.polls-bar { grid-column: 1 / -1; height: 6px; border-radius: 8px; background: var(--track); }
+.polls-bar span { display: block; height: 100%; border-radius: inherit; }
+
+.polls-disclosure summary {
+  display: list-item;
+  min-height: 44px;
+  padding-block: 11px;
+  cursor: pointer;
+  font-weight: 650;
+}
+
+.polls-card.polls-disclosure { padding-block: 2px; }
+.polls-card.polls-disclosure[open] { padding-bottom: var(--polls-padding); }
+.polls-parts li, .polls-sample { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; }
+.polls-parts li + li { margin-top: 5px; }
+.polls-sample dd { margin: 0; text-align: right; font-weight: 650; }
+
+.polls-chart-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.polls-party-options fieldset {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 12px;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  border: 0;
+}
+.polls-party-options label {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  gap: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.polls-swatch { flex: 0 0 10px; height: 10px; border-radius: 50%; }
+.polls-chart {
+  display: block;
+  width: 100%;
+  max-height: 460px;
+  cursor: crosshair;
+}
+.polls-chart text { fill: var(--muted); font: 15px var(--sans); }
+.polls-gridline { stroke: var(--line); }
+.polls-cursor { stroke: var(--muted); stroke-dasharray: 3 4; }
+.polls-marker { stroke: var(--card); stroke-width: 1.5; }
+.polls-slider { display: grid; margin-top: 8px; font-size: 0.875rem; font-weight: 650; }
+.polls-slider input { width: 100%; height: 44px; margin: 0; }
+.polls-observation { display: flex; flex-wrap: wrap; gap: 3px 12px; font-size: 0.875rem; }
+
+.polls-reading { display: inline-flex; align-items: center; gap: 5px; }
+
+.polls-table-scroll { max-height: 22rem; overflow: auto; }
+.polls-table-scroll table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.polls-table-scroll :is(th, td, caption) { padding: 6px 8px; }
+.polls-table-scroll caption { text-align: left; color: var(--muted); }
+.polls-table-scroll :is(th, td) { border-bottom: 1px solid var(--line); }
+.polls-table-scroll :is(th, td):first-child { text-align: left; white-space: nowrap; }
+.polls-table-scroll td { text-align: right; font-variant-numeric: tabular-nums; }
+
+#app.dk-polls-active { min-height: 100vh; height: auto; }
+.dk-polls-active .dk-page { min-width: 0; }
+.polls-desktop { flex: 1; }
+.polls-columns { align-items: start; }
+.dk-polls-active .dk-rail { position: sticky; top: 0; align-self: start; min-height: 100vh; }
+
+@media (min-width: 1080px) {
+  .polls-columns { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
+}
+
+@media (max-width: 550px) {
+  .dk-polls-active .dk-page { padding: 19px 10px; }
+  .dk-polls-active .dk-rail-slot { flex-basis: 70px; }
+  .dk-polls-active .dk-rail-item { width: 68px; }
+  .dk-polls-active .dk-rail-label { font-size: 11px; }
+  .dk-polls-active .dk-title { font-size: 28px; }
+}
+
+@media (max-width: 380px) {
+  .polls-mobile .polls-content { padding-inline: 12px; }
+  .polls-desktop .polls-rankings li { grid-template-columns: minmax(0, 1fr) auto; }
+  .polls-desktop .polls-change { grid-column: 2; }
+}

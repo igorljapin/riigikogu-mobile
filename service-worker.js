@@ -59,7 +59,10 @@
 // offline having previously not.
 // v10 refreshes all MP profile links after the Riigikogu website redesign.
 // v11 delivers November committee/group-role updates and Andres Sutt's portrait.
-const CACHE_NAME = 'riigikogu-mobile-v11';
+// v12 precaches the Polls interface on both surfaces.
+const CACHE_NAME = 'riigikogu-mobile-v12';
+const POLLS_CACHE = 'riigikogu-polls-data-v1';
+const POLLS_URL = new URL('./data/polls.json', self.location.href).href;
 
 // Where this app is deployed. Not used to build URLs — the relative list above
 // does that — but checked at install time, because a silent mount-point mismatch
@@ -89,6 +92,7 @@ const PRECACHE_ASSETS = [
   './offline.html',
   './manifest.json',
   './styles.css',
+  './polls.css',
 
   // The desktop surface's shell and its own manifest — a second app, nested
   // inside this one's scope (USABILITY.md §10.11). Both the directory URL and
@@ -104,12 +108,18 @@ const PRECACHE_ASSETS = [
   './src/dom.js',
   './src/lib/calculator.js',
   './src/lib/factions.js',
+  './src/lib/polls.js',
+  './src/polls-data.js',
+  './src/polls/rankings.js',
+  './src/polls/trends.js',
+  './src/polls/screen.js',
 
   './src/app.js',
   './src/views/parliament.js',
   './src/views/mps.js',
   './src/views/calculator.js',
   './src/views/board.js',
+  './src/views/polls.js',
 
   './src/views-desktop/app.js',
   './src/views-desktop/parts.js',
@@ -118,6 +128,7 @@ const PRECACHE_ASSETS = [
   './src/views-desktop/parliament.js',
   './src/views-desktop/directory.js',
   './src/views-desktop/calculator.js',
+  './src/views-desktop/polls.js',
 
   // The five files src/data.js loads, plus the floor plan the desktop surface
   // loads for itself. `catalogues.json` is intentionally absent: the monthly job
@@ -288,7 +299,7 @@ self.addEventListener('activate', (event) => {
       .keys()
       .then((names) =>
         Promise.all(
-          names.filter((name) => name !== CACHE_NAME).map((name) => caches.delete(name)),
+          names.filter((name) => name !== CACHE_NAME && name !== POLLS_CACHE).map((name) => caches.delete(name)),
         ),
       )
       .then(() => self.clients.claim()),
@@ -304,6 +315,8 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
   if (new URL(request.url).origin !== self.location.origin) return;
+  // The Polls loader owns network-first refresh and caches only validated data.
+  if (request.url === POLLS_URL) return;
 
   event.respondWith(
     caches.match(request).then((cached) => {

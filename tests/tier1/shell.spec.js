@@ -12,7 +12,7 @@ test.describe('Tier 1 — app shell and navigation', () => {
     await expect(page.getByText(/Estonian Parliament\s*•\s*101 MPs/)).toBeVisible();
   });
 
-  test('all three tabs exist in the bottom bar', async ({ page }) => {
+  test('all four tabs exist in the bottom bar', async ({ page }) => {
     for (const name of TABS) {
       await expect(tab(page, name)).toBeVisible();
     }

@@ -61,7 +61,7 @@ one is part of the work that introduces it.
 | # | Must always be true | Enforced by |
 |---|---|---|
 | 1.1 | The page is titled `XV Riigikogu Dashboard` and the header names the parliament and its 101 members | `tier1/shell.spec.js` |
-| 1.2 | Three tabs exist and are reachable: **Parliament**, **Members**, **Calculator** | `tier1/shell.spec.js` |
+| 1.2 | Four tabs exist in order and are reachable: **Parliament**, **Members**, **Calculator**, **Polls** | `tier1/shell.spec.js` |
 | 1.3 | Each tab shows its own content and hides the others | `tier1/shell.spec.js` |
 | 1.4 | Loading the app and visiting every tab raises no uncaught JavaScript error | `tier1/shell.spec.js` |
 
@@ -226,7 +226,7 @@ Introduced in Phase 4 and shipping now. `<id>` is always a party id from
 
 | Area | `data-testid` | Notes |
 |---|---|---|
-| Navigation | `tab-parliament`, `tab-members`, `tab-calculator` | |
+| Navigation | `tab-parliament`, `tab-members`, `tab-calculator`, `tab-polls` | |
 | Shell | `data-updated` | rendered from `meta.updatedAt` — replaces the hand-typed "Jan 2026" |
 | Parliament | `party-chip-<id>` | also carries `data-party-id` |
 | | `bloc-total-coalition`, `bloc-total-opposition`, `bloc-total-unaligned` | the third one is new in Phase 4 |
@@ -602,13 +602,13 @@ say it in words.
 
 | # | Must always be true | Enforced by |
 |---|---|---|
-| D1.1 | Three destinations exist and are reachable: Parliament, Directory, Calculator | `tier1/desktop/shell.spec.js` |
+| D1.1 | Four destinations exist and are reachable: Parliament, Directory, Calculator, Polls | `tier1/desktop/shell.spec.js` |
 | D1.2 | The active destination is the only one shown; switching away closes any open seat popup | `tier1/desktop/shell.spec.js` |
 | D1.3 | Loading the app and visiting every destination raises no uncaught JavaScript error | `tier1/desktop/shell.spec.js` |
 
 | Area | `data-testid` | Notes |
 |---|---|---|
-| Rail | `nav-parliament`, `nav-directory`, `nav-calculator` | |
+| Rail | `nav-parliament`, `nav-directory`, `nav-calculator`, `nav-polls` | |
 
 ### 10.2 Parliament view
 
@@ -958,3 +958,20 @@ work. Under that variable the unit tests that assume a complete, current overlay
 reason; the arithmetic tests stay on, and `test_seating.py` validates with the
 job's own alignment flags so every seating rule is still exercised. Nothing sets
 the variable outside that job, and the reviewer's push runs everything in full.
+
+
+## 11. Polls
+
+| Must always be true | Enforced by |
+|---|---|
+| Both surfaces open Party support through their fourth navigation item. Polling data starts loading on demand. | `tier1/polls.spec.js`, `tier1/desktop/shell.spec.js` |
+| Four-week results are the default. Weekly selection uses its own observations and comparison, sourced fieldwork dates and samples. Other is always last and expandable. | `tier1/polls.spec.js`, `unit/polls.test.mjs`, `python/test_polls.py` |
+| Trends default to six months and three parties, and offer date filtering, party comparison, exact pointer and keyboard readings, and a results table. Missing values remain unavailable and break the line. | `tier1/polls.spec.js`, `unit/polls.test.mjs` |
+| The desktop view shows both panels side by side where space permits. The mobile view stacks rankings, trends and methodology. Both accommodate narrow screens and light/dark preferences. | `tier1/polls-layout.spec.js` |
+| Loading, empty, errors and overdue states are readable. Polling failures do not block Parliament, Members/Directory or Calculator. | `tier1/polls.spec.js` |
+| The shared installed apps reuse the last validated snapshot, label offline results and handle first-time offline use. A malformed refresh cannot replace saved results. | `pwa/polls-offline.spec.js` |
+
+Polls panels and controls are shared by the two surface-specific views.
+`polls-series`, `polls-rankings`, `polls-range`, `polls-chart`,
+`polls-observation`, `polls-table`, `polls-methodology` and `polls-status`
+identify the stable controls and outputs. See the [polling update guide](docs/polls.md).

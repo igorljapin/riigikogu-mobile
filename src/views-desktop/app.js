@@ -1,10 +1,10 @@
 /**
  * Desktop entry point — loads the data, paints the party palette, renders the
- * left rail, and switches between the three destinations.
+ * left rail, and switches between the four destinations.
  *
  * This is the desktop twin of `src/app.js`, and deliberately a twin rather than
  * a branch inside it: the two surfaces share the DATA and LOGIC layers and share
- * no view code at all (`USABILITY.md` §10.5). `src/data.js`, `src/lib/*` and
+ * the Polls controls and panels (`USABILITY.md` §10.5). `src/data.js`, `src/lib/*` and
  * `src/dom.js` are reused exactly as the mobile app leaves them; everything this
  * surface draws lives in `src/views-desktop/` and `desktop.css`.
  *
@@ -26,13 +26,14 @@
  */
 
 import { loadData } from '../data.js';
-import { el, icon, replace } from '../dom.js';
+import { el, icon, ICONS, replace } from '../dom.js';
 import { emptySelection } from '../lib/calculator.js';
 import { buildGrid, loadSeating } from './seating.js';
 import { formatUpdated, RAIL_ICONS } from './parts.js';
 import renderParliament, { composition } from './parliament.js';
 import renderDirectory from './directory.js';
 import renderCalculator from './calculator.js';
+import renderPolls from './polls.js';
 
 const VIEWS = [
   {
@@ -58,6 +59,13 @@ const VIEWS = [
     sub: 'Build a voting group and see which constitutional thresholds it clears',
     glyph: RAIL_ICONS.calculator,
     render: renderCalculator,
+  },
+  {
+    id: 'polls',
+    label: 'Polls',
+    title: 'Party support',
+    glyph: ICONS.polls,
+    render: renderPolls,
   },
 ];
 
@@ -128,18 +136,24 @@ async function start() {
   const headAside = el('div', { className: 'dk-head-aside' });
   const main = el('main', { className: 'dk-main', id: 'view' });
 
+  const viewport = document.querySelector('meta[name="viewport"]');
+  const desktopViewport = viewport.content;
+
   function show(id) {
     state.view = id;
+    const polls = id === 'polls';
+    app.classList.toggle('dk-polls-active', polls);
+    viewport.content = polls ? 'width=device-width, initial-scale=1' : desktopViewport;
     const view = VIEWS.find((v) => v.id === id);
 
     replace(headText,
       // Computed from meta.updatedAt, never typed. The retiring desktop app
       // carried a hand-written date above numbers that had moved on without it.
-      el('p', { className: 'dk-kicker dk-provenance', 'data-testid': 'data-updated' }, [
+      !polls && el('p', { className: 'dk-kicker dk-provenance', 'data-testid': 'data-updated' }, [
         `XV Riigikogu · updated ${formatUpdated(data.meta.updatedAt)}`,
       ]),
       el('h1', { className: 'dk-title' }, [view.title]),
-      el('p', { className: 'dk-subtitle' }, [view.sub]),
+      view.sub && el('p', { className: 'dk-subtitle' }, [view.sub]),
     );
 
     // The composition block belongs to Parliament and is drawn in the page

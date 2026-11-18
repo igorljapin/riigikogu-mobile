@@ -14,7 +14,7 @@ test.describe('Tier 1 desktop — shell and navigation', () => {
     await gotoDesktop(page);
   });
 
-  test('D1.1 — all three destinations exist and are reachable', async ({ page }) => {
+  test('D1.1 — all four destinations exist and are reachable', async ({ page }) => {
     await expect(page).toHaveTitle('XV Riigikogu Desktop');
 
     for (const view of VIEWS) {

@@ -1,0 +1,106 @@
+name: Weekly polling data
+
+on:
+  schedule:
+    - cron: '17 12 * * 3'
+    - cron: '17 12 * * 4'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Validate and test without proposing a PR
+        type: boolean
+        default: true
+
+concurrency:
+  group: weekly-polls
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    # Workflow dispatch from a feature branch must not write a data PR.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      changed: ${{ steps.stage.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Stage source and validate
+        id: stage
+        run: |
+          python3 scripts/fetch_polls.py --baseline data/polls.json \
+            --output "$RUNNER_TEMP/candidate-polls.json" --report "$RUNNER_TEMP/polls-report.json"
+          echo "changed=$(jq -r .changed "$RUNNER_TEMP/polls-report.json")" >> "$GITHUB_OUTPUT"
+      - name: Summarize source check
+        if: always()
+        run: python3 scripts/polls_update_summary.py "$RUNNER_TEMP/polls-report.json" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/setup-node@v4
+        if: steps.stage.outputs.changed == 'true' || inputs.dry_run
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install test dependencies
+        if: steps.stage.outputs.changed == 'true' || inputs.dry_run
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Validate and test the prospective snapshot
+        if: steps.stage.outputs.changed == 'true' || inputs.dry_run
+        run: |
+          if [[ -f "$RUNNER_TEMP/candidate-polls.json" ]]; then
+            python3 scripts/validate_polls.py "$RUNNER_TEMP/candidate-polls.json"
+            cp "$RUNNER_TEMP/candidate-polls.json" data/polls.json
+          fi
+          npm test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: polls-validation-report
+          path: ${{ runner.temp }}/polls-report.json
+          if-no-files-found: ignore
+      - uses: actions/upload-artifact@v4
+        if: steps.stage.outputs.changed == 'true'
+        with:
+          name: polls-candidate
+          path: ${{ runner.temp }}/candidate-polls.json
+          if-no-files-found: error
+
+  propose:
+    needs: validate
+    if: needs.validate.outputs.changed == 'true' && !inputs.dry_run
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: polls-candidate
+          path: ${{ runner.temp }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: polls-validation-report
+          path: ${{ runner.temp }}
+      - name: Open or update the data PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          body="$RUNNER_TEMP/polls-pr.md"
+          python3 scripts/polls_update_summary.py "$RUNNER_TEMP/polls-report.json" > "$body"
+          printf '\nThe full suite passed in the polling update workflow. Review the data diff and approve any pending Usability Contract workflow before merging.\n\n[Update workflow run](%s/%s/actions/runs/%s)\n' "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" >> "$body"
+          if url=$(bash scripts/propose_polls.sh "$RUNNER_TEMP/candidate-polls.json" "$body" "$GITHUB_SHA"); then
+            printf 'Data pull request: %s\n' "$url" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'Unable to propose the validated data. See the failed step log for the reason.' >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi

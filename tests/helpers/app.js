@@ -22,7 +22,7 @@
 
 const { expect } = require('@playwright/test');
 
-const TABS = ['Parliament', 'Members', 'Calculator'];
+const TABS = ['Parliament', 'Members', 'Calculator', 'Polls'];
 
 /** Party short names, exactly as the app renders them on the Calculator tab. */
 const PARTY_SHORTS = ['Reform', 'Eesti 200', 'SDE', 'EKRE', 'Isamaa', 'Center', 'Independent'];
